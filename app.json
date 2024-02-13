@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "Animax",
+    "slug": "animax",    
+    "scheme": "myapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "androidNavigationBar": {
+      "visible": "hidden"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.codewithbeto.Animax"
+    },
+    "android": {
+      "package": "com.codewithbeto.Animax",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cabde16e-c505-4729-861a-b2488aa19c0f"
+      }
+    },
+    "owner": "kurumi12"
+  }
+}
