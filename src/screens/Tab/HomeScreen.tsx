@@ -8,7 +8,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import PlayIcon from '../../components/icons/PlayIcon';
 import MyAnimeListButton from '../../components/MyAnimeListButton';
 import TopHitsAnime from '../../components/TopHitsAnime';
-import NewEpisodeAnime from '../../components/NewEpisodeAnime';
+import NewEpisodesAnime from '../../components/NewEpisodesAnime';
+import { GET_NEWEPISODESANIME } from '../../utils/graphql/getNewEpisodesAnime';
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
@@ -27,14 +28,14 @@ const HomeScreen = ({ navigation }) => {
         ],
     });
     const [topHitsAnime, setTopHitsAnime] = useState<Anime[]>([]);
-    const [newEpisodeAnime, setNewEpisodeAnime] = useState<Anime[]>([]);
+    const [newEpisodesAnime, setNewEpisodesAnime] = useState<Anime[]>([]);
 
     const { data: topHitsData } = useQuery(GET_ANIMES, {
         variables: { 
             page: 1,
             limit: 6,
             order: 'ranked',
-            season: '2024'
+            season: String(new Date().getFullYear())
         },
     });   
     
@@ -47,18 +48,18 @@ const HomeScreen = ({ navigation }) => {
         }
     }, [topHitsData]);
     
-    //const { data: newEpisodeData } = useQuery(GET_NEWEPISODEANIME, {
-        //variables: { 
-            //limit: 6,
-            //order: 'ranked'
-        //},
-    //});   
+    const { data: newEpisodesData } = useQuery(GET_NEWEPISODESANIME, {
+        variables: { 
+            limit: 6,
+            order: 'ranked'
+        },
+    });   
     
-    //useEffect(() => {
-        //if (newEpisodeData) {
-            //setNewEpisodeAnime(newEpisodeData);
-        //}
-    //}, [newEpisodeData]);
+    useEffect(() => {
+        if (newEpisodesData) {
+            setNewEpisodesAnime(newEpisodesData.animes);
+        }
+    }, [newEpisodesData]);
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
@@ -132,7 +133,7 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.newEpisodeAnimeTextSeeAll}>See all</Text>
                         </TouchableOpacity>
                     </View>
-                    <NewEpisodeAnime data={newEpisodeAnime} onSelect={setSelectAnime} />                   
+                    <NewEpisodesAnime data={newEpisodesAnime} onSelect={setSelectAnime} />                   
                 </View>
             </View>            
         </ScrollView>

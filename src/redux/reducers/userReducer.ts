@@ -6,52 +6,45 @@ interface Interest {
   emojiText: string;
 }
 
+interface Anime {
+  animeId: string;
+  poster: {
+    originalUrl: string;
+  };
+  score: number;
+  rating: string;
+}
+
 interface UserState {
   uuid: string;
-  username: string;
-  password: string;
   email: string;
-  interest: boolean; 
+  password: string;
   interests: Interest[];
   profile: {
     avatar: string;
-    bio: string;
+    fullname: string;
     nickname: string;    
   };
   preferences: {
-    lang: string;
-    country: string;
-    ip: string
+    phonenumber: string;
   };
-  statistics: {
-    reviews: number;
-    followers: number;
-    likes: number;
-  }
+  animelist: Anime[]
 }
 
 const initialState: UserState = {
   uuid: '',
-  username: '',
+  email: '',
   password: '',
-  email: 'string',
-  interest: false, 
   interests: [],
   profile: {
     avatar: '',
-    bio: '',
+    fullname: '',
     nickname: '',  
   },
   preferences: {
-    lang: '',
-    country: '',
-    ip: '',
+    phonenumber: '',
   },
-  statistics: {
-    reviews: 0,
-    followers: 0,
-    likes: 0,
-  }
+  animelist: []
 };
 
 const userSlice = createSlice({
@@ -60,14 +53,12 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<UserState>) => {
       state.uuid = action.payload.uuid;
-      state.username = action.payload.username;
       state.password = action.payload.password;
       state.email = action.payload.email;
-      state.interest = action.payload.interest;
       state.interests = action.payload.interests;
       state.profile = action.payload.profile;
       state.preferences = action.payload.preferences;
-      state.statistics = action.payload.statistics;
+      state.animelist = action.payload.animelist;
     },
   },
 });

@@ -12,6 +12,10 @@ import AnimeScreen from './AnimeScreen';
 import AnimeSearchScreen from './AnimeSearchScreen';
 import AnimeSortScreen from './AnimeSortScreen';
 import TopHitsAnimeScreen from './TopHitsAnimeScreen';
+import EditDataScreen from './EditDataScreen';
+import SubcribeScreen from './SubcribeScreen';
+import PaymentScreen from './PaymentScreen';
+import AddNewCardScreen from './AddNewCardScreen';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +34,10 @@ const StackNavigator = () => {
             <Stack.Screen name="AnimeSearchScreen" component={AnimeSearchScreen}/>
             <Stack.Screen name="AnimeSortScreen" component={AnimeSortScreen}/>
             <Stack.Screen name="TopHitsAnimeScreen" component={TopHitsAnimeScreen}/>
+            <Stack.Screen name="EditDataScreen" component={EditDataScreen}/>
+            <Stack.Screen name="SubcribeScreen" component={SubcribeScreen}/>
+            <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
+            <Stack.Screen name="AddNewCardScreen" component={AddNewCardScreen}/>
         </Stack.Navigator>
     );
 };

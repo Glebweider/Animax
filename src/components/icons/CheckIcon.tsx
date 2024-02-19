@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const CheckIcon = ({ Color, Style }) => (
+const CheckIcon = ({ Color, Style, Width, Height }) => (
     <Svg
-        width="20"
-        height="20"
+        width={Width}
+        height={Height}
         viewBox="0 0 512 512"
         style={Style}>
         <Path

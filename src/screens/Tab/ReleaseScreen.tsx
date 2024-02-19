@@ -3,8 +3,6 @@ import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity, FlatList }
 import getCalendarAnime from '../../utils/fetch/getCalendarAnime';
 import MyAnimeListButton from '../../components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';
-import { getTokenFromStorage } from '../../utils/token';
-import getAnimeListUser from '../../utils/fetch/getAnimeListUser';
 
 const getDateArrayForMonth = () => {
     const today = new Date();
@@ -60,6 +58,7 @@ const ReleaseScreen = ({ navigation }) => {
     
         fetchData();
     }, []);
+    
 
     useEffect(() => {
         if(selectedDate) {

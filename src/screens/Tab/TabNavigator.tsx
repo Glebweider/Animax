@@ -91,7 +91,7 @@ const TabNavigator = () => {
                     tabBarIcon: ({ focused }) => (
                         <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Width={25} Height={25}/>
                     ),
-                    unmountOnBlur: true
+                    unmountOnBlur: false
                 }}  />
         </Tab.Navigator>  
     )

@@ -36,9 +36,7 @@ const AnimeSortScreen = ({ navigation }) => {
     
     return (
         <View style={styles.container}>
-            <View style={styles.backButtonContainer}>
-                <BackButton navigation={navigation} text="Sort & Filter" />
-            </View>
+            <BackButton navigation={navigation} text="Sort & Filter" />
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 {genresAnime.length >= 1 ?            
                     <View style={styles.filtersContainer}>
@@ -118,11 +116,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 15,
-    },
-    backButtonContainer: {
-        width: '100%',
-        alignItems: 'center',
-        marginTop: 60,
     },
     filtersContainer: {
         width: '94%',

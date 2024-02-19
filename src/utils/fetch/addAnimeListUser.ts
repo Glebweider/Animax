@@ -10,9 +10,10 @@ const addAnimeListUser = async (token: string, anime: any) => {
                 "anime": {
                     "animeId": anime.id,
                     "poster": {
-                        "originalUrl": anime.poster.originalUrl
+                        "originalUrl": anime.poster?.originalUrl || `https://shikimori.me${anime.image.original}`
                     },
-                    "score": anime.score
+                    "score": Number(anime.score),
+                    "rating": anime.rating
                 }
             }),
         });

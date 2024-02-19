@@ -10,7 +10,6 @@ import CheckIcon from './icons/CheckIcon';
 const MyAnimeListButton = ({ anime }) => {
     const [isInMyList, setIsInMyList] = useState(false);
 
-
     useEffect(() => {
         const fetchMyAnimeList = async () => {
             try {
@@ -41,7 +40,7 @@ const MyAnimeListButton = ({ anime }) => {
             <TouchableOpacity
                 onPress={() => handlePress()} 
                 style={styles.animeButtonMyListEnabled}>
-                <CheckIcon Color={'#06C149'} Style={{marginRight: 7, width: 20, height: 20}} />
+                <CheckIcon Color={'#06C149'} Style={{marginRight: 7}} Width={20} Height={20} />
                 <Text style={styles.animeButtonTextMyListEnabled}>My List</Text>
             </TouchableOpacity>
             : 

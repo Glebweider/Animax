@@ -29,7 +29,8 @@ const NewEpisodeAnimeItem: FC<NewEpisodeAnimeItemProps> = memo(({ anime, onPress
     </TouchableOpacity>
 ));
 
-const NewEpisodeAnime: FC<NewEpisodeAnimeProps> = ({ data, onSelect }) => (
+
+const NewEpisodesAnime: FC<NewEpisodeAnimeProps> = ({ data, onSelect }) => (
     <FlatList
         data={data}
         horizontal
@@ -102,4 +103,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default NewEpisodeAnime;
+export default NewEpisodesAnime;

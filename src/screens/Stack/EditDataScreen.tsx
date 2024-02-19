@@ -1,32 +1,25 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity, TextInput, Platform} from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import BackButton from '../../components/BackButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { isPhoneNumber } from '../../utils/validator';
-import { Picker } from '@react-native-picker/picker';
-import * as ImagePicker from 'expo-image-picker';
 import PencilIcon from '../../components/icons/PencilIcon';
-import checkPhoneNumberAvailability from '../../utils/fetch/authCheckPhoneNumberAvailability';
-import ConfigModal from '../../components/modals/ConfigModal';
-import checkNicknameAvailability from '../../utils/fetch/authCheckNicknameAvailability';
+import * as ImagePicker from 'expo-image-picker';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { saveTokenToStorage } from '../../utils/token'; 
+import { isPhoneNumber } from '../../utils/validator';
 import * as FileSystem from 'expo-file-system';
-import authUserInToken from '../../utils/fetch/authUserInToken';
 import { setUser } from '../../redux/reducers/userReducer';
+import authUserInToken from '../../utils/fetch/authUserInToken';
+import { getTokenFromStorage, saveTokenToStorage } from '../../utils/token';
 
 
-const AuthAccountSetupDataScreen = ({ navigation }) => {
+const EditDataScreen = ({ navigation }) => {
     const dispatch = useDispatch();
-    const authState = useSelector((state: RootState) => state.authReducer);
-    
+    const userState = useSelector((state: RootState) => state.userReducer);
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
 
-    const [textFullName, setTextFullName] = React.useState<string>('');
-    const [textNickname, setTextNickname] = React.useState<string>('');
-    const [textPhoneNumber, setTextPhoneNumber] = React.useState<string>('');
-    const [selectedGender, setSelectedGender] = React.useState<string>('');
+    const [textFullName, setTextFullName] = React.useState<string>(userState.profile.fullname);
+    const [textNickname, setTextNickname] = React.useState<string>(userState.profile.nickname);
+    const [textPhoneNumber, setTextPhoneNumber] = React.useState<string>(userState.preferences.phonenumber);
     const [avatar, setAvatar] = React.useState<any>(null);
 
     const [fullNameError, setFullNameError] = React.useState<string | null>(null);
@@ -36,13 +29,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const [isFullNameVerify, setFullNameVerify] = React.useState<boolean>(false);
     const [isNicknameVerify, setNicknameVerify] = React.useState<boolean>(false);
     const [isPhoneNumberVerify, setPhoneNumberVerify] = React.useState<boolean>(false);
-
-    const requestPermissions = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-            console.log('Permission denied!');
-        }
-    };
 
     useEffect(() => {
         if (textFullName.length >= 1) {
@@ -93,7 +79,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         }
     }, [textFullName, textNickname, textPhoneNumber, avatar]);
 
-    requestPermissions();
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -102,69 +87,53 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         });
 
         if (!result.canceled) {
-            setAvatar(result.assets[0]);
+            setAvatar(result.assets[0].uri);
         }
     };
 
-    const registation = async () => {
-        const checkPhoneNumber = await checkPhoneNumberAvailability(textPhoneNumber);
-        const checkNickname = await checkNicknameAvailability(textNickname);
-
-        if (checkPhoneNumber && checkNickname) {
-
-            const response = await FileSystem.uploadAsync(`http://192.168.1.15:4000/api/auth/register`, avatar.uri, {
+    const update = async () => {
+            const token = await getTokenFromStorage();
+            const response = await FileSystem.uploadAsync(`http://192.168.1.15:4000/api/auth/update-user-data`, avatar, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
                 parameters: {
-                    email: authState.email,
-                    password: authState.password,
-                    interests: JSON.stringify(authState.interests),
                     fullname: textFullName,
                     nickname: textNickname,
                     phonenumber: textPhoneNumber,
                 },
+                headers: {
+                    Authorization: token
+                },
                 uploadType: FileSystem.FileSystemUploadType.MULTIPART
-            })
+            });
 
-            console.log(response.body);
             if (response.status == 200) {
-                    setOpenModal(true);
-                    setTimeout(async () => {
-                        const user = await authUserInToken(response.body);
-                        if (user) {
-                            saveTokenToStorage(response.body);
-                            dispatch(setUser(user));
-                            navigation.navigate('HomeScreen');
-                        } else {
-                            setOpenModal(false); 
-                        }
-                    }, 5000);                          
+                    const user = await authUserInToken(response.body);
+                    if (user) {
+                        saveTokenToStorage(response.body);
+                        dispatch(setUser(user));
+                        navigation.navigate('HomeScreen');
+                    }              
             } else {
-                setOpenModal(false); 
                 alert(response.body);
             }
-
-        } else {
-            setPhoneNumberError('Введите действительный номер телефона');
-            setActiveButton(true);
-        }
     };
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Fill Your Profile" />
+            <BackButton navigation={navigation} text="Edit Profile" />
             <View style={styles.avatarContainer}>
                 <TouchableOpacity 
                     onPress={() => pickImage()}
                     style={styles.containerImageAvatar}>
                     { avatar ? 
-                    <Image 
-                        source={{ uri: avatar.uri }} 
-                        style={styles.imageAvatar} />   
-                    :
-                    <Image 
-                        source={require('../../../assets/avatar.png')} 
-                        style={styles.imageNullAvatar} />   
+                        <Image 
+                            source={{ uri: avatar }} 
+                            style={styles.imageAvatar} />   
+                        :
+                        <Image 
+                            source={{ uri: userState.profile.avatar }} 
+                            style={styles.imageAvatar} />   
                     }
                 </TouchableOpacity>
                 <View style={styles.pencilContainer}>
@@ -177,17 +146,17 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         style={styles.fullNameInput}
                         placeholderTextColor="#9E9E9E"
                         placeholder="Full Name"
-                        onChangeText={(newText) => setTextFullName(newText)}
-                        value={textFullName}/>
+                        value={textFullName}
+                        onChangeText={(newText) => setTextFullName(newText)}/>
                 </View>
                 {fullNameError && <Text style={styles.fullNameError}>{fullNameError}</Text>}
                 <View style={styles.nicknameSection}>
                     <TextInput
                         style={styles.nicknameInput}
                         placeholderTextColor="#9E9E9E"
+                        value={textNickname}
                         placeholder="Nickname"
-                        onChangeText={(newText) => setTextNickname(newText)}
-                        value={textNickname}/>
+                        onChangeText={(newText) => setTextNickname(newText)}/>
                 </View>
                 {nicknameError && <Text style={styles.nicknameError}>{nicknameError}</Text>}    
                 <View style={styles.phoneNumberSection}>
@@ -195,39 +164,22 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         style={styles.phoneNumberInput}
                         placeholderTextColor="#9E9E9E"
                         placeholder="Phone Number"
+                        value={textPhoneNumber}
                         keyboardType="phone-pad"
-                        onChangeText={(newText) => setTextPhoneNumber(newText)}
-                        value={textPhoneNumber}/>
+                        onChangeText={(newText) => setTextPhoneNumber(newText)}/>
                 </View>
-                {phoneNumberError && <Text style={styles.phoneNumberError}>{phoneNumberError}</Text>}     
-                <View style={styles.genderSection}>
-                    <Picker
-                        style={styles.genderPicker}
-                        selectedValue={selectedGender}
-                        prompt='Gender'
-                        mode='dropdown'
-                        dropdownIconColor={'#fff'}
-                        onValueChange={(value) => setSelectedGender(value)}>
-                            <Picker.Item label="Male" value="male" />
-                            <Picker.Item label="Female" value="female" />
-                            <Picker.Item label="Other" value="other" />
-                    </Picker>
-                </View>    
+                {phoneNumberError && <Text style={styles.phoneNumberError}>{phoneNumberError}</Text>}       
             </View>
             <TouchableOpacity 
-                onPress={() => registation()} 
+                onPress={() => update()} 
                 disabled={isActiveButton}
                 style={isActiveButton ? styles.continueButtonDisabled : styles.continueButtonEnabled}>
-                <Text style={styles.buttonTitle}>Continue</Text>
+                <Text style={styles.buttonTitle}>Update</Text>
             </TouchableOpacity>
-            <ConfigModal 
-                visible={isOpenModal} 
-                setVisible={setOpenModal}
-                navigation={navigation} />
         </View>
     );
 };
-    
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -244,18 +196,14 @@ const styles = StyleSheet.create({
     avatarContainer: {
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: 5,
     },
     containerImageAvatar: {
         width: 160,
         height: 160,
         backgroundColor: '#464648',
         borderRadius: 100,
-        overflow: 'hidden'
-    },
-    imageNullAvatar: {
-        width: '100%',
-        height: '100%',
-        marginTop: 8
+        overflow: 'hidden',
     },
     imageAvatar: {
         width: '100%',
@@ -263,7 +211,7 @@ const styles = StyleSheet.create({
     },
     inputsContainer: {
         width: '90%',
-        height: '55%'
+        height: '35%'
     },
     fullNameSection: {
         flexDirection: 'row',
@@ -339,23 +287,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center'
     },
-    genderSection: {
-        marginTop: 25,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: '#1F222A',
-        color: '#fff',
-    },
-    genderPicker: {
-        flex: 1,
-        color: '#fff',
-        fontFamily: 'Outfit',
-        height: '100%',
-    },
     titleContainer: {
         width: '90%',
     },
@@ -392,4 +323,4 @@ const styles = StyleSheet.create({
     },
 });
     
-export default AuthAccountSetupDataScreen;
+export default EditDataScreen;

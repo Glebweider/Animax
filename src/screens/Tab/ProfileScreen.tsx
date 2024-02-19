@@ -1,6 +1,5 @@
-import React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import PencilIcon from '../../components/icons/PencilIcon';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import CrownIcon from '../../components/icons/CrownIcon';
@@ -13,14 +12,14 @@ import { StatusBar } from 'expo-status-bar';
 
 const ProfileScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
-    const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
+    const [isOpenModalLogout, setOpenModalLogout] = useState<boolean>(false); 
 
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
             <LogoutModal 
-                visible={isOpenModal}
-                setVisible={setOpenModal}
+                visible={isOpenModalLogout}
+                setVisible={setOpenModalLogout}
                 navigation={navigation} />
             <View style={styles.headerContainer}>
                 <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
@@ -31,11 +30,6 @@ const ProfileScreen = ({ navigation }) => {
                     <Image 
                         source={{ uri: userState.profile.avatar }} 
                         style={styles.avatarImage} />  
-                    <TouchableOpacity 
-                        onPress={() => {}} 
-                        style={styles.pencilContainer}>
-                        <PencilIcon Color={"#181A20"} Width={14} Height={14} />
-                    </TouchableOpacity>
                 </View>
                 <View style={styles.profileUserData}>
                     <Text style={styles.profileUsername}>{userState.profile.nickname}</Text>
@@ -43,7 +37,7 @@ const ProfileScreen = ({ navigation }) => {
                 </View>
             </View>
             <TouchableOpacity
-                onPress={() => {}}
+                onPress={() => navigation.navigate('SubcribeScreen')}
                 style={styles.premiumContainer}>
                 <CrownIcon Width={60} Height={55} Color={'#06C149'} />
                 <View style={styles.premiumTextContainer}>
@@ -57,7 +51,7 @@ const ProfileScreen = ({ navigation }) => {
             </TouchableOpacity>
             <View style={styles.labelsContainer}>
                 <TouchableOpacity 
-                    onPress={() => {}}
+                    onPress={() => navigation.navigate('EditDataScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <ProfileIcon Width={27} Height={27} Color={'#fff'} />
@@ -167,7 +161,7 @@ const ProfileScreen = ({ navigation }) => {
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={() => setOpenModal(true)}
+                    onPress={() => setOpenModalLogout(true)}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg
@@ -283,13 +277,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#464648',
         borderRadius: 100,
         overflow: 'hidden'
-    },
-    pencilContainer: {
-        backgroundColor: "#06C149",
-        borderRadius: 10,
-        padding: 6,
-        left: 37,
-        bottom: 26,
     },
     avatarContainer: {
         alignItems: 'center',

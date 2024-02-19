@@ -4,6 +4,7 @@ import { useApolloClient, useQuery } from '@apollo/client';
 import ArrowLeftIcon from '../../components/icons/ArrowLeftIcon';
 import { GET_ANIMES } from '../../utils/graphql/getTopHitsAnimes';
 import MyAnimeListButton from '../../components/MyAnimeListButton';
+import BackButton from '../../components/BackButton';
 
 const TopHitsAnimeScreen = ({ navigation }) => {
     const client = useApolloClient();
@@ -84,14 +85,7 @@ const TopHitsAnimeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.headerLeft}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <ArrowLeftIcon Style={styles.headerButtonBack} Color={'#fff'} />
-                    </TouchableOpacity>
-                    <Text style={styles.headerText}>Top Hits Anime</Text>                    
-                </View>
-            </View>
+            <BackButton navigation={navigation} text='Top Hits Anime' />
             <View style={{width: '90%', height: '87%', alignItems: 'center'}}>
                 {animes.length >= 1 && (
                     <FlatList
@@ -114,28 +108,6 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         backgroundColor: '#181A20',
-    },
-    headerButtonBack: {
-        width: 28,
-        height: 28,
-    },
-    header: {
-        width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: 60,
-        marginTop: 50
-    },
-    headerLeft: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    headerText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 18,
-        marginLeft: 15,
     },
     containerAnimes: {
         width: '100%',
