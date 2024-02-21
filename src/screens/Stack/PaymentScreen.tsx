@@ -4,9 +4,21 @@ import { useEffect, useState } from 'react';
 import getPaymentMethods from '../../utils/fetch/getPaymentMethods';
 import { getTokenFromStorage } from '../../utils/token';
 
+interface IPaymentMethod {
+    textPaymentMethod: string;
+    iconPaymentMethod: string;
+    iconPaymentMethodWidth: number;
+    iconPaymentMethodHeight: number;
+}
+
 const PaymentScreen = ({ navigation, route }) => {
     const [paymentMethods, setPaymentMethods] = useState<any>([]); 
-    const [selectPaymentMethod, setSelectPaymentMethod] = useState<string>('PayPal');
+    const [selectPaymentMethod, setSelectPaymentMethod] = useState<IPaymentMethod>({
+        textPaymentMethod: 'PayPal',
+        iconPaymentMethod: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1200px-Apple_logo_white.svg.png',
+        iconPaymentMethodWidth: 24,
+        iconPaymentMethodHeight: 24,
+    });
     const { objecyBuy } = route.params;
 
     useEffect(() => {
@@ -28,7 +40,12 @@ const PaymentScreen = ({ navigation, route }) => {
             </View>
             <View style={styles.paymentMethods}>
                 <TouchableOpacity 
-                    onPress={() => setSelectPaymentMethod('PayPal')} 
+                    onPress={() => setSelectPaymentMethod({
+                        textPaymentMethod: 'PayPal',
+                        iconPaymentMethod: 'https://static-00.iconduck.com/assets.00/paypal-icon-856x1024-a3b7wbse.png',
+                        iconPaymentMethodWidth: 24,
+                        iconPaymentMethodHeight: 24,
+                    })} 
                     style={styles.paymentMethod}>
                         <View style={styles.paymentCardData}>
                             <Image 
@@ -39,13 +56,18 @@ const PaymentScreen = ({ navigation, route }) => {
                             <Text style={styles.paymentMethodText}>PayPal</Text>
                         </View>
                         <View style={styles.paymentMethodSelect}>
-                            {selectPaymentMethod == 'PayPal' && (
+                            {selectPaymentMethod.textPaymentMethod == 'PayPal' && (
                                 <View style={styles.paymentMethodSelected}/>
                             )}
                         </View>
                 </TouchableOpacity>   
                 <TouchableOpacity 
-                    onPress={() => setSelectPaymentMethod('GooglePay')} 
+                    onPress={() => setSelectPaymentMethod({
+                        textPaymentMethod: 'GooglePay',
+                        iconPaymentMethod: 'https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png',
+                        iconPaymentMethodWidth: 24,
+                        iconPaymentMethodHeight: 24,
+                    })} 
                     style={styles.paymentMethod}>
                         <View style={styles.paymentCardData}>
                             <Image 
@@ -56,13 +78,18 @@ const PaymentScreen = ({ navigation, route }) => {
                             <Text style={styles.paymentMethodText}>Google Pay</Text>
                         </View>
                         <View style={styles.paymentMethodSelect}>
-                            {selectPaymentMethod == 'GooglePay' && (
+                            {selectPaymentMethod.textPaymentMethod == 'GooglePay' && (
                                 <View style={styles.paymentMethodSelected}/>
                             )}
                         </View>
                 </TouchableOpacity>    
                 <TouchableOpacity 
-                    onPress={() => setSelectPaymentMethod('ApplePay')} 
+                    onPress={() => setSelectPaymentMethod({
+                        textPaymentMethod: 'ApplePay',
+                        iconPaymentMethod: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1200px-Apple_logo_white.svg.png',
+                        iconPaymentMethodWidth: 24,
+                        iconPaymentMethodHeight: 30,
+                    })} 
                     style={styles.paymentMethod}>
                         <View style={styles.paymentCardData}>
                             <Image 
@@ -73,7 +100,7 @@ const PaymentScreen = ({ navigation, route }) => {
                             <Text style={styles.paymentMethodText}>Apple Pay</Text>
                         </View>
                         <View style={styles.paymentMethodSelect}>
-                            {selectPaymentMethod == 'ApplePay' && (
+                            {selectPaymentMethod.textPaymentMethod == 'ApplePay' && (
                                 <View style={styles.paymentMethodSelected}/>
                             )}
                         </View>
@@ -85,7 +112,17 @@ const PaymentScreen = ({ navigation, route }) => {
                 </TouchableOpacity>                   
             </View>
             <TouchableOpacity 
-                onPress={() => navigation.navigate('ReviewSummaryScreen')} 
+                onPress={() => navigation.navigate('ReviewSummaryScreen', {
+                    buyData: {
+                        objecyBuy: objecyBuy,
+                        methodPayment: {
+                            textPaymentMethod: selectPaymentMethod.textPaymentMethod,
+                            iconPaymentMethod: selectPaymentMethod.iconPaymentMethod,
+                            iconPaymentMethodWidth: selectPaymentMethod.iconPaymentMethodWidth,
+                            iconPaymentMethodHeight: selectPaymentMethod.iconPaymentMethodHeight,
+                        },
+                    }
+                })} 
                 style={styles.buttonContinue}>
                     <Text style={styles.buttonContinueText}>Continue</Text>
             </TouchableOpacity>  

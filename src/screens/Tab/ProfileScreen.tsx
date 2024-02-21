@@ -138,7 +138,7 @@ const ProfileScreen = ({ navigation }) => {
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={() => {}}
+                    onPress={() => navigation.navigate('PrivacyPolicyScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg

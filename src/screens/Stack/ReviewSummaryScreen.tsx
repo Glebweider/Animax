@@ -1,0 +1,272 @@
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import BackButton from '../../components/BackButton';
+import CrownIcon from '../../components/icons/CrownIcon';
+import CheckIcon from '../../components/icons/CheckIcon';
+import { useState } from 'react';
+import ConfigPaymentModal from '../../components/modals/ConfigPaymentModal';
+
+const ReviewSummaryScreen = ({ navigation, route }) => {
+    const [taxPrice, setTaxPrice] = useState<number>(1.19)
+    const { buyData } = route.params;
+    const [isOpenModalConfigPayment, setOpenModalConfigPayment] = useState<boolean>(false); 
+
+    return (
+        <View style={styles.container}>
+            <BackButton navigation={navigation} text="Review Summary" />
+            <ConfigPaymentModal 
+                visible={isOpenModalConfigPayment}
+                setVisible={setOpenModalConfigPayment}
+                data={buyData}
+                navigation={navigation} />
+            <View style={styles.content}>
+                <View style={styles.cardPremium}>
+                    <View style={styles.cardHeader}>
+                        <CrownIcon Color={'#06C149'} Width={70} Height={70} />
+                        <View style={styles.cardHeaderTextContainer}>
+                            <Text style={styles.cardHeaderTextPrice}>${buyData.objecyBuy.price}</Text>
+                            <Text style={styles.cardHeaderTextMonth}>/{buyData.objecyBuy.date}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.cardLine} />
+                    <View style={styles.cardDataContainer}>
+                        <View style={styles.cardData}>
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <Text style={styles.cardDataText}>Watch all you want. Ad-free.</Text>
+                        </View>
+                        <View style={styles.cardData}>
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <Text style={styles.cardDataText}>Allows streaming of 4k.</Text>
+                        </View>
+                        <View style={styles.cardData}>
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <Text style={styles.cardDataText}>Video & Audio Quality is Better.</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.dataContainer}>
+                    <View style={styles.dataContent}>
+                        <View style={styles.dataAmountContainer}>
+                            <Text style={styles.dataAmountText}>Amount</Text>
+                            <Text style={styles.dataAmountPrice}>${buyData.objecyBuy.price}</Text>
+                        </View>
+                        <View style={styles.dataTaxContainer}>
+                            <Text style={styles.dataTaxText}>Tax</Text>
+                            <Text style={styles.dataTaxPrice}>${taxPrice}</Text>
+                        </View>
+                        <View style={styles.dataLine} />
+                        <View style={styles.dataTotalContainer}>
+                            <Text style={styles.dataTotalText}>Total</Text>
+                            <Text style={styles.dataTotalPrice}>${(buyData.objecyBuy.price + taxPrice).toFixed(2)}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={styles.paymentMethod}>
+                    <View style={styles.paymentCardData}>
+                        <Image 
+                            source={{ uri: buyData.methodPayment.iconPaymentMethod }} 
+                            width={buyData.methodPayment.iconPaymentMethodWidth}
+                            height={buyData.methodPayment.iconPaymentMethodHeight}
+                            style={styles.paymentMethodIcon} />
+                        <Text style={styles.paymentMethodText}>{buyData.methodPayment.textPaymentMethod}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => {}}>
+                        <Text style={styles.paymentChangeText}>Change</Text>
+                    </TouchableOpacity>
+                </View> 
+            </View>
+            <TouchableOpacity 
+                onPress={() => setOpenModalConfigPayment(true)} 
+                style={styles.buttonContinue}>
+                    <Text style={styles.buttonContinueText}>Confirm Payment</Text>
+            </TouchableOpacity>  
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#181A20',
+    },
+    content: {
+        width: '90%',
+        height: '77%'
+    },
+    paymentMethod: {
+        width: '100%',
+        height: 80,
+        backgroundColor: '#1F222A',
+        borderRadius: 20,
+        marginTop: 30,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    paymentMethodIcon: {
+        marginLeft: 24,
+        marginRight: 24
+    },
+    paymentCardData: {
+        width: '40%',
+        alignItems: 'center',
+        flexDirection: 'row',
+        height: 30,
+    },
+    paymentMethodText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 16,
+    },
+    paymentChangeText: {
+        color: '#06C149',
+        fontFamily: 'Outfit',
+        fontSize: 14,
+        marginRight: 24,
+    },
+    dataContainer: {
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#1F222A',
+        borderRadius: 30,
+        height: 173,
+        marginTop: 30,
+    },
+    dataContent: {
+        width: '86%',
+        height: '100%',
+        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-evenly'
+    },
+    dataAmountContainer: {
+        width: '100%', 
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 22
+    },
+    dataAmountText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 12,
+    },
+    dataAmountPrice: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 13,
+    },
+    dataTaxContainer: {
+        width: '100%', 
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 22
+    },
+    dataTaxText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 12,
+    },
+    dataTaxPrice: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 13,
+    },
+    dataTotalContainer: {
+        width: '100%', 
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 22
+    },
+    dataTotalText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 12,
+    },
+    dataTotalPrice: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 12,
+    },
+    dataLine: {
+        width: '100%',
+        height: 1,
+        backgroundColor: '#35383F',
+        borderRadius: 50,
+        alignSelf: 'center',
+    },
+    cardPremium: {
+        height: 294,
+        width: '100%',
+        borderColor: '#06C149',
+        borderWidth: 2,
+        marginTop: 25,
+        borderRadius: 30
+    },
+    cardHeader: {
+        alignItems: 'center',
+        marginTop: 10
+    },
+    cardHeaderTextContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    cardHeaderTextPrice: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 20,
+    },
+    cardHeaderTextMonth: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 13,
+        marginLeft: 7
+    },
+    cardLine: {
+        width: '80%',
+        height: 1,
+        backgroundColor: '#35383F',
+        borderRadius: 50,
+        alignSelf: 'center',
+        marginTop: 15
+    },
+    cardDataContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cardData: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '80%',
+        marginTop: 18
+    },
+    cardDataText: {
+        marginLeft: 20,
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 13,
+    },
+    buttonContinue: {
+        width: '90%',
+        height: 58,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#06C149',
+        shadowColor: 'rgba(6, 193, 73, 0.4)',
+        shadowOffset: { width: 4, height: 8 },
+        shadowOpacity: 0.24,
+        shadowRadius: 4,
+        elevation: 8, 
+    },
+    buttonContinueText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 15,
+    },
+});
+    
+export default ReviewSummaryScreen;

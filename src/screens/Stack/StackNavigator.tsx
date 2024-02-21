@@ -16,6 +16,8 @@ import EditDataScreen from './EditDataScreen';
 import SubcribeScreen from './SubcribeScreen';
 import PaymentScreen from './PaymentScreen';
 import AddNewCardScreen from './AddNewCardScreen';
+import PrivacyPolicyScreen from './PrivacyPolicyScreen';
+import ReviewSummaryScreen from './ReviewSummaryScreen';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +40,8 @@ const StackNavigator = () => {
             <Stack.Screen name="SubcribeScreen" component={SubcribeScreen}/>
             <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
             <Stack.Screen name="AddNewCardScreen" component={AddNewCardScreen}/>
+            <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen}/>
+            <Stack.Screen name="ReviewSummaryScreen" component={ReviewSummaryScreen}/>
         </Stack.Navigator>
     );
 };
