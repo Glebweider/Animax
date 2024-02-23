@@ -4,11 +4,13 @@ import BackButton from '../../components/BackButton';
 import facebookAuth from '../../utils/facebookAuth';
 import googleAuth from '../../utils/googleAuth';
 import appleAuth from '../../utils/appleAuth';
+import { StatusBar } from 'expo-status-bar';
 
 const AuthFGAScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar style='light' />
             <BackButton navigation={navigation} text='' />
             <View style={styles.titleContainer}>
                 <Image source={require('../../../assets/letsyouin.png')} style={styles.titleImage} />
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20',
     },
     titleContainer: {
-        marginTop: 25,
         width: '100%',
         height: '30%',
         alignItems: 'center',

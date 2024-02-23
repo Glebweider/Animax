@@ -18,6 +18,8 @@ import PaymentScreen from './PaymentScreen';
 import AddNewCardScreen from './AddNewCardScreen';
 import PrivacyPolicyScreen from './PrivacyPolicyScreen';
 import ReviewSummaryScreen from './ReviewSummaryScreen';
+import ForgotPasswordMethodsScreen from './ForgotPasswordMethodsScreen';
+import ForgotPasswordCodeVerifyScreen from './ForgotPasswordCodeVerifyScreen';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +44,8 @@ const StackNavigator = () => {
             <Stack.Screen name="AddNewCardScreen" component={AddNewCardScreen}/>
             <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen}/>
             <Stack.Screen name="ReviewSummaryScreen" component={ReviewSummaryScreen}/>
+            <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen}/>
+            <Stack.Screen name="ForgotPasswordCodeVerifyScreen" component={ForgotPasswordCodeVerifyScreen}/>
         </Stack.Navigator>
     );
 };

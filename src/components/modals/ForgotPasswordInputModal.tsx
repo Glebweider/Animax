@@ -1,38 +1,31 @@
 import React, { useEffect } from 'react';
-import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
 import { BallIndicator } from 'react-native-indicators';
 
 interface ModalProps {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     navigation: any;
-    data: any
+    setData: React.Dispatch<React.SetStateAction<string>>;
+    data: any;
 }
 
-const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, navigation }) => {
-
-    useEffect(() => {
-        if (visible) {                
-            setTimeout(() => {
-                setVisible(false);
-                navigation.navigate('Profile');
-            }, 5000);
-        }
-    }, [visible]);
+const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, setData, data, navigation }) => {
 
     return (
         <Modal transparent visible={visible} animationType="slide">
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Image 
-                        source={require('../../../assets/backgroundConfigurator.png')} //Заменить на другую иконку
-                        style={styles.modalImage} />
-                    <Text style={styles.modalTitle}>Congratulations!</Text>
-                    <Text style={styles.modalText}>Your have successfully subscribed 1 {data.objecyBuy.date} premium. Enjoy the benefits!</Text>
+                    <View style={styles.modalInputSection}>
+                        <TextInput
+                            style={styles.modalInput}
+                            placeholderTextColor="#9E9E9E"
+                            placeholder={data}
+                            onChangeText={(newText) => setData(newText)}/>
+                    </View>
                     <TouchableOpacity 
                         onPress={() => {
                             setVisible(false);
-                            navigation.navigate('Profile');
                         }}
                         style={styles.modalButtonContainer}>
                         <Text style={styles.modalButtonText}>oк</Text>
@@ -51,7 +44,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
     },
     modalButtonContainer: {
-        width: '80%',
+        width: '86%',
         height: 58,
         borderRadius: 50,
         justifyContent: 'center',
@@ -68,29 +61,27 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: '#1F222A',
         width: '80%',
-        height: '60%',
+        height: '22%',
         borderRadius: 40,
         alignItems: 'center',
     },
-    modalImage: {
-        marginTop: 15,
-        width: 240,
-        height: 240
-    },
-    modalTitle: {
-        marginTop: 20,
-        color: '#06C149',
-        fontFamily: 'Outfit',
-        fontSize: 24
-    },
-    modalText: {
-        marginTop: 15,
+    modalInput: {
+        flex: 1,
+        height: '100%',
         color: '#fff',
         fontFamily: 'Outfit',
-        fontSize: 13,
-        width: '80%',
-        textAlign: 'center'
+        marginLeft: 20
+    },
+    modalInputSection: {
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '86%',
+        height: 64,
+        borderRadius: 20,
+        backgroundColor: '#181A20',
     }
 });
 
-export default ConfigPaymentModal;
+export default ForgotPasswordInputModal;

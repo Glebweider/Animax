@@ -14,6 +14,7 @@ import { saveTokenToStorage } from '../../utils/token';
 import authUserInToken from '../../utils/fetch/authUserInToken';
 import { setUser } from '../../redux/reducers/userReducer';
 import { useDispatch } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
 
 const AuthSignInScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -76,6 +77,7 @@ const AuthSignInScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar style='light' />
             <BackButton navigation={navigation} text='' />
             <View style={styles.titleContainer}>
                 <Image source={require('../../../assets/logo.png')} style={styles.titleImage} />
@@ -123,7 +125,7 @@ const AuthSignInScreen = ({ navigation }) => {
                     <Text style={styles.signInText}>Sign in</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={() => navigation.navigate('ForgotPassword')}
+                    onPress={() => navigation.navigate('ForgotPasswordMethodsScreen')}
                     style={styles.clicableForgotPassword}>
                     <Text style={styles.clicableForgotPasswordText}>Forgot the password?</Text>
                 </TouchableOpacity>
@@ -256,7 +258,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20',
     },
     titleContainer: {
-        marginTop: 5,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center'
