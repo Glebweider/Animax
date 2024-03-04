@@ -11,15 +11,20 @@ export const GET_ANIME = gql`
             name
             rating
             russian
+            japanese
             score
             status
             poster {
+                id
                 originalUrl
-                previewUrl
             }
             genres {
                 id
                 russian
+            }
+            scoresStats {
+                count
+                score
             }
         }
     }

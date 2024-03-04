@@ -4,7 +4,7 @@
     "slug": "animax",    
     "scheme": "myapp",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "platforms": [
@@ -24,6 +24,7 @@
     },
     "android": {
       "package": "com.codewithbeto.Animax",
+      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

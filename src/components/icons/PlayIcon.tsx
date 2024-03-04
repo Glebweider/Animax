@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const PlayIcon = ({ Color, Style }) => (
+const PlayIcon = ({ Color, Style, Width, Height }) => (
     <Svg
-        width="16"
-        height="16"
+        width={Width}
+        height={Height}
         viewBox="0 0 512 512"
         style={Style}>
         <Path

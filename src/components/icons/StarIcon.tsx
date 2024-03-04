@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const StarIcon = ({ Color, Style }) => (
+const StarIcon = ({ Color, Style, Width, Height }) => (
     <Svg
-        width="24"
-        height="24"
+        width={Width}
+        height={Height}
         viewBox="0 0 24 24"
         fill={Color}
         style={Style}>

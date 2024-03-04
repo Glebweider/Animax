@@ -6,7 +6,6 @@ import CrownIcon from '../../components/icons/CrownIcon';
 import Svg, { G, Path } from 'react-native-svg';
 import ArrowRightIcon from '../../components/icons/ArrowRightIcon copy';
 import ProfileIcon from '../../components/icons/ProfileIcon';
-import DownloadIcon from '../../components/icons/DownloadIcon';
 import LogoutModal from '../../components/modals/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
 
@@ -56,15 +55,6 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.labelLeftContainer}>
                         <ProfileIcon Width={27} Height={27} Color={'#fff'} />
                         <Text style={styles.labelLeftText}>Edit Profile</Text>
-                    </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={() => {}}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <DownloadIcon Style={{}} Width={27} Height={27} Color={'#fff'} />
-                        <Text style={styles.labelLeftText}>Download</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>

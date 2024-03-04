@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList } from 'react-native';
 import { useApolloClient } from '@apollo/client';
 import { GET_ANIME } from '../../utils/graphql/getAnime';
 import { BallIndicator } from 'react-native-indicators';
@@ -9,19 +9,22 @@ import SendIcon from '../../components/icons/SendIcon';
 import MyListIcon from '../../components/icons/MyListIcon';
 import StarIcon from '../../components/icons/StarIcon';
 import PlayIcon from '../../components/icons/PlayIcon';
-import DownloadIcon from '../../components/icons/DownloadIcon';
 import SmartTvIcon from '../../components/icons/SmartTvIcon';
 import ArrowRightIcon from '../../components/icons/ArrowRightIcon copy';
 import { getTokenFromStorage } from '../../utils/token';
 import getAnimeListUser from '../../utils/fetch/getAnimeListUser';
 import removeAnimeListUser from '../../utils/fetch/removeAnimeListUser';
 import addAnimeListUser from '../../utils/fetch/addAnimeListUser';
+import getAnimeEpisodes from '../../utils/fetch/getAnimeEpisodes';
+import { ResizeMode, Video } from 'expo-av';
+import RatingModal from '../../components/modals/RatingModal';
 
 interface Anime {
     id: number;
     name: string;
     russian: string;
     poster: {
+        id: string;
         originalUrl: string;
     };
     score: string;
@@ -37,7 +40,13 @@ interface Anime {
         {
             id: number;
             russian: string;
-        },
+        }
+    ];
+    scoresStats: [
+        {
+            count: number;
+            score: number;
+        }
     ];
 }
 
@@ -49,6 +58,7 @@ const AnimeScreen = ({ navigation, route }) => {
         name: '',
         russian: '',
         poster: {
+            id: '',
             originalUrl: '',
         },
         score: '',
@@ -66,9 +76,20 @@ const AnimeScreen = ({ navigation, route }) => {
                 russian: '',
             },
         ],
+        scoresStats: [
+            {
+                count: 0,
+                score: 0,
+            }
+        ],
     });
-    const [isInMyList, setIsInMyList] = useState(false);
-    
+    const [isInMyList, setIsInMyList] = useState<boolean>(false);
+    const [episodesAnime, setEpisodesAnime] = useState<any>([]);
+    const [episodesAnimeHost, setEpisodesAnimeHost] = useState<string>('');
+    const [selectedEpisodeAnime, setSelectedEpisodeAnime] = useState<any>(null);
+    const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
+    const videoRef = useRef<Video>(null);
+
     useEffect(() => {
         const fetchData = async () => {
             if (animeId) {
@@ -80,6 +101,16 @@ const AnimeScreen = ({ navigation, route }) => {
                 });         
                 if (data && !error) {
                     setAnime(data.animes[0]);
+                    const animeEpisodes = await getAnimeEpisodes(data.animes[0].name || data.animes[0].russian || data.animes[0].japanese);
+                    if (animeEpisodes.list[0]) {
+                        const arrayData = Object.values(animeEpisodes.list[0].player.list)
+                        setEpisodesAnime(arrayData);
+                        setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
+                        setSelectedEpisodeAnime(arrayData[0])
+                    } else {
+                        alert('Ошибка серии этого аниме не найдены');
+                        setEpisodesAnime(null);
+                    }
                 } 
             }            
         }
@@ -122,11 +153,15 @@ const AnimeScreen = ({ navigation, route }) => {
         } catch (error) {
             console.error('Ошибка при попытке поделиться:', error.message);
         }
-};
+    };
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
+            <RatingModal 
+                visible={isOpenRatingWindow} 
+                setVisible={setOpenRatingWindow}
+                anime={anime} />
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ArrowLeftIcon Style={styles.headerIconArrow} Color={'#fff'} />
@@ -175,10 +210,14 @@ const AnimeScreen = ({ navigation, route }) => {
                 </View>
             </View>
             <View style={styles.animeData}>
-                <StarIcon Style={{}} Color={'#115D30'} />
-                <Text style={styles.animeScore}>
-                    {Number(anime.score).toFixed(1)}
-                    </Text>
+                <TouchableOpacity
+                    onPress={() => setOpenRatingWindow(true)}
+                    style={styles.animeScoreContainer}>
+                    <StarIcon Style={{}} Color={'#06C149'} Width={24} Height={24} />
+                    <Text style={styles.animeScore}>
+                        {Number(anime.score).toFixed(1)}
+                    </Text>                    
+                </TouchableOpacity>
                 <ArrowRightIcon Color={'#06C149'} Width={22} Height={22} />
                 <Text style={styles.animeDate}>
                     {new Date(anime.createdAt).getFullYear()}
@@ -198,26 +237,6 @@ const AnimeScreen = ({ navigation, route }) => {
                     </ScrollView>
                 </View>
             </View>
-            <View style={styles.animeButtonsContainer}>
-                <TouchableOpacity 
-                    onPress={() => {}}
-                    style={styles.animeButtonPlay}>
-                    <PlayIcon 
-                        Color={'#fff'} 
-                        Style={{ marginRight: 7 }} />
-                    <Text style={styles.animeButtonPlayText}>Play</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={() => {}}
-                    style={styles.animeButtonDownload}>
-                    <DownloadIcon 
-                        Color={'#06C149'} 
-                        Style={{ marginRight: 7 }}
-                        Width={20}
-                        Height={20} />
-                    <Text style={styles.animeButtonDownloadText}>Download</Text>
-                </TouchableOpacity>
-            </View>
             {anime.description ?
                 <View style={styles.animeDescriptionContainer}>
                     <Text 
@@ -230,50 +249,127 @@ const AnimeScreen = ({ navigation, route }) => {
                     </Text>
                 </View>
                 :
-                <Text>Нету дескриптион</Text>
+                <Text style={styles.animeNoneDescriptionText}>None description</Text>
             }
             <View style={styles.animeEpisodesContainer}>
                 <View style={styles.animeEpisodesHeader}>
-                    <Text style={styles.animeEpisodesText}>Episodes</Text>
-                    <Text style={styles.animeEpisodesLabel}>Season 2</Text>                    
+                    <Text style={styles.animeEpisodesText}>Episodes</Text>                  
                 </View>
-                <View style={styles.animeEpisodes}>
-
+                <View style={styles.animeEpisodesCards}>
+                    <FlatList
+                        data={episodesAnime}
+                        horizontal
+                        keyExtractor={(item) => item.uuid}
+                        style={{marginTop: 20}}
+                        renderItem={({ item }) => 
+                            <TouchableOpacity 
+                                key={item.uuid}
+                                onPress={() => setSelectedEpisodeAnime(item)}
+                                style={styles.cardEpisodeContainer}>
+                                <Image 
+                                    source={item.preview ? 
+                                        {uri: `https://anilibria.tv${item.preview}`} 
+                                        : 
+                                        require('../../../assets/default-to-poster.jpg') 
+                                    }
+                                    style={styles.cardEpisodeImage} />
+                                <PlayIcon 
+                                    Color={'#fff'} 
+                                    Style={{}}
+                                    Width={23}
+                                    Height={23} />
+                                <Text style={styles.cardEpisodeText}>Episode {item.episode}</Text>
+                            </TouchableOpacity>
+                        }
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{paddingHorizontal: 10}}/>
                 </View>
             </View>
-        </View>
+            {selectedEpisodeAnime &&
+                <Video
+                    ref={videoRef}
+                    source={{ uri: `https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}` }}
+                    posterSource={selectedEpisodeAnime.preview ?
+                        {uri: `https://anilibria.tv${selectedEpisodeAnime.preview}`} 
+                        :
+                        require('../../../assets/default-to-video.jpg')
+                    }
+                    posterStyle={styles.videoPoster}
+                    usePoster={true}
+                    style={styles.videoContainer}
+                    videoStyle={styles.video}
+                    resizeMode={ResizeMode.COVER}
+                    useNativeControls={true}/> 
+            }
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '100%',
+    scrollContainer: {
+        flexGrow: 1,
+        height: '118%',
         alignItems: 'center',
         backgroundColor: '#181A20',
     },
+    videoContainer: {
+        width: "92%", 
+        height: 300,
+        borderRadius: 10,
+        marginTop: 25
+    },
+    videoPoster: {
+        opacity: 0.9
+    },
+    video: {
+        height: '100%',
+        width: '100%',
+    },
+    animeEpisodesCards: {
+        alignItems: 'center',
+        width: '100%'
+    },
+    cardEpisodeContainer: {
+        width: 150,
+        height: 115,
+        marginRight: 7,
+        marginLeft: 7,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#1F222A',
+        borderRadius: 10
+    },
+    cardEpisodeImage: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        borderRadius: 10,
+        opacity: 0.9
+    },
+    cardEpisodeText: {
+        color: '#fff',
+        fontSize: 11,
+        fontFamily: 'Outfit',
+        position: 'absolute', 
+        margin: 10, 
+        left: 0, 
+        bottom: 0
+    },
     animeEpisodesContainer: {
-        width: '90%',
+        width: '100%',
         marginTop: 15,
+        alignItems: 'center'
     },
     animeEpisodesHeader: {
-        width: '100%',
+        width: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     animeEpisodesText: {
         color: '#fff',
-        fontSize: 15,
+        fontSize: 16,
         fontFamily: 'Outfit',
-    },
-    animeEpisodesLabel: {
-        color: '#06C149',
-        fontSize: 13,
-        fontFamily: 'Outfit',
-    },
-    animeEpisodes: {
-
     },
     animeDescriptionContainer: {
         width: '90%',
@@ -287,42 +383,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         width: '100%'
     },
-    animeButtonsContainer: {
-        width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 18,
-    },
-    animeButtonPlay: {
-        width: '48%',
-        backgroundColor: '#06C149',
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 38,
-        flexDirection: 'row',
-    },
-    animeButtonPlayText: {
+    animeNoneDescriptionText: {
         color: '#fff',
         fontSize: 13,
         fontFamily: 'Outfit',
-        overflow: 'hidden',
-    },
-    animeButtonDownload: {
-        width: '48%',        
-        borderColor: '#06C149',
-        borderRadius: 50,
-        borderWidth: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 38,
-        flexDirection: 'row',
-    },
-    animeButtonDownloadText: {
-        color: '#06C149',
-        fontSize: 13,
-        fontFamily: 'Outfit',
-        overflow: 'hidden',
+        marginTop: 18,
     },
     genresContainer: {
         width: '71%',
@@ -351,6 +416,10 @@ const styles = StyleSheet.create({
         color: '#06C149',
         fontFamily: 'Outfit',
         fontSize: 8
+    },
+    animeScoreContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     animeScore: {
         marginLeft: 7,

@@ -107,7 +107,7 @@ const HomeScreen = ({ navigation }) => {
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('AnimeScreen', {animeId: selectAnime.id})} 
                                     style={styles.animeButtonPlay}>
-                                    <PlayIcon Color={'#fff'} Style={{marginRight: 7,}} />
+                                    <PlayIcon Color={'#fff'} Style={{marginRight: 7}} Width={16} Height={16} />
                                     <Text style={styles.animeButtonTextPlay}>Play</Text>
                                 </TouchableOpacity>
                                 <View style={{marginLeft: 10}}>
@@ -143,7 +143,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({ 
     scrollContainer: {
         flexGrow: 1,
-        height: '118%'
+        height: '110%'
     },
     animeDataContainer: {
         position: 'absolute',

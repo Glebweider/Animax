@@ -5,14 +5,12 @@ import { StyleSheet, View } from "react-native";
 import HomeScreen from './HomeScreen';
 import ReleaseScreen from './ReleaseScreen';
 import MyListScreen from './MyListScreen';
-import DownloadScreen from './DownloadScreen';
 import ProfileScreen from './ProfileScreen';
 
 import ProfileIcon from "../../components/icons/ProfileIcon";
 import HomeIcon from "../../components/icons/HomeIcon";
 import CalendarIcon from "../../components/icons/CalendarIcon";
 import MyListIcon from "../../components/icons/MyListIcon";
-import DownloadIcon from "../../components/icons/DownloadIcon";
 
 const Tab = createBottomTabNavigator();
 
@@ -72,15 +70,6 @@ const TabNavigator = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <MyListIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
-                    ),
-                    unmountOnBlur: true
-                }}  />
-            <Tab.Screen 
-                name='Download' 
-                component={DownloadScreen}
-                options={{
-                    tabBarIcon: ({ focused }) => (
-                        <DownloadIcon Width={24} Height={24} Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
                     unmountOnBlur: true
                 }}  />
