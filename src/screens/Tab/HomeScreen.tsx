@@ -85,22 +85,21 @@ const HomeScreen = ({ navigation }) => {
                             uri: selectAnime.poster.originalUrl}} 
                             style={styles.selectAnimeImage} />
                         :
-                        <Text>Загрузка</Text>
+                        <Text>Loading</Text>
                     }
                     <View style={styles.animeDataContainer}>
                         <View style={styles.animeContent}>
                             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeName}>{selectAnime.russian}</Text>
                             <View style={styles.tagsContainer}>
-                                {selectAnime.genres ?
-                                    selectAnime.genres.map((tag) => (
-                                        <Text 
-                                            key={tag.russian} 
-                                            numberOfLines={1} 
-                                            ellipsizeMode="tail" 
-                                            style={styles.animeDescription}>{tag.russian}, </Text>
-                                    ))
+                                {selectAnime.genres ? 
+                                    <Text 
+                                        numberOfLines={1} 
+                                        ellipsizeMode="tail" 
+                                        style={styles.animeDescription}>
+                                            {selectAnime.genres.map(genre => genre.russian).join(', ')}
+                                    </Text>
                                     :
-                                    <Text style={styles.animeDescription}>Загрузка</Text>
+                                    <Text></Text>
                                 }
                             </View>
                             <View style={styles.animeButtonsContainer}>
@@ -143,7 +142,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({ 
     scrollContainer: {
         flexGrow: 1,
-        height: '110%'
+        height: '114%'
     },
     animeDataContainer: {
         position: 'absolute',
@@ -283,7 +282,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '90%',
         justifyContent: 'space-between',
-        marginTop: 10,
     },
     newEpisodeAnimeText: {
         color: '#fff',

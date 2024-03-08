@@ -255,7 +255,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 <View style={styles.animeEpisodesHeader}>
                     <Text style={styles.animeEpisodesText}>Episodes</Text>                  
                 </View>
-                <View style={styles.animeEpisodesCards}>
+
                     <FlatList
                         data={episodesAnime}
                         horizontal
@@ -284,7 +284,7 @@ const AnimeScreen = ({ navigation, route }) => {
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={{paddingHorizontal: 10}}/>
                 </View>
-            </View>
+
             {selectedEpisodeAnime &&
                 <Video
                     ref={videoRef}
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     },
     videoContainer: {
         width: "92%", 
-        height: 300,
+        height: 260,
         borderRadius: 10,
         marginTop: 25
     },
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     },
     animeEpisodesCards: {
         alignItems: 'center',
-        width: '100%'
+        width: '100%',
     },
     cardEpisodeContainer: {
         width: 150,

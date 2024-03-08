@@ -59,15 +59,27 @@ const ReleaseScreen = ({ navigation }) => {
         fetchData();
     }, []);
     
+    const animeCardTime = (data: string) => {
+        const date = new Date(data);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+
+        const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+        const formattedTime = `${formattedHours}:${formattedMinutes}`;
+        return formattedTime
+    }
 
     useEffect(() => {
         if(selectedDate) {
             if (Animes) {
                 const animeForDate = Animes.filter((anime) => {
-                    if (anime.anime.score >= 7) {
+                    if (anime.anime.score >= 7) {                
                         return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
                     } 
                 });
+
                 setSelectedAnimes(animeForDate);
             }
         }
@@ -117,23 +129,29 @@ const ReleaseScreen = ({ navigation }) => {
                     data={selectedAnimes}
                     keyExtractor={(item) => item.anime.id.toString()}
                     renderItem={({ item }) => (
-                        <View key={item.anime.id} style={styles.animeCardContainer}>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
-                                style={styles.animeCardImage}>
-                                <Image
-                                    source={{ uri: `https://shikimori.me${item.anime.image.original}` }}
-                                    style={styles.animeCardImage}/>
-                            </TouchableOpacity>
-                            <View style={styles.animeCardData}>
-                                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
-                                    {item.anime.russian ? item.anime.russian : item.anime.name}
-                                </Text>
-                                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
-                                    Episodes {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
-                                </Text>
-                                <View style={{ marginTop: 10 }}>
-                                    <MyAnimeListButton anime={item.anime} />
+                        <View style={{marginTop: 15}}>
+                            <View style={styles.animeCardTimeContainer}>
+                                <View style={styles.animeCardTimeLine} /> 
+                                <Text style={styles.animeCardTimeText}>{animeCardTime(item.next_episode_at)}</Text>                                
+                            </View>
+                            <View key={item.anime.id} style={styles.animeCardContainer}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
+                                    style={styles.animeCardImage}>
+                                    <Image
+                                        source={{ uri: `https://shikimori.me${item.anime.image.original}` }}
+                                        style={styles.animeCardImage}/>
+                                </TouchableOpacity>
+                                <View style={styles.animeCardData}>
+                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
+                                        {item.anime.russian ? item.anime.russian : item.anime.name}
+                                    </Text>
+                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
+                                        Episodes {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
+                                    </Text>
+                                    <View style={{ marginTop: 10 }}>
+                                        <MyAnimeListButton anime={item.anime} />
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -160,6 +178,24 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    animeCardTimeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    animeCardTimeLine: {
+        backgroundColor: '#06C149',
+        width: 16,
+        height: 6,
+        marginTop: 2,
+        borderRadius: 50,
+    },
+    animeCardTimeText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 14,
+        textAlign: 'center',
+        marginLeft: 6,
     },
     errorTextContainer: {
         width: '90%',
@@ -206,7 +242,7 @@ const styles = StyleSheet.create({
     animeCardContainer: {
         width: '100%',
         height: 115,
-        marginTop: 20,
+        marginTop: 9,
         flexDirection: 'row'
     },
     animeCardImage: {

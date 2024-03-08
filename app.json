@@ -36,8 +36,10 @@
     "extra": {
       "eas": {
         "projectId": "cabde16e-c505-4729-861a-b2488aa19c0f"
-      }
+      },
+      "supportsRTL": true
     },
+    "plugins": ["expo-localization"],
     "owner": "kurumi12"
   }
 }

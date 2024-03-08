@@ -105,21 +105,12 @@ const ProfileScreen = ({ navigation }) => {
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={() => {}}
+                    onPress={() => navigation.navigate('HelpCenterScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
-                        <Svg
-                            width="27"
-                            height="27"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <G
-                                stroke="#fff"
-                                strokeWidth={1.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round">
-                                <Path
-                                    d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z"/>
+                        <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
+                            <G stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                                <Path d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z"/>
                                 <Path d="M12 15.895V12M12.005 8.5h-.01" />
                             </G>
                         </Svg>
@@ -131,18 +122,9 @@ const ProfileScreen = ({ navigation }) => {
                     onPress={() => navigation.navigate('PrivacyPolicyScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
-                        <Svg
-                            width="27"
-                            height="27"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <G
-                                stroke="#fff"
-                                strokeWidth={1.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round">
-                                <Path
-                                    d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"/>
+                        <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
+                            <G stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                                <Path d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"/>
                                 <Path d="M12 8.105V12M11.995 15.5h.01" />
                             </G>
                         </Svg>

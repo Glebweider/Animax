@@ -20,6 +20,7 @@ import PrivacyPolicyScreen from './PrivacyPolicyScreen';
 import ReviewSummaryScreen from './ReviewSummaryScreen';
 import ForgotPasswordMethodsScreen from './ForgotPasswordMethodsScreen';
 import ForgotPasswordCodeVerifyScreen from './ForgotPasswordCodeVerifyScreen';
+import HelpCenterScreen from './HelpCenterScreen';
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,7 @@ const StackNavigator = () => {
             <Stack.Screen name="ReviewSummaryScreen" component={ReviewSummaryScreen}/>
             <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen}/>
             <Stack.Screen name="ForgotPasswordCodeVerifyScreen" component={ForgotPasswordCodeVerifyScreen}/>
+            <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
         </Stack.Navigator>
     );
 };
