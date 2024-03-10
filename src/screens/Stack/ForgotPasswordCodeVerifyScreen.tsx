@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
 import BackButton from '../../components/BackButton';
-import EmailIcon from '../../components/icons/EmailIcon';
 import { useEffect, useRef, useState } from 'react';
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
@@ -21,7 +20,6 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
             nextInput.focus();
           }
         } else if (newPins.join('').length < pins.join('').length) {
-          // Если символ удален, уменьшаем таймер на 1
           setResendCodeTimer((prevTimer) => Math.max(prevTimer - 1, 0));
           const prevInput = inputRefs.current[index - 1];
           if (prevInput) {

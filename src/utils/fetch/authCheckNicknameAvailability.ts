@@ -1,4 +1,4 @@
-const checkNicknameAvailability = async (nickname) => {
+const checkNicknameAvailability = async (nickname: string) => {
     try {
         const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/check-nickname`, {
             method: 'POST',

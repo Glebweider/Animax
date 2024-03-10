@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import HomeScreen from './HomeScreen';
 import ReleaseScreen from './ReleaseScreen';

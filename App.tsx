@@ -1,12 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar, View } from 'react-native';
+import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'https://shikimori.me/api/graphql', // Замените на URL вашего GraphQL-сервера
+  uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
   cache: new InMemoryCache(),
 });
 

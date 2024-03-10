@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View, Image, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
 import getCalendarAnime from '../../utils/fetch/getCalendarAnime';
 import MyAnimeListButton from '../../components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';

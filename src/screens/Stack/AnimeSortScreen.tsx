@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { GET_GENRES } from '../../utils/graphql/getGenres';
 import BackButton from '../../components/BackButton';
 import { useDispatch, useSelector } from 'react-redux';

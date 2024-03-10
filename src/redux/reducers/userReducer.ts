@@ -2,8 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Interest {
   id: number;
-  emoji: string;
-  emojiText: string;
+  text: string;
 }
 
 interface Anime {

@@ -103,7 +103,7 @@ const AnimeScreen = ({ navigation, route }) => {
                     setAnime(data.animes[0]);
                     const animeEpisodes = await getAnimeEpisodes(data.animes[0].name || data.animes[0].russian || data.animes[0].japanese);
                     if (animeEpisodes.list[0]) {
-                        const arrayData = Object.values(animeEpisodes.list[0].player.list)
+                        const arrayData = Object.values(animeEpisodes.list[0].player.list);
                         setEpisodesAnime(arrayData);
                         setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
                         setSelectedEpisodeAnime(arrayData[0])
@@ -255,36 +255,34 @@ const AnimeScreen = ({ navigation, route }) => {
                 <View style={styles.animeEpisodesHeader}>
                     <Text style={styles.animeEpisodesText}>Episodes</Text>                  
                 </View>
-
-                    <FlatList
-                        data={episodesAnime}
-                        horizontal
-                        keyExtractor={(item) => item.uuid}
-                        style={{marginTop: 20}}
-                        renderItem={({ item }) => 
-                            <TouchableOpacity 
-                                key={item.uuid}
-                                onPress={() => setSelectedEpisodeAnime(item)}
-                                style={styles.cardEpisodeContainer}>
-                                <Image 
-                                    source={item.preview ? 
-                                        {uri: `https://anilibria.tv${item.preview}`} 
-                                        : 
-                                        require('../../../assets/default-to-poster.jpg') 
-                                    }
-                                    style={styles.cardEpisodeImage} />
-                                <PlayIcon 
-                                    Color={'#fff'} 
-                                    Style={{}}
-                                    Width={23}
-                                    Height={23} />
-                                <Text style={styles.cardEpisodeText}>Episode {item.episode}</Text>
-                            </TouchableOpacity>
-                        }
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={{paddingHorizontal: 10}}/>
-                </View>
-
+                <FlatList
+                    data={episodesAnime}
+                    horizontal
+                    keyExtractor={(item) => item.uuid}
+                    style={{marginTop: 20}}
+                    renderItem={({ item }) => 
+                        <TouchableOpacity 
+                            key={item.uuid}
+                            onPress={() => setSelectedEpisodeAnime(item)}
+                            style={styles.cardEpisodeContainer}>
+                            <Image 
+                                source={item.preview ? 
+                                    {uri: `https://anilibria.tv${item.preview}`} 
+                                    : 
+                                    require('../../../assets/default-to-poster.jpg') 
+                                }
+                                style={styles.cardEpisodeImage} />
+                            <PlayIcon 
+                                Color={'#fff'} 
+                                Style={{}}
+                                Width={23}
+                                Height={23} />
+                            <Text style={styles.cardEpisodeText}>Episode {item.episode}</Text>
+                        </TouchableOpacity>
+                    }
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{paddingHorizontal: 10}}/>
+            </View>
             {selectedEpisodeAnime &&
                 <Video
                     ref={videoRef}
@@ -307,7 +305,7 @@ const AnimeScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     scrollContainer: {
-        flexGrow: 1,
+        width: '100%',
         height: '118%',
         alignItems: 'center',
         backgroundColor: '#181A20',

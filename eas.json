@@ -20,6 +20,12 @@
     "production": {
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://195.211.141.141:4000/api"
+      },
+      "android": {
+        "buildType": "apk"
       }
     }
   },

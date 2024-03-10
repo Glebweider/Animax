@@ -1,29 +1,24 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Image, Text, Button, TouchableOpacity, ScrollView} from 'react-native';
 import BackButton from '../../components/BackButton';
-import getInterests from '../../utils/fetch/getInterests';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { addInterest } from '../../redux/reducers/authReducer';
+import { GET_GENRES } from '../../utils/graphql/getGenres';
+import { useQuery } from '@apollo/client';
 
 const AuthAccountSetupInterestScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const [interestsArray, setInterestsArray] = React.useState<{ id: number; text: string }[]>([]);
     const InterestsState = useSelector((state: RootState) => state.authReducer);
-    const [isLoading, setLoading] = React.useState<boolean>(true);
+    const { data } = useQuery(GET_GENRES);   
+    const [genresAnime, setGenresAnime] = useState([]); 
 
     useEffect(() => {
-        if (interestsArray.length > 0) {
-            return
-        } else {
-            const fetchData = async () => {
-                setInterestsArray(await getInterests());
-                setLoading(false);
-            };        
-            fetchData();            
+        if (data) {
+            setGenresAnime(data.genres);
         }
-    },[]);
+    }, [data]);
 
     useEffect(() => {
         setActiveButton(true);
@@ -33,30 +28,32 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
     }, [InterestsState.interests]);
 
     const renderItems = () =>
-        interestsArray.map((data) => (
+    genresAnime.map((data) => (
         <TouchableOpacity
             key={data.id}
-            onPress={() => dispatch(addInterest({ id: data.id, text: data.text }))}
+            onPress={() => dispatch(addInterest({ id: data.id, text: data.russian }))}
             style={InterestsState.interests.some((i) => i.id === data.id)
             ? styles.interestContainerEnabled
             : styles.interestContainerDisabled}>
-            <Text style={styles.interestText}>{data.text}</Text>
+            <Text style={styles.interestText}>{data.russian}</Text>
         </TouchableOpacity>
     ));
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Choose Your Interest" />
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>Choose your interests and get the best anime recommendations. Don't worry, you can always change it later.</Text>
-            </View>
-            {isLoading ? 
-                <Text style={{color: '#fff'}}>Загрузка</Text>
-                :
-                <View style={styles.interestsContainer}>
-                    {renderItems()}
-                </View>                
-            }
+            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>            
+                <BackButton navigation={navigation} text="Choose Your Interest" />
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>Choose your interests and get the best anime recommendations. Don't worry, you can always change it later.</Text>
+                </View>
+                {genresAnime.length >= 1 ?                 
+                    <View style={styles.interestsContainer}>
+                        {renderItems()}
+                    </View>
+                    :     
+                    <Text style={{color: '#fff'}}>Загрузка</Text>
+                }                
+            </ScrollView>
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('AuthFGA')} 
@@ -75,6 +72,10 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
 };
     
 const styles = StyleSheet.create({
+    scrollContainer: {
+        flexGrow: 1,
+        paddingBottom: 85,
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -125,7 +126,9 @@ const styles = StyleSheet.create({
     buttonsContainer: {
         width: '90%',
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 15,
+        marginTop: 15
     },
     buttonSkip: {
         backgroundColor: '#35383F',

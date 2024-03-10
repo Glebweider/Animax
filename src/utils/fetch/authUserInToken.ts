@@ -1,4 +1,4 @@
-const authUserInToken = async (token: any) => {
+const authUserInToken = async (token: string) => {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/verify`, {
         method: 'GET',
         headers: {

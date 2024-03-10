@@ -1,4 +1,4 @@
-const checkPhoneNumberAvailability = async (phonenumber) => {
+const checkPhoneNumberAvailability = async (phonenumber: string) => {
     try {
         const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/check-phonenumber`, {
             method: 'POST',

@@ -3,7 +3,7 @@
     "name": "Animax",
     "slug": "animax",    
     "scheme": "myapp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,9 +12,6 @@
       "android",
       "web"
     ],
-    "androidNavigationBar": {
-      "visible": "hidden"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -24,7 +21,7 @@
     },
     "android": {
       "package": "com.codewithbeto.Animax",
-      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "INTERNET"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

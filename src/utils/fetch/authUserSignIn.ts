@@ -1,6 +1,9 @@
-import axios from 'axios';
+interface iAuthSignIn {
+    email: string;
+    password: string;
+}
 
-const authSignIn = async ({email, password}) => {
+const authSignIn = async ({email, password}: iAuthSignIn) => {
     const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: {
@@ -16,7 +19,7 @@ const authSignIn = async ({email, password}) => {
         return data;
     } else {
         const errorData = await response.json();
-        alert(errorData.message);
+        console.log(errorData)
         return;
     }
 }
