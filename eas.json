@@ -7,7 +7,6 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "resourceClass": "m-medium",
         "simulator": true
       }
     },
@@ -15,17 +14,20 @@
       "distribution": "internal",
       "ios": {
         "resourceClass": "m-medium"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
+        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.me/api/graphql"
       }
     },
     "production": {
-      "ios": {
-        "resourceClass": "m-medium"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://195.211.141.141:4000/api"
-      },
+      "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
+        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.me/api/graphql"
       }
     }
   },

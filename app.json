@@ -1,11 +1,11 @@
 {
   "expo": {
     "name": "Animax",
-    "slug": "animax",    
+    "slug": "animax",
     "scheme": "myapp",
     "version": "1.0.1",
     "orientation": "default",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
     "platforms": [
       "ios",
@@ -21,10 +21,9 @@
     },
     "android": {
       "package": "com.codewithbeto.Animax",
-      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "INTERNET"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#181A20"
       }
     },
     "web": {
@@ -33,10 +32,18 @@
     "extra": {
       "eas": {
         "projectId": "cabde16e-c505-4729-861a-b2488aa19c0f"
-      },
-      "supportsRTL": true
+      }
     },
-    "plugins": ["expo-localization"],
-    "owner": "kurumi12"
+    "owner": "kurumi12",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }

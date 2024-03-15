@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { WebView } from 'react-native-webview';
+//import { WebView } from 'react-native-webview';
 import axios from 'axios';
 import { View } from 'react-native';
+
 
 const KodikPlayer = ({ shikimoriInfo }) => {
     const [animeLink, setAnimeLink] = useState('');
@@ -22,25 +23,26 @@ const KodikPlayer = ({ shikimoriInfo }) => {
     }, [shikimoriInfo])
   
     return (
-        <WebView
-            style={{backgroundColor: '#181A20', flex: 1, marginTop: 25}}
-            containerStyle={{ width: '92%', height: 300, borderRadius: 10 }}
-            ref={webViewRef}
-            javaScriptEnabled={true}
-            domStorageEnabled={true}
-            startInLoadingState={true}
-            scalesPageToFit={false}
-            source={{ html: `
-            <iframe src=${animeLink} 
-                id="kodik-player"
-                frameborder="0" 
-                allowfullscreen 
-                allow="autoplay *; fullscreen *" 
-                style="border: 0; 
-                width: 100%; 
-                height: 300;">
-            </iframe>` }}
-        />            
+        //<WebView
+            //style={{backgroundColor: '#181A20', flex: 1, marginTop: 25}}
+            //containerStyle={{ width: '92%', height: 300, borderRadius: 10 }}
+            //ref={webViewRef}
+            //javaScriptEnabled={true}
+            //domStorageEnabled={true}
+            //startInLoadingState={true}
+            //scalesPageToFit={false}
+            //source={{ html: `
+            //<iframe src=${animeLink} 
+                //id="kodik-player"
+                //frameborder="0" 
+                //allowfullscreen 
+                //allow="autoplay *; fullscreen *" 
+                //style="border: 0; 
+                //width: 100%; 
+                //height: 300;">
+            //</iframe>` }}
+        ///> 
+        <View></View>           
     );
 };
   
