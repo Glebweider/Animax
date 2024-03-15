@@ -4,6 +4,7 @@ import SearchIcon from '../../components/icons/SearchIcon';
 import getAnimeListUser from '../../utils/fetch/getAnimeListUser';
 import { getTokenFromStorage } from '../../utils/token';
 import { BallIndicator } from 'react-native-indicators';
+import { i18n } from '../../localization';
 
 const MyListScreen = ({ navigation }) => {
     const [userAnimeList, setUserAnimeList] = useState([]);
@@ -29,7 +30,7 @@ const MyListScreen = ({ navigation }) => {
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
                     <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
-                    <Text style={styles.headerText}>My List</Text>                    
+                    <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>                    
                 </View>
                 <TouchableOpacity 
                     onPress={() => {}}
@@ -70,8 +71,8 @@ const MyListScreen = ({ navigation }) => {
                     <View style={{width: '100%', height: '100%', alignItems: 'center'}}>
                         <Image style={{marginTop: 80}} source={require('../../../assets/error404MyList.png')} />
                         <View style={styles.errorTextContainer}>
-                            <Text style={styles.errorTitle}>Your List is Empty</Text>
-                            <Text style={styles.errorText}>It seems that you haven't added any anime to the list</Text>
+                            <Text style={styles.errorTitle}>{i18n.t('mylist.listempty')}</Text>
+                            <Text style={styles.errorText}>{i18n.t('mylist.emptytext')}</Text>
                         </View>
                     </View>
                 )}                

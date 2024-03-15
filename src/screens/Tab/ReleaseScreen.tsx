@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react
 import getCalendarAnime from '../../utils/fetch/getCalendarAnime';
 import MyAnimeListButton from '../../components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';
+import { i18n } from '../../localization';
 
 const getDateArrayForMonth = () => {
     const today = new Date();
@@ -109,7 +110,7 @@ const ReleaseScreen = ({ navigation }) => {
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
                     <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
-                    <Text style={styles.headerText}>Release Calendar</Text>
+                    <Text style={styles.headerText}>{i18n.t('navigation.release')}</Text>
                 </View>
                 <FlatList
                     data={dateArray}
@@ -147,7 +148,7 @@ const ReleaseScreen = ({ navigation }) => {
                                         {item.anime.russian ? item.anime.russian : item.anime.name}
                                     </Text>
                                     <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
-                                        Episodes {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
+                                        {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
                                     </Text>
                                     <View style={{ marginTop: 10 }}>
                                         <MyAnimeListButton anime={item.anime} />
@@ -162,8 +163,8 @@ const ReleaseScreen = ({ navigation }) => {
                     <View style={{width: '100%', height: '100%', alignItems: 'center'}}>
                         <Image style={{marginTop: 80}} source={require('../../../assets/error404Anime.png')} />
                         <View style={styles.errorTextContainer}>
-                            <Text style={styles.errorTitle}>No Release Schedule</Text>
-                            <Text style={styles.errorText}>Sorry, there in no anime release schedule on this date</Text>
+                            <Text style={styles.errorTitle}>{i18n.t('release.norelease')}</Text>
+                            <Text style={styles.errorText}>{i18n.t('release.noreleasetext')}</Text>
                         </View>
                     </View>
             )}              

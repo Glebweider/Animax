@@ -5,12 +5,14 @@ import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 
+
 const client = new ApolloClient({
   uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
   cache: new InMemoryCache(),
 });
 
 const App = () => {
+
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>

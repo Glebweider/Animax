@@ -10,6 +10,7 @@ import MyAnimeListButton from '../../components/MyAnimeListButton';
 import TopHitsAnime from '../../components/TopHitsAnime';
 import NewEpisodesAnime from '../../components/NewEpisodesAnime';
 import { GET_NEWEPISODESANIME } from '../../utils/graphql/getNewEpisodesAnime';
+import { i18n } from '../../localization';
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
@@ -118,18 +119,18 @@ const HomeScreen = ({ navigation }) => {
                 </View>                    
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.hitsAnimeTextContainer}>
-                        <Text style={styles.hitsAnimeText}>Top Hits Anime</Text>
+                        <Text style={styles.hitsAnimeText}>{i18n.t('home.tophitsanime')}</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('TopHitsAnimeScreen')}>
-                            <Text style={styles.hitsAnimeTextSeeAll}>See all</Text>
+                            <Text style={styles.hitsAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
                     <TopHitsAnime data={topHitsAnime} onSelect={setSelectAnime} />              
                 </View>
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.newEpisodeAnimeTextContainer}>
-                        <Text style={styles.newEpisodeAnimeText}>New Episode Releases</Text>
+                        <Text style={styles.newEpisodeAnimeText}>{i18n.t('home.newepisodereleases')}</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('see all')}>
-                            <Text style={styles.newEpisodeAnimeTextSeeAll}>See all</Text>
+                            <Text style={styles.newEpisodeAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
                     <NewEpisodesAnime data={newEpisodesAnime} onSelect={setSelectAnime} />                   

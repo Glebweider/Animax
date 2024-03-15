@@ -3,6 +3,7 @@ import BackButton from '../../components/BackButton';
 import { useEffect, useState } from 'react';
 import getPaymentMethods from '../../utils/fetch/getPaymentMethods';
 import { getTokenFromStorage } from '../../utils/token';
+import { i18n } from '../../localization';
 
 interface IPaymentMethod {
     textPaymentMethod: string;
@@ -34,9 +35,9 @@ const PaymentScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Payment" />
+            <BackButton navigation={navigation} text={i18n.t('payment.payment')} />
             <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>Select the payment method you want yo use.</Text>
+                <Text style={styles.headerText}>{i18n.t('payment.details')}</Text>
             </View>
             <View style={styles.paymentMethods}>
                 <TouchableOpacity 
@@ -108,7 +109,7 @@ const PaymentScreen = ({ navigation, route }) => {
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('AddNewCardScreen')} 
                     style={styles.addNewCard}>
-                        <Text style={styles.addNewCardText}>Add New Card</Text>
+                        <Text style={styles.addNewCardText}>{i18n.t('payment.newcard')}</Text>
                 </TouchableOpacity>                   
             </View>
             <TouchableOpacity 
@@ -124,7 +125,7 @@ const PaymentScreen = ({ navigation, route }) => {
                     }
                 })} 
                 style={styles.buttonContinue}>
-                    <Text style={styles.buttonContinueText}>Continue</Text>
+                    <Text style={styles.buttonContinueText}>{i18n.t('payment.continue')}</Text>
             </TouchableOpacity>  
         </View>
     );

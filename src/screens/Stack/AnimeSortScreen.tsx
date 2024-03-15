@@ -6,6 +6,7 @@ import BackButton from '../../components/BackButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { addFilter, reset } from '../../redux/reducers/sortReducer';
+import { i18n } from '../../localization';
 
 const AnimeSortScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -36,7 +37,7 @@ const AnimeSortScreen = ({ navigation }) => {
     
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Sort & Filter" />
+            <BackButton navigation={navigation} text={i18n.t('sortfilter.sortfilter')} />
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
                 {genresAnime.length >= 1 ?            
                     <View style={styles.filtersContainer}>
@@ -50,12 +51,12 @@ const AnimeSortScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => dispatch(reset())}
                     style={styles.buttonResetContainer}>
-                    <Text style={styles.buttonResetText}>Reset</Text>
+                    <Text style={styles.buttonResetText}>{i18n.t('sortfilter.reset')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('AnimeSearchScreen')}
                     style={styles.buttonApplyContainer}>
-                    <Text style={styles.buttonApplyText}>Apply</Text>
+                    <Text style={styles.buttonApplyText}>{i18n.t('sortfilter.apply')}</Text>
                 </TouchableOpacity>
             </View>
         </View>

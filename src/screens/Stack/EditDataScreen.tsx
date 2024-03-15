@@ -10,6 +10,7 @@ import * as FileSystem from 'expo-file-system';
 import { setUser } from '../../redux/reducers/userReducer';
 import authUserInToken from '../../utils/fetch/authUserInToken';
 import { getTokenFromStorage, saveTokenToStorage } from '../../utils/token';
+import { i18n } from '../../localization';
 
 
 const EditDataScreen = ({ navigation }) => {
@@ -93,7 +94,7 @@ const EditDataScreen = ({ navigation }) => {
 
     const update = async () => {
             const token = await getTokenFromStorage();
-            const response = await FileSystem.uploadAsync(`http://192.168.1.15:4000/api/auth/update-user-data`, avatar, {
+            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/update-user-data`, avatar, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
                 parameters: {
@@ -121,7 +122,7 @@ const EditDataScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Edit Profile" />
+            <BackButton navigation={navigation} text={i18n.t('profile.edit')} />
             <View style={styles.avatarContainer}>
                 <TouchableOpacity 
                     onPress={() => pickImage()}

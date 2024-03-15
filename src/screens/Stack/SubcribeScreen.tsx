@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import BackButton from '../../components/BackButton';
 import CrownIcon from '../../components/icons/CrownIcon';
 import CheckIcon from '../../components/icons/CheckIcon';
+import { i18n } from '../../localization';
 
 const SubcribeScreen = ({ navigation }) => {
 
@@ -9,8 +10,8 @@ const SubcribeScreen = ({ navigation }) => {
         <View style={styles.container}>
             <BackButton navigation={navigation} text="" />
             <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>Subcribe to Premium</Text>
-                <Text style={styles.headerText}>Enjoy watching Full-HD animes, without restrictions and without ads</Text>
+                <Text style={styles.headerTitle}>{i18n.t('premium.subcribe')}</Text>
+                <Text style={styles.headerText}>{i18n.t('premium.details')}</Text>
             </View>
             <View style={styles.cardsContainer}>
                 <TouchableOpacity 
@@ -25,22 +26,22 @@ const SubcribeScreen = ({ navigation }) => {
                         <CrownIcon Color={'#06C149'} Width={70} Height={70} />
                         <View style={styles.cardHeaderTextContainer}>
                             <Text style={styles.cardHeaderTextPrice}>$0.99</Text>
-                            <Text style={styles.cardHeaderTextMonth}>/month</Text>
+                            <Text style={styles.cardHeaderTextMonth}>/{i18n.t('month')}</Text>
                         </View>
                     </View>
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Watch all you want. Ad-free.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Allows streaming of 4k.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Video & Audio Quality is Better.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -56,22 +57,22 @@ const SubcribeScreen = ({ navigation }) => {
                         <CrownIcon Color={'#06C149'} Width={70} Height={70} />
                         <View style={styles.cardHeaderTextContainer}>
                             <Text style={styles.cardHeaderTextPrice}>$9.99</Text>
-                            <Text style={styles.cardHeaderTextMonth}>/year</Text>
+                            <Text style={styles.cardHeaderTextMonth}>/{i18n.t('year')}</Text>
                         </View>
                     </View>
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Watch all you want. Ad-free.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Allows streaming of 4k.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Video & Audio Quality is Better.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     headerTitle: {
         color: '#06C149',
         fontFamily: 'Outfit',
-        fontSize: 28,
+        fontSize: 22,
     },
     headerText: {
         color: '#E0E0E0',

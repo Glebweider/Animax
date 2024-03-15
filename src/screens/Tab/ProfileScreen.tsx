@@ -8,6 +8,7 @@ import ArrowRightIcon from '../../components/icons/ArrowRightIcon copy';
 import ProfileIcon from '../../components/icons/ProfileIcon';
 import LogoutModal from '../../components/modals/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
+import { i18n } from '../../localization';
 
 const ProfileScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
@@ -22,7 +23,7 @@ const ProfileScreen = ({ navigation }) => {
                 navigation={navigation} />
             <View style={styles.headerContainer}>
                 <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
-                <Text style={styles.headerText}>Profile</Text>   
+                <Text style={styles.headerText}>{i18n.t('navigation.profile')}</Text>   
             </View>
             <View style={styles.profileContainer}>
                 <View style={styles.avatarContainer}>
@@ -40,11 +41,11 @@ const ProfileScreen = ({ navigation }) => {
                 style={styles.premiumContainer}>
                 <CrownIcon Width={60} Height={55} Color={'#06C149'} />
                 <View style={styles.premiumTextContainer}>
-                    <Text style={styles.premiumTitle}>Join Premium!</Text>
+                    <Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
                     <Text 
                         numberOfLines={2} 
                         ellipsizeMode="tail" 
-                        style={styles.premiumDescription}>Enjoy watching Full-HD animes, without restrictions and without ads</Text>
+                        style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
                 </View>
                 <ArrowRightIcon Color={'#06C149'} Width={30} Height={30} />
             </TouchableOpacity>
@@ -54,7 +55,7 @@ const ProfileScreen = ({ navigation }) => {
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <ProfileIcon Width={27} Height={27} Color={'#fff'} />
-                        <Text style={styles.labelLeftText}>Edit Profile</Text>
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.edit')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
@@ -78,12 +79,12 @@ const ProfileScreen = ({ navigation }) => {
                                 </G>
                             </G>
                         </Svg>
-                        <Text style={styles.labelLeftText}>Security</Text>
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.security')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={() => {}}
+                    onPress={() => navigation.navigate('LanguageScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg
@@ -100,7 +101,7 @@ const ProfileScreen = ({ navigation }) => {
                                     strokeWidth={2}/>
                             </G>
                         </Svg>
-                        <Text style={styles.labelLeftText}>Language</Text>
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.language')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
@@ -114,7 +115,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <Path d="M12 15.895V12M12.005 8.5h-.01" />
                             </G>
                         </Svg>
-                        <Text style={styles.labelLeftText}>Help Center</Text>
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.helpcenter')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
@@ -128,7 +129,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <Path d="M12 8.105V12M11.995 15.5h.01" />
                             </G>
                         </Svg>
-                        <Text style={styles.labelLeftText}>Privacy Policy</Text>
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.privacypolicy')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
@@ -149,7 +150,7 @@ const ProfileScreen = ({ navigation }) => {
                                 <Path d="M21.791 12.12H9.75M18.864 9.205l2.928 2.916-2.928 2.916M16.36 7.63c-.33-3.58-1.67-4.88-7-4.88-7.101 0-7.101 2.31-7.101 9.25 0 6.94 0 9.25 7.1 9.25 5.33 0 6.67-1.3 7-4.88" />
                             </G>
                         </Svg>
-                        <Text style={styles.labelLeftTextLogout}>Logout</Text>
+                        <Text style={styles.labelLeftTextLogout}>{i18n.t('profile.logout')}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

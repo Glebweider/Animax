@@ -36,6 +36,7 @@
     },
     "owner": "kurumi12",
     "plugins": [
+      "expo-localization",
       [
         "expo-build-properties",
         {

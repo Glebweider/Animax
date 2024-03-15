@@ -11,6 +11,7 @@ interface ModalProps {
 
 const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) => {
     const deAuthorization = async () => {
+        setVisible(false);
         await removeTokenFromStorage();
         navigation.navigate('AuthFGA');
     };

@@ -112,7 +112,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
         if (checkPhoneNumber && checkNickname) {
 
-            const response = await FileSystem.uploadAsync(`http://192.168.1.15:4000/api/auth/register`, avatar.uri, {
+            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/register`, avatar.uri, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
                 parameters: {

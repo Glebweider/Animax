@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 import StarIcon from '../icons/StarIcon';
+import { i18n } from '../../localization';
 
 
 interface ModalProps {
@@ -30,7 +31,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
             style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modalShelf}/>
-                <Text style={styles.modalTitle}>Give Rating</Text>
+                <Text style={styles.modalTitle}>{i18n.t('anime.modal.giverating')}</Text>
                 <View style={styles.modalHorizontalLine}/>
                 <View style={styles.modalRatingsContainer}>
                     <View style={styles.scoreDataContainer}>
@@ -45,7 +46,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
                             <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
                             <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
                         </View>
-                        <Text style={styles.userVoting}>({totalVotes} users)</Text>
+                        <Text style={styles.userVoting}>({totalVotes} {i18n.t('anime.modal.users')})</Text>
                     </View>
                     <View style={styles.modalVerticalLine}/>
                     <View style={styles.ratingsContainer}>
@@ -66,22 +67,27 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
                 </View>
                 <View style={styles.modalHorizontalLine}/>
                 <View style={styles.stars}>
-                    <StarIcon Style={{}} Color={'#06C149'} Width={34} Height={32} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={34} Height={32} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={34} Height={32} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={34} Height={32} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={34} Height={32} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
+                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
                 </View>
                 <View style={styles.modalButtons}>
                     <TouchableOpacity
                         onPress={() => setVisible(false)}
                         style={styles.modalButtonCancel}>
-                        <Text style={styles.modalButtonCancelText}>Cancel</Text>
+                        <Text style={styles.modalButtonCancelText}>{i18n.t('anime.modal.cancel')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setVisible(false)}
                         style={styles.modalButtonApply}>
-                        <Text style={styles.modalButtonApplyText}>Submit</Text>
+                        <Text style={styles.modalButtonApplyText}>{i18n.t('anime.modal.submit')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

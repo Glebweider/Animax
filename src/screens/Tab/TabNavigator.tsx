@@ -11,6 +11,7 @@ import ProfileIcon from "../../components/icons/ProfileIcon";
 import HomeIcon from "../../components/icons/HomeIcon";
 import CalendarIcon from "../../components/icons/CalendarIcon";
 import MyListIcon from "../../components/icons/MyListIcon";
+import { i18n } from "../../localization";
 
 const Tab = createBottomTabNavigator();
 
@@ -47,39 +48,43 @@ const TabNavigator = () => {
             tabBarInactiveTintColor: '#9E9E9E'
         }}>
             <Tab.Screen 
-                name='Home' 
+                name='Home'
                 component={HomeScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <HomeIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
+                    title: i18n.t('navigation.home'),
                     unmountOnBlur: false
                 }} />
             <Tab.Screen 
-            name='Release' 
+            name='Release'
             component={ReleaseScreen}
             options={{
                     tabBarIcon: ({ focused }) => (
                         <CalendarIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
+                    title: i18n.t('navigation.release'),
                     unmountOnBlur: true
                 }}  />
             <Tab.Screen 
-                name='MyList' 
+                name='MyList'  
                 component={MyListScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <MyListIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
+                    title: i18n.t('navigation.mylist'),
                     unmountOnBlur: true
                 }}  />
             <Tab.Screen 
-                name='Profile' 
+                name='Profile'
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Width={25} Height={25}/>
                     ),
+                    title: i18n.t('navigation.profile'),
                     unmountOnBlur: false
                 }}  />
         </Tab.Navigator>  

@@ -7,6 +7,7 @@ import { GET_ANIMEBYGENRES } from '../../utils/graphql/getAnimeByGenres';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { GET_ANIMEBYSEARCH } from '../../utils/graphql/getAnimeBySearch';
+import { i18n } from '../../localization';
 
 const AnimeSearchScreen = ({ navigation }) => {
     const client = useApolloClient();
@@ -121,7 +122,7 @@ const AnimeSearchScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.searchInput}
                         placeholderTextColor="#9E9E9E"
-                        placeholder="Search"
+                        placeholder={i18n.t('searchanime.search')}
                         keyboardType='default'
                         returnKeyType='search'
                         onSubmitEditing={() => searchAnime()}
@@ -169,8 +170,8 @@ const AnimeSearchScreen = ({ navigation }) => {
                             source={require('../../../assets/404.png')} 
                             style={styles.errorImage} />
                         <View style={styles.errorTextContainer}>
-                            <Text style={styles.errorTitle}>Not Found</Text>
-                            <Text style={styles.errorText}>Sorry, the keyword you entered could not be found. Try to check again or search with other keywords.</Text>
+                            <Text style={styles.errorTitle}>{i18n.t('searchanime.notfound')}</Text>
+                            <Text style={styles.errorText}>{i18n.t('searchanime.sorrytext')}</Text>
                         </View>
                     </View>
                 )}

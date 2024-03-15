@@ -18,6 +18,7 @@ import addAnimeListUser from '../../utils/fetch/addAnimeListUser';
 import getAnimeEpisodes from '../../utils/fetch/getAnimeEpisodes';
 import { ResizeMode, Video } from 'expo-av';
 import RatingModal from '../../components/modals/RatingModal';
+import { i18n } from '../../localization';
 
 interface Anime {
     id: number;
@@ -108,7 +109,7 @@ const AnimeScreen = ({ navigation, route }) => {
                         setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
                         setSelectedEpisodeAnime(arrayData[0])
                     } else {
-                        alert('Ошибка серии этого аниме не найдены');
+                        alert('Ошибка, серии этого аниме не найдены');
                         setEpisodesAnime(null);
                     }
                 } 
@@ -143,7 +144,7 @@ const AnimeScreen = ({ navigation, route }) => {
     };
 
     const handleShare = async () => {
-        const message = `Я советуем тебе аниме ${anime.russian}, ${anime.poster.originalUrl}`;
+        const message = `${i18n.t('anime.share') + anime.russian}, ${anime.poster.originalUrl}`;
       
         try {
             await Share.share({
@@ -174,9 +175,21 @@ const AnimeScreen = ({ navigation, route }) => {
             </View>   
             <View style={styles.previewAnimeContainer}>
                 {anime.poster.originalUrl !== '' ?
-                    <Image 
-                        source={{ uri: anime.poster.originalUrl }} 
-                        style={styles.previewAnimeImage} />
+                    <View style={{
+                        width: '100%', 
+                        height: '100%'
+                        }}>
+                        <View style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)', 
+                            width: '100%', 
+                            height: '100%', 
+                            zIndex: 2, 
+                            position: 'absolute'}}>
+                        </View>
+                        <Image 
+                            source={{ uri: anime.poster.originalUrl }} 
+                            style={styles.previewAnimeImage} />
+                    </View>
                     :
                     <BallIndicator 
                         color='#13D458' size={70} 
@@ -249,11 +262,11 @@ const AnimeScreen = ({ navigation, route }) => {
                     </Text>
                 </View>
                 :
-                <Text style={styles.animeNoneDescriptionText}>None description</Text>
+                <Text style={styles.animeNoneDescriptionText}>{i18n.t('anime.nonedescription')}</Text>
             }
             <View style={styles.animeEpisodesContainer}>
                 <View style={styles.animeEpisodesHeader}>
-                    <Text style={styles.animeEpisodesText}>Episodes</Text>                  
+                    <Text style={styles.animeEpisodesText}>{i18n.t('anime.episodes')}</Text>                  
                 </View>
                 <FlatList
                     data={episodesAnime}
@@ -277,7 +290,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                 Style={{}}
                                 Width={23}
                                 Height={23} />
-                            <Text style={styles.cardEpisodeText}>Episode {item.episode}</Text>
+                            <Text style={styles.cardEpisodeText}>{i18n.t('anime.episode')} {item.episode}</Text>
                         </TouchableOpacity>
                     }
                     showsHorizontalScrollIndicator={false}
@@ -309,6 +322,12 @@ const styles = StyleSheet.create({
         height: '118%',
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    backgroundShadow: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        zIndex: 2
     },
     videoContainer: {
         width: "92%", 
@@ -342,7 +361,7 @@ const styles = StyleSheet.create({
         height: '100%',
         position: 'absolute',
         borderRadius: 10,
-        opacity: 0.9
+        opacity: 0.7
     },
     cardEpisodeText: {
         color: '#fff',

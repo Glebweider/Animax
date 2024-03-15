@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing } from 'reac
 import BackButton from '../../components/BackButton';
 import { useEffect, useRef, useState } from 'react';
 import ContactUs from '../../components/ContactUs';
+import { i18n } from '../../localization';
 
 const HelpCenterScreen = ({ navigation }) => {
     const [selectMethodHelp, setSelectMethodHelp] = useState<string>('FAQ');
@@ -25,7 +26,7 @@ const HelpCenterScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Help Center" />
+            <BackButton navigation={navigation} text={i18n.t('profile.helpcenter')} />
             <View style={styles.methodsContainer}>
                 <View style={styles.methodsTextContainer}>
                     <TouchableOpacity

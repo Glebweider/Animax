@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/client';
-import ArrowLeftIcon from '../../components/icons/ArrowLeftIcon';
 import { GET_ANIMES } from '../../utils/graphql/getTopHitsAnimes';
 import MyAnimeListButton from '../../components/MyAnimeListButton';
 import BackButton from '../../components/BackButton';
+import { i18n } from '../../localization';
 
 const TopHitsAnimeScreen = ({ navigation }) => {
     const client = useApolloClient();
@@ -72,7 +72,7 @@ const TopHitsAnimeScreen = ({ navigation }) => {
                             numberOfLines={3} 
                             ellipsizeMode="tail" 
                             style={styles.animeCardGenre}>
-                            Genre: {item.genres.map(genre => genre.russian).join(', ')}
+                            {i18n.t('genre')}: {item.genres.map(genre => genre.russian).join(', ')}
                         </Text>
                     </View>
 
@@ -85,7 +85,7 @@ const TopHitsAnimeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text='Top Hits Anime' />
+            <BackButton navigation={navigation} text={i18n.t('home.tophitsanime')} />
             <View style={{width: '90%', height: '87%', alignItems: 'center'}}>
                 {animes.length >= 1 && (
                     <FlatList

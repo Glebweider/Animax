@@ -21,6 +21,7 @@ import ReviewSummaryScreen from './ReviewSummaryScreen';
 import ForgotPasswordMethodsScreen from './ForgotPasswordMethodsScreen';
 import ForgotPasswordCodeVerifyScreen from './ForgotPasswordCodeVerifyScreen';
 import HelpCenterScreen from './HelpCenterScreen';
+import LanguageScreen from './LanguageScreen';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,7 @@ const StackNavigator = () => {
             <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen}/>
             <Stack.Screen name="ForgotPasswordCodeVerifyScreen" component={ForgotPasswordCodeVerifyScreen}/>
             <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
+            <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
         </Stack.Navigator>
     );
 };

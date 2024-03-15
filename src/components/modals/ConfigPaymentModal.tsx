@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { BallIndicator } from 'react-native-indicators';
+import { i18n } from '../../localization';
 
 interface ModalProps {
     visible: boolean;
@@ -27,8 +27,12 @@ const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, n
                     <Image 
                         source={require('../../../assets/backgroundConfigurator.png')} //Заменить на другую иконку
                         style={styles.modalImage} />
-                    <Text style={styles.modalTitle}>Congratulations!</Text>
-                    <Text style={styles.modalText}>Your have successfully subscribed 1 {data.objecyBuy.date} premium. Enjoy the benefits!</Text>
+                    <Text style={styles.modalTitle}>{i18n.t('reviewsummary.modal.congratulations')}</Text>
+                    <Text style={styles.modalText}>{
+                        i18n.t('reviewsummary.modal.youhave') + 
+                        i18n.t(data.objecyBuy.date) + 
+                        i18n.t('reviewsummary.modal.enjoy')
+                    }</Text>
                     <TouchableOpacity 
                         onPress={() => {
                             setVisible(false);

@@ -1,10 +1,11 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import BackButton from '../../components/BackButton';
+import { i18n } from '../../localization';
 
 const PrivacyPolicyScreen = ({ navigation }) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <BackButton navigation={navigation} text="Privacy Policy" />
+            <BackButton navigation={navigation} text={i18n.t('profile.privacypolicy')} />
             <View style={styles.contentContainer}>
                 <Text style={styles.contentTitle}>1. Types of Data We Collect</Text>
                 <Text style={styles.contentText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>

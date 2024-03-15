@@ -4,6 +4,7 @@ import CrownIcon from '../../components/icons/CrownIcon';
 import CheckIcon from '../../components/icons/CheckIcon';
 import { useState } from 'react';
 import ConfigPaymentModal from '../../components/modals/ConfigPaymentModal';
+import { i18n } from '../../localization';
 
 const ReviewSummaryScreen = ({ navigation, route }) => {
     const [taxPrice, setTaxPrice] = useState<number>(1.19)
@@ -12,7 +13,7 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Review Summary" />
+            <BackButton navigation={navigation} text={i18n.t('reviewsummary.reviewsummary')} />
             <ConfigPaymentModal 
                 visible={isOpenModalConfigPayment}
                 setVisible={setOpenModalConfigPayment}
@@ -24,38 +25,38 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                         <CrownIcon Color={'#06C149'} Width={70} Height={70} />
                         <View style={styles.cardHeaderTextContainer}>
                             <Text style={styles.cardHeaderTextPrice}>${buyData.objecyBuy.price}</Text>
-                            <Text style={styles.cardHeaderTextMonth}>/{buyData.objecyBuy.date}</Text>
+                            <Text style={styles.cardHeaderTextMonth}>/{i18n.t(buyData.objecyBuy.date)}</Text>
                         </View>
                     </View>
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Watch all you want. Ad-free.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Allows streaming of 4k.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
                             <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
-                            <Text style={styles.cardDataText}>Video & Audio Quality is Better.</Text>
+                            <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
                 </View>
                 <View style={styles.dataContainer}>
                     <View style={styles.dataContent}>
                         <View style={styles.dataAmountContainer}>
-                            <Text style={styles.dataAmountText}>Amount</Text>
+                            <Text style={styles.dataAmountText}>{i18n.t('reviewsummary.amount')}</Text>
                             <Text style={styles.dataAmountPrice}>${buyData.objecyBuy.price}</Text>
                         </View>
                         <View style={styles.dataTaxContainer}>
-                            <Text style={styles.dataTaxText}>Tax</Text>
+                            <Text style={styles.dataTaxText}>{i18n.t('reviewsummary.tax')}</Text>
                             <Text style={styles.dataTaxPrice}>${taxPrice}</Text>
                         </View>
                         <View style={styles.dataLine} />
                         <View style={styles.dataTotalContainer}>
-                            <Text style={styles.dataTotalText}>Total</Text>
+                            <Text style={styles.dataTotalText}>{i18n.t('reviewsummary.total')}</Text>
                             <Text style={styles.dataTotalPrice}>${(buyData.objecyBuy.price + taxPrice).toFixed(2)}</Text>
                         </View>
                     </View>
@@ -69,15 +70,15 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                             style={styles.paymentMethodIcon} />
                         <Text style={styles.paymentMethodText}>{buyData.methodPayment.textPaymentMethod}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {}}>
-                        <Text style={styles.paymentChangeText}>Change</Text>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Text style={styles.paymentChangeText}>{i18n.t('reviewsummary.change')}</Text>
                     </TouchableOpacity>
                 </View> 
             </View>
             <TouchableOpacity 
                 onPress={() => setOpenModalConfigPayment(true)} 
                 style={styles.buttonContinue}>
-                    <Text style={styles.buttonContinueText}>Confirm Payment</Text>
+                    <Text style={styles.buttonContinueText}>{i18n.t('reviewsummary.confirmpayment')}</Text>
             </TouchableOpacity>  
         </View>
     );
