@@ -1,8 +1,9 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import BackButton from '../../components/BackButton';
-import EmailIcon from '../../components/icons/EmailIcon';
-import { useEffect, useState } from 'react';
-import ForgotPasswordInputModal from '../../components/modals/ForgotPasswordInputModal';
+import { useState } from 'react';
+
+import BackButton from '@Components/BackButton';
+import EmailIcon from '@Icons/EmailIcon';
+import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
 
 const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const [methodResetPassword, setMethodResetPassword] = useState<string>('SMS');

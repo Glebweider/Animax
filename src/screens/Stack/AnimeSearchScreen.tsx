@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import SearchIcon from '../../components/icons/SearchIcon';
-import SortIcon from '../../components/icons/SortIcon';
-import { useApolloClient, useQuery } from '@apollo/client';
-import { GET_ANIMEBYGENRES } from '../../utils/graphql/getAnimeByGenres';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { GET_ANIMEBYSEARCH } from '../../utils/graphql/getAnimeBySearch';
-import { i18n } from '../../localization';
+import { useApolloClient } from '@apollo/client';
+
+//Icons
+import SearchIcon from '@Icons/SearchIcon';
+import SortIcon from '@Icons/SortIcon';
+
+//Utils
+import { GET_ANIMEBYGENRES } from '@Utils/graphql/getAnimeByGenres';
+import { GET_ANIMEBYSEARCH } from '@Utils/graphql/getAnimeBySearch';
+import { i18n } from '@Utils/localization';
+
+//Redux
+import { RootState } from '@Redux/store';
 
 const AnimeSearchScreen = ({ navigation }) => {
     const client = useApolloClient();

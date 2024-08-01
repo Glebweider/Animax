@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, Text, Modal, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
-import { BallIndicator } from 'react-native-indicators';
+import React from 'react';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 interface ModalProps {
     visible: boolean;

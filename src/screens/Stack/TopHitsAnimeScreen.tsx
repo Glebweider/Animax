@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/client';
-import { GET_ANIMES } from '../../utils/graphql/getTopHitsAnimes';
-import MyAnimeListButton from '../../components/MyAnimeListButton';
-import BackButton from '../../components/BackButton';
-import { i18n } from '../../localization';
+import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
+import MyAnimeListButton from '@Components/MyAnimeListButton';
+import BackButton from '@Components/BackButton';
+import { i18n } from '@Utils/localization';
 
-const TopHitsAnimeScreen = ({ navigation }) => {
+const TopHitsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { StatusBar } from "expo-status-bar";
-import SearchIcon from '../../components/icons/SearchIcon';
+import SearchIcon from '@Components/icons/SearchIcon';
 import { useQuery } from '@apollo/client';
-import { GET_ANIMES } from '../../utils/graphql/getTopHitsAnimes';
+import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
 import { LinearGradient } from 'expo-linear-gradient';
-import PlayIcon from '../../components/icons/PlayIcon';
-import MyAnimeListButton from '../../components/MyAnimeListButton';
-import TopHitsAnime from '../../components/TopHitsAnime';
-import NewEpisodesAnime from '../../components/NewEpisodesAnime';
-import { GET_NEWEPISODESANIME } from '../../utils/graphql/getNewEpisodesAnime';
-import { i18n } from '../../localization';
+import PlayIcon from '@Components/icons/PlayIcon';
+import MyAnimeListButton from '@Components/MyAnimeListButton';
+import TopHitsAnime from '@Components/TopHitsAnime';
+import NewEpisodesAnime from '@Components/NewEpisodesAnime';
+import { GET_NEWEPISODESANIME } from '@Utils/graphql/getNewEpisodesAnime';
+import { i18n } from '@Utils/localization';
+import { Anime } from '@Interfaces/animeHomeScreen.interface';
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
@@ -47,7 +48,7 @@ const HomeScreen = ({ navigation }) => {
                 setSelectAnime(topHitsData.animes[0]);
             }
         }
-    }, [topHitsData]);
+    }, [selectAnime, topHitsData]);
     
     const { data: newEpisodesData } = useQuery(GET_NEWEPISODESANIME, {
         variables: { 

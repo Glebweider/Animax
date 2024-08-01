@@ -1,12 +1,18 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-native';
-import { GET_GENRES } from '../../utils/graphql/getGenres';
-import BackButton from '../../components/BackButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { addFilter, reset } from '../../redux/reducers/sortReducer';
-import { i18n } from '../../localization';
+
+//Components
+import BackButton from '@Components/BackButton';
+
+//Utils
+import { GET_GENRES } from '@Utils/graphql/getGenres';
+import { i18n } from '@Utils/localization';
+
+//Redux
+import { RootState } from '@Redux/store';
+import { addFilter, reset } from '@Redux/reducers/sortReducer';
 
 const AnimeSortScreen = ({ navigation }) => {
     const dispatch = useDispatch();

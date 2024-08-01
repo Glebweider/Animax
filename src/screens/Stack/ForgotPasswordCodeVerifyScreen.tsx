@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
-import BackButton from '../../components/BackButton';
 import { useEffect, useRef, useState } from 'react';
+
+import BackButton from '@Components/BackButton';
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
     const { data } = route.params;

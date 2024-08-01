@@ -1,20 +1,28 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity, TextInput} from 'react-native';
-import BackButton from '../../components/BackButton';
-import EmailIcon from '../../components/icons/EmailIcon';
-import PasswordIcon from '../../components/icons/PasswordIcon';
-import EyeOnIcon from '../../components/icons/EyeOnIcon';
-import EyeOffIcon from '../../components/icons/EyeOffIcon';
-import facebookAuth from '../../utils/facebookAuth';
-import googleAuth from '../../utils/googleAuth';
-import appleAuth from '../../utils/appleAuth';
-import authSignIn from '../../utils/fetch/authUserSignIn';
-import { isEmail } from '../../utils/validator';
-import { saveTokenToStorage } from '../../utils/token';
-import authUserInToken from '../../utils/fetch/authUserInToken';
-import { setUser } from '../../redux/reducers/userReducer';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
+
+//Components
+import BackButton from '@Components/BackButton';
+
+//Icons 
+import EmailIcon from '@Icons/EmailIcon';
+import PasswordIcon from '@Icons/PasswordIcon';
+import EyeOnIcon from '@Icons/EyeOnIcon';
+import EyeOffIcon from '@Icons/EyeOffIcon';
+
+//Utils
+import facebookAuth from '@Utils/facebookAuth';
+import googleAuth from '@Utils/googleAuth';
+import appleAuth from '@Utils/appleAuth';
+import authSignIn from '@Utils/fetch/authUserSignIn';
+import { isEmail } from '@Utils/validator';
+import { saveTokenToStorage } from '@Utils/token';
+import authUserInToken from '@Utils/fetch/authUserInToken';
+
+//Redux
+import { setUser } from '@Redux/reducers/userReducer';
 
 const AuthSignInScreen = ({ navigation }) => {
     const dispatch = useDispatch();

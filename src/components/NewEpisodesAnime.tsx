@@ -1,5 +1,7 @@
+/* eslint-disable react/display-name */
 import React, { FC, memo } from 'react';
 import { FlatList, View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Anime } from '@Interfaces/animeHomeScreen.interface';
 
 interface NewEpisodeAnimeProps {
     data: Anime[];

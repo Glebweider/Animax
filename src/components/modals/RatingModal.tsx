@@ -1,8 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
-import StarIcon from '../icons/StarIcon';
-import { i18n } from '../../localization';
+
+//Icons
+import StarIcon from '@Icons/StarIcon';
+
+//Utils
+import { i18n } from '@Utils/localization';
 
 
 interface ModalProps {

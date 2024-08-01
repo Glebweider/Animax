@@ -5,7 +5,7 @@ const authUserInToken = async (token: string) => {
             'Authorization': `${token}`,
         }
     });
-    if (response.status == 200) {
+    if (response.status === 200) {
         return response.json();
     } else {
         const errorData = await response.json();

@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import BackButton from '../../components/BackButton';
-import CrownIcon from '../../components/icons/CrownIcon';
-import CheckIcon from '../../components/icons/CheckIcon';
+import BackButton from '@Components/BackButton';
+import CrownIcon from '@Icons/CrownIcon';
+import CheckIcon from '@Icons/CheckIcon';
 import { useState } from 'react';
-import ConfigPaymentModal from '../../components/modals/ConfigPaymentModal';
-import { i18n } from '../../localization';
+import ConfigPaymentModal from '@Modal/ConfigPaymentModal';
+import { i18n } from '@Utils/localization';
 
 const ReviewSummaryScreen = ({ navigation, route }) => {
     const [taxPrice, setTaxPrice] = useState<number>(1.19)

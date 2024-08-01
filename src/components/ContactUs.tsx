@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-import DiscordIcon from './icons/DiscordIcon';
-import WebSiteIcon from './icons/WebSiteIcon';
-import TwitterIcon from './icons/TwitterIcon';
-import WhatsAppIcon from './icons/WhatsAppIcon';
+//Icons
+import DiscordIcon from '@Icons/DiscordIcon';
+import WebSiteIcon from '@Icons/WebSiteIcon';
+import TwitterIcon from '@Icons/TwitterIcon';
+import WhatsAppIcon from '@Icons/WhatsAppIcon';
 
 const ContactUs = () => {
   

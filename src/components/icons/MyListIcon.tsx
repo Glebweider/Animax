@@ -9,7 +9,7 @@ const MyListIcon = ({ Color, Style }) => (
         style={Style}
         fill='none'>
         <G
-            strokeWidth={1.5}
+            strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
             stroke={Color}>

@@ -1,10 +1,10 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import BackButton from '../../components/BackButton';
-import CrownIcon from '../../components/icons/CrownIcon';
-import CheckIcon from '../../components/icons/CheckIcon';
-import { i18n } from '../../localization';
+import BackButton from '@Components/BackButton';
+import CrownIcon from '@Icons/CrownIcon';
+import CheckIcon from '@Icons/CheckIcon';
+import { i18n } from '@Utils/localization';
 
-const SubcribeScreen = ({ navigation }) => {
+const SubcribeScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>

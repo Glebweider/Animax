@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
-import { removeTokenFromStorage } from '../../utils/token';
+
+//Utils
+import { removeTokenFromStorage } from '@Utils/token';
 
 interface ModalProps {
     visible: boolean;

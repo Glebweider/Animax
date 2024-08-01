@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
-import getAnimeListUser from '../utils/fetch/getAnimeListUser';
-import { getTokenFromStorage } from '../utils/token';
-import removeAnimeListUser from '../utils/fetch/removeAnimeListUser';
-import addAnimeListUser from '../utils/fetch/addAnimeListUser';
-import AddIcon from './icons/AddIcon';
-import CheckIcon from './icons/CheckIcon';
+
+//Utils
+import getAnimeListUser from '@Utils/fetch/getAnimeListUser';
+import { getTokenFromStorage } from '@Utils/token';
+import removeAnimeListUser from '@Utils/fetch/removeAnimeListUser';
+import addAnimeListUser from '@Utils/fetch/addAnimeListUser';
+
+//Icons
+import AddIcon from '@Icons/AddIcon';
+import CheckIcon from '@Icons/CheckIcon';
 
 const MyAnimeListButton = ({ anime }) => {
     const [isInMyList, setIsInMyList] = useState(false);

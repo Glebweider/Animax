@@ -1,19 +1,29 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity, TextInput, Platform} from 'react-native';
-import BackButton from '../../components/BackButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { isPhoneNumber } from '../../utils/validator';
-import { Picker } from '@react-native-picker/picker';
-import * as ImagePicker from 'expo-image-picker';
-import PencilIcon from '../../components/icons/PencilIcon';
-import checkPhoneNumberAvailability from '../../utils/fetch/authCheckPhoneNumberAvailability';
-import ConfigModal from '../../components/modals/ConfigModal';
-import checkNicknameAvailability from '../../utils/fetch/authCheckNicknameAvailability';
-import { RootState } from '../../redux/store';
-import { saveTokenToStorage } from '../../utils/token'; 
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
 import * as FileSystem from 'expo-file-system';
-import authUserInToken from '../../utils/fetch/authUserInToken';
-import { setUser } from '../../redux/reducers/userReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import * as ImagePicker from 'expo-image-picker';
+import { Picker } from '@react-native-picker/picker';
+
+//Components
+import BackButton from '@Components/BackButton';
+
+//Modals
+import ConfigModal from '@Modal/ConfigModal';
+
+//Icons
+import PencilIcon from '@Icons/PencilIcon';
+
+//Utils
+import { isPhoneNumber } from '@Utils/validator';
+import { saveTokenToStorage } from '@Utils/token'; 
+import authUserInToken from '@Utils/fetch/authUserInToken';
+import checkPhoneNumberAvailability from '@Utils/fetch/authCheckPhoneNumberAvailability';
+import checkNicknameAvailability from '@Utils/fetch/authCheckNicknameAvailability';
+
+//Redux
+import { RootState } from '@Redux/store';
+import { setUser } from '@Redux/reducers/userReducer';
 
 
 const AuthAccountSetupDataScreen = ({ navigation }) => {

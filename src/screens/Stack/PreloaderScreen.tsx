@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, Button } from 'react-native';
-import { getTokenFromStorage, removeTokenFromStorage } from '../../utils/token';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../redux/reducers/userReducer';
-import authUserInToken from '../../utils/fetch/authUserInToken';
+import { StyleSheet, View, Image } from 'react-native';
 import * as Font from 'expo-font';
 import { BallIndicator } from 'react-native-indicators';
+import { useDispatch } from 'react-redux';
 
-const PreloaderScreen = ({ navigation }) => {
+import { getTokenFromStorage } from '@Utils/token';
+import { setUser } from '@Redux/reducers/userReducer';
+import authUserInToken from '@Utils/fetch/authUserInToken';
+
+const PreloaderScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
 
     useEffect(() => {

@@ -1,10 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity } from 'react-native';
-import BackButton from '../../components/BackButton';
-import facebookAuth from '../../utils/facebookAuth';
-import googleAuth from '../../utils/googleAuth';
-import appleAuth from '../../utils/appleAuth';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+
+//Components
+import BackButton from '@Components/BackButton';
+
+//Utils
+import facebookAuth from '@Utils/facebookAuth';
+import googleAuth from '@Utils/googleAuth';
+import appleAuth from '@Utils/appleAuth';
 
 const AuthFGAScreen = ({ navigation }) => {
 

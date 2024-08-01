@@ -1,3 +1,4 @@
+import { Anime } from '@Interfaces/animeHomeScreen.interface';
 import React, { FC, memo } from 'react';
 import { FlatList, View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 

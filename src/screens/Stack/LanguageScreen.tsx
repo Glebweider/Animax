@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import BackButton from '../../components/BackButton';
-import { i18n } from '../../localization';
-import { saveLocalizationToStorage } from '../../utils/localization';
+import BackButton from '@Components/BackButton';
+import { i18n } from '@Utils/localization';
+import { saveLocalizationToStorage } from '@Utils/localization';
 
 const LanguageScreen = ({ navigation }) => {
 

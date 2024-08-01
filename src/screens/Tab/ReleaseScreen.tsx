@@ -1,9 +1,16 @@
+/* eslint-disable react/display-name */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import getCalendarAnime from '../../utils/fetch/getCalendarAnime';
-import MyAnimeListButton from '../../components/MyAnimeListButton';
+import getCalendarAnime from '@Utils/fetch/getCalendarAnime';
+import MyAnimeListButton from '@Components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';
-import { i18n } from '../../localization';
+import { i18n } from '@Utils/localization';
+
+interface IDate {
+    dayOfMonth: string;
+    dayOfWeek: string;
+    dayOfDate: string;
+}
 
 const getDateArrayForMonth = () => {
     const today = new Date();
@@ -24,12 +31,6 @@ const getDateArrayForMonth = () => {
   
     return dateArray;
 };
-
-interface IDate {
-    dayOfMonth: string;
-    dayOfWeek: string;
-    dayOfDate: string;
-}
 
 const ReleaseScreen = ({ navigation }) => {
     const [selectedDate, setSelectedDate] = useState<IDate>({
@@ -77,7 +78,7 @@ const ReleaseScreen = ({ navigation }) => {
             if (Animes) {
                 const animeForDate = Animes.filter((anime) => {
                     if (anime.anime.score >= 7) {                
-                        return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
+                        return anime.next_episode_at.split('T')[0] === selectedDate.dayOfDate;
                     } 
                 });
 
@@ -118,7 +119,7 @@ const ReleaseScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item) => item.dayOfMonth.toString()}
                     renderItem={({ item }) => (
-                        <MemoizedDateItem isSelected={selectedDate.dayOfMonth == item.dayOfMonth} onPress={setSelectedDate} item={item} />
+                        <MemoizedDateItem isSelected={selectedDate.dayOfMonth === item.dayOfMonth} onPress={setSelectedDate} item={item} />
                     )}/>
             </View>
             <View style={{width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center'}}>

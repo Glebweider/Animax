@@ -1,6 +1,8 @@
 import React from 'react';
-import { StyleSheet, Image, Text, TouchableOpacity, View } from 'react-native';
-import ArrowLeftIcon from './icons/ArrowLeftIcon';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+//Icons
+import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
 
 const BackButton = ({ navigation, text }) => {
 

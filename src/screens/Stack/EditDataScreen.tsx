@@ -1,16 +1,21 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
-import BackButton from '../../components/BackButton';
-import PencilIcon from '../../components/icons/PencilIcon';
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { isPhoneNumber } from '../../utils/validator';
 import * as FileSystem from 'expo-file-system';
-import { setUser } from '../../redux/reducers/userReducer';
-import authUserInToken from '../../utils/fetch/authUserInToken';
-import { getTokenFromStorage, saveTokenToStorage } from '../../utils/token';
-import { i18n } from '../../localization';
+
+import BackButton from '@Components/BackButton';
+import PencilIcon from '@Icons/PencilIcon';
+
+//Redux
+import { RootState } from '@Redux/store';
+import { setUser } from '@Redux/reducers/userReducer';
+
+//Utils
+import authUserInToken from '@Utils/fetch/authUserInToken';
+import { getTokenFromStorage, saveTokenToStorage } from '@Utils/token';
+import { isPhoneNumber } from '@Utils/validator';
+import { i18n } from '@Utils/localization';
 
 
 const EditDataScreen = ({ navigation }) => {

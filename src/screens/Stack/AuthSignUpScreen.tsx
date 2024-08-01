@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity, TextInput} from 'react-native';
-import BackButton from '../../components/BackButton';
-import EmailIcon from '../../components/icons/EmailIcon';
-import PasswordIcon from '../../components/icons/PasswordIcon';
-import EyeOnIcon from '../../components/icons/EyeOnIcon';
-import EyeOffIcon from '../../components/icons/EyeOffIcon';
-import facebookAuth from '../../utils/facebookAuth';
-import googleAuth from '../../utils/googleAuth';
-import appleAuth from '../../utils/appleAuth';
-import checkEmailAvailability from '../../utils/fetch/authCheckEmailAvailability';
-import { setEmailAndPasswordUser } from '../../redux/reducers/authReducer';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
 import { useDispatch } from 'react-redux';
 
-const AuthSignUpScreen = ({ navigation }) => {
+//Components
+import BackButton from '@Components/BackButton';
+
+//Icons
+import EmailIcon from '@Icons/EmailIcon';
+import PasswordIcon from '@Icons/PasswordIcon';
+import EyeOnIcon from '@Icons/EyeOnIcon';
+import EyeOffIcon from '@Icons/EyeOffIcon';
+
+//Utils
+import facebookAuth from '@Utils/facebookAuth';
+import googleAuth from '@Utils/googleAuth';
+import appleAuth from '@Utils/appleAuth';
+import checkEmailAvailability from '@Utils/fetch/authCheckEmailAvailability';
+
+//Redux
+import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';
+
+const AuthSignUpScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
     const [textEmail, setTextEmail] = React.useState<string>('');
     const [textPassword, setTextPassword] = React.useState<string>('');
@@ -38,15 +46,9 @@ const AuthSignUpScreen = ({ navigation }) => {
             setEmailVerify(false);
         }
     
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (textEmail.length >= 3) {
-            if (!emailRegex.test(textEmail)) {
-                setEmailError('Введите действительный адрес электронной почты');
-                setPasswordVerify(false);
-            } else {
-                setEmailError(null)
-                setPasswordVerify(true);
-            }            
+            setEmailError(null)
+            setPasswordVerify(true);           
         } else {
             setEmailError(null)
             setPasswordVerify(false);

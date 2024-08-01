@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import SearchIcon from '../../components/icons/SearchIcon';
-import getAnimeListUser from '../../utils/fetch/getAnimeListUser';
-import { getTokenFromStorage } from '../../utils/token';
+import SearchIcon from '@Icons/SearchIcon';
+import getAnimeListUser from '@Utils/fetch/getAnimeListUser';
+import { getTokenFromStorage } from '@Utils/token';
 import { BallIndicator } from 'react-native-indicators';
-import { i18n } from '../../localization';
+import { i18n } from '@Utils/localization';
 
 const MyListScreen = ({ navigation }) => {
     const [userAnimeList, setUserAnimeList] = useState([]);

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { i18n } from '../../localization';
+
+//Utils
+import { i18n } from '@Utils/localization';
 
 interface ModalProps {
     visible: boolean;

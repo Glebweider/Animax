@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import CrownIcon from '../../components/icons/CrownIcon';
+import { RootState } from '@Redux/store';
+import CrownIcon from '@Icons/CrownIcon';
 import Svg, { G, Path } from 'react-native-svg';
-import ArrowRightIcon from '../../components/icons/ArrowRightIcon copy';
-import ProfileIcon from '../../components/icons/ProfileIcon';
-import LogoutModal from '../../components/modals/LogoutModal';
+import ArrowRightIcon from '@Components/icons/ArrowRightIcon';
+import ProfileIcon from '@Icons/ProfileIcon';
+import LogoutModal from '@Modal/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
-import { i18n } from '../../localization';
+import { i18n } from '@Utils/localization';
 
 const ProfileScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
@@ -54,7 +54,7 @@ const ProfileScreen = ({ navigation }) => {
                     onPress={() => navigation.navigate('EditDataScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
-                        <ProfileIcon Width={27} Height={27} Color={'#fff'} />
+                        <ProfileIcon Style={{}} Color={'#fff'} />
                         <Text style={styles.labelLeftText}>{i18n.t('profile.edit')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />

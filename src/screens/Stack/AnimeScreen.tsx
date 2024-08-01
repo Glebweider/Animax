@@ -1,55 +1,40 @@
+/* eslint-disable import/namespace */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList } from 'react-native';
 import { useApolloClient } from '@apollo/client';
-import { GET_ANIME } from '../../utils/graphql/getAnime';
 import { BallIndicator } from 'react-native-indicators';
-import ArrowLeftIcon from '../../components/icons/ArrowLeftIcon';
-import SendIcon from '../../components/icons/SendIcon';
-import MyListIcon from '../../components/icons/MyListIcon';
-import StarIcon from '../../components/icons/StarIcon';
-import PlayIcon from '../../components/icons/PlayIcon';
-import SmartTvIcon from '../../components/icons/SmartTvIcon';
-import ArrowRightIcon from '../../components/icons/ArrowRightIcon copy';
-import { getTokenFromStorage } from '../../utils/token';
-import getAnimeListUser from '../../utils/fetch/getAnimeListUser';
-import removeAnimeListUser from '../../utils/fetch/removeAnimeListUser';
-import addAnimeListUser from '../../utils/fetch/addAnimeListUser';
-import getAnimeEpisodes from '../../utils/fetch/getAnimeEpisodes';
-import { ResizeMode, Video } from 'expo-av';
-import RatingModal from '../../components/modals/RatingModal';
-import { i18n } from '../../localization';
 
-interface Anime {
-    id: number;
-    name: string;
-    russian: string;
-    poster: {
-        id: string;
-        originalUrl: string;
-    };
-    score: string;
-    status: string;
-    episodes: number;
-    episodes_aired: number;
-    rating: string;
-    aired_on: string;
-    released_on: string;
-    createdAt: string;
-    description: string;
-    genres: [
-        {
-            id: number;
-            russian: string;
-        }
-    ];
-    scoresStats: [
-        {
-            count: number;
-            score: number;
-        }
-    ];
-}
+//Modal
+import RatingModal from '@Modal/RatingModal';
+
+//Components
+import AnilibriaPlayer from '@Components/AnilibriaPlayer';
+import KodikPlayer from '@Components/KodikPlayer';
+
+//Icons
+import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
+import SendIcon from '@Icons/SendIcon';
+import MyListIcon from '@Icons/MyListIcon';
+import StarIcon from '@Icons/StarIcon';
+import PlayIcon from '@Icons/PlayIcon';
+import SmartTvIcon from '@Icons/SmartTvIcon';
+import ArrowRightIcon from '@Icons/ArrowRightIcon';
+
+//Utils
+import { getTokenFromStorage } from '@Utils/token';
+import getAnimeListUser from '@Utils/fetch/getAnimeListUser';
+import removeAnimeListUser from '@Utils/fetch/removeAnimeListUser';
+import addAnimeListUser from '@Utils/fetch/addAnimeListUser';
+import getAnimeEpisodes from '@Utils/fetch/getAnimeEpisodes';
+import { i18n } from '@Utils/localization';
+import { GET_ANIME } from '@Utils/graphql/getAnime';
+
+//Interface
+import { Anime } from '@Interfaces/animeAnimeScreen.interface';
+
+
 
 const AnimeScreen = ({ navigation, route }) => {
     const client = useApolloClient();
@@ -88,8 +73,8 @@ const AnimeScreen = ({ navigation, route }) => {
     const [episodesAnime, setEpisodesAnime] = useState<any>([]);
     const [episodesAnimeHost, setEpisodesAnimeHost] = useState<string>('');
     const [selectedEpisodeAnime, setSelectedEpisodeAnime] = useState<any>(null);
+    const [isScroll, setScroll] = useState<boolean>(true);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
-    const videoRef = useRef<Video>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -102,21 +87,29 @@ const AnimeScreen = ({ navigation, route }) => {
                 });         
                 if (data && !error) {
                     setAnime(data.animes[0]);
-                    const animeEpisodes = await getAnimeEpisodes(data.animes[0].name || data.animes[0].russian || data.animes[0].japanese);
-                    if (animeEpisodes.list[0]) {
-                        const arrayData = Object.values(animeEpisodes.list[0].player.list);
-                        setEpisodesAnime(arrayData);
-                        setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
-                        setSelectedEpisodeAnime(arrayData[0])
-                    } else {
-                        alert('Ошибка, серии этого аниме не найдены');
-                        setEpisodesAnime(null);
-                    }
+                    const animeNameArray = [data.animes[0].name, data.animes[0].russian, data.animes[0].japanese]
+                    animeNameArray.map(async (anime) => {
+                        const _animeEpisodes = await getAnimeEpisodes(anime);
+                        if (_animeEpisodes.ok) {
+                            const animeEpisodes = await _animeEpisodes.json();
+                            if (animeEpisodes.list[0]) {
+                                if (Object.keys(animeEpisodes.list[0].player.list).length === 0) {
+                                    alert('Ошибка, серии этого аниме не найдены');
+                                    setEpisodesAnime(null);
+                                }
+                                const arrayData = Object.values(animeEpisodes.list[0].player.list);
+                                setEpisodesAnime(arrayData);
+                                setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
+                                setSelectedEpisodeAnime(arrayData[0]);
+                                //console.log(`https://${animeEpisodes.list[0].player.host}${arrayData[0].hls.fhd}`)
+                            }
+                        }
+                    })
                 } 
             }            
         }
         fetchData()
-    }, []);
+    }, [animeId, client]);
 
     useEffect(() => {
         const fetchMyAnimeList = async () => {
@@ -157,8 +150,8 @@ const AnimeScreen = ({ navigation, route }) => {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-            <StatusBar style='light' />
+        <ScrollView scrollEnabled={isScroll} contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+            <StatusBar style='light'  />
             <RatingModal 
                 visible={isOpenRatingWindow} 
                 setVisible={setOpenRatingWindow}
@@ -250,7 +243,7 @@ const AnimeScreen = ({ navigation, route }) => {
                     </ScrollView>
                 </View>
             </View>
-            {anime.description ?
+            {anime.description &&
                 <View style={styles.animeDescriptionContainer}>
                     <Text 
                         numberOfLines={3} 
@@ -261,8 +254,6 @@ const AnimeScreen = ({ navigation, route }) => {
                             .replace(/\[i](.*?)\[\/i]/g, '')}
                     </Text>
                 </View>
-                :
-                <Text style={styles.animeNoneDescriptionText}>{i18n.t('anime.nonedescription')}</Text>
             }
             <View style={styles.animeEpisodesContainer}>
                 <View style={styles.animeEpisodesHeader}>
@@ -296,21 +287,11 @@ const AnimeScreen = ({ navigation, route }) => {
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 10}}/>
             </View>
+            <KodikPlayer shikimoriInfo={anime.name} />
             {selectedEpisodeAnime &&
-                <Video
-                    ref={videoRef}
-                    source={{ uri: `https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}` }}
-                    posterSource={selectedEpisodeAnime.preview ?
-                        {uri: `https://anilibria.tv${selectedEpisodeAnime.preview}`} 
-                        :
-                        require('../../../assets/default-to-video.jpg')
-                    }
-                    posterStyle={styles.videoPoster}
-                    usePoster={true}
-                    style={styles.videoContainer}
-                    videoStyle={styles.video}
-                    resizeMode={ResizeMode.COVER}
-                    useNativeControls={true}/> 
+                <AnilibriaPlayer 
+                    url={`https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}`}
+                    setScroll={setScroll}/>
             }
         </ScrollView>
     );
@@ -328,15 +309,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         zIndex: 2
-    },
-    videoContainer: {
-        width: "92%", 
-        height: 260,
-        borderRadius: 10,
-        marginTop: 25
-    },
-    videoPoster: {
-        opacity: 0.9
     },
     video: {
         height: '100%',

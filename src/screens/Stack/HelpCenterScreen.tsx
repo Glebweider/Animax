@@ -1,8 +1,9 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing } from 'react-native';
-import BackButton from '../../components/BackButton';
 import { useEffect, useRef, useState } from 'react';
-import ContactUs from '../../components/ContactUs';
-import { i18n } from '../../localization';
+
+import BackButton from '@Components/BackButton';
+import ContactUs from '@Components/ContactUs';
+import { i18n } from '@Utils/localization';
 
 const HelpCenterScreen = ({ navigation }) => {
     const [selectMethodHelp, setSelectMethodHelp] = useState<string>('FAQ');

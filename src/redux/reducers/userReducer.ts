@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Interest {
+interface IInterest {
   id: number;
   text: string;
 }
 
-interface Anime {
+interface IAnime {
   animeId: string;
   poster: {
     originalUrl: string;
@@ -14,11 +14,11 @@ interface Anime {
   rating: string;
 }
 
-interface UserState {
+interface IUserState {
   uuid: string;
   email: string;
   password: string;
-  interests: Interest[];
+  interests: IInterest[];
   profile: {
     avatar: string;
     fullname: string;
@@ -27,10 +27,10 @@ interface UserState {
   preferences: {
     phonenumber: string;
   };
-  animelist: Anime[]
+  animelist: IAnime[];
 }
 
-const initialState: UserState = {
+const initialState: IUserState = {
   uuid: '',
   email: '',
   password: '',
@@ -50,7 +50,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<UserState>) => {
+    setUser: (state, action: PayloadAction<IUserState>) => {
       state.uuid = action.payload.uuid;
       state.password = action.payload.password;
       state.email = action.payload.email;

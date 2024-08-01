@@ -1,4 +1,30 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "noEmit": true,
+    "target": "es6",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strict": false,
+    "baseUrl": ".",
+    "paths": {
+      "@Components/*": ["src/components/*"],
+      "@Modal/*": ["src/components/modals/*"],
+      "@Icons/*": ["src/components/icons/*"],
+      "@Utils/*": ["src/utils/*"],
+      "@Stack/*": ["src/screens/Stack/*"],
+      "@Tab/*": ["src/screens/Tab/*"],
+      "@Redux/*": ["src/redux/*"],
+      "@Assets/*": ["assets/*"],
+      "@Interfaces/*": ["src/interfaces/*"]
+    }
+  },
+  "exclude": ["node_modules"],
   "extends": "expo/tsconfig.base"
 }

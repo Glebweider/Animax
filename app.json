@@ -3,7 +3,7 @@
     "name": "Animax",
     "slug": "animax",
     "scheme": "myapp",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",

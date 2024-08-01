@@ -3,8 +3,8 @@ import Svg, { Path } from 'react-native-svg';
 
 const HomeIcon = ({ Color, Style }) => (
     <Svg
-        width="24"
-        height="24"
+        width="22"
+        height="22"
         viewBox="0 0 512 512"
         style={Style}>
         <Path

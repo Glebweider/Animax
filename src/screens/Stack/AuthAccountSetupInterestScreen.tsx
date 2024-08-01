@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity, ScrollView} from 'react-native';
-import BackButton from '../../components/BackButton';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import { addInterest } from '../../redux/reducers/authReducer';
-import { GET_GENRES } from '../../utils/graphql/getGenres';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import { useQuery } from '@apollo/client';
+import { useDispatch, useSelector } from 'react-redux';
+
+//Components
+import BackButton from '@Components/BackButton';
+
+//Redux
+import { RootState } from '@Redux/store';
+import { addInterest } from '@Redux/reducers/authReducer';
+
+//Utils
+import { GET_GENRES } from '@Utils/graphql/getGenres';
 
 const AuthAccountSetupInterestScreen = ({ navigation }) => {
     const dispatch = useDispatch();

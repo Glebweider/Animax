@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-//import { WebView } from 'react-native-webview';
-import axios from 'axios';
+//import { WebView } from 'react-native-webview';;
 import { View } from 'react-native';
-
 
 const KodikPlayer = ({ shikimoriInfo }) => {
     const [animeLink, setAnimeLink] = useState('');
@@ -14,9 +12,8 @@ const KodikPlayer = ({ shikimoriInfo }) => {
             return;
         }
 
-        const response = await axios.get(`https://kodikapi.com/search?shikimori_id=${shikimoriInfo.id}&limit=1&token=${token}`);
-        setAnimeLink(`https:${response.data.results[0]?.link}`) 
-    };
+    console.log(324234)
+};
 
     useEffect(() => {
         loadVideo()

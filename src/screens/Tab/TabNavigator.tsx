@@ -2,31 +2,39 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
 
-import HomeScreen from './HomeScreen';
-import ReleaseScreen from './ReleaseScreen';
-import MyListScreen from './MyListScreen';
-import ProfileScreen from './ProfileScreen';
+import HomeScreen from '@Tab/HomeScreen';
+import ReleaseScreen from '@Tab/ReleaseScreen';
+import MyListScreen from '@Tab/MyListScreen';
+import ProfileScreen from '@Tab/ProfileScreen';
 
-import ProfileIcon from "../../components/icons/ProfileIcon";
-import HomeIcon from "../../components/icons/HomeIcon";
-import CalendarIcon from "../../components/icons/CalendarIcon";
-import MyListIcon from "../../components/icons/MyListIcon";
-import { i18n } from "../../localization";
+import ProfileIcon from "@Icons/ProfileIcon";
+import HomeIcon from "@Icons/HomeIcon";
+import CalendarIcon from "@Icons/CalendarIcon";
+import MyListIcon from "@Icons/MyListIcon";
+import { i18n } from "@Utils/localization";
+import * as NavigationBar from 'expo-navigation-bar';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+    const funct = async () => {
+        ScreenOrientation.unlockAsync()
+        await NavigationBar.setVisibilityAsync('hidden')
+    }
+    funct()
     return (
         <Tab.Navigator screenOptions={{ 
             headerShown: false,
             tabBarBackground: () => <BlurView 
-                intensity={30} 
+                intensity={4} 
                 tint="dark"
                 style={{
                     ...StyleSheet.absoluteFillObject,
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
+                    borderTopLeftRadius: 22,
+                    borderTopRightRadius: 22,
                     overflow: 'hidden',
+                    backgroundColor: '#222222b3'
                 }} />,
             tabBarStyle: {
                 position: 'absolute',
@@ -55,7 +63,6 @@ const TabNavigator = () => {
                         <HomeIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
                     title: i18n.t('navigation.home'),
-                    unmountOnBlur: false
                 }} />
             <Tab.Screen 
             name='Release'
@@ -65,7 +72,6 @@ const TabNavigator = () => {
                         <CalendarIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
                     title: i18n.t('navigation.release'),
-                    unmountOnBlur: true
                 }}  />
             <Tab.Screen 
                 name='MyList'  
@@ -75,17 +81,15 @@ const TabNavigator = () => {
                         <MyListIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
                     title: i18n.t('navigation.mylist'),
-                    unmountOnBlur: true
                 }}  />
             <Tab.Screen 
                 name='Profile'
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Width={25} Height={25}/>
+                        <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
                     title: i18n.t('navigation.profile'),
-                    unmountOnBlur: false
                 }}  />
         </Tab.Navigator>  
     )

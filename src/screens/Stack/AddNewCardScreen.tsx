@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import BackButton from '../../components/BackButton';
+import { StyleSheet, View, Image } from 'react-native';
+import BackButton from '@Components/BackButton';
 
 const AddNewCardScreen = ({ navigation }) => {
 
