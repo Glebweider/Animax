@@ -5,11 +5,25 @@ import CheckIcon from '@Icons/CheckIcon';
 import { useState } from 'react';
 import ConfigPaymentModal from '@Modal/ConfigPaymentModal';
 import { i18n } from '@Utils/localization';
+import buyPremiumUser from '@Utils/fetch/buyPremiumUser';
+import { getTokenFromStorage } from '@Utils/token';
+import { useDispatch } from 'react-redux';
+import { setPremium } from '@Redux/reducers/userReducer';
 
 const ReviewSummaryScreen = ({ navigation, route }) => {
     const [taxPrice, setTaxPrice] = useState<number>(1.19)
     const { buyData } = route.params;
+    const dispatch = useDispatch();
     const [isOpenModalConfigPayment, setOpenModalConfigPayment] = useState<boolean>(false); 
+
+    const handleBuyPremium = async () => {
+        const token = await getTokenFromStorage();
+        const response = await buyPremiumUser(token, buyData.objecyBuy.date);
+        if (response) {
+            dispatch(setPremium(response));
+            setOpenModalConfigPayment(true);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -76,7 +90,7 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                 </View> 
             </View>
             <TouchableOpacity 
-                onPress={() => setOpenModalConfigPayment(true)} 
+                onPress={() => handleBuyPremium()} 
                 style={styles.buttonContinue}>
                     <Text style={styles.buttonContinueText}>{i18n.t('reviewsummary.confirmpayment')}</Text>
             </TouchableOpacity>  

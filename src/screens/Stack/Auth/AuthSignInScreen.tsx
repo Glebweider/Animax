@@ -23,6 +23,7 @@ import authUserInToken from '@Utils/fetch/authUserInToken';
 
 //Redux
 import { setUser } from '@Redux/reducers/userReducer';
+import PasswordSection from '@Components/PasswordSection';
 
 const AuthSignInScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -88,7 +89,7 @@ const AuthSignInScreen = ({ navigation }) => {
             <StatusBar style='light' />
             <BackButton navigation={navigation} text='' />
             <View style={styles.titleContainer}>
-                <Image source={require('../../../assets/logo.png')} style={styles.titleImage} />
+                <Image source={require('../../../../assets/logo.png')} style={styles.titleImage} />
                 <Text style={styles.titleText}>Login Your Account</Text>
             </View>
             <View style={styles.authContainer}>
@@ -105,26 +106,7 @@ const AuthSignInScreen = ({ navigation }) => {
                         value={textEmail}/>
                 </View>
                 {emailError && <Text style={styles.emailError}>{emailError}</Text>}
-                <View style={styles.passwordSection}>
-                    <PasswordIcon 
-                        Color={textPassword ? '#fff' : '#9E9E9E'} 
-                        Style={styles.icon} />
-                    <TextInput
-                        style={styles.passwordInput}
-                        placeholderTextColor="#9E9E9E"
-                        placeholder="Password"
-                        secureTextEntry={isVisibledPassword}
-                        onChangeText={(newText) => setTextPassword(newText)}
-                        value={textPassword}/>
-                    <TouchableOpacity onPress={() => isVisibledPassword ? setVisibledPassword(false) : setVisibledPassword(true)}>
-                        { 
-                        isVisibledPassword ? 
-                        <EyeOffIcon Color={textPassword ? '#fff' : '#9E9E9E'} Style={styles.icon}/> 
-                        :
-                        <EyeOnIcon Color={textPassword ? '#fff' : '#9E9E9E'} Style={styles.icon}/>  
-                        }                       
-                    </TouchableOpacity>
-                </View>
+                <PasswordSection placeholder='Password' textPassword={textPassword} setTextPassword={setTextPassword} />
                 {passwordError && <Text style={styles.passwordError}>{passwordError}</Text>}
                 <TouchableOpacity 
                     onPress={() => authorization()}
@@ -147,21 +129,21 @@ const AuthSignInScreen = ({ navigation }) => {
                         onPress={() => facebookAuth()} 
                         style={styles.facebookContainer}>
                         <Image 
-                            source={require('../../../assets/icons/facebook-icon.png')} 
+                            source={require('../../../../assets/icons/facebook-icon.png')} 
                             style={styles.facebookImage} />
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => googleAuth()} 
                         style={styles.googleContainer}>
                         <Image 
-                            source={require('../../../assets/icons/google-icon.png')} 
+                            source={require('../../../../assets/icons/google-icon.png')} 
                             style={styles.googleImage} />
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => appleAuth()} 
                         style={styles.appleContainer}>
                         <Image 
-                            source={require('../../../assets/icons/apple-icon.png')} 
+                            source={require('../../../../assets/icons/apple-icon.png')} 
                             style={styles.appleImage} />
                     </TouchableOpacity>
                 </View>

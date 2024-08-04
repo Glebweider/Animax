@@ -19,6 +19,7 @@ export interface Anime {
         {
             id: number;
             russian: string;
+            name: string;
         }
     ];
     scoresStats: [

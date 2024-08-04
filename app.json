@@ -7,14 +7,8 @@
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "platforms": ["ios", "android", "web"],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.codewithbeto.Animax"
@@ -45,6 +39,11 @@
           }
         }
       ]
-    ]
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#181A20"
+    }
   }
 }

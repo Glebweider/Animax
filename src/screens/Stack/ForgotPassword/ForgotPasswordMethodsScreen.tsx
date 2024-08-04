@@ -4,6 +4,7 @@ import { useState } from 'react';
 import BackButton from '@Components/BackButton';
 import EmailIcon from '@Icons/EmailIcon';
 import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
+import forgotPasswordUser from '@Utils/fetch/forgotPasswordUser';
 
 const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const [methodResetPassword, setMethodResetPassword] = useState<string>('SMS');
@@ -11,6 +12,20 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const [isOpenModalForgotPasswordInput, setOpenModalForgotPasswordInput] = useState<boolean>(false); 
 
 
+    const fetchData = async () => {
+        const response = await forgotPasswordUser(viaData)
+        if (response.success) {
+            navigation.navigate('ForgotPasswordCodeVerifyScreen', {
+                data: {
+                    method: methodResetPassword,
+                    text: viaData,
+                    expiresAt: response.expiresAt
+                }
+            })
+        } else {
+            alert('Error from request email');
+        }
+    }
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text="Forgot Password" />
@@ -22,7 +37,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                 navigation={navigation} />
             <View style={styles.content}>
                 <Image 
-                    source={require('../../../assets/backgroundForgotPassword.png')}
+                    source={require('../../../../assets/backgroundForgotPassword.png')}
                     style={{}} />  
                 <Text style={styles.contentText}>Select which contact details should we use to reset your password</Text> 
                 <TouchableOpacity 
@@ -61,12 +76,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                 </TouchableOpacity>                
             </View>
             <TouchableOpacity 
-                onPress={() => navigation.navigate('ForgotPasswordCodeVerifyScreen', {
-                    data: {
-                        method: methodResetPassword,
-                        text: viaData
-                    }
-                })} 
+                onPress={() => fetchData()} 
                 disabled={viaData == null}
                 style={styles.buttonContinue}>
                     <Text style={styles.buttonContinueText}>Continue</Text>

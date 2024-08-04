@@ -30,13 +30,18 @@ const AnimeSortScreen = ({ navigation }) => {
         genresAnime.map((data) => (
             <TouchableOpacity
                 key={data.id}
-                onPress={() => dispatch(addFilter({ id: data.id, text: data.russian }))}
+                onPress={() => dispatch(addFilter({ id: data.id, text: (i18n.locale === 'ru' || i18n.locale === 'uk') 
+                    ? data.russian 
+                    : data.name }))}
                 style={FilterState.filter.some((i) => i.id === data.id)
                     ? styles.filterContainerEnabled
                     : styles.filterContainerDisabled}>
                 <Text style={FilterState.filter.some((i) => i.id === data.id)
                     ? styles.filterTextEnabled
-                    : styles.filterTextDisabled}>{data.russian}</Text>
+                    : styles.filterTextDisabled}>{(i18n.locale === 'ru' || i18n.locale === 'uk') 
+                        ? data.russian 
+                        : data.name}
+                </Text>
             </TouchableOpacity>
         )
     ), [genresAnime, FilterState.filter]);
@@ -50,7 +55,7 @@ const AnimeSortScreen = ({ navigation }) => {
                         {renderItems}
                     </View>   
                     :
-                    <Text>Загрузка</Text>
+                    <Text>{i18n.t('loading')}</Text>
                 }                
             </ScrollView>
             <View style={styles.buttons}>

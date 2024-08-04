@@ -78,7 +78,7 @@ const ReleaseScreen = ({ navigation }) => {
             if (Animes) {
                 const animeForDate = Animes.filter((anime) => {
                     if (anime.anime.score >= 7) {                
-                        return anime.next_episode_at.split('T')[0] === selectedDate.dayOfDate;
+                        return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
                     } 
                 });
 
@@ -95,7 +95,7 @@ const ReleaseScreen = ({ navigation }) => {
                 style={isSelected ? styles.dataContainerEnabled : styles.dataContainerDisabled}
                 onPress={handlePress}>
                 <Text style={isSelected ? styles.dataTextWeekEnabled : styles.dataTextWeekDisabled}>
-                    {item.dayOfWeek}
+                    {item.dayOfWeek && i18n.t(`release.${item.dayOfWeek}`)}
                 </Text>
                 <Text style={isSelected ? styles.dataTextMonthEnabled : styles.dataTextMonthDisabled}>
                     {item.dayOfMonth}
@@ -119,7 +119,7 @@ const ReleaseScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item) => item.dayOfMonth.toString()}
                     renderItem={({ item }) => (
-                        <MemoizedDateItem isSelected={selectedDate.dayOfMonth === item.dayOfMonth} onPress={setSelectedDate} item={item} />
+                        <MemoizedDateItem isSelected={selectedDate.dayOfMonth == item.dayOfMonth} onPress={setSelectedDate} item={item} />
                     )}/>
             </View>
             <View style={{width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center'}}>

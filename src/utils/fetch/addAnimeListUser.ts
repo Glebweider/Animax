@@ -1,6 +1,6 @@
 const addAnimeListUser = async (token: string, anime: any) => {
     try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/add-animelist`, {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/add-animelist`, {
             method: 'POST',
             headers: {
                 'Authorization': token,

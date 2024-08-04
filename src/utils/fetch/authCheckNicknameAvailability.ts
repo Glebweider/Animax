@@ -1,6 +1,6 @@
 const checkNicknameAvailability = async (nickname: string) => {
     try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/check-nickname`, {
+        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/check-nickname`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

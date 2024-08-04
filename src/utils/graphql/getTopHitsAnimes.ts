@@ -8,9 +8,11 @@ export const GET_ANIMES = gql`
                 mainUrl
             }
             russian
+            name
             genres {
                 id
                 russian
+                name
             }
             score
             id

@@ -10,3 +10,4 @@ const getInterests = async () => {
 }
 
 export default getInterests;
+

@@ -17,6 +17,7 @@
     "@apollo/client": "^3.8.10",
     "@apollo/react-hooks": "^4.0.0",
     "@expo/config-plugins": "~8.0.0",
+    "@expo/metro-runtime": "~3.2.1",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/slider": "4.5.2",
     "@react-native-picker/picker": "^2.7.5",
@@ -41,6 +42,7 @@
     "expo-navigation-bar": "^3.0.7",
     "expo-screen-orientation": "~7.0.5",
     "expo-status-bar": "~1.12.1",
+    "expo-updates": "~0.25.21",
     "expo-video": "^1.2.4",
     "graphql": "^15.8.0",
     "i18n-js": "^4.4.3",
@@ -57,7 +59,9 @@
     "react-native-screens": "^3.31.1",
     "react-native-svg": "^15.2.0",
     "react-native-video": "^6.4.3",
+    "react-native-web": "~0.19.10",
     "react-redux": "^8.0.5",
+    "redux-devtools-expo-dev-plugin": "^0.2.1",
     "validator": "^13.11.0"
   },
   "devDependencies": {

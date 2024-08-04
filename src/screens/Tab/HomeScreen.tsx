@@ -8,10 +8,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 import PlayIcon from '@Components/icons/PlayIcon';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import TopHitsAnime from '@Components/TopHitsAnime';
-import NewEpisodesAnime from '@Components/NewEpisodesAnime';
-import { GET_NEWEPISODESANIME } from '@Utils/graphql/getNewEpisodesAnime';
+import RecomendationAnime from '@Components/RecomendationAnime';
+import { GET_RECOMENDATIONANIME } from '@Utils/graphql/getRecomendationAnime';
 import { i18n } from '@Utils/localization';
 import { Anime } from '@Interfaces/animeHomeScreen.interface';
+import { useSelector } from 'react-redux';
+import { RootState } from '@Redux/store';
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
@@ -22,15 +24,19 @@ const HomeScreen = ({ navigation }) => {
         russian: '',
         score: 0,
         id: 0,
+        name: '',
         rating: '',
         genres: [
             {
-                russian: ''
+                russian: '',
+                name: ''
             },
         ],
     });
     const [topHitsAnime, setTopHitsAnime] = useState<Anime[]>([]);
-    const [newEpisodesAnime, setNewEpisodesAnime] = useState<Anime[]>([]);
+    const [recomendationAnime, setRecomendationAnime] = useState<Anime[]>([]);
+    const [genreId, setGenreId] = useState<number>(null);
+    const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
     const { data: topHitsData } = useQuery(GET_ANIMES, {
         variables: { 
@@ -43,25 +49,29 @@ const HomeScreen = ({ navigation }) => {
     
     useEffect(() => {
         if (topHitsData) {
-          setTopHitsAnime(topHitsData.animes);
+            setTopHitsAnime(topHitsData.animes);
             if (selectAnime) {
                 setSelectAnime(topHitsData.animes[0]);
             }
         }
-    }, [selectAnime, topHitsData]);
+    }, [topHitsData]);
     
-    const { data: newEpisodesData } = useQuery(GET_NEWEPISODESANIME, {
+    if (!genreId) {
+        setGenreId(userInterests[Math.floor(Math.random() * userInterests.length)].id);
+    }
+    const { data: recomendationData } = useQuery(GET_RECOMENDATIONANIME, {
         variables: { 
             limit: 6,
-            order: 'ranked'
+            order: 'ranked',
+            genre: genreId
         },
     });   
     
     useEffect(() => {
-        if (newEpisodesData) {
-            setNewEpisodesAnime(newEpisodesData.animes);
+        if (recomendationData) {
+            setRecomendationAnime(recomendationData.animes);
         }
-    }, [newEpisodesData]);
+    }, [recomendationData]);
 
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
@@ -87,29 +97,37 @@ const HomeScreen = ({ navigation }) => {
                             uri: selectAnime.poster.originalUrl}} 
                             style={styles.selectAnimeImage} />
                         :
-                        <Text>Loading</Text>
+                        <Text>{i18n.t('loading')}</Text>
                     }
                     <View style={styles.animeDataContainer}>
                         <View style={styles.animeContent}>
-                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeName}>{selectAnime.russian}</Text>
+                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeName}>{
+                                (i18n.locale === 'ru' || i18n.locale === 'uk') 
+                                ? selectAnime.russian 
+                                : selectAnime.name}
+                            </Text>
                             <View style={styles.tagsContainer}>
                                 {selectAnime.genres ? 
                                     <Text 
                                         numberOfLines={1} 
                                         ellipsizeMode="tail" 
                                         style={styles.animeDescription}>
-                                            {selectAnime.genres.map(genre => genre.russian).join(', ')}
+                                            {selectAnime.genres.map(genre => (
+                                                i18n.locale === 'ru' || i18n.locale === 'uk') 
+                                                ? genre.russian 
+                                                : genre.name
+                                            ).join(', ')}
                                     </Text>
                                     :
-                                    <Text></Text>
+                                    <Text>{i18n.t('loading')}</Text>
                                 }
                             </View>
                             <View style={styles.animeButtonsContainer}>
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('AnimeScreen', {animeId: selectAnime.id})} 
                                     style={styles.animeButtonPlay}>
-                                    <PlayIcon Color={'#fff'} Style={{marginRight: 7}} Width={16} Height={16} />
-                                    <Text style={styles.animeButtonTextPlay}>Play</Text>
+                                    <PlayIcon Color={'#fff'} Style={{marginRight: 7, marginLeft: 13,}} Width={16} Height={16} />
+                                    <Text style={styles.animeButtonTextPlay}>{i18n.t('play')}</Text>
                                 </TouchableOpacity>
                                 <View style={{marginLeft: 10}}>
                                     <MyAnimeListButton anime={selectAnime} />
@@ -129,12 +147,12 @@ const HomeScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.newEpisodeAnimeTextContainer}>
-                        <Text style={styles.newEpisodeAnimeText}>{i18n.t('home.newepisodereleases')}</Text>
+                        <Text style={styles.newEpisodeAnimeText}>{i18n.t('home.yourecomendationanimes')}</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('see all')}>
                             <Text style={styles.newEpisodeAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
-                    <NewEpisodesAnime data={newEpisodesAnime} onSelect={setSelectAnime} />                   
+                    <RecomendationAnime data={recomendationAnime} onSelect={setSelectAnime} />                   
                 </View>
             </View>            
         </ScrollView>
@@ -184,7 +202,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 86,
+        minWidth: 86,
         height: 36,
         flexDirection: 'row',
     },
@@ -193,6 +211,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontFamily: 'Outfit',
         overflow: 'hidden',
+        marginRight: 13,
     },
     animeButtonMyList: {
         borderRadius: 50,

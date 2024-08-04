@@ -36,19 +36,21 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.profileUserEmail}>{userState.email}</Text>
                 </View>
             </View>
-            <TouchableOpacity
-                onPress={() => navigation.navigate('SubcribeScreen')}
-                style={styles.premiumContainer}>
-                <CrownIcon Width={60} Height={55} Color={'#06C149'} />
-                <View style={styles.premiumTextContainer}>
-                    <Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
-                    <Text 
-                        numberOfLines={2} 
-                        ellipsizeMode="tail" 
-                        style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
-                </View>
-                <ArrowRightIcon Color={'#06C149'} Width={30} Height={30} />
-            </TouchableOpacity>
+            {!userState.premium.premium && 
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('SubcribeScreen')}
+                    style={styles.premiumContainer}>
+                    <CrownIcon Width={60} Height={55} Color={'#06C149'} />
+                    <View style={styles.premiumTextContainer}>
+                        <Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
+                        <Text 
+                            numberOfLines={2} 
+                            ellipsizeMode="tail" 
+                            style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
+                    </View>
+                    <ArrowRightIcon Color={'#06C149'} Width={30} Height={30} />
+                </TouchableOpacity>
+            }
             <View style={styles.labelsContainer}>
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('EditDataScreen')}

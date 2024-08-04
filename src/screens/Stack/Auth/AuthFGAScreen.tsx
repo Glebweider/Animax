@@ -17,26 +17,26 @@ const AuthFGAScreen = ({ navigation }) => {
             <StatusBar style='light' />
             <BackButton navigation={navigation} text='' />
             <View style={styles.titleContainer}>
-                <Image source={require('../../../assets/letsyouin.png')} style={styles.titleImage} />
+                <Image source={require('../../../../assets/letsyouin.png')} style={styles.titleImage} />
                 <Text style={styles.titleText}>Let's you in</Text>
             </View>
             <View style={styles.authContainer}>
                 <TouchableOpacity 
                 onPress={() => facebookAuth()} 
                 style={styles.facebookContainer}>
-                    <Image source={require('../../../assets/icons/facebook-icon.png')} style={styles.facebookImage} />
+                    <Image source={require('../../../../assets/icons/facebook-icon.png')} style={styles.facebookImage} />
                     <Text style={styles.facebookText}>Continue with Facebook</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                 onPress={() => googleAuth()} 
                 style={styles.googleContainer}>
-                    <Image source={require('../../../assets/icons/google-icon.png')} style={styles.googleImage} />
+                    <Image source={require('../../../../assets/icons/google-icon.png')} style={styles.googleImage} />
                     <Text style={styles.googleText}>Continue with Google</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                 onPress={() => appleAuth()} 
                 style={styles.appleContainer}>
-                    <Image source={require('../../../assets/icons/apple-icon.png')} style={styles.appleImage} />
+                    <Image source={require('../../../../assets/icons/apple-icon.png')} style={styles.appleImage} />
                     <Text style={styles.appleText}>Continue with Apple</Text>
                 </TouchableOpacity>
             </View>

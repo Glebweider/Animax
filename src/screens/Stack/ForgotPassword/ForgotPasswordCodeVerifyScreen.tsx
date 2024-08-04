@@ -2,10 +2,33 @@ import { StyleSheet, View, Text, TouchableOpacity, Image, TextInput } from 'reac
 import { useEffect, useRef, useState } from 'react';
 
 import BackButton from '@Components/BackButton';
+import recoverPasswordUser from '@Utils/fetch/recoverPasswordUser';
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
     const { data } = route.params;
-    const [resendCodeTimer, setResendCodeTimer] = useState<number>(55);
+    const [expiresAt] = useState(data.expiresAt);
+    const [timeLeft, setTimeLeft] = useState(data.expiresAt);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+        const now = Date.now();
+        const remainingTime = expiresAt - now;
+
+        if (remainingTime <= 0) {
+            setTimeLeft(0);
+            clearInterval(interval);
+        } else {
+            setTimeLeft(remainingTime);
+        }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [expiresAt]);
+
+
+    const minutes = Math.floor(timeLeft / 60000);
+    const seconds = Math.floor((timeLeft % 60000) / 1000);
+    const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
     const [pins, setPins] = useState(['', '', '', '']);
     const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
@@ -21,7 +44,6 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
             nextInput.focus();
           }
         } else if (newPins.join('').length < pins.join('').length) {
-          setResendCodeTimer((prevTimer) => Math.max(prevTimer - 1, 0));
           const prevInput = inputRefs.current[index - 1];
           if (prevInput) {
             prevInput.focus();
@@ -31,24 +53,17 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
         setPins(newPins);
       };
   
-    const handlePinSubmit = () => {
+    const handlePinSubmit = async () => {
         const enteredPin = pins.join('');
-    
-        const expectedPin = '1234';
-  
-        if (enteredPin === expectedPin) {
-            alert('Пин-код верный!');
-        } else {
-            alert('Пин-код неверный.');
+        const response = await recoverPasswordUser(data.text, enteredPin);
+        if (response) {
+            navigation.navigate('ForgotPasswordResetPasswordScreen', {
+                data: {
+                    email: data.text,
+                }
+            })
         }
     };
-
-    useEffect(() => {
-        const intervalId = setInterval(() => 
-            setResendCodeTimer(resendCodeTimer - 1), 
-        1000)
-        return () => clearInterval(intervalId);
-    }, [, resendCodeTimer])
     
     return (
         <View style={styles.container}>
@@ -74,7 +89,7 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
                 </View>
                 <View style={styles.resendCodeContainer}>
                     <Text style={styles.resendCodeText}>Resend code in </Text>
-                    <Text style={styles.resendCodeTimer}>{resendCodeTimer}</Text>
+                    <Text style={styles.resendCodeTimer}>{formattedTime}</Text>
                     <Text style={styles.resendCodeTime}> s</Text>
                 </View>
             </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Linking } from 'react-native';
 
 //Icons
 import DiscordIcon from '@Icons/DiscordIcon';
@@ -12,7 +12,7 @@ const ContactUs = () => {
     return (
         <View style={styles.container}>
             <TouchableOpacity 
-                onPress={() => {}}
+                onPress={() => Linking.openURL('https://discord.gg/animelandia-926550837172514876')}
                 style={styles.contactContainer}>
                     <DiscordIcon 
                         Color='#06C149'
@@ -25,7 +25,7 @@ const ContactUs = () => {
                     <Text style={styles.contactText}>Discord</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-                onPress={() => {}}
+                onPress={() => Linking.openURL('https://google.com')}
                 style={styles.contactContainer}>
                     <WebSiteIcon 
                         Color='#06C149'
@@ -38,7 +38,7 @@ const ContactUs = () => {
                     <Text style={styles.contactText}>Website</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-                onPress={() => {}}
+                onPress={() => Linking.openURL('https://x.com')}
                 style={styles.contactContainer}>
                     <TwitterIcon
                         Color='#06C149'
@@ -51,7 +51,7 @@ const ContactUs = () => {
                     <Text style={styles.contactText}>Twitter</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-                onPress={() => {}}
+                onPress={() => Linking.openURL('https://www.whatsapp.com/')}
                 style={styles.contactContainer}>
                     <WhatsAppIcon
                         Color='#06C149'

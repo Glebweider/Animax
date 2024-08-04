@@ -121,6 +121,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         const checkNickname = await checkNicknameAvailability(textNickname);
 
         if (checkPhoneNumber && checkNickname) {
+            console.log(JSON.stringify(authState.interests))
 
             const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/register`, avatar.uri, {
                 fieldName: 'avatar',
@@ -173,7 +174,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         style={styles.imageAvatar} />   
                     :
                     <Image 
-                        source={require('../../../assets/avatar.png')} 
+                        source={require('../../../../assets/avatar.png')} 
                         style={styles.imageNullAvatar} />   
                     }
                 </TouchableOpacity>
@@ -232,8 +233,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
             </TouchableOpacity>
             <ConfigModal 
                 visible={isOpenModal} 
-                setVisible={setOpenModal}
-                navigation={navigation} />
+                setVisible={setOpenModal} />
         </View>
     );
 };

@@ -21,6 +21,7 @@ export const GET_ANIME = gql`
             genres {
                 id
                 russian
+                name
             }
             scoresStats {
                 count

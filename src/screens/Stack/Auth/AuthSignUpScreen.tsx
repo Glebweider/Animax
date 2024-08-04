@@ -4,12 +4,10 @@ import { useDispatch } from 'react-redux';
 
 //Components
 import BackButton from '@Components/BackButton';
+import PasswordSection from '@Components/PasswordSection';
 
 //Icons
 import EmailIcon from '@Icons/EmailIcon';
-import PasswordIcon from '@Icons/PasswordIcon';
-import EyeOnIcon from '@Icons/EyeOnIcon';
-import EyeOffIcon from '@Icons/EyeOffIcon';
 
 //Utils
 import facebookAuth from '@Utils/facebookAuth';
@@ -20,19 +18,18 @@ import checkEmailAvailability from '@Utils/fetch/authCheckEmailAvailability';
 //Redux
 import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';
 
+
 const AuthSignUpScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
     const [textEmail, setTextEmail] = React.useState<string>('');
     const [textPassword, setTextPassword] = React.useState<string>('');
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const [isVisibledPassword, setVisibledPassword] = React.useState<boolean>(true);
     const [passwordError, setPasswordError] = React.useState<string | null>(null);
     const [emailError, setEmailError] = React.useState<string | null>(null);
     const [isEmailVerify, setEmailVerify] = React.useState<boolean>(false);
     const [isPasswordVerify, setPasswordVerify] = React.useState<boolean>(false);
 
     useEffect(() => {
-        // Валидация пароля
         if (textPassword.length >= 1) {
             if (textPassword.length < 6) {
                 setPasswordError('Пароль должен содержать не менее 6 символов');
@@ -81,7 +78,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
         <View style={styles.container}>
             <BackButton navigation={navigation} text='' />
             <View style={styles.titleContainer}>
-                <Image source={require('../../../assets/logo.png')} style={styles.titleImage} />
+                <Image source={require('../../../../assets/logo.png')} style={styles.titleImage} />
                 <Text style={styles.titleText}>Create Your Account</Text>
             </View>
             <View style={styles.authContainer}>
@@ -98,26 +95,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
                         value={textEmail}/>
                 </View>
                 {emailError && <Text style={styles.emailError}>{emailError}</Text>}
-                <View style={styles.passwordSection}>
-                    <PasswordIcon 
-                        Color={textPassword ? '#fff' : '#9E9E9E'} 
-                        Style={styles.icon} />
-                    <TextInput
-                        style={styles.passwordInput}
-                        placeholderTextColor="#9E9E9E"
-                        placeholder="Password"
-                        secureTextEntry={isVisibledPassword}
-                        onChangeText={(newText) => setTextPassword(newText)}
-                        value={textPassword}/>
-                    <TouchableOpacity onPress={() => isVisibledPassword ? setVisibledPassword(false) : setVisibledPassword(true)}>
-                        { 
-                        isVisibledPassword ? 
-                        <EyeOffIcon Color={textPassword ? '#fff' : '#9E9E9E'} Style={styles.icon}/> 
-                        :
-                        <EyeOnIcon Color={textPassword ? '#fff' : '#9E9E9E'} Style={styles.icon}/>  
-                        }                       
-                    </TouchableOpacity>
-                </View>
+                <PasswordSection placeholder='Password' textPassword={textPassword} setTextPassword={setTextPassword} />
                 {passwordError && <Text style={styles.passwordError}>{passwordError}</Text>}
                 <TouchableOpacity 
                     onPress={() => registration()}
@@ -135,21 +113,21 @@ const AuthSignUpScreen = ({ navigation }: any) => {
                         onPress={() => facebookAuth()} 
                         style={styles.facebookContainer}>
                         <Image 
-                            source={require('../../../assets/icons/facebook-icon.png')} 
+                            source={require('../../../../assets/icons/facebook-icon.png')} 
                             style={styles.facebookImage} />
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => googleAuth()} 
                         style={styles.googleContainer}>
                         <Image 
-                            source={require('../../../assets/icons/google-icon.png')} 
+                            source={require('../../../../assets/icons/google-icon.png')} 
                             style={styles.googleImage} />
                     </TouchableOpacity>
                     <TouchableOpacity 
                         onPress={() => appleAuth()} 
                         style={styles.appleContainer}>
                         <Image 
-                            source={require('../../../assets/icons/apple-icon.png')} 
+                            source={require('../../../../assets/icons/apple-icon.png')} 
                             style={styles.appleImage} />
                     </TouchableOpacity>
                 </View>

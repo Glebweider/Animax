@@ -14,11 +14,20 @@ interface IAnime {
   rating: string;
 }
 
+interface IPremium {
+  premium: boolean;
+  duration: number;
+}
+
 interface IUserState {
   uuid: string;
   email: string;
   password: string;
   interests: IInterest[];
+  premium: {
+    premium: boolean;
+    duration: number;
+  },
   profile: {
     avatar: string;
     fullname: string;
@@ -35,6 +44,10 @@ const initialState: IUserState = {
   email: '',
   password: '',
   interests: [],
+  premium: {
+    premium: false,
+    duration: 0
+  },
   profile: {
     avatar: '',
     fullname: '',
@@ -55,13 +68,24 @@ const userSlice = createSlice({
       state.password = action.payload.password;
       state.email = action.payload.email;
       state.interests = action.payload.interests;
+      state.premium = action.payload.premium;
       state.profile = action.payload.profile;
       state.preferences = action.payload.preferences;
       state.animelist = action.payload.animelist;
     },
+    removeAnime: (state, action: PayloadAction<string>) => {
+      state.animelist = state.animelist.filter(anime => anime.animeId !== action.payload);
+    },
+    addAnime: (state, action: PayloadAction<IAnime>) => {
+      state.animelist.push(action.payload);
+    },
+    setPremium: (state, action: PayloadAction<IPremium>) => {
+      state.premium.premium = action.payload.premium;
+      state.premium.duration = action.payload.duration;
+    }
   },
 });
 
-export const {setUser} = userSlice.actions;
+export const { setUser, removeAnime, addAnime, setPremium } = userSlice.actions;
 
 export default userSlice.reducer;

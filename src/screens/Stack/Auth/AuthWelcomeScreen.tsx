@@ -6,7 +6,7 @@ const AuthWelcomeScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../../../assets/background.png')} style={styles.backgroundImage} />
+            <Image source={require('../../../../assets/background.png')} style={styles.backgroundImage} />
             <LinearGradient
                     colors={['rgba(24, 26, 32, 0)', 'rgba(24, 26, 32, 100)']}
                     start={{ x: 0, y: 0,}}

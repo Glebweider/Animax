@@ -1,12 +1,12 @@
 import { createStackNavigator } from '@react-navigation/stack';
 
 import PreloaderScreen from '@Stack/PreloaderScreen';
-import AuthWelcomeScreen from '@Stack/AuthWelcomeScreen';
-import AuthFGAScreen from '@Stack/AuthFGAScreen';
-import AuthSignUpScreen from '@Stack/AuthSignUpScreen';
-import AuthSignInScreen from '@Stack/AuthSignInScreen';
-import AuthAccountSetupInterestScreen from '@Stack/AuthAccountSetupInterestScreen';
-import AuthAccountSetupDataScreen from '@Stack/AuthAccountSetupDataScreen';
+import AuthWelcomeScreen from '@Stack/Auth/AuthWelcomeScreen';
+import AuthFGAScreen from '@Stack/Auth/AuthFGAScreen';
+import AuthSignUpScreen from '@Stack/Auth/AuthSignUpScreen';
+import AuthSignInScreen from '@Stack/Auth/AuthSignInScreen';
+import AuthAccountSetupInterestScreen from '@Stack/Auth/AuthAccountSetupInterestScreen';
+import AuthAccountSetupDataScreen from '@Stack/Auth/AuthAccountSetupDataScreen';
 import TabNavigator from '@Tab/TabNavigator';
 import AnimeScreen from '@Stack/AnimeScreen';
 import AnimeSearchScreen from '@Stack/AnimeSearchScreen';
@@ -18,10 +18,11 @@ import PaymentScreen from '@Stack/PaymentScreen';
 import AddNewCardScreen from '@Stack/AddNewCardScreen';
 import PrivacyPolicyScreen from '@Stack/PrivacyPolicyScreen';
 import ReviewSummaryScreen from '@Stack/ReviewSummaryScreen';
-import ForgotPasswordMethodsScreen from '@Stack/ForgotPasswordMethodsScreen';
-import ForgotPasswordCodeVerifyScreen from '@Stack/ForgotPasswordCodeVerifyScreen';
+import ForgotPasswordMethodsScreen from '@Stack/ForgotPassword/ForgotPasswordMethodsScreen';
+import ForgotPasswordCodeVerifyScreen from '@Stack/ForgotPassword/ForgotPasswordCodeVerifyScreen';
 import HelpCenterScreen from '@Stack/HelpCenterScreen';
 import LanguageScreen from '@Stack/LanguageScreen';
+import ForgotPasswordResetPasswordScreen from '@Stack/ForgotPassword/ForgotPasswordResetPasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,7 @@ const StackNavigator = () => {
             <Stack.Screen name="ReviewSummaryScreen" component={ReviewSummaryScreen}/>
             <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen}/>
             <Stack.Screen name="ForgotPasswordCodeVerifyScreen" component={ForgotPasswordCodeVerifyScreen}/>
+            <Stack.Screen name="ForgotPasswordResetPasswordScreen" component={ForgotPasswordResetPasswordScreen}/>
             <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
             <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
         </Stack.Navigator>

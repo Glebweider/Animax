@@ -60,6 +60,7 @@ const AnimeScreen = ({ navigation, route }) => {
             {
                 id: 0,
                 russian: '',
+                name: ''
             },
         ],
         scoresStats: [
@@ -94,7 +95,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             const animeEpisodes = await _animeEpisodes.json();
                             if (animeEpisodes.list[0]) {
                                 if (Object.keys(animeEpisodes.list[0].player.list).length === 0) {
-                                    alert('Ошибка, серии этого аниме не найдены');
+                                    alert('Error, notfound this anime episodes');
                                     setEpisodesAnime(null);
                                 }
                                 const arrayData = Object.values(animeEpisodes.list[0].player.list);
@@ -119,7 +120,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 const isAnimeInList = userAnimeList.some((userAnime) => userAnime.animeId == anime.id);
                 setIsInMyList(isAnimeInList);
             } catch (error) {
-                console.error('Ошибка при получении списка аниме пользователя', error);
+                console.error('Error get animelist user', error);
             }
         };
   
@@ -145,7 +146,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 title: anime.russian,
             });
         } catch (error) {
-            console.error('Ошибка при попытке поделиться:', error.message);
+            console.error('Error try share:', error.message);
         }
     };
 
@@ -193,7 +194,10 @@ const AnimeScreen = ({ navigation, route }) => {
                 <Text 
                     numberOfLines={1} 
                     ellipsizeMode="tail" 
-                    style={styles.titleText}>{anime.name}</Text>
+                    style={styles.titleText}>{
+                                (i18n.locale === 'ru' || i18n.locale === 'uk') 
+                                ? anime.russian 
+                                : anime.name}</Text>
                 <View style={styles.titleContainerButtons}>
                     {isInMyList ? 
                         <TouchableOpacity 
@@ -237,7 +241,10 @@ const AnimeScreen = ({ navigation, route }) => {
                             <View 
                                 style={styles.genreContainer}
                                 key={genre.id}>
-                                <Text style={styles.genreText}>{genre.russian}</Text>                                
+                                <Text style={styles.genreText}>{(i18n.locale === 'ru' || i18n.locale === 'uk') 
+                                    ? genre.russian 
+                                    : genre.name}
+                                </Text>                                
                             </View>
                         ))}                    
                     </ScrollView>

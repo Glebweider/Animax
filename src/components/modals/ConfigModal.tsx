@@ -1,3 +1,4 @@
+import { i18n } from '@Utils/localization';
 import React, { useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, Image } from 'react-native';
 import { BallIndicator } from 'react-native-indicators';
@@ -5,10 +6,9 @@ import { BallIndicator } from 'react-native-indicators';
 interface ModalProps {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    navigation: any;
 }
 
-const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) => {
+const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 
     useEffect(() => {
         if (visible) {                
@@ -25,8 +25,8 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) 
                     <Image 
                         source={require('../../../assets/backgroundConfigurator.png')}
                         style={styles.modalImage} />
-                    <Text style={styles.modalTitle}>Congratulations!</Text>
-                    <Text style={styles.modalText}>Your account is ready to use. You will be redirected to the Home page in a few seconds.</Text>
+                    <Text style={styles.modalTitle}>{i18n.t('configModal.congratulations')}</Text>
+                    <Text style={styles.modalText}>{i18n.t('configModal.text')}</Text>
                     <BallIndicator color='#13D458' size={60} animationDuration={700} />
                 </View>
             </View>

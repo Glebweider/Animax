@@ -2,7 +2,6 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import BackButton from '@Components/BackButton';
-import getPaymentMethods from '@Utils/fetch/getPaymentMethods';
 import { getTokenFromStorage } from '@Utils/token';
 import { i18n } from '@Utils/localization';
 
@@ -14,7 +13,6 @@ interface IPaymentMethod {
 }
 
 const PaymentScreen = ({ navigation, route }) => {
-    const [paymentMethods, setPaymentMethods] = useState<any>([]); 
     const [selectPaymentMethod, setSelectPaymentMethod] = useState<IPaymentMethod>({
         textPaymentMethod: 'PayPal',
         iconPaymentMethod: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1200px-Apple_logo_white.svg.png',
@@ -22,17 +20,6 @@ const PaymentScreen = ({ navigation, route }) => {
         iconPaymentMethodHeight: 24,
     });
     const { objecyBuy } = route.params;
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const token = await getTokenFromStorage();
-            const paymentMethods = await getPaymentMethods(token);
-            if (paymentMethods) {
-                setPaymentMethods(paymentMethods);
-            }
-        };
-        fetchData();
-    }, []);
 
     return (
         <View style={styles.container}>

@@ -238,13 +238,13 @@ const styles = StyleSheet.create({
     },
     filters: {
         width: '100%',
-        height: 45,
-        marginTop: 20,
+        borderRadius: 15,
     },
     filtersScrollView: {
         width: '100%',
         height: 45,
         flexGrow: 1,  
+        borderRadius: 10,
     },
     tag: {
         height: 45,
@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         marginTop: 60,
+        marginBottom: 15,
     },
     sortButton: {
         width: 62,

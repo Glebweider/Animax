@@ -17,7 +17,7 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
-        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.me/api/graphql"
+        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
       }
     },
     "production": {
@@ -27,7 +27,7 @@
       },
       "env": {
         "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
-        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.me/api/graphql"
+        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
       }
     }
   },

@@ -99,7 +99,7 @@ const EditDataScreen = ({ navigation }) => {
 
     const update = async () => {
             const token = await getTokenFromStorage();
-            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/update-user-data`, avatar, {
+            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`, avatar, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
                 parameters: {
