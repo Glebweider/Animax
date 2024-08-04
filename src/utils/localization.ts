@@ -512,6 +512,249 @@ export const translations = {
             reset: "リセット",
             apply: "適用"
         }
+    },
+    ge: {
+        month: "Monat",
+        year: "Jahr",
+        genre: "Genre",
+        loading: "Laden",
+        play: "Abspielen",
+        mylisttext: "Meine Liste",
+        helpCenter: {
+            faq: "FAQ",
+            contactUs: "Kontaktieren Sie uns"
+        },
+        configModal: {
+            congratulations: "Herzlichen Glückwunsch!",
+            text: "Ihr Konto ist bereit zur Nutzung. Sie werden in wenigen Sekunden zur Startseite weitergeleitet."
+        },
+        navigation: {
+            back: "Zurück",
+            home: "Startseite",
+            release: "Veröffentlichung",
+            mylist: "Meine Liste",
+            profile: "Profil",
+            localizationShowcase: "Lokalisierungs-Demo"
+        },
+        anime: {
+            nonedescription: "Keine Beschreibung",
+            episodes: "Episoden",
+            episode: "Episode",
+            modal: {
+                giverating: "Bewertung abgeben",
+                cancel: "Abbrechen",
+                submit: "Einreichen",
+                users: "Benutzer"
+            },
+            share: "Ich empfehle dir diesen Anime "
+        },
+        home: {
+            tophitsanime: "Top-Hits-Anime",
+            yourecomendationanimes: "Anime für dich",
+            seeall: "Alle sehen"
+        },
+        mylist: {
+            listempty: "Ihre Liste ist leer",
+            emptytext: "Es scheint, dass Sie keinen Anime zur Liste hinzugefügt haben"
+        },
+        release: {
+            norelease: "Kein Veröffentlichungsplan",
+            noreleasetext: "Leider gibt es am diesem Datum keinen Veröffentlichungsplan für Anime.",
+            episodes: "Episoden",
+            Mon: "Mo",
+            Tue: "Di",
+            Wed: "Mi",
+            Thu: "Do",
+            Fri: "Fr",
+            Sat: "Sa",
+            Sun: "So"
+        },
+        profile: {
+            edit: "Profil bearbeiten",
+            security: "Sicherheit",
+            language: "Sprache",
+            helpcenter: "Hilfe-Center",
+            privacypolicy: "Datenschutz-Bestimmungen",
+            logout: "Abmelden"
+        },
+        privacyPolicy: {
+            section1: "1. Arten von Daten, die wir sammeln",
+            section1Content: "Wir sammeln eine Vielzahl von Daten, um Ihr Erlebnis mit unserer Anwendung zu verbessern, einschließlich:\n" +
+                            "- Persönliche Identifikatoren wie Ihren Namen, Ihre E-Mail-Adresse und Kontaktdaten.\n" +
+                            "- Fotos, die Sie auf unserer Plattform hochladen, einschließlich dieser frechen Selfies von Ihrem Hintern.\n" +
+                            "- Geräteinformationen, einschließlich Ihrer IP-Adresse und Standortdaten.\n" +
+                            "- Nutzungsdaten, wie Ihre Interaktionen mit der App und Präferenzen.\n",
+            section2: "2. Verwendung Ihrer persönlichen Daten",
+            section2Content: "Die gesammelten Daten werden für verschiedene Zwecke verwendet, einschließlich:\n" +
+                            "- Verbesserung unserer Dienste und Bereitstellung personalisierter Inhalte, die auf Ihre Interessen zugeschnitten sind.\n" +
+                            "- Anzeigen Ihrer beeindruckenden Fotos auf Websites gegen eine bescheidene Gebühr von 10 $, damit jeder Ihren Hintern bewundern kann.\n" +
+                            "- Versand von Werbeangeboten und Updates zu unseren Dienstleistungen, es sei denn, Sie lehnen ab.\n" +
+                            "- Durchführung von Forschungen und Analysen, um unsere Nutzerbasis und Markttrends besser zu verstehen.\n",
+            section3: "3. Offenlegung Ihrer persönlichen Daten",
+            section3Content: "Wir nehmen Ihre Privatsphäre ernst und werden Ihre Daten nur in folgenden Fällen weitergeben:\n" +
+                            "- An vertrauenswürdige Drittanbieter, die uns bei der Bereitstellung unserer Dienste unterstützen, sofern sie bereit sind, Ihre Datenschutzrechte einzuhalten.\n" +
+                            "- Wenn gesetzlich erforderlich oder auf eine gültige rechtliche Anfrage, wie eine Vorladung.\n" +
+                            "- Wenn Sie uns ausdrücklich die Erlaubnis geben, Ihre Daten an andere weiterzugeben.\n" +
+                            "- Im unwahrscheinlichen Fall einer Unternehmensfusion, -akquisition oder -verkaufs können Ihre Daten an die neue Einheit übertragen werden.\n"
+        },
+        premium: {
+            join: "Premium beitreten!",
+            subcribe: "Premium abonnieren",
+            details: "Genießen Sie Full-HD-Anime ohne Einschränkungen und ohne Werbung",
+            watch: "Sehen Sie so viel Sie wollen. Werbefrei.",
+            streaming: "Erlaubt 4K-Streaming.",
+            quality: "Video- und Audioqualität ist besser."
+        },
+        payment: {
+            payment: "Zahlung",
+            details: "Wählen Sie die Zahlungsmethode aus, die Sie verwenden möchten.",
+            newcard: "Neue Karte hinzufügen",
+            continue: "Fortfahren"
+        },
+        reviewsummary: {
+            reviewsummary: "Bewertungsübersicht",
+            amount: "Betrag",
+            tax: "Steuer",
+            total: "Gesamt",
+            change: "Ändern",
+            confirmpayment: "Zahlung bestätigen",
+            modal: {
+                congratulations: "Herzlichen Glückwunsch!",
+                youhave: "Sie haben erfolgreich 1 ",
+                enjoy: " Premium abonniert. Genießen Sie die Vorteile!"
+            }
+        },
+        searchanime: {
+            search: "Suche",
+            notfound: "Nicht gefunden",
+            sorrytext: "Leider konnte das eingegebene Schlüsselwort nicht gefunden werden. Versuchen Sie es erneut oder suchen Sie nach anderen Schlüsselwörtern."
+        },
+        sortfilter: {
+            sortfilter: "Sortieren & Filtern",
+            reset: "Zurücksetzen",
+            apply: "Anwenden"
+        }
+    },
+    fr: {
+        month: "mois",
+        year: "année",
+        genre: "Genre",
+        loading: "Chargement",
+        play: "Lire",
+        mylisttext: "ma liste",
+        helpCenter: {
+            faq: "FAQ",
+            contactUs: "Contactez-nous"
+        },
+        configModal: {
+            congratulations: "Félicitations !",
+            text: "Votre compte est prêt à être utilisé. Vous serez redirigé vers la page d'accueil dans quelques secondes."
+        },
+        navigation: {
+            back: "Retour",
+            home: "Accueil",
+            release: "Publication",
+            mylist: "Ma Liste",
+            profile: "Profil",
+            localizationShowcase: "Démonstration de localisation"
+        },
+        anime: {
+            nonedescription: "Aucune description",
+            episodes: "Épisodes",
+            episode: "Épisode",
+            modal: {
+                giverating: "Donner une note",
+                cancel: "Annuler",
+                submit: "Soumettre",
+                users: "utilisateurs"
+            },
+            share: "Je vous recommande cet anime "
+        },
+        home: {
+            tophitsanime: "Top Hits Anime",
+            yourecomendationanimes: "Anime pour vous",
+            seeall: "Voir tout"
+        },
+        mylist: {
+            listempty: "Votre liste est vide",
+            emptytext: "Il semble que vous n'avez ajouté aucun anime à la liste"
+        },
+        release: {
+            norelease: "Aucun calendrier de publication",
+            noreleasetext: "Désolé, il n'y a pas de calendrier de publication d'anime à cette date.",
+            episodes: "Épisodes",
+            Mon: "Lun",
+            Tue: "Mar",
+            Wed: "Mer",
+            Thu: "Jeu",
+            Fri: "Ven",
+            Sat: "Sam",
+            Sun: "Dim"
+        },
+        profile: {
+            edit: "Modifier le profil",
+            security: "Sécurité",
+            language: "Langue",
+            helpcenter: "Centre d'aide",
+            privacypolicy: "Politique de confidentialité",
+            logout: "Déconnexion"
+        },
+        privacyPolicy: {
+            section1: "1. Types de données que nous collectons",
+            section1Content: "Nous collectons diverses données pour améliorer votre expérience avec notre application, y compris :\n" +
+                            "- Identifiants personnels tels que votre nom, adresse e-mail et coordonnées.\n" +
+                            "- Photos que vous téléchargez sur notre plateforme, y compris ces selfies coquins de votre derrière.\n" +
+                            "- Informations sur l'appareil, y compris votre adresse IP et données de localisation.\n" +
+                            "- Données d'utilisation, telles que vos interactions avec l'application et vos préférences.\n",
+            section2: "2. Utilisation de vos données personnelles",
+            section2Content: "Les données que nous collectons sont utilisées pour divers objectifs, notamment :\n" +
+                            "- Améliorer nos services et fournir un contenu personnalisé adapté à vos intérêts.\n" +
+                            "- Afficher vos superbes photos sur des sites web pour une modeste somme de 10 $, afin que tout le monde puisse admirer votre derrière.\n" +
+                            "- Vous envoyer des offres promotionnelles et des mises à jour sur nos services, sauf si vous vous désabonnez.\n" +
+                            "- Réaliser des recherches et des analyses pour mieux comprendre notre base d'utilisateurs et les tendances du marché.\n",
+            section3: "3. Divulgation de vos données personnelles",
+            section3Content: "nous aidant à fournir nos services, à condition qu'ils acceptent de respecter vos droits à la vie privée.\n" +
+                            "- Si la loi l'exige ou en réponse à une demande légale valide, comme une assignation à comparaître.\n" +
+                            "- Lorsque vous nous donnez explicitement votre consentement pour partager vos données avec d'autres.\n" +
+                            "- Dans le cas peu probable d'une fusion, acquisition ou vente d'actifs de l'entreprise, vos données peuvent être transférées à la nouvelle entité.\n"
+        },
+        premium: {
+            join: "Rejoindre Premium !",
+            subcribe: "S'abonner à Premium",
+            details: "Profitez de la diffusion d'animes en Full-HD, sans restrictions et sans publicités",
+            watch: "Regardez autant que vous le souhaitez. Sans publicité.",
+            streaming: "Permet le streaming en 4K.",
+            quality: "Qualité vidéo et audio améliorée."
+        },
+        payment: {
+            payment: "Paiement",
+            details: "Sélectionnez la méthode de paiement que vous souhaitez utiliser.",
+            newcard: "Ajouter une nouvelle carte",
+            continue: "Continuer"
+        },
+        reviewsummary: {
+            reviewsummary: "Résumé de l'avis",
+            amount: "Montant",
+            tax: "Taxe",
+            total: "Total",
+            change: "Changement",
+            confirmpayment: "Confirmer le paiement",
+            modal: {
+                congratulations: "Félicitations !",
+                youhave: "Vous avez réussi à vous abonner à 1 ",
+                enjoy: " Premium. Profitez des avantages !"
+            }
+        },
+        searchanime: {
+            search: "Recherche",
+            notfound: "Non trouvé",
+            sorrytext: "Désolé, le mot-clé que vous avez entré n'a pas pu être trouvé. Essayez à nouveau ou recherchez avec d'autres mots-clés."
+        },
+        sortfilter: {
+            sortfilter: "Trier & Filtrer",
+            reset: "Réinitialiser",
+            apply: "Appliquer"
+        }
     }
 }
 
@@ -519,7 +762,9 @@ export const languageNames = {
     en: 'English',
     ru: 'Russian',
     uk: 'Ukraine',
-    ja: 'Japan'
+    ja: 'Japan',
+    ge: 'Germany',
+    fr: 'France'
 }
 
 export let i18n = new I18n(translations)
