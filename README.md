@@ -25,6 +25,17 @@ $ cd '.\FrontEnd\'
 # install
 $ npm install
 ```
+## env the app
+
+```bash
+
+# Main Api  
+$ EXPO_PUBLIC_API_URL
+
+# Anime Api
+$ EXPO_PUBLIC_ANIME_API_GRAPHQL
+
+```
 
 ## Running the app
 
@@ -39,6 +50,6 @@ $ npm expo android
 # start ios
 $ npm expo ios
 
-# start web
-$ npm expo web
+# start development
+$ npm expo start:dev
 ```
