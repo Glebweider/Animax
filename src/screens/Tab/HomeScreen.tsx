@@ -148,7 +148,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.newEpisodeAnimeTextContainer}>
                         <Text style={styles.newEpisodeAnimeText}>{i18n.t('home.yourecomendationanimes')}</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('see all')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('RecomendationsAnimeScreen')}>
                             <Text style={styles.newEpisodeAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>

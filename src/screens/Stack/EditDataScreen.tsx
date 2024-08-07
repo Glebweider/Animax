@@ -151,7 +151,7 @@ const EditDataScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.fullNameInput}
                         placeholderTextColor="#9E9E9E"
-                        placeholder="Full Name"
+                        placeholder={i18n.t('fullName')}
                         value={textFullName}
                         onChangeText={(newText) => setTextFullName(newText)}/>
                 </View>
@@ -161,7 +161,7 @@ const EditDataScreen = ({ navigation }) => {
                         style={styles.nicknameInput}
                         placeholderTextColor="#9E9E9E"
                         value={textNickname}
-                        placeholder="Nickname"
+                        placeholder={i18n.t('nickname')}
                         onChangeText={(newText) => setTextNickname(newText)}/>
                 </View>
                 {nicknameError && <Text style={styles.nicknameError}>{nicknameError}</Text>}    
@@ -169,7 +169,7 @@ const EditDataScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.phoneNumberInput}
                         placeholderTextColor="#9E9E9E"
-                        placeholder="Phone Number"
+                        placeholder={i18n.t('phoneNumber')}
                         value={textPhoneNumber}
                         keyboardType="phone-pad"
                         onChangeText={(newText) => setTextPhoneNumber(newText)}/>
@@ -180,7 +180,7 @@ const EditDataScreen = ({ navigation }) => {
                 onPress={() => update()} 
                 disabled={isActiveButton}
                 style={isActiveButton ? styles.continueButtonDisabled : styles.continueButtonEnabled}>
-                <Text style={styles.buttonTitle}>Update</Text>
+                <Text style={styles.buttonTitle}>{i18n.t('update')}</Text>
             </TouchableOpacity>
         </View>
     );

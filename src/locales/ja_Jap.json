@@ -1,0 +1,123 @@
+{
+  "month": "月",
+  "year": "年",
+  "genre": "ジャンル",
+  "loading": "読み込み中",
+  "play": "再生",
+  "mylisttext": "マイリスト",
+  "helpCenter": {
+    "faq": "よくある質問",
+    "contactUs": "お問い合わせ"
+  },
+  "configModal": {
+    "congratulations": "おめでとうございます！",
+    "text": "アカウントの準備が整いました。数秒以内にホームページにリダイレクトされます。"
+  },
+  "navigation": {
+    "back": "戻る",
+    "home": "ホーム",
+    "release": "リリース",
+    "mylist": "マイリスト",
+    "profile": "プロフィール",
+    "localizationShowcase": "ローカライズのショーケース"
+  },
+  "anime": {
+    "nonedescription": "説明なし",
+    "episodes": "エピソード",
+    "episode": "エピソード",
+    "modal": {
+      "giverating": "評価を付ける",
+      "cancel": "キャンセル",
+      "submit": "送信",
+      "users": "ユーザー"
+    },
+    "share": "このアニメをお勧めします "
+  },
+  "home": {
+    "tophitsanime": "トップヒットアニメ",
+    "yourecomendationanimes": "あなたへのアニメ",
+    "seeall": "すべて見る"
+  },
+  "mylist": {
+    "listempty": "リストが空です",
+    "emptytext": "リストにアニメを追加していないようです。"
+  },
+  "release": {
+    "norelease": "リリーススケジュールなし",
+    "noreleasetext": "申し訳ありませんが、この日付にアニメのリリーススケジュールはありません。",
+    "episodes": "エピソード",
+    "Mon": "月",
+    "Tue": "火",
+    "Wed": "水",
+    "Thu": "木",
+    "Fri": "金",
+    "Sat": "土",
+    "Sun": "日"
+  },
+  "profile": {
+    "edit": "プロフィールを編集",
+    "notification": "通知",
+    "security": "セキュリティ",
+    "language": "言語",
+    "helpcenter": "ヘルプセンター",
+    "privacypolicy": "プライバシーポリシー",
+    "logout": "ログアウト"
+  },
+  "privacyPolicy": {
+    "section1": "1. 収集するデータの種類",
+    "section1Content": "アプリケーションの体験を向上させるために、以下のデータを収集します:\n- 名前、メールアドレス、連絡先情報などの個人識別子。\n- プラットフォームにアップロードした写真、特にあらゆる部分の面白いセルフィー。\n- デバイス情報、IPアドレスや位置データなど。\n- アプリの使用状況、アプリとのやり取りや設定など。\n",
+    "section2": "2. 個人データの使用",
+    "section2Content": "収集したデータは、次の目的で使用されます:\n- サービスの改善と、興味に合わせたパーソナライズされたコンテンツの提供。\n- あなたの素晴らしい写真をウェブサイトに公開するために、10ドルの手数料であなたの体をみんなに見てもらいます。\n- 広告やサービスに関する更新を送信します。拒否しない限り。\n- ユーザー層や市場動向をよりよく理解するための研究と分析。\n",
+    "section3": "3. 個人データの開示",
+    "section3Content": "プライバシーを重視しており、以下の場合にのみデータを共有します:\n- サービスの提供を支援する信頼できる第三者パートナーと、彼らがプライバシー権を守ることに同意している場合。\n- 法律で要求される場合や有効な法的要求に応じて。\n- 他者とデータを共有するための明示的な同意がある場合。\n- 企業の合併、買収、または資産売却の可能性がある場合、新しい団体にデータが転送される可能性があります。\n"
+  },
+  "premium": {
+    "join": "プレミアムに参加！",
+    "subcribe": "プレミアムに登録する",
+    "details": "制限なしで広告なしのフルHDアニメを楽しむ。",
+    "watch": "好きなだけ視聴できます。広告なし。",
+    "streaming": "4kのストリーミングを許可します。",
+    "quality": "ビデオと音声の品質が向上します。"
+  },
+  "payment": {
+    "payment": "支払い",
+    "details": "使用したい支払い方法を選択してください。",
+    "newcard": "新しいカードを追加",
+    "continue": "続行"
+  },
+  "reviewsummary": {
+    "reviewsummary": "レビューの概要",
+    "amount": "金額",
+    "tax": "税金",
+    "total": "合計",
+    "change": "変更",
+    "confirmpayment": "支払いを確認",
+    "modal": {
+      "congratulations": "おめでとうございます！",
+      "youhave": "1つのプレミアムに成功しました。",
+      "enjoy": "プレミアムの特典をお楽しみください！"
+    }
+  },
+  "searchanime": {
+    "search": "検索",
+    "notfound": "見つかりません",
+    "sorrytext": "申し訳ありませんが、入力したキーワードは見つかりませんでした。もう一度確認するか、別のキーワードで検索してください。"
+  },
+  "sortfilter": {
+    "sortfilter": "並べ替え & フィルター",
+    "reset": "リセット",
+    "apply": "適用"
+  },
+  "caution_lang": "注意！言語を変更すると、インターフェースの言語が変わりますが、音声言語はそのままです。",
+  "fullName": "フルネーム",
+  "nickname": "ニックネーム",
+  "phoneNumber": "電話番号",
+  "update": "更新",
+  "notification": {
+    "generalNotification": "一般通知",
+    "newArrival": "新着",
+    "newServicesAvailable": "新しいサービスが利用可能",
+    "appUpdates": "アプリの更新",
+    "subscription": "サブスクリプション"
+  }
+}

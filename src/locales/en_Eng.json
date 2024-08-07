@@ -1,0 +1,123 @@
+{
+  "month": "month",
+  "year": "year",
+  "genre": "Genre",
+  "loading": "Loading",
+  "play": "Play",
+  "mylisttext": "mylist",
+  "helpCenter": {
+    "faq": "FAQ",
+    "contactUs": "Contact us"
+  },
+  "configModal": {
+    "congratulations": "Congratulations!",
+    "text": "Your account is ready to use. You will be redirected to the Home page in a few seconds."
+  },
+  "navigation": {
+    "back": "Back",
+    "home": "Home",
+    "release": "Release",
+    "mylist": "MyList",
+    "profile": "Profile",
+    "localizationShowcase": "Localization Showcase"
+  },
+  "anime": {
+    "nonedescription": "None description",
+    "episodes": "Episodes",
+    "episode": "Episode",
+    "modal": {
+      "giverating": "Give Rating",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "users": "users"
+    },
+    "share": "I recommend anime to you "
+  },
+  "home": {
+    "tophitsanime": "Top Hits Anime",
+    "yourecomendationanimes": "Anime for you",
+    "seeall": "See all"
+  },
+  "mylist": {
+    "listempty": "Your List is Empty",
+    "emptytext": "It seems that you haven't added any anime to the list"
+  },
+  "release": {
+    "norelease": "No Release Schedule",
+    "noreleasetext": "Sorry, there in no anime release schedule on this date",
+    "episodes": "Episodes",
+    "Mon": "Mon",
+    "Tue": "Tue",
+    "Wed": "Wed",
+    "Thu": "Thu",
+    "Fri": "Fri",
+    "Sat": "Sat",
+    "Sun": "Sun"
+  },
+  "profile": {
+    "edit": "Edit Profile",
+    "notification": "Notification",
+    "security": "Security",
+    "language": "Language",
+    "helpcenter": "Help Center",
+    "privacypolicy": "Privacy Policy",
+    "logout": "Logout"
+  },
+  "privacyPolicy": {
+    "section1": "1. Types of Data We Collect",
+    "section1Content": "We collect a variety of data to enhance your experience with our application, including:\n- Personal identifiers such as your name, email address, and contact information.\n- Photos you upload to our platform, including those cheeky selfies your ass.\n- Device information, including your IP address and location data.\n- Usage data, such as your interactions with the app and preferences.\n",
+    "section2": "2. Use of Your Personal Data",
+    "section2Content": "The data we collect is used for a range of purposes, including:\n- Improving our services and providing personalized content tailored to your interests.\n- Displaying your stunning photos on websites for a modest fee of $10, so everyone can appreciate your ass.\n- Sending you promotional offers and updates about our services, unless you opt-out.\n- Conducting research and analysis to better understand our user base and market trends.\n",
+    "section3": "3. Disclosure of Your Personal Data",
+    "section3Content": "We take your privacy seriously and will only share your data in the following circumstances:\n- With trusted third-party partners who assist us in delivering our services, provided they agree to uphold your privacy rights.\n- If required by law or in response to a valid legal request, such as a subpoena.\n- When you give us explicit consent to share your data with others.\n- In the unlikely event of a company merger, acquisition, or asset sale, your data may be transferred to the new entity.\n"
+  },
+  "premium": {
+    "join": "Join Premium!",
+    "subcribe": "Subcribe to Premium",
+    "details": "Enjoy watching Full-HD animes, without restrictions and without ads",
+    "watch": "Watch all you want. Ad-free.",
+    "streaming": "Allows streaming of 4k.",
+    "quality": "Video & Audio Quality is Better."
+  },
+  "payment": {
+    "payment": "Payment",
+    "details": "Select the payment method you want yo use.",
+    "newcard": "Add New Card",
+    "continue": "Continue"
+  },
+  "reviewsummary": {
+    "reviewsummary": "Review Summary",
+    "amount": "Amount",
+    "tax": "Tax",
+    "total": "Total",
+    "change": "Change",
+    "confirmpayment": "Confirm Payment",
+    "modal": {
+      "congratulations": "Congratulations!",
+      "youhave": "Your have successfully subscribed 1 ",
+      "enjoy": " premium. Enjoy the benefits!"
+    }
+  },
+  "searchanime": {
+    "search": "Search",
+    "notfound": "Not Found",
+    "sorrytext": "Sorry, the keyword you entered could not be found. Try to check again or search with other keywords."
+  },
+  "sortfilter": {
+    "sortfilter": "Sort & Filter",
+    "reset": "Reset",
+    "apply": "Apply"
+  },
+  "caution_lang": "Caution! Changing the language will change the interface language, but the audio language will remain the same.",
+  "fullName": "Full Name",
+  "nickname": "Nickname",
+  "phoneNumber": "Phone Number",
+  "update": "Update",
+  "notification": {
+    "generalNotification": "General Notification",
+    "newArrival": "New Arrival",
+    "newServicesAvailable": "New Services Available",
+    "appUpdates": "App Updates",
+    "subscription": "Subscription"
+  }
+}

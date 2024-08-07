@@ -300,10 +300,10 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 
 const styles = StyleSheet.create({
   container: {
-	width: '90%',
-	height: 250,
-	marginTop: 32,
-	borderRadius: 10,
+		width: '100%',
+		height: 250,
+		marginTop: 32,
+		borderRadius: 10,
   },
   progressBar: {
     flexDirection: 'row',
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
   timeText: {
     color: '#fff',
     fontSize: 12,
-	fontFamily: 'Outfit',
+		fontFamily: 'Outfit',
   },
   controlButton: {
     paddingVertical: 10,
@@ -328,13 +328,13 @@ const styles = StyleSheet.create({
   video: {
     width: '100%',
     height: 250,
-	position: 'absolute',
-	borderRadius: 10,
+		position: 'absolute',
+		borderRadius: 10,
   },
   controlsView: {
-	width: '100%',
-	height: '100%',
-	justifyContent: 'flex-end',
+		width: '100%',
+		height: '100%',
+		justifyContent: 'flex-end',
   },
 	sliderVolume: {
 		width: 160,
@@ -351,10 +351,10 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-	alignItems: 'flex-end',
-	width: '100%',
-	height: 55,
-	marginBottom: 13,
+		alignItems: 'flex-end',
+		width: '100%',
+		height: 55,
+		marginBottom: 13,
   },
   button: {
     padding: 11,
@@ -365,12 +365,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   fullScreenContainer: {
-	zIndex: 1000,
+		zIndex: 1000,
   },
   fullScreenVideo: {
     width: '100%',
     height: '100%',
-	position: 'absolute',
+		position: 'absolute',
   },
   fullScreenButton: {
     justifyContent: 'center',
@@ -382,11 +382,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   stepButton: {
-	padding: 7,
+		padding: 7,
     borderRadius: 5,
   },
   rewindButton: {
-	padding: 7,
+		padding: 7,
     borderRadius: 5,
   }
 });

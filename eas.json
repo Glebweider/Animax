@@ -8,7 +8,8 @@
       "distribution": "internal",
       "ios": {
         "simulator": true
-      }
+      },
+      "channel": "development"
     },
     "preview": {
       "distribution": "internal",
@@ -18,7 +19,8 @@
       "env": {
         "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
         "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
-      }
+      },
+      "channel": "preview"
     },
     "production": {
       "distribution": "internal",
@@ -28,7 +30,8 @@
       "env": {
         "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
         "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {

@@ -23,6 +23,8 @@ import ForgotPasswordCodeVerifyScreen from '@Stack/ForgotPassword/ForgotPassword
 import HelpCenterScreen from '@Stack/HelpCenterScreen';
 import LanguageScreen from '@Stack/LanguageScreen';
 import ForgotPasswordResetPasswordScreen from '@Stack/ForgotPassword/ForgotPasswordResetPasswordScreen';
+import RecomendationsAnimeScreen from '@Stack/RecomendationsAnimeScreen';
+import NotificationScreen from '@Stack/NotificationScreen';
 
 const Stack = createStackNavigator();
 
@@ -41,7 +43,9 @@ const StackNavigator = () => {
             <Stack.Screen name="AnimeSearchScreen" component={AnimeSearchScreen}/>
             <Stack.Screen name="AnimeSortScreen" component={AnimeSortScreen}/>
             <Stack.Screen name="TopHitsAnimeScreen" component={TopHitsAnimeScreen}/>
+            <Stack.Screen name="RecomendationsAnimeScreen" component={RecomendationsAnimeScreen}/>
             <Stack.Screen name="EditDataScreen" component={EditDataScreen}/>
+            <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
             <Stack.Screen name="SubcribeScreen" component={SubcribeScreen}/>
             <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
             <Stack.Screen name="AddNewCardScreen" component={AddNewCardScreen}/>

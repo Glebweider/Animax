@@ -20,6 +20,7 @@ const LanguageScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('profile.language')} />
+            <Text style={styles.cautionLangText}>{i18n.t('caution_lang')}</Text>
             {languageOptions.map((lang) => (
                 <TouchableOpacity 
                     key={lang}
@@ -42,6 +43,13 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    cautionLangText: {
+        color: '#fff',
+        fontSize: 16,
+        fontFamily: 'Outfit',
+        marginHorizontal: 20,
+        marginBottom: 15,
     },
     laguageContainer: {
         width: "90%",

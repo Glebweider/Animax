@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, TextInput, ScrollView, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useApolloClient } from '@apollo/client';
@@ -14,176 +14,143 @@ import { i18n } from '@Utils/localization';
 
 //Redux
 import { RootState } from '@Redux/store';
+import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
 
 const AnimeSearchScreen = ({ navigation }) => {
     const client = useApolloClient();
-    const [textSearch, setTextSearch] = React.useState<string>('');
-    const [errorSearch, setErrorSearch] = React.useState<boolean>(false);
+    const [textSearch, setTextSearch] = useState<string>('');
+    const [errorSearch, setErrorSearch] = useState<boolean>(false);
     const FilterState = useSelector((state: RootState) => state.sortReducer);
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);
-    
-    const handleEndReached = async () => {
-        let tags: string;
-        let newPage = page + 1;
+
+    const fetchAnimes = useCallback(
+        async (newPage: number = 1, search: string = '') => {
+            try {
+                const idArray = FilterState.filter.map(item => item.id);
+                const tags = idArray.join(',');
+                setErrorSearch(false);
+
+                const query = search ? GET_ANIMEBYSEARCH : GET_ANIMEBYGENRES;
+                const variables = search
+                ? { page: newPage, search, genreIds: tags }
+                : { page: newPage, limit: 50, genreIds: tags };
+
+                const { data } = await client.query({ query, variables });
+
+                if (data && data.animes.length) {
+                setAnimes(prevAnimes => (newPage === 1 ? data.animes : [...prevAnimes, ...data.animes]));
+                } else {
+                setErrorSearch(true);
+                }
+            } catch (error) {
+                console.error('Error fetching animes:', error);
+                setErrorSearch(true);
+            }
+        },
+        [FilterState.filter, client]
+    );
+
+    const handleEndReached = () => {
+        const newPage = page + 1;
         setPage(newPage);
-
-        if (FilterState.filter.length !== 0) {
-            const idArray = FilterState.filter.map(item => item.id);
-            tags = idArray.join(',');
-        } else {
-            tags = ""
-        };
-
-        const { data } = await client.query({
-            query: GET_ANIMEBYGENRES,
-            variables: { 
-                page: newPage,
-                limit: 50,
-                genreIds: tags,
-            },
-        });   
-        if (data) {
-            setAnimes(prevAnimes => [...prevAnimes, ...data.animes]);     
-        }
+        fetchAnimes(newPage);
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            const idArray = FilterState.filter.map(item => item.id);
-            const resultString = idArray.join(',');
-            setErrorSearch(false);
+        fetchAnimes();
+    }, [FilterState.filter, fetchAnimes]);
 
-            const { data } = await client.query({
-                query: GET_ANIMEBYGENRES,
-                variables: { 
-                    page: 1,
-                    limit: 50,
-                    genreIds: resultString
-                },
-            });   
-            if (data.animes.length !== 0) {
-                setAnimes(data.animes);
-            } else {
-                setErrorSearch(true);
-            };
-        };    
-        fetchData();
-    }, [FilterState.filter]);
-
-    const searchAnime = async () => {
-        if(textSearch) {
-            let tags: string;
-
-            if (FilterState.filter.length !== 0) {
-                const idArray = FilterState.filter.map(item => item.id);
-                tags = idArray.join(',');
-            } else {
-                tags = ""
-            };
-
-            const { data } = await client.query({
-                query: GET_ANIMEBYSEARCH,
-                variables: { 
-                    page: 1,
-                    search: textSearch,
-                    genreIds: tags,
-                },
-            });   
-            if (data.animes.length !== 0) {
-                setAnimes(data.animes);
-            } else {
-                setErrorSearch(true);
-            };
-        };
+    const searchAnime = () => {
+        if (textSearch) {
+            setPage(1);
+            fetchAnimes(1, textSearch);
+        }
     };
 
-    const AnimeCard = React.memo(({ item }: any) => {
-        return (
-            <TouchableOpacity
-                onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
-                key={item.id}
-                style={styles.animeContainerAnimeTop}>
-                <View style={styles.scoreContainer}>
-                    <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
-                </View>
-                {(item.rating === 'r_plus' || item.rating === 'rx') && (
-                    <View style={styles.ratingContainer}>
-                        <Text style={styles.ratingText}>18+</Text>
-                    </View>
-                )}
-                <Image
-                    source={{ uri: item.poster.originalUrl }}
-                    style={styles.animeImageAnimeTop}/>
-            </TouchableOpacity>)
-    });
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.buttonsContainer}>
-                <View style={styles.searchSection}>
-                    <SearchIcon 
-                        Color={textSearch ? '#fff' : '#9E9E9E'} 
-                        Style={styles.icon} />
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholderTextColor="#9E9E9E"
-                        placeholder={i18n.t('searchanime.search')}
-                        keyboardType='default'
-                        returnKeyType='search'
-                        onSubmitEditing={() => searchAnime()}
-                        onChangeText={(newText) => setTextSearch(newText)}
-                        value={textSearch}/>
-                </View>
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate('AnimeSortScreen')}
-                    style={styles.sortButton}>
-                    <SortIcon Color={'#06C149'} Style={{width: 200, height: 200,}} />
-                </TouchableOpacity>
-            </View>
-            {FilterState.filter.length >= 1 && (
-                <View style={styles.filters}>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScrollView}>
-                        {FilterState.filter.map((tag) => (
-                                <View 
-                                    style={styles.tag}
-                                    key={tag.id}>
-                                    <Text 
-                                        numberOfLines={1} 
-                                        ellipsizeMode="tail" 
-                                        style={styles.tagText}>{tag.text}</Text>                                
-                                </View>
-                            ))
-                        }                    
-                    </ScrollView>
-                </View>
-            )}
-            <View style={{width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
-                {!errorSearch ? (
-                    animes.length >= 1 && (
-                        <FlatList
-                            data={animes}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={({ item }) => <AnimeCard item={item} />}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.containerAnimeTop}
-                            onEndReached={handleEndReached}
-                            onEndReachedThreshold={0.1}
-                            numColumns={2}/>
-                    )) : (
-                    <View style={styles.errorContainer}>
-                        <Image 
-                            source={require('../../../assets/404.png')} 
-                            style={styles.errorImage} />
-                        <View style={styles.errorTextContainer}>
-                            <Text style={styles.errorTitle}>{i18n.t('searchanime.notfound')}</Text>
-                            <Text style={styles.errorText}>{i18n.t('searchanime.sorrytext')}</Text>
-                        </View>
-                    </View>
-                )}
-            </View>
+    const AnimeCard = React.memo(({ item }: any) => (
+        <TouchableOpacity
+        onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
+        key={item.id}
+        style={styles.animeContainerAnimeTop}>
+        <View style={styles.scoreContainer}>
+            <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
         </View>
-    );
+        {(item.rating === 'r_plus' || item.rating === 'rx') && (
+            <View style={styles.ratingContainer}>
+                <Text style={styles.ratingText}>18+</Text>
+            </View>
+        )}
+        <Image
+            source={{ uri: item.poster.originalUrl || item.poster.mainUrl }}
+            style={styles.animeImageAnimeTop}/>
+        </TouchableOpacity>
+    ));
+
+  return (
+    <View style={styles.container}>
+        <View style={styles.buttonsContainer}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('HomeScreen')}
+                style={[styles.sortButton, {backgroundColor: '#1F222A'}]}>
+                <ArrowLeftIcon Color={'#fff'} Style={{ width: 200, height: 200 }} />
+            </TouchableOpacity>
+            <View style={styles.searchSection}>
+                <SearchIcon Color={textSearch ? '#fff' : '#9E9E9E'} Style={styles.icon} />
+                <TextInput
+                    style={styles.searchInput}
+                    placeholderTextColor="#9E9E9E"
+                    placeholder={i18n.t('searchanime.search')}
+                    keyboardType="default"
+                    returnKeyType="search"
+                    onSubmitEditing={searchAnime}
+                    onChangeText={setTextSearch}
+                    value={textSearch}/>
+            </View>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('AnimeSortScreen')}
+                style={styles.sortButton}>
+                <SortIcon Color={'#06C149'} Style={{ width: 200, height: 200 }} />
+            </TouchableOpacity>
+        </View>
+        {FilterState.filter.length >= 1 && (
+            <View style={styles.filters}>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScrollView}>
+                    {FilterState.filter.map(tag => (
+                        <View style={styles.tag} key={tag.id}>
+                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.tagText}>
+                                {tag.text}
+                            </Text>
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
+        )}
+        <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+        {!errorSearch ? (
+            animes.length >= 1 && (
+                <FlatList
+                data={animes}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) => <AnimeCard item={item} />}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.containerAnimeTop}
+                onEndReached={handleEndReached}
+                onEndReachedThreshold={0.1}
+                numColumns={2}/>
+            )
+        ) : (
+            <View style={styles.errorContainer}>
+                <Image source={require('../../../assets/404.png')} style={styles.errorImage} />
+                <View style={styles.errorTextContainer}>
+                    <Text style={styles.errorTitle}>{i18n.t('searchanime.notfound')}</Text>
+                    <Text style={styles.errorText}>{i18n.t('searchanime.sorrytext')}</Text>
+                </View>
+            </View>
+        )}
+        </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -281,7 +248,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '80%',
+        width: '62%',
         height: 62,
         borderRadius: 15,
         backgroundColor: '#1F222A',

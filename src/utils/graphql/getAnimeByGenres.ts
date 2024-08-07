@@ -9,7 +9,9 @@ export const GET_ANIMEBYGENRES = gql`
             score
             rating
             poster {
+                id
                 originalUrl
+                mainUrl
             }
         }
     }

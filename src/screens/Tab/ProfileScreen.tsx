@@ -9,6 +9,7 @@ import ProfileIcon from '@Icons/ProfileIcon';
 import LogoutModal from '@Modal/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
 import { i18n } from '@Utils/localization';
+import NotificationIcon from '@Components/icons/NotificationIcon';
 
 const ProfileScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
@@ -58,6 +59,15 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.labelLeftContainer}>
                         <ProfileIcon Style={{}} Color={'#fff'} />
                         <Text style={styles.labelLeftText}>{i18n.t('profile.edit')}</Text>
+                    </View>
+                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('NotificationScreen')}
+                    style={styles.labelContainer}>
+                    <View style={styles.labelLeftContainer}>
+                        <NotificationIcon Style={{}} Color={'#fff'} Width={25} Height={25} />
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.notification')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>

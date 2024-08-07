@@ -1,0 +1,123 @@
+{
+  "month": "mois",
+  "year": "année",
+  "genre": "Genre",
+  "loading": "Chargement",
+  "play": "Lire",
+  "mylisttext": "ma liste",
+  "helpCenter": {
+    "faq": "FAQ",
+    "contactUs": "Contactez-nous"
+  },
+  "configModal": {
+    "congratulations": "Félicitations !",
+    "text": "Votre compte est prêt à être utilisé. Vous serez redirigé vers la page d'accueil dans quelques secondes."
+  },
+  "navigation": {
+    "back": "Retour",
+    "home": "Accueil",
+    "release": "Publication",
+    "mylist": "Ma Liste",
+    "profile": "Profil",
+    "localizationShowcase": "Démonstration de localisation"
+  },
+  "anime": {
+    "nonedescription": "Aucune description",
+    "episodes": "Épisodes",
+    "episode": "Épisode",
+    "modal": {
+      "giverating": "Donner une note",
+      "cancel": "Annuler",
+      "submit": "Soumettre",
+      "users": "utilisateurs"
+    },
+    "share": "Je vous recommande cet anime "
+  },
+  "home": {
+    "tophitsanime": "Top Hits Anime",
+    "yourecomendationanimes": "Anime pour vous",
+    "seeall": "Voir tout"
+  },
+  "mylist": {
+    "listempty": "Votre liste est vide",
+    "emptytext": "Il semble que vous n'avez ajouté aucun anime à la liste"
+  },
+  "release": {
+    "norelease": "Aucun calendrier de publication",
+    "noreleasetext": "Désolé, il n'y a pas de calendrier de publication d'anime à cette date.",
+    "episodes": "Épisodes",
+    "Mon": "Lun",
+    "Tue": "Mar",
+    "Wed": "Mer",
+    "Thu": "Jeu",
+    "Fri": "Ven",
+    "Sat": "Sam",
+    "Sun": "Dim"
+  },
+  "profile": {
+    "edit": "Modifier le profil",
+    "notification": "Notification",
+    "security": "Sécurité",
+    "language": "Langue",
+    "helpcenter": "Centre d'aide",
+    "privacypolicy": "Politique de confidentialité",
+    "logout": "Déconnexion"
+  },
+  "privacyPolicy": {
+    "section1": "1. Types de données que nous collectons",
+    "section1Content": "Nous collectons diverses données pour améliorer votre expérience avec notre application, y compris :\n- Identifiants personnels tels que votre nom, adresse e-mail et coordonnées.\n- Photos que vous téléchargez sur notre plateforme, y compris ces selfies coquins de votre derrière.\n- Informations sur l'appareil, y compris votre adresse IP et données de localisation.\n- Données d'utilisation, telles que vos interactions avec l'application et vos préférences.\n",
+    "section2": "2. Utilisation de vos données personnelles",
+    "section2Content": "Les données que nous collectons sont utilisées pour divers objectifs, notamment :\n- Améliorer nos services et fournir un contenu personnalisé adapté à vos intérêts.\n- Afficher vos superbes photos sur des sites web pour une modeste somme de 10 $, afin que tout le monde puisse admirer votre derrière.\n- Vous envoyer des offres promotionnelles et des mises à jour sur nos services, sauf si vous vous désabonnez.\n- Réaliser des recherches et des analyses pour mieux comprendre notre base d'utilisateurs et les tendances du marché.\n",
+    "section3": "3. Divulgation de vos données personnelles",
+    "section3Content": "Nous prenons votre vie privée au sérieux et partagerons vos données uniquement dans les circonstances suivantes :\n- Avec des partenaires de confiance nous aidant à fournir nos services, à condition qu'ils acceptent de respecter vos droits à la vie privée.\n- Si la loi l'exige ou en réponse à une demande légale valide, comme une assignation à comparaître.\n- Lorsque vous nous donnez explicitement votre consentement pour partager vos données avec d'autres.\n- Dans le cas peu probable d'une fusion, acquisition ou vente d'actifs de l'entreprise, vos données peuvent être transférées à la nouvelle entité.\n"
+  },
+  "premium": {
+    "join": "Rejoindre Premium !",
+    "subcribe": "S'abonner à Premium",
+    "details": "Profitez de la diffusion d'animes en Full-HD, sans restrictions et sans publicités",
+    "watch": "Regardez autant que vous le souhaitez. Sans publicité.",
+    "streaming": "Permet le streaming en 4K.",
+    "quality": "Qualité vidéo et audio améliorée."
+  },
+  "payment": {
+    "payment": "Paiement",
+    "details": "Sélectionnez la méthode de paiement que vous souhaitez utiliser.",
+    "newcard": "Ajouter une nouvelle carte",
+    "continue": "Continuer"
+  },
+  "reviewsummary": {
+    "reviewsummary": "Résumé de l'avis",
+    "amount": "Montant",
+    "tax": "Taxe",
+    "total": "Total",
+    "change": "Changement",
+    "confirmpayment": "Confirmer le paiement",
+    "modal": {
+      "congratulations": "Félicitations !",
+      "youhave": "Vous avez réussi à vous abonner à 1 ",
+      "enjoy": " Premium. Profitez des avantages !"
+    }
+  },
+  "searchanime": {
+    "search": "Recherche",
+    "notfound": "Non trouvé",
+    "sorrytext": "Désolé, le mot-clé que vous avez entré n'a pas pu être trouvé. Essayez à nouveau ou recherchez avec d'autres mots-clés."
+  },
+  "sortfilter": {
+    "sortfilter": "Trier & Filtrer",
+    "reset": "Réinitialiser",
+    "apply": "Appliquer"
+  },
+  "caution_lang": "Attention ! Changer la langue modifie la langue de l'interface, mais la langue audio reste inchangée.",
+  "fullName": "Nom complet",
+  "nickname": "Surnom",
+  "phoneNumber": "Numéro de téléphone",
+  "update": "Mettre à jour",
+  "notification": {
+    "generalNotification": "Notification générale",
+    "newArrival": "Nouveaux arrivages",
+    "newServicesAvailable": "Nouveaux services disponibles",
+    "appUpdates": "Mises à jour de l'application",
+    "subscription": "Abonnement"
+  }
+}

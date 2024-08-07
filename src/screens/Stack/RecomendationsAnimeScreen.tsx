@@ -5,51 +5,48 @@ import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import BackButton from '@Components/BackButton';
 import { i18n } from '@Utils/localization';
+import { GET_RECOMENDATIONANIME } from '@Utils/graphql/getRecomendationAnime';
+import { useSelector } from 'react-redux';
+import { RootState } from '@Redux/store';
 
-const TopHitsAnimeScreen = ({ navigation }: any) => {
-const client = useApolloClient();
+const RecomendationsAnimeScreen = ({ navigation }: any) => {
+    const client = useApolloClient();
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);
-    const { data } = useQuery(GET_ANIMES, {
-        variables: { 
-            page: 1,
-            limit: 50,
-            order: 'ranked',
-        },
-    });
+    const [genreId, setGenreId] = useState<number>(null);
+    const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
     useEffect(() => {
-        if (data) {
-            setAnimes(data.animes);
+        if (!genreId && userInterests.length > 0) {
+            const randomGenreId = userInterests[Math.floor(Math.random() * userInterests.length)].id;
+            setGenreId(randomGenreId);
         }
-    }, [data]);
+    }, [genreId, userInterests]);
 
     useEffect(() => {
-        const fetchMoreData = async () => {
-            if (page > 1) {
-                try {
-                    const { data } = await client.query({
-                        query: GET_ANIMES,
-                        variables: { 
-                            page,
-                            limit: 50,
-                            order: 'ranked',
-                        },
-                    });
-                    if (data) {
-                        setAnimes(prevAnimes => [...prevAnimes, ...data.animes]);
-                    }
-                } catch (error) {
-                    console.error('Error fetching more animes', error);
+        if (genreId) {
+            client.query({
+                query: GET_RECOMENDATIONANIME,
+                variables: { 
+                    page,
+                    limit: 50,
+                    order: 'ranked',
+                    genre: genreId
+                },
+            }).then(({ data }) => {
+                if (data) {
+                    setAnimes(prevAnimes => [...prevAnimes, ...data.animes]);
                 }
-            }
-        };
-
-        fetchMoreData();
-    }, [page, client]);
-
-    const handleEndReached = () => {
+            }).catch(error => {
+                console.error('Error fetching animes', error);
+            });
+        }
+    }, [page, genreId]);
+    
+    const handleEndReached = async () => {
         setPage(prevPage => prevPage + 1);
+        const newGenreId = userInterests[Math.floor(Math.random() * userInterests.length)].id;
+        setGenreId(newGenreId);
     };
 
     const AnimeCard = React.memo(({ item }: any) => {
@@ -95,7 +92,7 @@ const client = useApolloClient();
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text={i18n.t('home.tophitsanime')} />
+            <BackButton navigation={navigation} text={i18n.t('home.yourecomendationanimes')} />
             <View style={{width: '90%', height: '87%', alignItems: 'center'}}>
                 {animes.length >= 1 && (
                     <FlatList
@@ -200,4 +197,4 @@ const styles = StyleSheet.create({
     },
 });
     
-export default TopHitsAnimeScreen;
+export default RecomendationsAnimeScreen;

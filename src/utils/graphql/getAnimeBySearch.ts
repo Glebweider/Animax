@@ -9,7 +9,9 @@ export const GET_ANIMEBYSEARCH = gql`
             score
             rating
             poster {
+                id
                 originalUrl
+                mainUrl
             }
         }
     }

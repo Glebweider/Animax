@@ -5,13 +5,22 @@ export const GET_RECOMENDATIONANIME = gql`
         animes(limit: $limit, order: $order, genre: $genre) {
             poster {
                 originalUrl
-                previewUrl
                 mainUrl
             }
             russian
             name
+            genres {
+                id
+                russian
+                name
+            }
             score
             id
+            rating
+            airedOn {
+                date
+                year
+            }
         }
     }
 `;

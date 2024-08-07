@@ -4,15 +4,26 @@ import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-
+import 'notification-config';
 
 const client = new ApolloClient({
   uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Anime: {
+        fields: {
+          poster: {
+            merge(existing = {}, incoming) {
+              return { ...existing, ...incoming };
+            },
+          },
+        },
+      },
+    },
+  }),
 });
 
 const App = () => {
-
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>

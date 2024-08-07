@@ -56,7 +56,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (textFullName.length >= 1) {
-            if (textFullName.length < 4) {
+            if (textFullName.length < 3) {
                 setFullNameError('Полное имя должно содержать не менее 4 символов');
                 setFullNameVerify(false);
             } else {
@@ -94,7 +94,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
             setPhoneNumberVerify(false);
         }
     
-        if (textFullName.length >= 6 && textNickname.length >= 4 && isPhoneNumber(textPhoneNumber) && avatar) {
+        if (textFullName.length >= 3 && textNickname.length >= 4 && isPhoneNumber(textPhoneNumber) && avatar) {
             if (isFullNameVerify && isNicknameVerify && isPhoneNumberVerify && avatar) {
                 setActiveButton(false);                
             }

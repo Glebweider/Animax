@@ -3,22 +3,43 @@
     "name": "Animax",
     "slug": "animax",
     "scheme": "myapp",
-    "version": "1.0.2",
+    "version": "1.0.6",
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android", "web"],
-    "assetBundlePatterns": ["**/*"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "updates": {
+      "fallbackToCacheTimeout": 60000,
+      "checkAutomatically": "ON_LOAD",
+      "url": "https://u.expo.dev/cabde16e-c505-4729-861a-b2488aa19c0f"
+    },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.codewithbeto.Animax"
+      "bundleIdentifier": "com.codewithbeto.Animax",
+      "buildNumber": "1.0.6",
+      "infoPlist": {
+        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "UIRequiresFullScreen": true
+      },
+      "icon": "./assets/icon.png"
     },
     "android": {
       "package": "com.codewithbeto.Animax",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#181A20"
-      }
+      },
+      "versionCode": 1,
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "SCHEDULE_EXACT_ALARM"
+      ]
     },
     "web": {
       "favicon": "./assets/logo.png"
@@ -38,12 +59,32 @@
             "usesCleartextTraffic": true
           }
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification_icon.png",
+          "color": "#181A20",
+          "defaultChannel": "default",
+          "sounds": [
+            "./assets/notfication_sound.wav"
+          ]
+        }
+      ],
+      [
+        "expo-updates",
+        {
+          "username": "kurumi12"
+        }
       ]
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#181A20"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }

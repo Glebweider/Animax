@@ -1,29 +1,37 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import SearchIcon from '@Icons/SearchIcon';
 import getAnimeListUser from '@Utils/fetch/getAnimeListUser';
 import { getTokenFromStorage } from '@Utils/token';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
+import { useIsFocused } from '@react-navigation/native';
 
 const MyListScreen = ({ navigation }) => {
     const [userAnimeList, setUserAnimeList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const isFocused = useIsFocused();
 
     const fetchData = useCallback(async () => {
+        setIsLoading(true);
         let token = await getTokenFromStorage();
         if (token) {
-            const userAnimeList = await getAnimeListUser(token);
-            setUserAnimeList(userAnimeList);
-            setIsLoading(false);
+            try {
+                const userAnimeList = await getAnimeListUser(token);
+                setUserAnimeList(userAnimeList);
+            } catch (error) {
+                console.error('Ошибка при запросе данных:', error);
+            }
         } else {
             alert('У вас отсутствует AuthToken, пожалуйста, перезайдите в приложение');
         }
+        setIsLoading(false);
     }, []);
-    
+
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        if (isFocused) {
+            fetchData();
+        }
+    }, [isFocused, fetchData]);
 
     return (
         <View style={styles.container}>
@@ -32,11 +40,6 @@ const MyListScreen = ({ navigation }) => {
                     <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>                    
                 </View>
-                <TouchableOpacity 
-                    onPress={() => {}}
-                    style={styles.headerIconSearch}>
-                    <SearchIcon Color={'#fff'} Style={styles.headerIconSearch} />                            
-                </TouchableOpacity>
             </View>
             <View style={{width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
                 {isLoading ? (

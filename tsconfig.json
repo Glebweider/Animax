@@ -22,7 +22,8 @@
       "@Tab/*": ["src/screens/Tab/*"],
       "@Redux/*": ["src/redux/*"],
       "@Assets/*": ["assets/*"],
-      "@Interfaces/*": ["src/interfaces/*"]
+      "@Interfaces/*": ["src/interfaces/*"],
+      "@locales/*": ["src/locales/*"]
     }
   },
   "exclude": ["node_modules"],

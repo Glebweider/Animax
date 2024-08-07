@@ -5,6 +5,7 @@ import getCalendarAnime from '@Utils/fetch/getCalendarAnime';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
+import { useIsFocused } from '@react-navigation/native';
 
 interface IDate {
     dayOfMonth: string;
@@ -43,6 +44,7 @@ const ReleaseScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     const dateArray = useMemo(() => getDateArrayForMonth(), []);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,9 +59,11 @@ const ReleaseScreen = ({ navigation }) => {
             });
             setIsLoading(false);
         };
-    
-        fetchData();
-    }, []);
+        if (isFocused) {
+            setIsLoading(true)
+            fetchData();
+        }
+    }, [isFocused]);
     
     const animeCardTime = (data: string) => {
         const date = new Date(data);

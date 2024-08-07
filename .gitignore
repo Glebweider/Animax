@@ -58,5 +58,4 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
-expo-env.d.ts
 *.uusver
