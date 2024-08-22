@@ -1,7 +1,7 @@
 # Animax
 
 <div align="center">
-    <a href="https://github.com/Glebweider/Animax"><img src='./assets/icon.png' width="20%" /></a>
+    <a href="https://github.com/Glebweider/Animax"><img src='https://imgur.com/Ezn88g8' width="20%" /></a>
 </div>
 
 <p align="center" >
