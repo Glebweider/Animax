@@ -1,4 +1,4 @@
-<img src="./assets/cover.png">
+![Cover Image](/assets/cover.png)
 
 <p align="center" >
   <a href="https://www.npmjs.com/~nestjscore" target="_blank">
