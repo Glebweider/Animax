@@ -1,4 +1,4 @@
-<img src='https://i.imgur.com/Ezn88g8.png' />
+<img src="./assets/cover.png">
 
 <p align="center" >
   <a href="https://www.npmjs.com/~nestjscore" target="_blank">
