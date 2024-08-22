@@ -1,8 +1,6 @@
 # Animax
 
-<div align="center">
-    <a href="https://github.com/Glebweider/Animax"><img src='https://imgur.com/Ezn88g8' width="20%" /></a>
-</div>
+<img src='https://i.imgur.com/Ezn88g8.png' />
 
 <p align="center" >
   <a href="https://www.npmjs.com/~nestjscore" target="_blank">
