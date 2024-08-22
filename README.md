@@ -1,5 +1,3 @@
-# Animax
-
 <img src='https://i.imgur.com/Ezn88g8.png' />
 
 <p align="center" >
