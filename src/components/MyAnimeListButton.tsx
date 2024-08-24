@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 //Utils
 import { getTokenFromStorage } from '@Utils/token';
-import removeAnimeListUser from '@Utils/fetch/removeAnimeListUser';
-import addAnimeListUser from '@Utils/fetch/addAnimeListUser';
 
 //Icons
 import AddIcon from '@Icons/AddIcon';
@@ -15,11 +13,15 @@ import CheckIcon from '@Icons/CheckIcon';
 import { RootState } from '@Redux/store';
 import { addAnime, removeAnime } from '@Redux/reducers/userReducer';
 import { i18n } from '@Utils/localization';
+import useAddAnimeList from '@Utils/fetch/addAnimeListUser';
+import useRemoveAnimeListUser from '@Utils/fetch/removeAnimeListUser';
 
 const MyAnimeListButton = ({ anime }) => {
     const [isInMyList, setIsInMyList] = useState(false);
     const dispatch = useDispatch();
     const userAnimeList = useSelector((state: RootState) => state.userReducer.animelist);
+    const { addAnimeListUser } = useAddAnimeList();
+    const { removeAnimeListUser } = useRemoveAnimeListUser();
 
     useEffect(() => {
         const fetchMyAnimeList = async () => {

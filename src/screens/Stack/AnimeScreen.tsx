@@ -19,20 +19,20 @@ import SendIcon from '@Icons/SendIcon';
 import MyListIcon from '@Icons/MyListIcon';
 import StarIcon from '@Icons/StarIcon';
 import PlayIcon from '@Icons/PlayIcon';
-import SmartTvIcon from '@Icons/SmartTvIcon';
 import ArrowRightIcon from '@Icons/ArrowRightIcon';
 
 //Utils
 import { getTokenFromStorage } from '@Utils/token';
-import getAnimeListUser from '@Utils/fetch/getAnimeListUser';
-import removeAnimeListUser from '@Utils/fetch/removeAnimeListUser';
-import addAnimeListUser from '@Utils/fetch/addAnimeListUser';
-import getAnimeEpisodes from '@Utils/fetch/getAnimeEpisodes';
 import { i18n } from '@Utils/localization';
 import { GET_ANIME } from '@Utils/graphql/getAnime';
 
 //Interface
 import { Anime } from '@Interfaces/animeAnimeScreen.interface';
+import useAddAnimeList from '@Utils/fetch/addAnimeListUser';
+import { useAlert } from '@Components/AlertContext';
+import useGetAnimeEpisodes from '@Utils/fetch/getAnimeEpisodes';
+import useRemoveAnimeListUser from '@Utils/fetch/removeAnimeListUser';
+import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
 
 
 
@@ -76,6 +76,11 @@ const AnimeScreen = ({ navigation, route }) => {
     const [selectedEpisodeAnime, setSelectedEpisodeAnime] = useState<any>(null);
     const [isScroll, setScroll] = useState<boolean>(true);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
+    const { addAnimeListUser } = useAddAnimeList();
+    const { showAlert } = useAlert();
+    const { getAnimeEpisodes } = useGetAnimeEpisodes();
+    const { removeAnimeListUser } = useRemoveAnimeListUser();
+    const { getAnimeListUser } = useGetAnimeListUser();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -95,14 +100,13 @@ const AnimeScreen = ({ navigation, route }) => {
                             const animeEpisodes = await _animeEpisodes.json();
                             if (animeEpisodes.list[0]) {
                                 if (Object.keys(animeEpisodes.list[0].player.list).length === 0) {
-                                    alert('Error, notfound this anime episodes');
+                                    showAlert('Error, notfound this anime episodes');
                                     setEpisodesAnime(null);
                                 }
                                 const arrayData = Object.values(animeEpisodes.list[0].player.list);
                                 setEpisodesAnime(arrayData);
                                 setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
                                 setSelectedEpisodeAnime(arrayData[0]);
-                                //console.log(`https://${animeEpisodes.list[0].player.host}${arrayData[0].hls.fhd}`)
                             }
                         }
                     })
@@ -120,7 +124,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 const isAnimeInList = userAnimeList.some((userAnime) => userAnime.animeId == anime.id);
                 setIsInMyList(isAnimeInList);
             } catch (error) {
-                console.error('Error get animelist user', error);
+                showAlert('error');
             }
         };
   
@@ -146,7 +150,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 title: anime.russian,
             });
         } catch (error) {
-            console.error('Error try share:', error.message);
+            showAlert(error.message);
         }
     };
 
@@ -160,11 +164,6 @@ const AnimeScreen = ({ navigation, route }) => {
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ArrowLeftIcon Style={styles.headerIconArrow} Color={'#fff'} />
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={() => {}}
-                    style={styles.headerIconSearch}>
-                    <SmartTvIcon Color={'#fff'} Style={styles.headerIconSearch} />                            
                 </TouchableOpacity>
             </View>   
             <View style={styles.previewAnimeContainer}>

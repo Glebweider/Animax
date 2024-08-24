@@ -12,10 +12,11 @@ import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
 
 //Utils
-import authUserInToken from '@Utils/fetch/authUserInToken';
 import { getTokenFromStorage, saveTokenToStorage } from '@Utils/token';
 import { isPhoneNumber } from '@Utils/validator';
 import { i18n } from '@Utils/localization';
+import useAuthUserInToken from '@Utils/fetch/authUserInToken';
+import { useAlert } from '@Components/AlertContext';
 
 
 const EditDataScreen = ({ navigation }) => {
@@ -35,6 +36,9 @@ const EditDataScreen = ({ navigation }) => {
     const [isFullNameVerify, setFullNameVerify] = React.useState<boolean>(false);
     const [isNicknameVerify, setNicknameVerify] = React.useState<boolean>(false);
     const [isPhoneNumberVerify, setPhoneNumberVerify] = React.useState<boolean>(false);
+
+    const { authUserInToken } = useAuthUserInToken();
+    const { showAlert } = useAlert();
 
     useEffect(() => {
         if (textFullName.length >= 1) {
@@ -121,7 +125,7 @@ const EditDataScreen = ({ navigation }) => {
                         navigation.navigate('HomeScreen');
                     }              
             } else {
-                alert(response.body);
+                showAlert(response.body);
             }
     };
 

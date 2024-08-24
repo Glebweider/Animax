@@ -17,13 +17,14 @@ import PencilIcon from '@Icons/PencilIcon';
 //Utils
 import { isPhoneNumber } from '@Utils/validator';
 import { saveTokenToStorage } from '@Utils/token'; 
-import authUserInToken from '@Utils/fetch/authUserInToken';
-import checkPhoneNumberAvailability from '@Utils/fetch/authCheckPhoneNumberAvailability';
-import checkNicknameAvailability from '@Utils/fetch/authCheckNicknameAvailability';
 
 //Redux
 import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
+import useCheckPhoneNumberAvailability from '@Utils/fetch/authCheckPhoneNumberAvailability';
+import useCheckNicknameAvailability from '@Utils/fetch/authCheckNicknameAvailability';
+import useAuthUserInToken from '@Utils/fetch/authUserInToken';
+import { useAlert } from '@Components/AlertContext';
 
 
 const AuthAccountSetupDataScreen = ({ navigation }) => {
@@ -47,10 +48,15 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const [isNicknameVerify, setNicknameVerify] = React.useState<boolean>(false);
     const [isPhoneNumberVerify, setPhoneNumberVerify] = React.useState<boolean>(false);
 
+    const { checkPhoneNumberAvailability } = useCheckPhoneNumberAvailability();
+    const { checkNicknameAvailability } = useCheckNicknameAvailability();
+    const { authUserInToken } = useAuthUserInToken();
+    const { showAlert } = useAlert();
+
     const requestPermissions = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-            console.log('Permission denied!');
+            showAlert('Permission denied!');
         }
     };
 
@@ -121,8 +127,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         const checkNickname = await checkNicknameAvailability(textNickname);
 
         if (checkPhoneNumber && checkNickname) {
-            console.log(JSON.stringify(authState.interests))
-
             const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/register`, avatar.uri, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
@@ -137,7 +141,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                 uploadType: FileSystem.FileSystemUploadType.MULTIPART
             })
 
-            console.log(response.body);
             if (response.status == 200) {
                     setOpenModal(true);
                     setTimeout(async () => {
@@ -152,7 +155,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                     }, 5000);                          
             } else {
                 setOpenModal(false); 
-                alert(response.body);
+                showAlert(response.body);
             }
 
         } else {

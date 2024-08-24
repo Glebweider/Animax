@@ -1,29 +1,37 @@
-const checkPhoneNumberAvailability = async (phonenumber: string) => {
+import { useAlert } from "@Components/AlertContext";
+
+const useCheckPhoneNumberAvailability = () => {
+  const { showAlert } = useAlert();
+
+  const checkPhoneNumberAvailability = async (phonenumber: string) => {
     try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/check-phonenumber`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ phonenumber }),
-        });
-    
-        if (response.ok) {
-            const data = await response.json();
-            if (!data) {
-                return true
-            } else {
-                alert('Этот номер телефона уже зарегистрирован');
-                return false
-            }
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/check-phonenumber`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phonenumber }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (!data) {
+          return true;
         } else {
-            alert('Ошибка при проверке номер телефона');
-            return false
+          showAlert('Этот номер телефона уже зарегистрирован');
+          return false;
         }
+      } else {
+        showAlert('Ошибка при проверке номера телефона');
+        return false;
+      }
     } catch (error) {
-        console.error('Ошибка сети:', error);
-        return false
+      showAlert(error.message);
+      return false;
     }
+  };
+
+  return { checkPhoneNumberAvailability };
 };
 
-export default checkPhoneNumberAvailability;
+export default useCheckPhoneNumberAvailability;

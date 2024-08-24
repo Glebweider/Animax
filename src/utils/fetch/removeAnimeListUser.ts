@@ -1,25 +1,32 @@
-const removeAnimeListUser = async (token: string, animeId: string) => {
-    try {
-        const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/remove-animelist`, {
-            method: 'POST',
-            headers: {
-                'Authorization': token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "animeId": animeId
-            }),
-        });
-        if (response.ok) {
-            return;
-        } else {
-            const errorData = await response.json();
-            alert(errorData.message);
-            return;
-        }
-    } catch (error) {
-        console.log(error, 'RemoveAnimeListUser');
-    }
-}
+import { useAlert } from "@Components/AlertContext";
 
-export default removeAnimeListUser;
+const useRemoveAnimeListUser = () => {
+  const { showAlert } = useAlert();
+
+  const removeAnimeListUser = async (token: string, animeId: string) => {
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/remove-animelist`, {
+        method: 'POST',
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ animeId }),
+      });
+
+      if (response.ok) {
+        return;
+      } else {
+        const errorData = await response.json();
+        showAlert(errorData.message);
+        return;
+      }
+    } catch (error) {
+      showAlert(error.message);
+    }
+  };
+
+  return { removeAnimeListUser };
+};
+
+export default useRemoveAnimeListUser;

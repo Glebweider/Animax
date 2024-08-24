@@ -7,9 +7,11 @@ import * as Updates from 'expo-updates';
 
 import { getTokenFromStorage } from '@Utils/token';
 import { setUser } from '@Redux/reducers/userReducer';
-import authUserInToken from '@Utils/fetch/authUserInToken';
 
 import * as Notifications from 'expo-notifications';
+import { registerForPushNotificationsAsync } from 'notification-config';
+import useAuthUserInToken from '@Utils/fetch/authUserInToken';
+import { useAlert } from '@Components/AlertContext';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -21,43 +23,36 @@ Notifications.setNotificationHandler({
 
 const PreloaderScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
-    const [textError, setTextError] = useState<string>(null);
+    const { authUserInToken } = useAuthUserInToken();
+    const { showAlert } = useAlert();
 
     useEffect(() => {
         const bootStart = async () => {
             await Font.loadAsync({ 'Outfit': require('../../../assets/fonts/Outfit.ttf') });
+            await registerForPushNotificationsAsync();
 
             try {
                 const update = await Updates.checkForUpdateAsync();
                 if (update.isAvailable) {
-                    await Notifications.scheduleNotificationAsync({
-                        content: {
-                            title: "Animax new updates!",
-                            body: "App updated",
-                            data: { someData: 'reloaded app' },
-                        },
-                        trigger: 1
-                    });
                     await Updates.fetchUpdateAsync();
                     await Updates.reloadAsync();
                 }
-            } catch (e) {
-                console.error('Error checking for updates:', e);
-            }
-            
-            await Notifications.scheduleNotificationAsync({
-                content: {
-                    title: "Настечка <3",
-                    body: "Хочешь скину ножки",
-                    data: { someData: 'да!' },
-                },
-                trigger: 1
-            });
+            } catch (e) {}
+
+            // await Notifications.scheduleNotificationAsync({
+            //     content: {
+            //         title: "Настечка <3",
+            //         body: "Хочешь скину ножки",
+            //         data: { someData: 'да!' },
+            //     },
+            //     trigger: {
+            //         seconds: 3,
+            //     },
+            // });
 
             let userToken = await getTokenFromStorage();
             try {
                 if (userToken) {
-                    setTextError(null)
                     const user = await authUserInToken(userToken);
                     if (user) {
                         dispatch(setUser(user));
@@ -69,22 +64,18 @@ const PreloaderScreen = ({ navigation }: any) => {
                     navigation.navigate('AuthWelcome');
                 }
             } catch (error) {
-                setTextError("К сожеленнию сервер на данный момент не доступен")
+                showAlert("К сожалению, сервер в данный момент недоступен");
             }
         };
-
         bootStart();
     }, [dispatch, navigation]);
 
     return (
         <View style={styles.container}>
             <Image source={require('../../../assets/logo.png')} style={styles.logo} />
-            {!textError && (
-                <View style={styles.loaderIndicatorContainer}>
-                    <BallIndicator color="#13D458" size={70} animationDuration={700} />
-                </View>
-            )}
-            <Text style={styles.textError}>{textError}</Text>
+            <View style={styles.loaderIndicatorContainer}>
+                <BallIndicator color="#13D458" size={70} animationDuration={700} />
+            </View>
         </View>
     );
 };
@@ -95,16 +86,6 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         backgroundColor: '#181A20',
-    },
-    textError: {
-        color: '#red',
-        fontSize: 14,
-		fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center',
-        width: '80%',
-        height: 70,
-        marginTop: '60%'
     },
     logo: {
         width: 160,

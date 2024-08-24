@@ -15,6 +15,7 @@ import { i18n } from '@Utils/localization';
 //Redux
 import { RootState } from '@Redux/store';
 import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
+import { useAlert } from '@Components/AlertContext';
 
 const AnimeSearchScreen = ({ navigation }) => {
     const client = useApolloClient();
@@ -23,6 +24,7 @@ const AnimeSearchScreen = ({ navigation }) => {
     const FilterState = useSelector((state: RootState) => state.sortReducer);
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);
+    const { showAlert } = useAlert();
 
     const fetchAnimes = useCallback(
         async (newPage: number = 1, search: string = '') => {
@@ -32,19 +34,17 @@ const AnimeSearchScreen = ({ navigation }) => {
                 setErrorSearch(false);
 
                 const query = search ? GET_ANIMEBYSEARCH : GET_ANIMEBYGENRES;
-                const variables = search
-                ? { page: newPage, search, genreIds: tags }
-                : { page: newPage, limit: 50, genreIds: tags };
+                const variables = search ? { page: newPage, search, genreIds: tags } : { page: newPage, limit: 50, genreIds: tags };
 
                 const { data } = await client.query({ query, variables });
 
                 if (data && data.animes.length) {
-                setAnimes(prevAnimes => (newPage === 1 ? data.animes : [...prevAnimes, ...data.animes]));
+                    setAnimes(prevAnimes => (newPage === 1 ? data.animes : [...prevAnimes, ...data.animes]));
                 } else {
-                setErrorSearch(true);
+                    setErrorSearch(true);
                 }
             } catch (error) {
-                console.error('Error fetching animes:', error);
+                showAlert(error);
                 setErrorSearch(true);
             }
         },
@@ -70,9 +70,9 @@ const AnimeSearchScreen = ({ navigation }) => {
 
     const AnimeCard = React.memo(({ item }: any) => (
         <TouchableOpacity
-        onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
-        key={item.id}
-        style={styles.animeContainerAnimeTop}>
+            onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
+            key={item.id}
+            style={styles.animeContainerAnimeTop}>
         <View style={styles.scoreContainer}>
             <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
         </View>

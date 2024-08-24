@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import getCalendarAnime from '@Utils/fetch/getCalendarAnime';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
 import { useIsFocused } from '@react-navigation/native';
+import useGetCalendarAnime from '@Utils/fetch/getCalendarAnime';
 
 interface IDate {
     dayOfMonth: string;
@@ -45,6 +45,7 @@ const ReleaseScreen = ({ navigation }) => {
 
     const dateArray = useMemo(() => getDateArrayForMonth(), []);
     const isFocused = useIsFocused();
+    const { getCalendarAnime } = useGetCalendarAnime();
 
     useEffect(() => {
         const fetchData = async () => {

@@ -1,27 +1,41 @@
+import { useAlert } from "@Components/AlertContext";
+
 interface iAuthSignIn {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
-const authSignIn = async ({email, password}: iAuthSignIn) => {
-    const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
+const useAuthSignIn = () => {
+  const { showAlert } = useAlert();
+
+  const authSignIn = async ({ email, password }: iAuthSignIn) => {
+    try {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            email: email,
-            password: password,
+          email,
+          password,
         }),
-    });
-    if (response.status === 200) {
+      });
+
+      if (response.ok) {
         const data = await response.text();
         return data;
-    } else {
+      } else {
         const errorData = await response.json();
-        console.log(errorData)
-        return;
+        showAlert(errorData.message);
+        return null;
+      }
+    } catch (error) {
+      showAlert(error.message);
+      return null;
     }
-}
+  };
 
-export default authSignIn;
+  return { authSignIn };
+};
+
+export default useAuthSignIn;

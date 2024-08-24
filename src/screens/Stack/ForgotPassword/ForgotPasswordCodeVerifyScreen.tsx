@@ -1,13 +1,14 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 
 import BackButton from '@Components/BackButton';
-import recoverPasswordUser from '@Utils/fetch/recoverPasswordUser';
+import useRecoverPassword from '@Utils/fetch/recoverPasswordUser';
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
     const { data } = route.params;
     const [expiresAt] = useState(data.expiresAt);
     const [timeLeft, setTimeLeft] = useState(data.expiresAt);
+    const { recoverPasswordUser } = useRecoverPassword();
 
     useEffect(() => {
         const interval = setInterval(() => {

@@ -5,11 +5,13 @@ import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import BackButton from '@Components/BackButton';
 import { i18n } from '@Utils/localization';
+import { useAlert } from '@Components/AlertContext';
 
 const TopHitsAnimeScreen = ({ navigation }: any) => {
 const client = useApolloClient();
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);
+    const { showAlert } = useAlert();
     const { data } = useQuery(GET_ANIMES, {
         variables: { 
             page: 1,
@@ -40,7 +42,7 @@ const client = useApolloClient();
                         setAnimes(prevAnimes => [...prevAnimes, ...data.animes]);
                     }
                 } catch (error) {
-                    console.error('Error fetching more animes', error);
+                    showAlert(error);
                 }
             }
         };

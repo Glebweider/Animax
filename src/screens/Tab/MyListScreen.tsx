@@ -1,15 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import getAnimeListUser from '@Utils/fetch/getAnimeListUser';
 import { getTokenFromStorage } from '@Utils/token';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
 import { useIsFocused } from '@react-navigation/native';
+import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
+import { useAlert } from '@Components/AlertContext';
 
 const MyListScreen = ({ navigation }) => {
     const [userAnimeList, setUserAnimeList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const isFocused = useIsFocused();
+    const { getAnimeListUser } = useGetAnimeListUser();
+    const { showAlert } = useAlert();
 
     const fetchData = useCallback(async () => {
         setIsLoading(true);
@@ -19,10 +22,10 @@ const MyListScreen = ({ navigation }) => {
                 const userAnimeList = await getAnimeListUser(token);
                 setUserAnimeList(userAnimeList);
             } catch (error) {
-                console.error('Ошибка при запросе данных:', error);
+                alert(error);
             }
         } else {
-            alert('У вас отсутствует AuthToken, пожалуйста, перезайдите в приложение');
+            showAlert('У вас отсутствует AuthToken, пожалуйста, перезайдите в приложение');
         }
         setIsLoading(false);
     }, []);

@@ -29,6 +29,7 @@ node_modules/
 .expo/
 dist/
 web-build/
+android/
 
 # Native
 *.orig.*
@@ -59,3 +60,4 @@ yarn-error.*
 
 # @end expo-cli
 *.uusver
+google-services.json

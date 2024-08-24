@@ -1,5 +1,4 @@
 import * as Notifications from 'expo-notifications';
-import { Alert } from 'react-native';
 
 export async function registerForPushNotificationsAsync() {
   let token: string;
@@ -15,7 +14,6 @@ export async function registerForPushNotificationsAsync() {
 
   // Проверка, что разрешения предоставлены
   if (finalStatus !== 'granted') {
-    Alert.alert('Не удалось получить разрешение на push-уведомления!');
     return;
   }
 
@@ -23,9 +21,8 @@ export async function registerForPushNotificationsAsync() {
   try {
     token = (await Notifications.getExpoPushTokenAsync()).data;
   } catch (error) {
-    console.error('Ошибка при получении push-токена:', error);
+
   }
 
-  console.log('Push token:', token);
   return token;
 }

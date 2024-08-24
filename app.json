@@ -7,25 +7,27 @@
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "platforms": ["ios", "android", "web"],
+    "assetBundlePatterns": ["**/*"],
     "updates": {
-      "fallbackToCacheTimeout": 60000,
+      "fallbackToCacheTimeout": 10000,
       "checkAutomatically": "ON_LOAD",
       "url": "https://u.expo.dev/cabde16e-c505-4729-861a-b2488aa19c0f"
     },
     "ios": {
       "bundleIdentifier": "com.codewithbeto.Animax",
+      "supportsTablet": true,
       "buildNumber": "1.0.6",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
-        "UIRequiresFullScreen": true
+        "UIRequiresFullScreen": true,
+        "CFBundleURLTypes": [
+          {
+            "CFBundlesURLSchemes": [
+              "com.googleusercontent.apps.229985266945-sjbpl4nn6ukbhm57nvmol9jbst0gdt54"
+            ]
+          }
+        ]
       },
       "icon": "./assets/icon.png"
     },
@@ -36,10 +38,7 @@
         "backgroundColor": "#181A20"
       },
       "versionCode": 1,
-      "permissions": [
-        "RECEIVE_BOOT_COMPLETED",
-        "SCHEDULE_EXACT_ALARM"
-      ]
+      "permissions": ["RECEIVE_BOOT_COMPLETED", "SCHEDULE_EXACT_ALARM"]
     },
     "web": {
       "favicon": "./assets/logo.png"
@@ -66,9 +65,7 @@
           "icon": "./assets/notification_icon.png",
           "color": "#181A20",
           "defaultChannel": "default",
-          "sounds": [
-            "./assets/notfication_sound.wav"
-          ]
+          "sounds": ["./assets/notfication_sound.wav"]
         }
       ],
       [
@@ -76,15 +73,21 @@
         {
           "username": "kurumi12"
         }
-      ]
+      ],
+       [
+         "expo-camera",
+         {
+           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+           "recordAudioAndroid": true
+         }
+       ]
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#181A20"
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    }
+    "runtimeVersion": "1.0.6"
   }
 }

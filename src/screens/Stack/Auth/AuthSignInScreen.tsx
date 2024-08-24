@@ -24,17 +24,20 @@ import authUserInToken from '@Utils/fetch/authUserInToken';
 //Redux
 import { setUser } from '@Redux/reducers/userReducer';
 import PasswordSection from '@Components/PasswordSection';
+import useAuthUserInToken from '@Utils/fetch/authUserInToken';
+import useAuthSignIn from '@Utils/fetch/authUserSignIn';
 
 const AuthSignInScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [textEmail, setTextEmail] = React.useState<string>('');
     const [textPassword, setTextPassword] = React.useState<string>('');
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const [isVisibledPassword, setVisibledPassword] = React.useState<boolean>(true);
     const [passwordError, setPasswordError] = React.useState<string | null>(null);
     const [emailError, setEmailError] = React.useState<string | null>(null);
     const [isEmailVerify, setEmailVerify] = React.useState<boolean>(false);
     const [isPasswordVerify, setPasswordVerify] = React.useState<boolean>(false);
+    const { authUserInToken } = useAuthUserInToken();
+    const { authSignIn } = useAuthSignIn();
     
     useEffect(() => {
         if (textPassword.length >= 1) {

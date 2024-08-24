@@ -4,13 +4,15 @@ import { useState } from 'react';
 import BackButton from '@Components/BackButton';
 import EmailIcon from '@Icons/EmailIcon';
 import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
-import forgotPasswordUser from '@Utils/fetch/forgotPasswordUser';
+import useForgotPassword from '@Utils/fetch/forgotPasswordUser';
+import { useAlert } from '@Components/AlertContext';
 
 const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const [methodResetPassword, setMethodResetPassword] = useState<string>('SMS');
     const [viaData, setViaData] = useState<string>(null);
     const [isOpenModalForgotPasswordInput, setOpenModalForgotPasswordInput] = useState<boolean>(false); 
-
+    const { forgotPasswordUser } = useForgotPassword();
+    const { showAlert } = useAlert()
 
     const fetchData = async () => {
         const response = await forgotPasswordUser(viaData)
@@ -23,7 +25,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                 }
             })
         } else {
-            alert('Error from request email');
+            showAlert('Error from request email');
         }
     }
     return (
@@ -40,7 +42,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                     source={require('../../../../assets/backgroundForgotPassword.png')}
                     style={{}} />  
                 <Text style={styles.contentText}>Select which contact details should we use to reset your password</Text> 
-                <TouchableOpacity 
+                {/* <TouchableOpacity 
                     style={methodResetPassword == 'SMS' ? 
                         styles.contentMethodContainerEnabled 
                     : 
@@ -55,7 +57,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                             Style={{}} />
                     </View>
                     <Text style={styles.contentMethodViaText}>SMS</Text>
-                </TouchableOpacity>   
+                </TouchableOpacity>    */}
                 <TouchableOpacity
                     style={
                         methodResetPassword == 'EMAIL' ? 

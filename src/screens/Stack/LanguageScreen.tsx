@@ -3,9 +3,11 @@ import BackButton from '@Components/BackButton';
 import { i18n, languageNames, translations } from '@Utils/localization';
 import { saveLocalizationToStorage } from '@Utils/localization';
 import * as Updates from 'expo-updates';
+import { useAlert } from '@Components/AlertContext';
 
 const LanguageScreen = ({ navigation }) => {
     const languageOptions = Object.keys(translations);
+    const { showAlert } = useAlert();
 
     const handleChangeLanguage = async (lang: string) => {
         try {
@@ -13,7 +15,7 @@ const LanguageScreen = ({ navigation }) => {
             i18n.locale = lang;
             await Updates.reloadAsync();
         } catch (error) {
-            alert(error);
+            showAlert(error);
         }
     };
 

@@ -5,16 +5,17 @@ import CheckIcon from '@Icons/CheckIcon';
 import { useState } from 'react';
 import ConfigPaymentModal from '@Modal/ConfigPaymentModal';
 import { i18n } from '@Utils/localization';
-import buyPremiumUser from '@Utils/fetch/buyPremiumUser';
 import { getTokenFromStorage } from '@Utils/token';
 import { useDispatch } from 'react-redux';
 import { setPremium } from '@Redux/reducers/userReducer';
+import useBuyPremiumUser from '@Utils/fetch/buyPremiumUser';
 
 const ReviewSummaryScreen = ({ navigation, route }) => {
     const [taxPrice, setTaxPrice] = useState<number>(1.19)
     const { buyData } = route.params;
     const dispatch = useDispatch();
     const [isOpenModalConfigPayment, setOpenModalConfigPayment] = useState<boolean>(false); 
+    const { buyPremiumUser } = useBuyPremiumUser();
 
     const handleBuyPremium = async () => {
         const token = await getTokenFromStorage();

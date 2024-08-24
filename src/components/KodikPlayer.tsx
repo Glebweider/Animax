@@ -12,8 +12,7 @@ const KodikPlayer = ({ shikimoriInfo }) => {
             return;
         }
 
-    console.log(324234)
-};
+    };
 
     useEffect(() => {
         loadVideo()

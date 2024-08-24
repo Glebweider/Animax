@@ -1,13 +1,26 @@
-const getCalendarAnime = async () => {
-    const response = await fetch(`https://shikimori.me/api/calendar`);
-    if (response.status === 200) {
-        const data = await response.json();
-        return data;
-    } else {
-        const errorData = await response.json();
-        alert(errorData.message);
-        return;
-    }
-}
+import { useAlert } from "@Components/AlertContext";
 
-export default getCalendarAnime;
+const useGetCalendarAnime = () => {
+  const { showAlert } = useAlert();
+
+  const getCalendarAnime = async () => {
+    try {
+      const response = await fetch(`https://shikimori.me/api/calendar`);
+      
+      if (response.ok) {
+        return await response.json();
+      } else {
+        const errorData = await response.json();
+        showAlert(errorData.message);
+        return null;
+      }
+    } catch (error) {
+      showAlert(error.message);
+      return null;
+    }
+  };
+
+  return { getCalendarAnime };
+};
+
+export default useGetCalendarAnime;

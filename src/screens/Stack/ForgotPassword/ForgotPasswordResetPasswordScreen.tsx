@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 
 import BackButton from '@Components/BackButton';
 import PasswordSection from '@Components/PasswordSection';
-import resetPasswordUser from '@Utils/fetch/resetPasswordUser';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@Redux/reducers/userReducer';
 import ConfigModal from '@Components/modals/ConfigModal';
 import { saveTokenToStorage } from '@Utils/token';
+import useResetPassword from '@Utils/fetch/resetPasswordUser';
 
 const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const { data } = route.params;
@@ -16,6 +16,7 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const [textVerifyPassword, setTextVerifyPassword] = useState<string>(null);
     const [isOpenModal, setOpenModal] = useState<boolean>(false);
     const [isEnabledButton, setEnabledButton] = useState<boolean>(true);
+    const { resetPasswordUser } = useResetPassword();
     
     useEffect(() => {
         if (textNewPassword == textVerifyPassword) {

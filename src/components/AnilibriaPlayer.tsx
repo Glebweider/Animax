@@ -56,7 +56,7 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 		showControls();
 		const updateScreenDimensions = () => {
 			const { width, height } = Dimensions.get('screen');
-			setScreenWidth(width - 36);
+			setScreenWidth(width);
 			setScreenHeight(height);
 		};
 		const subscription = Dimensions.addEventListener('change', updateScreenDimensions);

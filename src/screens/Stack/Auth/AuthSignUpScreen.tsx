@@ -13,10 +13,10 @@ import EmailIcon from '@Icons/EmailIcon';
 import facebookAuth from '@Utils/facebookAuth';
 import googleAuth from '@Utils/googleAuth';
 import appleAuth from '@Utils/appleAuth';
-import checkEmailAvailability from '@Utils/fetch/authCheckEmailAvailability';
 
 //Redux
 import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';
+import useCheckEmailAvailability from '@Utils/fetch/authCheckEmailAvailability';
 
 
 const AuthSignUpScreen = ({ navigation }: any) => {
@@ -28,6 +28,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
     const [emailError, setEmailError] = React.useState<string | null>(null);
     const [isEmailVerify, setEmailVerify] = React.useState<boolean>(false);
     const [isPasswordVerify, setPasswordVerify] = React.useState<boolean>(false);
+    const { checkEmailAvailability } = useCheckEmailAvailability();
 
     useEffect(() => {
         if (textPassword.length >= 1) {

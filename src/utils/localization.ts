@@ -13,7 +13,7 @@ export const saveLocalizationToStorage = async (languageCode: string) => {
     try {
         await AsyncStorage.setItem('Language', languageCode);
     } catch (error) {
-        console.error('Error when saving Language:', error);
+        
     }
 };
 
@@ -25,7 +25,6 @@ export const getLocalizationFromStorage = async () => {
         }
         return localization;
     } catch (error) {
-        console.error('Error when receiving Language:', error);
         alert('Error when receiving Language')
         return null;
     }

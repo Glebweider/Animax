@@ -5,6 +5,7 @@ import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import 'notification-config';
+import { AlertProvider } from '@Components/AlertContext';
 
 const client = new ApolloClient({
   uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
@@ -27,10 +28,12 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
-        <StatusBar backgroundColor="#181A20" />  
-        <NavigationContainer>
-          <StackNavigator />
-        </NavigationContainer>
+        <AlertProvider>
+          <StatusBar backgroundColor="#181A20" />  
+          <NavigationContainer>
+            <StackNavigator />
+          </NavigationContainer>
+        </AlertProvider>
       </Provider>
     </ApolloProvider>
   );

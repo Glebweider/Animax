@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList } from 'react-native';
-import { useApolloClient, useQuery } from '@apollo/client';
-import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
+import { useApolloClient } from '@apollo/client';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import BackButton from '@Components/BackButton';
 import { i18n } from '@Utils/localization';
 import { GET_RECOMENDATIONANIME } from '@Utils/graphql/getRecomendationAnime';
 import { useSelector } from 'react-redux';
 import { RootState } from '@Redux/store';
+import { useAlert } from '@Components/AlertContext';
 
 const RecomendationsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();
@@ -15,6 +15,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
     const [page, setPage] = useState(1);
     const [genreId, setGenreId] = useState<number>(null);
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
+    const { showAlert } = useAlert();
 
     useEffect(() => {
         if (!genreId && userInterests.length > 0) {
@@ -38,7 +39,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
                     setAnimes(prevAnimes => [...prevAnimes, ...data.animes]);
                 }
             }).catch(error => {
-                console.error('Error fetching animes', error);
+                showAlert(error);
             });
         }
     }, [page, genreId]);
