@@ -17,7 +17,7 @@
         "resourceClass": "m-medium"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
+        "EXPO_PUBLIC_API_URL": "https://animax-back-end.vercel.app/api",
         "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
       },
       "channel": "preview"
@@ -28,7 +28,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://195.211.141.141:4000/api",
+        "EXPO_PUBLIC_API_URL": "https://animax-back-end.vercel.app/api",
         "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
       },
       "channel": "production"

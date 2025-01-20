@@ -24,7 +24,7 @@ interface AnilibriaPlayerProps {
 
 const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 	const video = useRef<Video>(null);
-  const [status, setStatus] = useState<AVPlaybackStatusSuccess | null>(null);
+  	const [status, setStatus] = useState<AVPlaybackStatusSuccess | null>(null);
 	const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 	const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
 	const [screenHeight, setScreenHeight] = useState(Dimensions.get('window').height);

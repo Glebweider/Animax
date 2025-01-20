@@ -93,23 +93,25 @@ const AnimeScreen = ({ navigation, route }) => {
                 });         
                 if (data && !error) {
                     setAnime(data.animes[0]);
-                    const animeNameArray = [data.animes[0].name, data.animes[0].russian, data.animes[0].japanese]
-                    animeNameArray.map(async (anime) => {
-                        const _animeEpisodes = await getAnimeEpisodes(anime);
-                        if (_animeEpisodes.ok) {
-                            const animeEpisodes = await _animeEpisodes.json();
-                            if (animeEpisodes.list[0]) {
-                                if (Object.keys(animeEpisodes.list[0].player.list).length === 0) {
-                                    showAlert('Error, notfound this anime episodes');
-                                    setEpisodesAnime(null);
-                                }
-                                const arrayData = Object.values(animeEpisodes.list[0].player.list);
-                                setEpisodesAnime(arrayData);
-                                setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
-                                setSelectedEpisodeAnime(arrayData[0]);
+                    const animeNameArray = [data.animes[0].name, data.animes[0].russian, data.animes[0].japanese];
+                    
+                    for (let anime of animeNameArray) {
+                        const animeEpisodes = await getAnimeEpisodes(anime);
+                        if (animeEpisodes.list[0]) {
+
+                            if (Object.keys(animeEpisodes.list[0].player.list).length === 0) {
+                                showAlert('Error, notfound this anime episodes');
+                                setEpisodesAnime(null);
+                                break;
                             }
+
+                            const arrayData = Object.values(animeEpisodes.list[0].player.list);
+                            setEpisodesAnime(arrayData);
+                            setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
+                            setSelectedEpisodeAnime(arrayData[0]);
+                            break;
                         }
-                    })
+                    }
                 } 
             }            
         }
@@ -143,7 +145,6 @@ const AnimeScreen = ({ navigation, route }) => {
 
     const handleShare = async () => {
         const message = `${i18n.t('anime.share') + anime.russian}, ${anime.poster.originalUrl}`;
-      
         try {
             await Share.share({
                 message,
@@ -294,10 +295,12 @@ const AnimeScreen = ({ navigation, route }) => {
                     contentContainerStyle={{paddingHorizontal: 10}}/>
             </View>
             <KodikPlayer shikimoriInfo={anime.name} />
-            {selectedEpisodeAnime &&
+            {selectedEpisodeAnime ?
                 <AnilibriaPlayer 
                     url={`https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}`}
                     setScroll={setScroll}/>
+                :
+                <BallIndicator color="#13D458" size={70} animationDuration={700} />
             }
         </ScrollView>
     );

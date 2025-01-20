@@ -136,15 +136,9 @@ const EditDataScreen = ({ navigation }) => {
                 <TouchableOpacity 
                     onPress={() => pickImage()}
                     style={styles.containerImageAvatar}>
-                    { avatar ? 
-                        <Image 
-                            source={{ uri: avatar }} 
-                            style={styles.imageAvatar} />   
-                        :
-                        <Image 
-                            source={{ uri: userState.profile.avatar }} 
-                            style={styles.imageAvatar} />   
-                    }
+                    <Image 
+                        source={{ uri: avatar && userState.profile.avatar}} 
+                        style={styles.imageAvatar} />   
                 </TouchableOpacity>
                 <View style={styles.pencilContainer}>
                     <PencilIcon Color={"#181A20"} Width={20} Height={20} />

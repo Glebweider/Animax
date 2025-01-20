@@ -18,11 +18,11 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-    const func = async () => {
+    const BootStrap = async () => {
         ScreenOrientation.unlockAsync()
         await NavigationBar.setVisibilityAsync('hidden')
     }
-    func()
+    BootStrap()
     return (
         <Tab.Navigator screenOptions={{ 
             headerShown: false,

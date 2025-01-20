@@ -13,6 +13,23 @@ interface IDate {
     dayOfDate: string;
 }
 
+const MemoizedDateItem = React.memo(({ isSelected, onPress, item }: any) => {
+    return (
+        <TouchableOpacity
+            style={isSelected ? styles.dataContainerEnabled : styles.dataContainerDisabled}
+            onPress={() => onPress(item)}>
+            <Text style={isSelected ? styles.dataTextWeekEnabled : styles.dataTextWeekDisabled}>
+                {item.dayOfWeek && i18n.t(`release.${item.dayOfWeek}`)}
+            </Text>
+            <Text style={isSelected ? styles.dataTextMonthEnabled : styles.dataTextMonthDisabled}>
+                {item.dayOfMonth}
+            </Text>
+        </TouchableOpacity>
+    );
+}, (prevProps, nextProps) => {
+    return prevProps.isSelected === nextProps.isSelected;
+});
+
 const getDateArrayForMonth = () => {
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -92,25 +109,6 @@ const ReleaseScreen = ({ navigation }) => {
         }
     }, [selectedDate, Animes]);
 
-    const MemoizedDateItem = React.memo(({ isSelected, onPress, item }: any) => {
-        const handlePress = useCallback(() => onPress(item), [item, onPress]);
-      
-        return (
-            <TouchableOpacity
-                style={isSelected ? styles.dataContainerEnabled : styles.dataContainerDisabled}
-                onPress={handlePress}>
-                <Text style={isSelected ? styles.dataTextWeekEnabled : styles.dataTextWeekDisabled}>
-                    {item.dayOfWeek && i18n.t(`release.${item.dayOfWeek}`)}
-                </Text>
-                <Text style={isSelected ? styles.dataTextMonthEnabled : styles.dataTextMonthDisabled}>
-                    {item.dayOfMonth}
-                </Text>
-            </TouchableOpacity>
-        );
-    }, (prevProps, nextProps) => {
-        return prevProps.isSelected === nextProps.isSelected;
-    });
-
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -124,7 +122,10 @@ const ReleaseScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item) => item.dayOfMonth.toString()}
                     renderItem={({ item }) => (
-                        <MemoizedDateItem isSelected={selectedDate.dayOfMonth == item.dayOfMonth} onPress={setSelectedDate} item={item} />
+                        <MemoizedDateItem 
+                            isSelected={selectedDate.dayOfMonth == item.dayOfMonth} 
+                            onPress={setSelectedDate} 
+                            item={item} />
                     )}/>
             </View>
             <View style={{width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center'}}>

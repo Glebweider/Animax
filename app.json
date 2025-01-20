@@ -3,7 +3,7 @@
     "name": "Animax",
     "slug": "animax",
     "scheme": "myapp",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     "ios": {
       "bundleIdentifier": "com.codewithbeto.Animax",
       "supportsTablet": true,
-      "buildNumber": "1.0.6",
+      "buildNumber": "1.0.7",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
         "UIRequiresFullScreen": true,
@@ -73,21 +73,13 @@
         {
           "username": "kurumi12"
         }
-      ],
-       [
-         "expo-camera",
-         {
-           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-           "recordAudioAndroid": true
-         }
-       ]
+      ]
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#181A20"
     },
-    "runtimeVersion": "1.0.6"
+    "runtimeVersion": "1.0.7"
   }
 }
