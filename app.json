@@ -3,7 +3,7 @@
     "name": "Animax",
     "slug": "animax",
     "scheme": "myapp",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
@@ -17,17 +17,10 @@
     "ios": {
       "bundleIdentifier": "com.codewithbeto.Animax",
       "supportsTablet": true,
-      "buildNumber": "1.0.7",
+      "buildNumber": "1.0.8",
       "infoPlist": {
         "UIBackgroundModes": ["fetch", "remote-notification"],
-        "UIRequiresFullScreen": true,
-        "CFBundleURLTypes": [
-          {
-            "CFBundlesURLSchemes": [
-              "com.googleusercontent.apps.229985266945-sjbpl4nn6ukbhm57nvmol9jbst0gdt54"
-            ]
-          }
-        ]
+        "UIRequiresFullScreen": true
       },
       "icon": "./assets/icon.png"
     },
@@ -80,6 +73,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#181A20"
     },
-    "runtimeVersion": "1.0.7"
+    "runtimeVersion": "1.0.8"
   }
 }
