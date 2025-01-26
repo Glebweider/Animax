@@ -25,6 +25,7 @@ import useCheckPhoneNumberAvailability from '@Utils/fetch/authCheckPhoneNumberAv
 import useCheckNicknameAvailability from '@Utils/fetch/authCheckNicknameAvailability';
 import useAuthUserInToken from '@Utils/fetch/authUserInToken';
 import { useAlert } from '@Components/AlertContext';
+import { registerForPushNotificationsAsync } from 'notification-config';
 
 
 const AuthAccountSetupDataScreen = ({ navigation }) => {
@@ -127,6 +128,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         const checkNickname = await checkNicknameAvailability(textNickname);
 
         if (checkPhoneNumber && checkNickname) {
+            const pushToken = await registerForPushNotificationsAsync();
             const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/register`, avatar.uri, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
@@ -137,6 +139,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                     fullname: textFullName,
                     nickname: textNickname,
                     phonenumber: textPhoneNumber,
+                    pushToken: pushToken
                 },
                 uploadType: FileSystem.FileSystemUploadType.MULTIPART
             })

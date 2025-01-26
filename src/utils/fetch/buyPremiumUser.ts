@@ -5,7 +5,7 @@ const useBuyPremiumUser = () => {
 
   const buyPremiumUser = async (token: string, duration: string) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/buy-premium`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/premium/buy`, {
         method: 'POST',
         headers: {
           'Authorization': token,

@@ -17,21 +17,13 @@ import { RootState } from '@Redux/store';
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
-        poster: {
-            originalUrl: '',
-            mainUrl: '',
-        },
+        poster: { originalUrl: '', mainUrl: '' },
         russian: '',
         score: 0,
         id: 0,
         name: '',
         rating: '',
-        genres: [
-            {
-                russian: '',
-                name: ''
-            },
-        ],
+        genres: [{ russian: '', name: '' }],
     });
     const [topHitsAnime, setTopHitsAnime] = useState<Anime[]>([]);
     const [recomendationAnime, setRecomendationAnime] = useState<Anime[]>([]);
@@ -46,19 +38,22 @@ const HomeScreen = ({ navigation }) => {
             season: String(new Date().getFullYear())
         },
     });   
-    
+
+    useEffect(() => {
+        if (!genreId && userInterests.length > 0) {
+            setGenreId(userInterests[Math.floor(Math.random() * userInterests.length)].id);
+        }
+    }, [genreId, userInterests]);
+
     useEffect(() => {
         if (topHitsData) {
             setTopHitsAnime(topHitsData.animes);
-            if (selectAnime) {
+            if (!selectAnime || selectAnime.id === 0) {
                 setSelectAnime(topHitsData.animes[0]);
             }
         }
     }, [topHitsData]);
-    
-    if (!genreId) {
-        setGenreId(userInterests[Math.floor(Math.random() * userInterests.length)].id);
-    }
+
     const { data: recomendationData } = useQuery(GET_RECOMENDATIONANIME, {
         variables: { 
             limit: 6,
@@ -66,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
             genre: genreId
         },
     });   
-    
+
     useEffect(() => {
         if (recomendationData) {
             setRecomendationAnime(recomendationData.animes);

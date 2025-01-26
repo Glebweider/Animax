@@ -19,7 +19,8 @@
     "release": "Rilascio",
     "mylist": "La mia lista",
     "profile": "Profilo",
-    "localizationShowcase": "Mostra Localizzazione"
+    "localizationShowcase": "Mostra Localizzazione",
+    "сommunity": "Comunità"
   },
   "anime": {
     "nonedescription": "Nessuna descrizione",
@@ -55,6 +56,7 @@
     "Sun": "Dom"
   },
   "profile": {
+    "settings": "Impostazioni",
     "edit": "Modifica Profilo",
     "notification": "Notifica",
     "security": "Sicurezza",

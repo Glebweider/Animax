@@ -3,12 +3,13 @@ import { useAlert } from "@Components/AlertContext";
 interface iAuthSignIn {
   email: string;
   password: string;
+  pushToken: string;
 }
 
 const useAuthSignIn = () => {
   const { showAlert } = useAlert();
 
-  const authSignIn = async ({ email, password }: iAuthSignIn) => {
+  const authSignIn = async ({ email, password, pushToken }: iAuthSignIn) => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
@@ -18,6 +19,7 @@ const useAuthSignIn = () => {
         body: JSON.stringify({
           email,
           password,
+          pushToken,
         }),
       });
 

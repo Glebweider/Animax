@@ -22,7 +22,6 @@ interface IPremium {
 interface IUserState {
   uuid: string;
   email: string;
-  password: string;
   interests: IInterest[];
   premium: {
     premium: boolean;
@@ -42,7 +41,6 @@ interface IUserState {
 const initialState: IUserState = {
   uuid: '',
   email: '',
-  password: '',
   interests: [],
   premium: {
     premium: false,
@@ -65,7 +63,6 @@ const userSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<IUserState>) => {
       state.uuid = action.payload.uuid;
-      state.password = action.payload.password;
       state.email = action.payload.email;
       state.interests = action.payload.interests;
       state.premium = action.payload.premium;

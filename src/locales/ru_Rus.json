@@ -20,7 +20,8 @@
     "release": "Релизы",
     "mylist": "Мой список",
     "profile": "Профиль",
-    "localizationShowcase": "Демонстрация локализации"
+    "localizationShowcase": "Демонстрация локализации",
+    "сommunity": "Сообщество"
   },
   "anime": {
     "nonedescription": "Нет описания",
@@ -56,6 +57,7 @@
     "Sun": "Вос"
   },
   "profile": {
+    "settings": "Настройки",
     "edit": "Редактировать Профиль",
     "notification": "Уведомление",
     "security": "Безопасность",

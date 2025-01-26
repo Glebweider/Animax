@@ -42,7 +42,11 @@ const MyAnimeListButton = ({ anime }) => {
         let token = await getTokenFromStorage();
         if (isInMyList) {
             dispatch(removeAnime(anime.id));
-            await removeAnimeListUser(token, anime.id);
+            setIsInMyList(false);
+            const response = await removeAnimeListUser(token, anime.id);
+            if (!response) {
+                setIsInMyList(true);
+            }
         } else {
             dispatch(addAnime({
                 animeId: anime.id,
@@ -50,9 +54,12 @@ const MyAnimeListButton = ({ anime }) => {
                 score: anime.score,
                 rating: anime.rating
             }));
-            await addAnimeListUser(token, anime);
+            setIsInMyList(true);
+            const response = await addAnimeListUser(token, anime);
+            if (!response) {
+                setIsInMyList(false);
+            }
         }
-        setIsInMyList((prev) => !prev);
     };
 
     return (

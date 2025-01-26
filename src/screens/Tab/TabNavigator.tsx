@@ -1,6 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
+import * as NavigationBar from 'expo-navigation-bar';
+import * as ScreenOrientation from 'expo-screen-orientation';
+
+import { i18n } from "@Utils/localization";
 
 import HomeScreen from '@Tab/HomeScreen';
 import ReleaseScreen from '@Tab/ReleaseScreen';
@@ -11,20 +15,24 @@ import ProfileIcon from "@Icons/ProfileIcon";
 import HomeIcon from "@Icons/HomeIcon";
 import CalendarIcon from "@Icons/CalendarIcon";
 import MyListIcon from "@Icons/MyListIcon";
-import { i18n } from "@Utils/localization";
-import * as NavigationBar from 'expo-navigation-bar';
-import * as ScreenOrientation from 'expo-screen-orientation';
+import { RootState } from "@Redux/store";
+import { useSelector } from "react-redux";
+
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+    const currentUserStateId = useSelector((state: RootState) => state.userReducer.uuid);
     const BootStrap = async () => {
         ScreenOrientation.unlockAsync()
         await NavigationBar.setVisibilityAsync('hidden')
-    }
-    BootStrap()
+    };
+
+    BootStrap();
+
     return (
-        <Tab.Navigator screenOptions={{ 
+        <Tab.Navigator 
+        screenOptions={{ 
             headerShown: false,
             tabBarBackground: () => <BlurView 
                 intensity={4} 
@@ -34,23 +42,23 @@ const TabNavigator = () => {
                     borderTopLeftRadius: 22,
                     borderTopRightRadius: 22,
                     overflow: 'hidden',
-                    backgroundColor: '#222222b3'
+                    backgroundColor: '#222222b3',
+                    borderBottomWidth: 0,
                 }} />,
             tabBarStyle: {
                 position: 'absolute',
                 height: '9%',
                 borderTopWidth: 0,
-                backgroundColor: 'transparent'
-            },
-            tabBarIconStyle: {
-                marginTop: 15,
+                backgroundColor: 'transparent',
             },
             tabBarLabelStyle: {
-                elevation: 0,
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexDirection: 'column',
                 marginBottom: 13,
+            },
+            tabBarIconStyle: {
+                marginTop: 15,
             },
             tabBarActiveTintColor: '#06C149',
             tabBarInactiveTintColor: '#9E9E9E'
@@ -65,9 +73,9 @@ const TabNavigator = () => {
                     title: i18n.t('navigation.home'),
                 }} />
             <Tab.Screen 
-            name='Release'
-            component={ReleaseScreen}
-            options={{
+                name='Release'
+                component={ReleaseScreen}
+                options={{
                     tabBarIcon: ({ focused }) => (
                         <CalendarIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
                     ),
@@ -84,6 +92,7 @@ const TabNavigator = () => {
                 }}  />
             <Tab.Screen 
                 name='Profile'
+                initialParams={{ "userId": currentUserStateId }}
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -100,7 +109,7 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         elevation: 0,
-    },
+    }
 })
 
 export default TabNavigator;

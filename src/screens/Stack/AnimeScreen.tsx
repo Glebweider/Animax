@@ -1,8 +1,8 @@
 /* eslint-disable import/namespace */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList, AppStateStatus, AppState } from 'react-native';
 import { useApolloClient } from '@apollo/client';
 import { BallIndicator } from 'react-native-indicators';
 
@@ -33,12 +33,16 @@ import { useAlert } from '@Components/AlertContext';
 import useGetAnimeEpisodes from '@Utils/fetch/getAnimeEpisodes';
 import useRemoveAnimeListUser from '@Utils/fetch/removeAnimeListUser';
 import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
+import { useFocusEffect } from '@react-navigation/native';
+import useUpdateTimeSpent from '@Utils/fetch/updateTimeSpent';
 
 
 
 const AnimeScreen = ({ navigation, route }) => {
     const client = useApolloClient();
+    const { showAlert } = useAlert();
     const { animeId } = route.params;
+
     const [anime, setAnime] = useState<Anime>({
         id: 0,
         name: '',
@@ -76,11 +80,56 @@ const AnimeScreen = ({ navigation, route }) => {
     const [selectedEpisodeAnime, setSelectedEpisodeAnime] = useState<any>(null);
     const [isScroll, setScroll] = useState<boolean>(true);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
+
     const { addAnimeListUser } = useAddAnimeList();
-    const { showAlert } = useAlert();
     const { getAnimeEpisodes } = useGetAnimeEpisodes();
     const { removeAnimeListUser } = useRemoveAnimeListUser();
     const { getAnimeListUser } = useGetAnimeListUser();
+    const { updateTimeSpent } = useUpdateTimeSpent();
+    
+    const startTime = useRef<number | null>(null);
+    const endTime = useRef<number | null>(null);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            startTime.current = Date.now();
+        
+            return () => {
+                endTime.current = Date.now();
+            };
+        }, [])
+    );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let token = await getTokenFromStorage();
+
+                endTime.current = Date.now();
+                const timeSpent = ((endTime.current - (startTime.current || 0)));
+                startTime.current = Date.now();
+
+                console.log(timeSpent)
+                await updateTimeSpent(token, Number(timeSpent));
+            } catch (error) {
+                showAlert(error.message);
+            }
+        };
+
+        const intervalId = setInterval(fetchData, 6000);
+        const handleAppStateChange = (nextAppState: AppStateStatus) => {
+            if (nextAppState === 'inactive' || nextAppState === 'background') {
+                startTime.current = Date.now();
+            }
+        };
+        const subscription = AppState.addEventListener('change', handleAppStateChange);
+        
+        fetchData();
+        return () => {
+            subscription.remove();
+            clearInterval(intervalId)
+        };
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {

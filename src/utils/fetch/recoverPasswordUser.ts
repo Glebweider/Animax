@@ -5,7 +5,7 @@ const useRecoverPassword = () => {
 
   const recoverPasswordUser = async (email: string, code: string) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/recover-password`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/recover-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

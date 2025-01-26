@@ -25,6 +25,7 @@ import LanguageScreen from '@Stack/LanguageScreen';
 import ForgotPasswordResetPasswordScreen from '@Stack/ForgotPassword/ForgotPasswordResetPasswordScreen';
 import RecomendationsAnimeScreen from '@Stack/RecomendationsAnimeScreen';
 import NotificationScreen from '@Stack/NotificationScreen';
+import SettingsScreen from './SettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -56,6 +57,7 @@ const StackNavigator = () => {
             <Stack.Screen name="ForgotPasswordResetPasswordScreen" component={ForgotPasswordResetPasswordScreen}/>
             <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
             <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
+            <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         </Stack.Navigator>
     );
 };

@@ -29,7 +29,7 @@ const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
         ],
     };
 
-    setTimeout(() => onClose(), 5000)
+    setTimeout(() => onClose(), 3000)
 
     return (
         <View style={styles.overlay}>

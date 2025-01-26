@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import 'notification-config';
 import { AlertProvider } from '@Components/AlertContext';
 
 const client = new ApolloClient({

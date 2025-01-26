@@ -12,23 +12,21 @@ const useAddAnimeList = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          anime: {
-            animeId: anime.id,
-            poster: {
-              originalUrl: anime.poster?.originalUrl || `https://shikimori.me${anime.image.original}`,
-            },
-            score: Number(anime.score),
-            rating: anime.rating,
+          animeId: anime.id,
+          poster: {
+            originalUrl: anime.poster?.originalUrl || `https://shikimori.me${anime.image.original}`,
           },
+          score: Number(anime.score),
+          rating: anime.rating,
         }),
       });
 
       if (response.ok) {
-        return;
+        return true;
       } else {
         const errorData = await response.json();
         showAlert(errorData.message);
-        return;
+        return false;
       }
     } catch (error) {
       showAlert(error.message);

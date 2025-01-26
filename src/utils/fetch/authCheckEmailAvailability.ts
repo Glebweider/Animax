@@ -5,7 +5,7 @@ const useCheckEmailAvailability = () => {
 
   const checkEmailAvailability = async (email: string) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/check-email`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/valid-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

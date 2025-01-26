@@ -8,24 +8,21 @@ import BackButton from '@Components/BackButton';
 
 //Icons 
 import EmailIcon from '@Icons/EmailIcon';
-import PasswordIcon from '@Icons/PasswordIcon';
-import EyeOnIcon from '@Icons/EyeOnIcon';
-import EyeOffIcon from '@Icons/EyeOffIcon';
 
 //Utils
 import facebookAuth from '@Utils/facebookAuth';
 import googleAuth from '@Utils/googleAuth';
 import appleAuth from '@Utils/appleAuth';
-import authSignIn from '@Utils/fetch/authUserSignIn';
 import { isEmail } from '@Utils/validator';
 import { saveTokenToStorage } from '@Utils/token';
-import authUserInToken from '@Utils/fetch/authUserInToken';
 
 //Redux
 import { setUser } from '@Redux/reducers/userReducer';
 import PasswordSection from '@Components/PasswordSection';
 import useAuthUserInToken from '@Utils/fetch/authUserInToken';
 import useAuthSignIn from '@Utils/fetch/authUserSignIn';
+
+import { registerForPushNotificationsAsync } from 'notification-config';
 
 const AuthSignInScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -76,7 +73,12 @@ const AuthSignInScreen = ({ navigation }) => {
     }, [textEmail, textPassword]);
 
     const authorization = async () => {
-        const response = await authSignIn({email: textEmail, password: textPassword});
+        const pushToken = await registerForPushNotificationsAsync();
+        const response = await authSignIn({
+            email: textEmail, 
+            password: textPassword,
+            pushToken: pushToken
+        });
         if (response) {
             saveTokenToStorage(response);
             const user = await authUserInToken(response);

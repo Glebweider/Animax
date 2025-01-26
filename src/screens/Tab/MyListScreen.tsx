@@ -8,8 +8,8 @@ import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
 import { useAlert } from '@Components/AlertContext';
 
 const MyListScreen = ({ navigation }) => {
-    const [userAnimeList, setUserAnimeList] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const isFocused = useIsFocused();
     const { getAnimeListUser } = useGetAnimeListUser();
     const { showAlert } = useAlert();
@@ -48,7 +48,7 @@ const MyListScreen = ({ navigation }) => {
                 {isLoading ? (
                     <BallIndicator color='#06C149' size={80} animationDuration={700} />
                 ) : (
-                    userAnimeList.length >= 1 ?
+                    userAnimeList?.length >= 1 ?
                     <FlatList
                         data={userAnimeList}
                         keyExtractor={(item) => item.animeId.toString()}

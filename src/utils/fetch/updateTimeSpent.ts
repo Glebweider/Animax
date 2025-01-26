@@ -1,17 +1,18 @@
 import { useAlert } from "@Components/AlertContext";
 
-const useRemoveAnimeListUser = () => {
+const useUpdateTimeSpent = () => {
   const { showAlert } = useAlert();
 
-  const removeAnimeListUser = async (token: string, animeId: string) => {
+  const updateTimeSpent = async (token: string, timeSpent: number) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/remove-animelist`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/update-time-spent`, {
         method: 'POST',
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
+          'X-Request-Source': 'app',
         },
-        body: JSON.stringify({ animeId }),
+      body: JSON.stringify({ "timeSpent": timeSpent })
       });
 
       if (response.ok) {
@@ -23,10 +24,11 @@ const useRemoveAnimeListUser = () => {
       }
     } catch (error) {
       showAlert(error.message);
+      return false;
     }
   };
 
-  return { removeAnimeListUser };
+  return { updateTimeSpent };
 };
 
-export default useRemoveAnimeListUser;
+export default useUpdateTimeSpent;

@@ -73,17 +73,17 @@ const AnimeSearchScreen = ({ navigation }) => {
             onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
             key={item.id}
             style={styles.animeContainerAnimeTop}>
-        <View style={styles.scoreContainer}>
-            <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
-        </View>
-        {(item.rating === 'r_plus' || item.rating === 'rx') && (
-            <View style={styles.ratingContainer}>
-                <Text style={styles.ratingText}>18+</Text>
+            <View style={styles.scoreContainer}>
+                <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
             </View>
-        )}
-        <Image
-            source={{ uri: item.poster.originalUrl || item.poster.mainUrl }}
-            style={styles.animeImageAnimeTop}/>
+            {(item.rating === 'r_plus' || item.rating === 'rx') && (
+                <View style={styles.ratingContainer}>
+                    <Text style={styles.ratingText}>18+</Text>
+                </View>
+            )}
+            <Image
+                source={{ uri: item.poster.originalUrl || item.poster.mainUrl }}
+                style={styles.animeImageAnimeTop}/>
         </TouchableOpacity>
     ));
 
@@ -126,7 +126,7 @@ const AnimeSearchScreen = ({ navigation }) => {
                 </ScrollView>
             </View>
         )}
-        <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
         {!errorSearch ? (
             animes.length >= 1 && (
                 <FlatList

@@ -19,7 +19,8 @@
     "release": "Релізи",
     "mylist": "Мій список",
     "profile": "Профіль",
-    "localizationShowcase": "Демонстрація локалізації"
+    "localizationShowcase": "Демонстрація локалізації",
+    "сommunity": "Спільнота"
   },
   "anime": {
     "nonedescription": "Немає опису",
@@ -55,6 +56,7 @@
     "Sun": "Нед"
   },
   "profile": {
+    "settings": "Налаштування",
     "edit": "Редагувати Профіль",
     "notification": "Сповіщення",
     "security": "Безпека",

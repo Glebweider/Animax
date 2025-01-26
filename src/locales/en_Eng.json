@@ -19,7 +19,8 @@
     "release": "Release",
     "mylist": "MyList",
     "profile": "Profile",
-    "localizationShowcase": "Localization Showcase"
+    "localizationShowcase": "Localization Showcase",
+    "сommunity": "Community"
   },
   "anime": {
     "nonedescription": "None description",
@@ -55,6 +56,7 @@
     "Sun": "Sun"
   },
   "profile": {
+    "settings": "Settings",
     "edit": "Edit Profile",
     "notification": "Notification",
     "security": "Security",
