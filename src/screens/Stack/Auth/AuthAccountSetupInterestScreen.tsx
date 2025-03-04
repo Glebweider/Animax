@@ -34,16 +34,16 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
     }, [InterestsState.interests]);
 
     const renderItems = () =>
-    genresAnime.map((data) => (
-        <TouchableOpacity
-            key={data.id}
-            onPress={() => dispatch(addInterest({ id: data.id, text: data.russian }))}
-            style={InterestsState.interests.some((i) => i.id === data.id)
-            ? styles.interestContainerEnabled
-            : styles.interestContainerDisabled}>
-            <Text style={styles.interestText}>{data.russian}</Text>
-        </TouchableOpacity>
-    ));
+        genresAnime.map((data) => (
+            <TouchableOpacity
+                key={data.id}
+                onPress={() => dispatch(addInterest({ id: data.id, text: data.russian }))}
+                style={InterestsState.interests.some((i) => i.id === data.id)
+                ? styles.interestContainerEnabled
+                : styles.interestContainerDisabled}>
+                <Text style={styles.interestText}>{data.russian}</Text>
+            </TouchableOpacity>
+        ));
 
     return (
         <View style={styles.container}>
@@ -62,7 +62,7 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
             </ScrollView>
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity 
-                    onPress={() => navigation.navigate('AuthFGA')} 
+                    onPress={() => navigation.navigate('AuthAccountSetupData')} 
                     style={styles.buttonSkip}>
                     <Text style={styles.buttonTitle}>Skip</Text>
                 </TouchableOpacity>

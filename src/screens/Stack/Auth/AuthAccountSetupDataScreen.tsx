@@ -54,13 +54,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
 
-    const requestPermissions = async () => {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-            showAlert('Permission denied!');
-        }
-    };
-
     useEffect(() => {
         if (textFullName.length >= 1) {
             if (textFullName.length < 3) {
@@ -110,7 +103,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         }
     }, [textFullName, textNickname, textPhoneNumber, avatar]);
 
-    requestPermissions();
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,

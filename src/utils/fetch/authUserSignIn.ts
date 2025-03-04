@@ -1,4 +1,6 @@
 import { useAlert } from "@Components/AlertContext";
+import { Platform } from "react-native";
+// import { getSystemVersion, getDeviceName, getUniqueId } from 'react-native-device-info';
 
 interface iAuthSignIn {
   email: string;
@@ -15,6 +17,10 @@ const useAuthSignIn = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-Device-Platform': Platform.OS,
+          // 'X-Device-Version': getSystemVersion(),
+          // 'X-Device-Name': await getDeviceName(),
+          // 'X-Device-UniqId': await getUniqueId()
         },
         body: JSON.stringify({
           email,

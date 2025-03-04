@@ -10,9 +10,9 @@ import BackButton from '@Components/BackButton';
 import EmailIcon from '@Icons/EmailIcon';
 
 //Utils
-import facebookAuth from '@Utils/facebookAuth';
-import googleAuth from '@Utils/googleAuth';
-import appleAuth from '@Utils/appleAuth';
+import facebookAuth from '@Utils/auth/facebookAuth';
+import googleAuth from '@Utils/auth/googleAuth';
+import appleAuth from '@Utils/auth/appleAuth';
 import { isEmail } from '@Utils/validator';
 import { saveTokenToStorage } from '@Utils/token';
 

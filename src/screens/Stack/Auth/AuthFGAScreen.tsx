@@ -6,9 +6,9 @@ import { StatusBar } from 'expo-status-bar';
 import BackButton from '@Components/BackButton';
 
 //Utils
-import facebookAuth from '@Utils/facebookAuth';
-import googleAuth from '@Utils/googleAuth';
-import appleAuth from '@Utils/appleAuth';
+import facebookAuth from '@Utils/auth/facebookAuth';
+import googleAuth from '@Utils/auth/googleAuth';
+import appleAuth from '@Utils/auth/appleAuth';
 
 const AuthFGAScreen = ({ navigation }) => {
 

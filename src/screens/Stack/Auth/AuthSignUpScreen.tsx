@@ -10,9 +10,9 @@ import PasswordSection from '@Components/PasswordSection';
 import EmailIcon from '@Icons/EmailIcon';
 
 //Utils
-import facebookAuth from '@Utils/facebookAuth';
-import googleAuth from '@Utils/googleAuth';
-import appleAuth from '@Utils/appleAuth';
+import facebookAuth from '@Utils/auth/facebookAuth';
+import googleAuth from '@Utils/auth/googleAuth';
+import appleAuth from '@Utils/auth/appleAuth';
 
 //Redux
 import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';

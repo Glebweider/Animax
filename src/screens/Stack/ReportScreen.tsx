@@ -1,0 +1,137 @@
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { socket } from '@Utils/socket';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { IMessage, ITicket } from './HelpCenterScreen';
+import BackButton from '@Components/BackButton';
+import encryptor from '@Utils/encryptor';
+import decryptor from '@Utils/decryptor';
+import { useSelector } from 'react-redux';
+import { RootState } from '@Redux/store';
+
+
+type TicketDetailsRouteProp = RouteProp<{ TicketDetails: { ticket: ITicket } }, 'TicketDetails'>;
+
+const ReportScreen = ({ navigation }) => {
+    const route = useRoute<TicketDetailsRouteProp>();
+    const { ticket } = route.params;
+
+    const [messages, setMessages] = useState<IMessage[]>(ticket.messages);
+    const [newMessage, setNewMessage] = useState<string>('');
+    const userState = useSelector((state: RootState) => state.userReducer);
+
+    useEffect(() => {
+        socket.emit('connectToTicket', ticket.id);
+
+        socket.on('exception', (error) => {
+            alert(error.message);
+        });
+
+        socket.on('newMessage', (data: IMessage) => {
+            setMessages((prevMessages) => [...prevMessages, data]);
+        });
+
+        return () => {
+            socket.off('exception');
+            socket.off('newMessage');
+        };
+    }, []);
+
+    const sendMessage = () => {
+        if (newMessage.trim()) {
+            socket.emit('sendMessage', { message: encryptor(newMessage), ticketId: ticket.id });
+            setNewMessage('');
+        }
+    };
+
+
+    const renderMessage = ({ item }: { item: IMessage }) => (
+        <View
+            style={[
+                styles.messageContainer,
+                item.senderId === userState.uuid ? styles.userMessage : styles.adminMessage,
+            ]}>
+            <Text style={styles.messageText}>{decryptor(item.text)}</Text>
+        </View>
+    );
+
+    return (
+        <View style={styles.container}>
+            <BackButton navigation={navigation} text={`Chat ${ticket.reason}`} />
+            <FlatList
+                data={messages}
+                renderItem={renderMessage}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={styles.messagesContainer}/>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    value={newMessage}
+                    onChangeText={setNewMessage}
+                    placeholderTextColor="#9E9E9E"
+                    placeholder="Type a message..."
+                    style={styles.input}/>
+                <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+                    <Text style={styles.sendText}>Send</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#181A20',
+    },
+    messagesContainer: {
+        width: '110%',
+        flexGrow: 1,
+        marginTop: 10,
+    },
+    messageContainer: {
+        maxWidth: '80%',
+        marginVertical: 8,
+        padding: 10,
+        borderRadius: 10,
+        backgroundColor: '#333',
+    },
+    userMessage: {
+        alignSelf: 'flex-end',
+        backgroundColor: '#333333',
+    },
+    adminMessage: {
+        alignSelf: 'flex-start',
+        backgroundColor: '#2B2A2A',
+    },
+    messageText: {
+        color: '#FFF',
+        fontFamily: 'Outfit',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        marginBottom: 10
+    },
+    input: {
+        flex: 1,
+        padding: 14,
+        borderRadius: 20,
+        backgroundColor: '#1F222A',
+        color: '#fff',
+        fontFamily: 'Outfit',
+    },
+    sendButton: {
+        marginLeft: 10,
+        backgroundColor: '#4CAF50',
+        padding: 14,
+        borderRadius: 20,
+    },
+    sendText: {
+        color: '#FFF',
+        fontFamily: 'Outfit',
+    },
+});
+    
+export default ReportScreen;
