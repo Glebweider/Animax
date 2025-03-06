@@ -13,11 +13,10 @@ import AnimeSearchScreen from '@Stack/AnimeSearchScreen';
 import AnimeSortScreen from '@Stack/AnimeSortScreen';
 import TopHitsAnimeScreen from '@Stack/TopHitsAnimeScreen';
 import EditDataScreen from '@Stack/EditDataScreen';
-import SubcribeScreen from '@Stack/SubcribeScreen';
-import PaymentScreen from '@Stack/PaymentScreen';
-import AddNewCardScreen from '@Stack/AddNewCardScreen';
+import SubcribeScreen from '@Stack/Premium/SubcribeScreen';
+import PaymentScreen from '@Stack/Premium/PaymentScreen';
 import PrivacyPolicyScreen from '@Stack/PrivacyPolicyScreen';
-import ReviewSummaryScreen from '@Stack/ReviewSummaryScreen';
+import ReviewSummaryScreen from '@Stack/Premium/ReviewSummaryScreen';
 import ForgotPasswordMethodsScreen from '@Stack/ForgotPassword/ForgotPasswordMethodsScreen';
 import ForgotPasswordCodeVerifyScreen from '@Stack/ForgotPassword/ForgotPasswordCodeVerifyScreen';
 import HelpCenterScreen from '@Stack/HelpCenterScreen';
@@ -50,7 +49,6 @@ const StackNavigator = () => {
             <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
             <Stack.Screen name="SubcribeScreen" component={SubcribeScreen}/>
             <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
-            <Stack.Screen name="AddNewCardScreen" component={AddNewCardScreen}/>
             <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen}/>
             <Stack.Screen name="ReviewSummaryScreen" component={ReviewSummaryScreen}/>
             <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen}/>

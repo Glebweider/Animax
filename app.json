@@ -7,8 +7,14 @@
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android", "web"],
-    "assetBundlePatterns": ["**/*"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "updates": {
       "fallbackToCacheTimeout": 10000,
       "checkAutomatically": "ON_LOAD",
@@ -19,7 +25,10 @@
       "supportsTablet": true,
       "buildNumber": "1.0.6",
       "infoPlist": {
-        "UIBackgroundModes": ["fetch", "remote-notification"],
+        "UIBackgroundModes": [
+          "fetch",
+          "remote-notification"
+        ],
         "UIRequiresFullScreen": true
       },
       "icon": "./assets/icon.png"
@@ -31,7 +40,10 @@
         "backgroundColor": "#181A20"
       },
       "versionCode": 1,
-      "permissions": ["RECEIVE_BOOT_COMPLETED", "SCHEDULE_EXACT_ALARM"]
+      "permissions": [
+        "RECEIVE_BOOT_COMPLETED",
+        "SCHEDULE_EXACT_ALARM"
+      ]
     },
     "web": {
       "favicon": "./assets/logo.png"
@@ -58,7 +70,9 @@
           "icon": "./assets/notification_icon.png",
           "color": "#181A20",
           "defaultChannel": "default",
-          "sounds": ["./assets/notfication_sound.wav"]
+          "sounds": [
+            "./assets/notfication_sound.wav"
+          ]
         }
       ],
       [
@@ -66,7 +80,9 @@
         {
           "username": "kurumi12"
         }
-      ]
+      ],
+      "expo-font",
+      "expo-video"
     ],
     "splash": {
       "image": "./assets/splash.png",

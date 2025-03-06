@@ -69,9 +69,9 @@ const ContactUs = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        width: '100%',
+        height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
     },
     contactContainer: {
         width: '92%',

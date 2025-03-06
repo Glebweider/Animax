@@ -104,17 +104,17 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+        justifyContent: 'space-between'
     },
     content: {
         width: '90%',
-        height: '77%'
     },
     paymentMethod: {
         width: '100%',
         height: 80,
         backgroundColor: '#1F222A',
         borderRadius: 20,
-        marginTop: 30,
+        marginTop: 25,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row'
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1F222A',
         borderRadius: 30,
         height: 173,
-        marginTop: 30,
+        marginTop: 20,
     },
     dataContent: {
         width: '86%',
@@ -219,7 +219,6 @@ const styles = StyleSheet.create({
         width: '100%',
         borderColor: '#06C149',
         borderWidth: 2,
-        marginTop: 25,
         borderRadius: 30
     },
     cardHeader: {
@@ -277,6 +276,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.24,
         shadowRadius: 4,
         elevation: 8, 
+        marginBottom: 20,
     },
     buttonContinueText: {
         color: '#fff',

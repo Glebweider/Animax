@@ -1,5 +1,5 @@
-import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Button, Image } from 'react-native';
-import { SetStateAction, useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Image } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
 
 import BackButton from '@Components/BackButton';
 import ContactUs from '@Components/ContactUs';
@@ -58,19 +58,19 @@ const HelpCenterScreen = ({ navigation }) => {
         }
         fetchData();
 
-        socket.on('ticketCreated', (ticket) => {
+        socket?.on('ticketCreated', (ticket) => {
             setTickets((prevTickets) => [...prevTickets, ticket]);
         });
 
         return () => {
-            socket.off('ticketCreated');
+            socket?.off('ticketCreated');
         };
     }, []);
     
     
     useEffect(() => {
         const animation = Animated.timing(moveValue, {
-            toValue: moveLeft ? 0 : 190,
+            toValue: moveLeft ? 0 : 176,
             duration: 200,
             easing: Easing.linear,
             useNativeDriver: false,

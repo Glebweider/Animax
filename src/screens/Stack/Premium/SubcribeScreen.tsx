@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import BackButton from '@Components/BackButton';
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
@@ -7,7 +7,7 @@ import { i18n } from '@Utils/localization';
 const SubcribeScreen = ({ navigation }: any) => {
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
             <BackButton navigation={navigation} text="" />
             <View style={styles.headerContainer}>
                 <Text style={styles.headerTitle}>{i18n.t('premium.subcribe')}</Text>
@@ -77,13 +77,14 @@ const SubcribeScreen = ({ navigation }: any) => {
                     </View>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
+        paddingBottom: 30,
         alignItems: 'center',
         backgroundColor: '#181A20',
     },
