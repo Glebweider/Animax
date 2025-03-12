@@ -29,7 +29,6 @@ const TabNavigator = () => {
     };
 
     BootStrap();
-
     return (
         <Tab.Navigator 
         screenOptions={{ 

@@ -6,8 +6,9 @@
   "play": "Дивитись",
   "mylisttext": "Мій список",
   "helpCenter": {
-    "faq": "Поширені запитання",
-    "contactUs": "Зв'язатися з нами"
+    "support": "Тех. Підтримка",
+    "contactUs": "Зв'язатися з нами",
+    "newTicket": "Створити новий запит"
   },
   "configModal": {
     "congratulations": "Вітаємо!",
@@ -117,8 +118,8 @@
   "update": "Оновити",
   "notification": {
     "generalNotification": "Загальне сповіщення",
-    "newArrival": "Новий прибуток",
-    "newServicesAvailable": "Доступні нові послуги",
+    "newEpisodes": "Нові серії аніме",
+    "newReleases": "Нові аніме",
     "appUpdates": "Оновлення додатку",
     "subscription": "Підписка"
   }

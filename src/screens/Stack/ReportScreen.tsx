@@ -2,12 +2,13 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { socket } from '@Utils/socket';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
-import { IMessage, ITicket } from './HelpCenterScreen';
+import { IMessage, ITicket } from './Settings/HelpCenterScreen';
 import BackButton from '@Components/BackButton';
 import encryptor from '@Utils/encryptor';
 import decryptor from '@Utils/decryptor';
 import { useSelector } from 'react-redux';
 import { RootState } from '@Redux/store';
+import sendNotification from '@Utils/notification';
 
 
 type TicketDetailsRouteProp = RouteProp<{ TicketDetails: { ticket: ITicket } }, 'TicketDetails'>;
@@ -29,6 +30,9 @@ const ReportScreen = ({ navigation }) => {
 
         socket.on('newMessage', (data: IMessage) => {
             setMessages((prevMessages) => [...prevMessages, data]);
+            if (data.senderId != userState.uuid) {
+                sendNotification(ticket.adminNickname, decryptor(data.text));
+            }
         });
 
         return () => {
@@ -62,7 +66,8 @@ const ReportScreen = ({ navigation }) => {
                 data={messages}
                 renderItem={renderMessage}
                 keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={styles.messagesContainer}/>
+                contentContainerStyle={styles.messagesContainer}
+                style={{ width: '94%' }}/>
             <View style={styles.inputContainer}>
                 <TextInput
                     value={newMessage}
@@ -85,9 +90,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20',
     },
     messagesContainer: {
-        width: '110%',
         flexGrow: 1,
-        marginTop: 10,
     },
     messageContainer: {
         maxWidth: '80%',
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         padding: 14,
-        borderRadius: 20,
+        borderRadius: 15,
         backgroundColor: '#1F222A',
         color: '#fff',
         fontFamily: 'Outfit',
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         backgroundColor: '#4CAF50',
         padding: 14,
-        borderRadius: 20,
+        borderRadius: 15,
     },
     sendText: {
         color: '#FFF',

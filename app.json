@@ -7,6 +7,7 @@
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "platforms": [
       "ios",
       "android",

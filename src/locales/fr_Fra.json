@@ -6,8 +6,9 @@
   "play": "Lire",
   "mylisttext": "ma liste",
   "helpCenter": {
-    "faq": "FAQ",
-    "contactUs": "Contactez-nous"
+    "support": "Soutien",
+    "contactUs": "Contactez-nous",
+    "newTicket": "Créer un nouveau ticket"
   },
   "configModal": {
     "congratulations": "Félicitations !",
@@ -117,8 +118,8 @@
   "update": "Mettre à jour",
   "notification": {
     "generalNotification": "Notification générale",
-    "newArrival": "Nouveaux arrivages",
-    "newServicesAvailable": "Nouveaux services disponibles",
+    "newEpisodes": "Nouveaux épisodes d'anime",
+    "newReleases": "Nouvelles sorties d'anime",
     "appUpdates": "Mises à jour de l'application",
     "subscription": "Abonnement"
   }

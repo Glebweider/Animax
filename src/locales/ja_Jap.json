@@ -6,8 +6,9 @@
   "play": "再生",
   "mylisttext": "マイリスト",
   "helpCenter": {
-    "faq": "よくある質問",
-    "contactUs": "お問い合わせ"
+    "support": "それらの。サポート",
+    "contactUs": "お問い合わせ",
+    "newTicket": "新しいチケットを作成"
   },
   "configModal": {
     "congratulations": "おめでとうございます！",
@@ -117,8 +118,8 @@
   "update": "更新",
   "notification": {
     "generalNotification": "一般通知",
-    "newArrival": "新着",
-    "newServicesAvailable": "新しいサービスが利用可能",
+    "newEpisodes": "新しいアニメのエピソード",
+    "newReleases": "新作アニメ",
     "appUpdates": "アプリの更新",
     "subscription": "サブスクリプション"
   }

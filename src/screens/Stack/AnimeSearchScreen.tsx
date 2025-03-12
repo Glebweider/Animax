@@ -126,7 +126,7 @@ const AnimeSearchScreen = ({ navigation }) => {
                 </ScrollView>
             </View>
         )}
-        <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+        <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
         {!errorSearch ? (
             animes.length >= 1 && (
                 <FlatList

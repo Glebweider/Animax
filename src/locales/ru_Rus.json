@@ -7,8 +7,9 @@
   "mylisttext": "Мой список",
   "congratulations": "Поздравляем!",
   "helpCenter": {
-    "faq": "Часто задаваемые вопросы",
-    "contactUs": "Связаться с нами"
+    "support": "Тех. Поддержка",
+    "contactUs": "Связаться с нами",
+    "newTicket": "Создать новый тикет"
   },
   "configModal": {
     "congratulations": "Поздравляем!",
@@ -118,8 +119,8 @@
   "update": "Обновить",
   "notification": {
     "generalNotification": "Общее уведомление",
-    "newArrival": "Новое поступление",
-    "newServicesAvailable": "Доступны новые услуги",
+    "newEpisodes": "Новые серии аниме",
+    "newReleases": "Новые аниме",
     "appUpdates": "Обновления приложения",
     "subscription": "Подписка"
   }

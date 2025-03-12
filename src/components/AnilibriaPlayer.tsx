@@ -140,7 +140,12 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 	};
 	return (
 		<TouchableWithoutFeedback onPress={handleUserActivity}>
-			<View style={isFullScreen ? [StyleSheet.absoluteFillObject, styles.fullScreenContainer, { width: screenWidth, height: screenHeight }] : styles.container}>
+			<View style={
+				isFullScreen ? [
+					StyleSheet.absoluteFillObject, 
+					styles.fullScreenContainer, 
+					{ width: screenWidth, height: screenHeight }] : 
+					styles.container}>
 				<Video
 					ref={video}
 					style={isFullScreen ? [styles.fullScreenVideo, { width: screenWidth, height: screenHeight }] : styles.video}
@@ -299,43 +304,43 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-		width: '100%',
-		height: 250,
+  	container: {
+		width: '90%',
+		height: 210,
 		marginTop: 32,
 		borderRadius: 10,
-  },
-  progressBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  slider: {
-    width: '80%',
-    height: 8,
-  },
-  timeText: {
-    color: '#fff',
-    fontSize: 12,
+	},
+	progressBar: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	slider: {
+		width: '80%',
+		height: 8,
+	},
+	timeText: {
+		color: '#fff',
+		fontSize: 12,
 		fontFamily: 'Outfit',
-  },
-  controlButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 5,
-  },
-  video: {
-    width: '100%',
-    height: 250,
+	},
+	controlButton: {
+		paddingVertical: 10,
+		paddingHorizontal: 15,
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		borderRadius: 5,
+	},
+	video: {
+		width: '100%',
+		height: 210,
 		position: 'absolute',
 		borderRadius: 10,
-  },
-  controlsView: {
+	},
+	controlsView: {
 		width: '100%',
 		height: '100%',
 		justifyContent: 'flex-end',
-  },
+	},
 	sliderVolume: {
 		width: 160,
 	},
@@ -348,47 +353,47 @@ const styles = StyleSheet.create({
 	volumeViewMinimize: {
 		flexDirection: 'row',
 	},
-  controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+	controls: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		alignItems: 'flex-end',
 		width: '100%',
 		height: 55,
 		marginBottom: 13,
-  },
-  button: {
-    padding: 11,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  fullScreenContainer: {
+	},
+	button: {
+		padding: 11,
+		borderRadius: 5,
+	},
+	buttonText: {
+		color: '#fff',
+		fontSize: 16,
+	},
+	fullScreenContainer: {
 		zIndex: 1000,
-  },
-  fullScreenVideo: {
-    width: '100%',
-    height: '100%',
+	},
+	fullScreenVideo: {
+		width: '100%',
+		height: '100%',
 		position: 'absolute',
-  },
-  fullScreenButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Полупрозрачный фон для кнопки
-  },
-  fullScreenToggle: {
-    padding: 7,
-    borderRadius: 5,
-  },
-  stepButton: {
+	},
+	fullScreenButton: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+	},
+	fullScreenToggle: {
 		padding: 7,
-    borderRadius: 5,
-  },
-  rewindButton: {
+		borderRadius: 5,
+	},
+	stepButton: {
 		padding: 7,
-    borderRadius: 5,
-  }
+		borderRadius: 5,
+	},
+	rewindButton: {
+		padding: 7,
+		borderRadius: 5,
+	}
 });
   
 export default AnilibriaPlayer;

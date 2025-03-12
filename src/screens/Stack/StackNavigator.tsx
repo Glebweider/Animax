@@ -12,20 +12,21 @@ import AnimeScreen from '@Stack/AnimeScreen';
 import AnimeSearchScreen from '@Stack/AnimeSearchScreen';
 import AnimeSortScreen from '@Stack/AnimeSortScreen';
 import TopHitsAnimeScreen from '@Stack/TopHitsAnimeScreen';
-import EditDataScreen from '@Stack/EditDataScreen';
+import EditDataScreen from '@Stack/Settings/EditDataScreen';
 import SubcribeScreen from '@Stack/Premium/SubcribeScreen';
 import PaymentScreen from '@Stack/Premium/PaymentScreen';
-import PrivacyPolicyScreen from '@Stack/PrivacyPolicyScreen';
+import PrivacyPolicyScreen from '@Stack/Settings/PrivacyPolicyScreen';
 import ReviewSummaryScreen from '@Stack/Premium/ReviewSummaryScreen';
 import ForgotPasswordMethodsScreen from '@Stack/ForgotPassword/ForgotPasswordMethodsScreen';
 import ForgotPasswordCodeVerifyScreen from '@Stack/ForgotPassword/ForgotPasswordCodeVerifyScreen';
-import HelpCenterScreen from '@Stack/HelpCenterScreen';
-import LanguageScreen from '@Stack/LanguageScreen';
+import HelpCenterScreen from '@Stack/Settings/HelpCenterScreen';
+import LanguageScreen from '@Stack/Settings/LanguageScreen';
 import ForgotPasswordResetPasswordScreen from '@Stack/ForgotPassword/ForgotPasswordResetPasswordScreen';
 import RecomendationsAnimeScreen from '@Stack/RecomendationsAnimeScreen';
-import NotificationScreen from '@Stack/NotificationScreen';
-import SettingsScreen from '@Stack/SettingsScreen';
+import NotificationScreen from '@Stack/Settings/NotificationScreen';
+import SettingsScreen from '@Stack/Settings/SettingsScreen';
 import ReportScreen from '@Stack/ReportScreen';
+import SecurityScreen from '@Stack/Settings/SecurityScreen';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,7 @@ const StackNavigator = () => {
             <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
             <Stack.Screen name="ReportScreen" component={ReportScreen} />
+            <Stack.Screen name="SecurityScreen" component={SecurityScreen} />
         </Stack.Navigator>
     );
 };

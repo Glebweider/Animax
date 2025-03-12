@@ -109,7 +109,6 @@ const AnimeScreen = ({ navigation, route }) => {
                 const timeSpent = ((endTime.current - (startTime.current || 0)));
                 startTime.current = Date.now();
 
-                console.log(timeSpent)
                 await updateTimeSpent(token, Number(timeSpent));
             } catch (error) {
                 showAlert(error.message);
@@ -343,9 +342,9 @@ const AnimeScreen = ({ navigation, route }) => {
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 10}}/>
             </View>
-            <KodikPlayer shikimoriInfo={anime.name} />
+            {/* <KodikPlayer shikimoriInfo={anime.name} /> */}
             {selectedEpisodeAnime ?
-                <AnilibriaPlayer 
+                <AnilibriaPlayer
                     url={`https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}`}
                     setScroll={setScroll}/>
                 :
@@ -357,8 +356,7 @@ const AnimeScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     scrollContainer: {
-        width: '100%',
-        height: '118%',
+        flexGrow: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
     },
@@ -437,7 +435,7 @@ const styles = StyleSheet.create({
         marginTop: 18,
     },
     genresContainer: {
-        width: '71%',
+        flex: 1,
         height: 26,
         marginLeft: 10,
         alignItems: 'center',

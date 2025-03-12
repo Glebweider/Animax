@@ -88,8 +88,10 @@ const styles = StyleSheet.create({
     buttons: {
         backgroundColor: '#181A20',
         borderColor: '#35383F',
-        borderWidth: 1,
-        width: '100%',
+        borderTopWidth: 1,
+        borderRightWidth: 1,
+        borderLeftWidth: 1,
+        width: '102%',
         height: 117,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,

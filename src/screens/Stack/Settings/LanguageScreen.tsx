@@ -42,13 +42,13 @@ const LanguageScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexGrow: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
     },
     cautionLangText: {
-        color: '#fff',
-        fontSize: 16,
+        color: '#06C149',
+        fontSize: 18,
         fontFamily: 'Outfit',
         marginHorizontal: 20,
         marginBottom: 15,

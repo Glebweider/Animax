@@ -6,8 +6,9 @@
   "play": "Play",
   "mylisttext": "mylist",
   "helpCenter": {
-    "faq": "FAQ",
-    "contactUs": "Contact us"
+    "support": "Support",
+    "contactUs": "Contact us",
+    "newTicket": "Create new ticket"
   },
   "configModal": {
     "congratulations": "Congratulations!",
@@ -117,8 +118,8 @@
   "update": "Update",
   "notification": {
     "generalNotification": "General Notification",
-    "newArrival": "New Arrival",
-    "newServicesAvailable": "New Services Available",
+    "newEpisodes": "New Anime Episodes",
+    "newReleases": "New Anime Releases",
     "appUpdates": "App Updates",
     "subscription": "Subscription"
   }

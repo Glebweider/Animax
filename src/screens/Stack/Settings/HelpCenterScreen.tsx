@@ -32,7 +32,7 @@ export interface IMessage {
 
 
 const HelpCenterScreen = ({ navigation }) => {
-    const [selectMethodHelp, setSelectMethodHelp] = useState<string>('FAQ');
+    const [selectMethodHelp, setSelectMethodHelp] = useState<string>('SUPPORT');
     const [moveLeft, setMoveLeft] = useState<boolean>(true);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [tickets, setTickets] = useState<ITicket[]>([]);
@@ -120,11 +120,11 @@ const HelpCenterScreen = ({ navigation }) => {
                 <View style={styles.methodsTextContainer}>
                     <TouchableOpacity
                         onPress={() => {
-                            setSelectMethodHelp('FAQ');
+                            setSelectMethodHelp('SUPPORT');
                             setMoveLeft(true);
                         }}
                         style={styles.FAQContainer}>
-                        <Text style={selectMethodHelp == 'FAQ' ? styles.methodTextActive : styles.methodText}>{i18n.t('helpCenter.faq')}</Text>
+                        <Text style={selectMethodHelp == 'SUPPORT' ? styles.methodTextActive : styles.methodText}>{i18n.t('helpCenter.support')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -137,11 +137,7 @@ const HelpCenterScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.line}>
                     <Animated.View style={[styles.lineActive, {
-                        transform: [ 
-                            {
-                                translateX: moveValue,
-                            } 
-                        ],
+                        transform: [{ translateX: moveValue }],
                     }]} />
                 </View>
             </View>
@@ -155,7 +151,7 @@ const HelpCenterScreen = ({ navigation }) => {
                         />
                         {tickets.length < 2 && (
                             <TouchableOpacity style={styles.containerButton} onPress={() => setOpenModal(true)}>
-                                <Text style={styles.textButton}>Create new ticket</Text>
+                                <Text style={styles.textButton}>{i18n.t('helpCenter.newTicket')}</Text>
                             </TouchableOpacity>
                         )}
                     </>
@@ -174,8 +170,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20',
     },
     containerButton: {
-        width: '60%',
-        padding: 14,
+        width: '74%',
+        padding: 16,
         borderRadius: 15,
         backgroundColor: '#1F222A',
         justifyContent: 'center',
