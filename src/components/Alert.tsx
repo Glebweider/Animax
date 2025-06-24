@@ -12,7 +12,7 @@ const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
     useEffect(() => {
         Animated.timing(scaleAnim, {
             toValue: 1,
-            duration: 500,
+            duration: 400,
             easing: Easing.out(Easing.ease),
             useNativeDriver: false,
         }).start();
@@ -29,7 +29,7 @@ const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
         ],
     };
 
-    setTimeout(() => onClose(), 3000)
+    setTimeout(() => onClose(), 4500)
 
     return (
         <View style={styles.overlay}>

@@ -116,6 +116,7 @@
   "fullName": "Полное имя",
   "nickname": "Псевдоним",
   "phoneNumber": "Номер телефона",
+  "description": "Описание",
   "update": "Обновить",
   "notification": {
     "generalNotification": "Общее уведомление",

@@ -115,6 +115,7 @@
   "fullName": "Nome completo",
   "nickname": "Soprannome",
   "phoneNumber": "Numero di telefono",
+  "description": "Descrizione",
   "update": "Aggiornare",
   "notification": {
     "generalNotification": "Notifica generale",

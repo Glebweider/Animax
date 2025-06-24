@@ -5,7 +5,7 @@ const useGetCalendarAnime = () => {
 
   const getCalendarAnime = async () => {
     try {
-      const response = await fetch(`https://shikimori.me/api/calendar`);
+      const response = await fetch(`https://shikimori.one/api/calendar`);
       
       if (response.ok) {
         return await response.json();

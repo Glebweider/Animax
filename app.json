@@ -3,7 +3,7 @@
     "name": "Animax",
     "slug": "animax",
     "scheme": "myapp",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "orientation": "default",
     "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
@@ -24,7 +24,7 @@
     "ios": {
       "bundleIdentifier": "com.codewithbeto.Animax",
       "supportsTablet": true,
-      "buildNumber": "1.0.6",
+      "buildNumber": "1.1.0",
       "infoPlist": {
         "UIBackgroundModes": [
           "fetch",
@@ -70,10 +70,7 @@
         {
           "icon": "./assets/notification_icon.png",
           "color": "#181A20",
-          "defaultChannel": "default",
-          "sounds": [
-            "./assets/notfication_sound.wav"
-          ]
+          "defaultChannel": "default"
         }
       ],
       [
@@ -90,6 +87,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#181A20"
     },
-    "runtimeVersion": "1.0.6"
+    "runtimeVersion": "1.1.0"
   }
 }

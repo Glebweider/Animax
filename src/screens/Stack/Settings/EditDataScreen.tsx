@@ -22,274 +22,225 @@ import { useAlert } from '@Components/AlertContext';
 const EditDataScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const userState = useSelector((state: RootState) => state.userReducer);
-    const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-
-    const [textFullName, setTextFullName] = React.useState<string>(userState.profile.fullname);
-    const [textNickname, setTextNickname] = React.useState<string>(userState.profile.nickname);
-    const [textPhoneNumber, setTextPhoneNumber] = React.useState<string>(userState.preferences.phonenumber);
-    const [avatar, setAvatar] = React.useState<any>(null);
-
-    const [fullNameError, setFullNameError] = React.useState<string | null>(null);
-    const [nicknameError, setNicknameError] = React.useState<string | null>(null);
-    const [phoneNumberError, setPhoneNumberError] = React.useState<string | null>(null);
-
-    const [isFullNameVerify, setFullNameVerify] = React.useState<boolean>(false);
-    const [isNicknameVerify, setNicknameVerify] = React.useState<boolean>(false);
-    const [isPhoneNumberVerify, setPhoneNumberVerify] = React.useState<boolean>(false);
-
     const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
-
+    
+    const [form, setForm] = React.useState({
+        fullName: userState.profile.fullname,
+        nickname: userState.profile.nickname,
+        phoneNumber: userState.preferences.phonenumber,
+        description: userState.description,
+        avatar: null,
+    });
+    
+    const [errors, setErrors] = React.useState({
+        fullName: "",
+        nickname: "",
+        phoneNumber: "",
+    });
+    
+    const [isActiveButton, setActiveButton] = React.useState(true);
+    
     useEffect(() => {
-        if (textFullName.length >= 1) {
-            if (textFullName.length < 4) {
-                setFullNameError('Полное имя должно содержать не менее 4 символов');
-                setFullNameVerify(false);
-            } else {
-                setFullNameError(null);
-                setFullNameVerify(true);
-            }
-        } else {
-            setFullNameError(null);
-            setFullNameVerify(false);
+        const newErrors: any = {};
+        
+        if (form.fullName.length > 0 && form.fullName.length < 4) {
+            newErrors.fullName = 'Полное имя должно содержать не менее 4 символов';
+        }
+        if (form.nickname.length > 0 && form.nickname.length < 4) {
+            newErrors.nickname = 'Никнейм должен содержать не менее 4 символов';
+        }
+        if (form.phoneNumber.length > 0 && !isPhoneNumber(form.phoneNumber)) {
+            newErrors.phoneNumber = 'Введите действительный номер телефона';
+        }
+        if (form.description.length > 48) {
+            newErrors.description = `Описание не может содержать более 48 символов`;
         }
     
-        if (textNickname.length >= 3) {
-            if (textNickname.length < 4) {
-                setNicknameError('Никнейм должен содержать не менее 4 символов');
-                setNicknameVerify(false);
-            } else {
-                setNicknameError(null);
-                setNicknameVerify(true);
-            }            
-        } else {
-            setNicknameError(null);
-            setNicknameVerify(false);
-        }
-
-        if (textPhoneNumber.length >= 3) {
-            if (!isPhoneNumber(textPhoneNumber)) {
-                setPhoneNumberError('Введите действительный номер телефона');
-                setPhoneNumberVerify(false);
-            } else {
-                setPhoneNumberError(null);
-                setPhoneNumberVerify(true);
-            }            
-        } else {
-            setPhoneNumberError(null);
-            setPhoneNumberVerify(false);
-        }
+        setErrors(newErrors);
+        
+        setActiveButton(
+            Object.keys(newErrors).length > 0 || 
+            !form.fullName || 
+            !form.nickname || 
+            !form.phoneNumber || 
+            form.description.length === 0
+        );
+    }, [form]);
     
-        if (textFullName.length >= 6 && textNickname.length >= 4 && isPhoneNumber(textPhoneNumber) && avatar) {
-            if (isFullNameVerify && isNicknameVerify && isPhoneNumberVerify && avatar) {
-                setActiveButton(false);                
-            }
-        } else {
-            setActiveButton(true);
-        }
-    }, [textFullName, textNickname, textPhoneNumber, avatar]);
-
+    const handleChange = (key: string, value: string) => {
+        setForm((prev) => ({ ...prev, [key]: value }));
+    };
+    
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             quality: 1,
         });
-
+    
         if (!result.canceled) {
-            setAvatar(result.assets[0].uri);
+            handleChange("avatar", result.assets[0].uri);
         }
     };
-
+    
     const update = async () => {
-            const token = await getTokenFromStorage();
-            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`, avatar, {
-                fieldName: 'avatar',
-                httpMethod: 'POST',
-                parameters: {
-                    fullname: textFullName,
-                    nickname: textNickname,
-                    phonenumber: textPhoneNumber,
-                },
+        const token = await getTokenFromStorage();
+
+        let response;
+        if (form.avatar) {
+            response = await FileSystem.uploadAsync(
+                `${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`, 
+                form.avatar, 
+                {
+                    fieldName: 'avatar',
+                    httpMethod: 'POST',
+                    parameters: {
+                        fullname: form.fullName,
+                        nickname: form.nickname,
+                        phonenumber: form.phoneNumber,
+                        description: form.description,
+                    },
+                    headers: {
+                        Authorization: token
+                    },
+                    uploadType: FileSystem.FileSystemUploadType.MULTIPART
+                }
+            );
+        } else {
+            response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`, {
+                method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization: token
                 },
-                uploadType: FileSystem.FileSystemUploadType.MULTIPART
+                body: JSON.stringify({
+                    fullname: form.fullName,
+                    nickname: form.nickname,
+                    phonenumber: form.phoneNumber,
+                    description: form.description,
+                })
             });
-
-            if (response.status == 200) {
-                    const user = await authUserInToken(response.body);
-                    if (user) {
-                        saveTokenToStorage(response.body);
-                        dispatch(setUser(user));
-                        navigation.navigate('HomeScreen');
-                    }              
-            } else {
-                showAlert(response.body);
+    
+            response = {
+                status: response.status,
+                body: await response.text()
+            };
+        }
+    
+        if (response.status == 200) {
+            const user = await authUserInToken(response.body);
+            if (user) {
+                saveTokenToStorage(response.body);
+                dispatch(setUser(user));
+                navigation.navigate('HomeScreen');
             }
+        } else {
+            showAlert(response.body);
+        }
     };
-
+    
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text={i18n.t('profile.edit')} />
-            <View style={styles.avatarContainer}>
-                <TouchableOpacity 
-                    onPress={() => pickImage()}
-                    style={styles.containerImageAvatar}>
-                    <Image 
-                        source={{ uri: avatar && userState.profile.avatar}} 
-                        style={styles.imageAvatar} />   
-                </TouchableOpacity>
-                <View style={styles.pencilContainer}>
-                    <PencilIcon Color={"#181A20"} Width={20} Height={20} />
+            <View style={{ flex: 1, alignItems: 'center', width: '100%' }}>
+                <BackButton navigation={navigation} text={i18n.t('profile.edit')} />
+                <View style={styles.avatarContainer}>
+                    <TouchableOpacity onPress={pickImage} style={styles.containerImageAvatar}>
+                        <Image source={{ uri: form.avatar || userState.profile.avatar }} style={styles.imageAvatar} />
+                    </TouchableOpacity>
+                    <View style={styles.pencilContainer}>
+                        <PencilIcon Color={"#181A20"} Width={20} Height={20} />
+                    </View>
                 </View>
-            </View>
-            <View style={styles.inputsContainer}>
-                <View style={styles.fullNameSection}>
-                    <TextInput
-                        style={styles.fullNameInput}
-                        placeholderTextColor="#9E9E9E"
-                        placeholder={i18n.t('fullName')}
-                        value={textFullName}
-                        onChangeText={(newText) => setTextFullName(newText)}/>
+                <View style={styles.inputsContainer}>
+                    {['fullName', 'nickname', 'phoneNumber', 'description'].map((field) => (
+                        <>
+                            <View key={field} style={styles.inputSection}>
+                                <TextInput
+                                    style={styles.input}
+                                    placeholderTextColor="#9E9E9E"
+                                    placeholder={i18n.t(field)}
+                                    value={form[field]}
+                                    onChangeText={(text) => handleChange(field, text)}
+                                />
+                            </View>
+                            {errors[field] && <Text style={styles.errorText}>{errors[field]}</Text>}
+                        </>
+                    ))}
                 </View>
-                {fullNameError && <Text style={styles.fullNameError}>{fullNameError}</Text>}
-                <View style={styles.nicknameSection}>
-                    <TextInput
-                        style={styles.nicknameInput}
-                        placeholderTextColor="#9E9E9E"
-                        value={textNickname}
-                        placeholder={i18n.t('nickname')}
-                        onChangeText={(newText) => setTextNickname(newText)}/>
-                </View>
-                {nicknameError && <Text style={styles.nicknameError}>{nicknameError}</Text>}    
-                <View style={styles.phoneNumberSection}>
-                    <TextInput
-                        style={styles.phoneNumberInput}
-                        placeholderTextColor="#9E9E9E"
-                        placeholder={i18n.t('phoneNumber')}
-                        value={textPhoneNumber}
-                        keyboardType="phone-pad"
-                        onChangeText={(newText) => setTextPhoneNumber(newText)}/>
-                </View>
-                {phoneNumberError && <Text style={styles.phoneNumberError}>{phoneNumberError}</Text>}       
             </View>
             <TouchableOpacity 
-                onPress={() => update()} 
+                onPress={update} 
                 disabled={isActiveButton}
                 style={isActiveButton ? styles.continueButtonDisabled : styles.continueButtonEnabled}>
                 <Text style={styles.buttonTitle}>{i18n.t('update')}</Text>
             </TouchableOpacity>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+        justifyContent: 'space-between'
     },
     pencilContainer: {
         backgroundColor: "#06C149",
         borderRadius: 10,
         padding: 8,
-        left: 50,
-        bottom: 35,
+        position: 'absolute',
+        bottom: 10,
+        right: 10,
     },
     avatarContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 5,
+        marginTop: 30,
+        position: 'relative',
     },
     containerImageAvatar: {
         width: 160,
         height: 160,
         backgroundColor: '#464648',
-        borderRadius: 100,
+        borderRadius: 80,
         overflow: 'hidden',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     imageAvatar: {
         width: '100%',
         height: '100%',
+        resizeMode: 'cover',
     },
     inputsContainer: {
         width: '90%',
-        height: '35%'
+        marginTop: 10
     },
-    fullNameSection: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+    inputSection: {
+        marginTop: 15,
         width: '100%',
         height: 64,
         borderRadius: 20,
         backgroundColor: '#1F222A',
+        justifyContent: 'center',
     },
-    fullNameInput: {
+    input: {
         flex: 1,
         height: '100%',
         color: '#fff',
         fontFamily: 'Outfit',
         marginLeft: 20,
+        paddingVertical: 10,
     },
-    fullNameError: {
+    errorText: {
         marginTop: 5,
         color: 'red',
-        fontSize: 11,
+        fontSize: 10,
         fontFamily: 'Outfit',
         justifyContent: 'center',
-        textAlign: 'center'
-    },
-    nicknameSection: {
-        marginTop: 25,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: '#1F222A',
-    },
-    nicknameInput: {
-        flex: 1,
-        height: '100%',
-        color: '#fff',
-        fontFamily: 'Outfit',
-        marginLeft: 20,
-    },
-    nicknameError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    phoneNumberSection: {
-        marginTop: 25,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: '#1F222A',
-    },
-    phoneNumberInput: {
-        flex: 1,
-        height: '100%',
-        color: '#fff',
-        fontFamily: 'Outfit',
-        marginLeft: 20,
-    },
-    phoneNumberError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     titleContainer: {
         width: '90%',
@@ -303,6 +254,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0E9E42',
         width: '90%',
         height: 60,
+        marginBottom: 20,
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
@@ -310,6 +262,7 @@ const styles = StyleSheet.create({
     continueButtonEnabled: {
         backgroundColor: '#06C149',
         width: '90%',
+        marginBottom: 20,
         height: 60,
         borderRadius: 50,
         justifyContent: 'center',
@@ -318,7 +271,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
         shadowRadius: 4,
-        elevation: 8, 
+        elevation: 8,
     },
     buttonTitle: {
         color: '#fff',

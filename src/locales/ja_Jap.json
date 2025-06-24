@@ -115,6 +115,7 @@
   "fullName": "フルネーム",
   "nickname": "ニックネーム",
   "phoneNumber": "電話番号",
+  "description": "説明",
   "update": "更新",
   "notification": {
     "generalNotification": "一般通知",

@@ -24,6 +24,7 @@ export interface IUserProfile {
     };
     animestats: {
         counterWatchedAnime: number;
-        timeSpentWatchingAnime: number; // колво просмотреных аниме
+        timeSpentWatchingAnime: number;
+        achievementsCountWatchedAnime: number;
     }
 }

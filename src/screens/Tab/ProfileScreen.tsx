@@ -26,6 +26,7 @@ const ProfileScreen = ({ navigation, route }) => {
         animestats: {
             counterWatchedAnime: 0,
             timeSpentWatchingAnime: 0,
+            achievementsCountWatchedAnime: 0,
         }
     });
 
@@ -98,7 +99,7 @@ const ProfileScreen = ({ navigation, route }) => {
                 </View>
                 <View style={styles.statContainer}>
                     <Text style={styles.statTitleText}>Просмотренно</Text>
-                    <Text style={styles.statDataText}>6</Text>
+                    <Text style={styles.statDataText}>{isLoading && user.animestats.achievementsCountWatchedAnime}</Text>
                 </View>
                 <View style={styles.statContainer}>
                     <Text style={styles.statTitleText}>Время проведённое за просмотром</Text>
