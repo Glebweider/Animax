@@ -6,6 +6,7 @@ import { i18n } from '@Utils/localization';
 import { useIsFocused } from '@react-navigation/native';
 import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
 import { useAlert } from '@Components/AlertContext';
+import { StatusBar } from 'expo-status-bar';
 
 const MyListScreen = ({ navigation }) => {
     const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
@@ -38,6 +39,7 @@ const MyListScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar style='light' />
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
                     <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
@@ -46,7 +48,7 @@ const MyListScreen = ({ navigation }) => {
             </View>
             <View style={{width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
                 {isLoading ? (
-                    <BallIndicator color='#06C149' size={80} animationDuration={700} />
+                    <BallIndicator color='#06C149' size={80} animationDuration={700} />  
                 ) : (
                     userAnimeList?.length >= 1 ?
                     <FlatList

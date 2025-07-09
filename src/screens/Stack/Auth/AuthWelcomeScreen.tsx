@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from 'expo-status-bar';
 
 const AuthWelcomeScreen = ({ navigation }) => {
-
     return (
         <View style={styles.container}>
+            <StatusBar style='light' />
             <Image source={require('../../../../assets/background.png')} style={styles.backgroundImage} />
             <LinearGradient
                     colors={['rgba(24, 26, 32, 0)', 'rgba(24, 26, 32, 100)']}
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
         height: '30%',
         alignItems: 'center',
         zIndex: 2,
-        marginBottom: 25,
+        marginBottom: 10,
     },
     backgroundShadow: {
         position: 'absolute',
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     buttonTitle: {
         color: '#fff',
         fontSize: 15,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
     backgroundImage: {
         flex: 1,
@@ -84,14 +85,15 @@ const styles = StyleSheet.create({
     title: {
         color: '#fff',
         fontWeight: "500",
-        fontSize: 31,
+        fontSize: 36,
         fontFamily: 'Outfit',
+        textAlign: 'center'
     },
     description: {
         color: '#fff',
         fontSize: 13,
         fontFamily: 'Outfit',
-        textAlign: 'center',
+        textAlign: 'center'
     }
 });
     

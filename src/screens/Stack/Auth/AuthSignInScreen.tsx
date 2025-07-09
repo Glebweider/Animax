@@ -73,6 +73,8 @@ const AuthSignInScreen = ({ navigation }) => {
     }, [textEmail, textPassword]);
 
     const authorization = async () => {
+        setActiveButton(true);
+
         const pushToken = await registerForPushNotificationsAsync();
         const response = await authSignIn({
             email: textEmail, 
@@ -87,6 +89,7 @@ const AuthSignInScreen = ({ navigation }) => {
                 navigation.navigate('HomeScreen');
             }
         }
+        setActiveButton(false); 
     }
 
     return (

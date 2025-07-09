@@ -42,7 +42,7 @@ const NotificationScreen = ({ navigation }) => {
             if (data) {
                 setActiveButton(false);
                 dispatch(setAlertSettings(notificationSettings));
-                navigation.navigate('SettingsScreen')
+                navigation.navigate('SettingsScreen');
             }            
         } catch (error) {
             showAlert(`Ошибка: ${error.message}`);

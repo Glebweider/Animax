@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 20,
+        marginTop: 15,
     },
     signUpText: {
         color: '#fff',

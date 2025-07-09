@@ -80,6 +80,7 @@ const AnimeScreen = ({ navigation, route }) => {
     const [selectedEpisodeAnime, setSelectedEpisodeAnime] = useState<any>(null);
     const [isScroll, setScroll] = useState<boolean>(true);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
+    const [isPlaying, setPlaying] = useState<boolean>(false);
 
     const { addAnimeListUser } = useAddAnimeList();
     const { getAnimeEpisodes } = useGetAnimeEpisodes();
@@ -204,8 +205,11 @@ const AnimeScreen = ({ navigation, route }) => {
     };
 
     return (
-        <ScrollView scrollEnabled={isScroll} contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-            <StatusBar style='light'  />
+        <ScrollView 
+            scrollEnabled={isScroll} 
+            contentContainerStyle={[styles.scrollContainer, !isPlaying && { maxHeight: '115%' }]}
+            showsVerticalScrollIndicator={false}>
+            <StatusBar style='light' />
             <RatingModal 
                 visible={isOpenRatingWindow} 
                 setVisible={setOpenRatingWindow}
@@ -346,7 +350,10 @@ const AnimeScreen = ({ navigation, route }) => {
             {selectedEpisodeAnime ?
                 <AnilibriaPlayer
                     url={`https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}`}
-                    setScroll={setScroll}/>
+                    setPlaying={setPlaying}
+                    setScroll={setScroll}
+                    hasNextEpisode={true}
+                    onNextEpisode={() => {console.log(343343434)}}/>
                 :
                 <BallIndicator color="#13D458" size={70} animationDuration={700} />
             }
@@ -546,7 +553,7 @@ const styles = StyleSheet.create({
     },
     previewAnimeImage: {
         width: '100%',
-        height: '100%'
+        height: '100%',
     }
 });
     

@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BlurView } from "expo-blur";
 import { StyleSheet } from "react-native";
-import * as NavigationBar from 'expo-navigation-bar';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 import { i18n } from "@Utils/localization";
@@ -23,12 +22,8 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
     const currentUserStateId = useSelector((state: RootState) => state.userReducer.uuid);
-    const BootStrap = async () => {
-        ScreenOrientation.unlockAsync()
-        await NavigationBar.setVisibilityAsync('hidden')
-    };
+    ScreenOrientation.unlockAsync();
 
-    BootStrap();
     return (
         <Tab.Navigator 
         screenOptions={{ 

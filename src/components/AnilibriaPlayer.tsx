@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Dimensions, StatusBar, Text, TouchableWithoutFeedback } from 'react-native';
 import { Video, AVPlaybackStatusSuccess, AVPlaybackStatus, ResizeMode } from 'expo-av';
@@ -20,36 +19,41 @@ import AutoVolumeVideoPlayerIcon from '@Icons/videoplayer/AutoVolumeVideoPlayerI
 interface AnilibriaPlayerProps {
 	url: string;
 	setScroll: (bool: boolean) => void;
+	setPlaying: (bool: boolean) => void;
+	hasNextEpisode?: boolean;
+  	onNextEpisode?: () => void;
 }
 
-const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
+const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpisode }: AnilibriaPlayerProps) => {
 	const video = useRef<Video>(null);
-  	const [status, setStatus] = useState<AVPlaybackStatusSuccess | null>(null);
+	const [status, setStatus] = useState<AVPlaybackStatusSuccess | null>(null);
 	const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 	const [screenWidth, setScreenWidth] = useState(Dimensions.get('window').width);
 	const [screenHeight, setScreenHeight] = useState(Dimensions.get('window').height);
 	const [volume, setVolume] = useState(100);
 	const [controlsVisible, setControlsVisible] = useState<boolean>(true);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const isSeekingRef = useRef(false);
+	const wasPlayingBeforeSeek = useRef(false);
 
 	const isPlaying = (status: AVPlaybackStatus): status is AVPlaybackStatusSuccess => {
 		return (status as AVPlaybackStatusSuccess).isPlaying !== undefined;
 	};
-
+	
 	const hideControls = () => {
 		setControlsVisible(false);
 	};
 
 	const showControls = () => {
 		setControlsVisible(true);
-		if (timeoutRef.current) {
-			clearTimeout(timeoutRef.current);
-		}
+		if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		timeoutRef.current = setTimeout(hideControls, 5000);
 	};
 
 	const handleUserActivity = () => {
-		showControls();
+		if (!isSeekingRef.current) {
+			showControls();
+		}
 	};
 
 	useEffect(() => {
@@ -62,12 +66,8 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 		const subscription = Dimensions.addEventListener('change', updateScreenDimensions);
 
 		return () => {
-			if (subscription && subscription.remove) {
-				subscription.remove();
-			}
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
+			subscription?.remove();
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		};
 	}, []);
 
@@ -76,60 +76,45 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 		if (!isFullScreen) {
 			StatusBar.setHidden(true);
 			setScroll(false);
-			const lockOrientation = async () => {
-				await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-				await NavigationBar.setVisibilityAsync('hidden')
-			};
-			lockOrientation();
+			setPlaying(true);
+			ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+			NavigationBar.setVisibilityAsync('hidden');
 		} else {
 			StatusBar.setHidden(false);
 			setScroll(true);
+			setPlaying(false);
 			ScreenOrientation.unlockAsync();
-			const Nav = async () => {
-				NavigationBar.setVisibilityAsync('visible')
-				NavigationBar.setBackgroundColorAsync('black')
-			}
-			Nav()
-
+			NavigationBar.setVisibilityAsync('visible');
+			NavigationBar.setBackgroundColorAsync('black');
 		}
 	};
 
-	const handleSkipBackward = async () => {
+	const handleSkip = async (ms: number) => {
 		if (status && video.current) {
-			const newPosition = Math.max(status.positionMillis - 10000, 0);
+			const newPosition = Math.min(Math.max(status.positionMillis + ms, 0), status.durationMillis || 0);
 			await video.current.setPositionAsync(newPosition);
 		}
-	};
-
-	const handleSkipForward = async () => {
-		if (status && video.current) {
-			const newPosition = Math.min(status.positionMillis + 10000, status.durationMillis || 0);
-			await video.current.setPositionAsync(newPosition);
-		}
-	};
-
-	const handlePreviousEpisode = () => {
-		// Логика для перехода на предыдущий эпизод
-		console.log('Previous episode');
-	};
-
-	const handleNextEpisode = () => {
-		// Логика для перехода на следующий эпизд
-		console.log('Next episode');
 	};
 
 	const handleVolumeChange = (value: number) => {
-		const volumeValue = value / 100;
 		setVolume(value);
-		if (video.current) {
-			video.current.setVolumeAsync(volumeValue);
-		}
+		if (video.current) video.current.setVolumeAsync(value / 100);
 	};
 
-	const handleSeek = async (value: number) => {
-		if (status && video.current) {
-			const newPosition = value;
-			await video.current.setPositionAsync(newPosition);
+	const handleSeekStart = () => {
+		if (status?.isPlaying) {
+			wasPlayingBeforeSeek.current = true;
+			video.current?.pauseAsync();
+		}
+		isSeekingRef.current = true;
+	};
+
+	const handleSeekComplete = async (value: number) => {
+		if (video.current) await video.current.setPositionAsync(value);
+		isSeekingRef.current = false;
+		if (wasPlayingBeforeSeek.current) {
+			wasPlayingBeforeSeek.current = false;
+			video.current?.playAsync();
 		}
 	};
 
@@ -138,6 +123,11 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 		const seconds = Math.floor((millis % 60000) / 1000);
 		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 	};
+
+	const handleNextEpisodePress = () => {
+		if (hasNextEpisode && onNextEpisode) onNextEpisode();
+	};
+
 	return (
 		<TouchableWithoutFeedback onPress={handleUserActivity}>
 			<View style={
@@ -171,7 +161,8 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 								minimumValue={0}
 								maximumValue={status?.durationMillis || 1}
 								value={status?.positionMillis || 0}
-								onValueChange={handleSeek}
+								onSlidingStart={handleSeekStart}
+                				onSlidingComplete={handleSeekComplete}
 								minimumTrackTintColor="#06C149"
 								maximumTrackTintColor="#4F4F4F"
 								thumbTintColor="#06C149" />
@@ -204,10 +195,10 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 								justifyContent: 'space-evenly', 
 								alignItems: 'flex-end', 
 								width: '36%' }}>
-								<TouchableOpacity style={styles.rewindButton} onPress={handleSkipBackward}>
+								<TouchableOpacity style={styles.rewindButton} onPress={() => handleSkip(-10000)}>
 									<RewindBackVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26}/>
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.stepButton} onPress={handlePreviousEpisode}>
+								<TouchableOpacity style={styles.stepButton} onPress={handleNextEpisodePress}>
 									<BackwardStepVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 								</TouchableOpacity>
 								<TouchableOpacity
@@ -221,10 +212,10 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 										<PlayVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 									}
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.stepButton} onPress={handleNextEpisode}>
+								<TouchableOpacity style={styles.stepButton} onPress={handleNextEpisodePress}>
 									<ForwardStepVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.rewindButton} onPress={handleSkipForward}>
+								<TouchableOpacity style={styles.rewindButton} onPress={() => handleSkip(10000)}>
 									<RewindForwVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26}/>
 								</TouchableOpacity>
 							</View>
@@ -248,7 +239,8 @@ const AnilibriaPlayer = ({ url, setScroll }: AnilibriaPlayerProps) => {
 								minimumValue={0}
 								maximumValue={status?.durationMillis || 1}
 								value={status?.positionMillis || 0}
-								onValueChange={handleSeek}
+								onSlidingStart={handleSeekStart}
+                				onSlidingComplete={handleSeekComplete}
 								minimumTrackTintColor="#06C149"
 								maximumTrackTintColor="#4F4F4F"
 								thumbTintColor="#06C149" />

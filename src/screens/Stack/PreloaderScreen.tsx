@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
-import * as Font from 'expo-font';
 import { BallIndicator } from 'react-native-indicators';
 import { useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
@@ -10,10 +9,10 @@ import { getTokenFromStorage } from '@Utils/token';
 import { setUser } from '@Redux/reducers/userReducer';
 
 import * as Notifications from 'expo-notifications';
-import { registerForPushNotificationsAsync } from 'notification-config';
 import useAuthUserInToken from '@Utils/fetch/authUserInToken';
 import { useAlert } from '@Components/AlertContext';
 import { useFonts } from 'expo-font';
+import { StatusBar } from 'expo-status-bar';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -80,6 +79,7 @@ const PreloaderScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar style='light' />
             <View style={{ height: '95%' }}>
                 <Image source={require('../../../assets/logo.png')} style={styles.logo} />
                 <View style={styles.loaderIndicatorContainer}>

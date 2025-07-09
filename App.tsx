@@ -1,10 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'react-native';
+import { EventSubscription, StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { AlertProvider } from '@Components/AlertContext';
+import * as NavigationBar from 'expo-navigation-bar';
+
+
 
 const client = new ApolloClient({
   uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
@@ -23,7 +26,15 @@ const client = new ApolloClient({
   }),
 });
 
+NavigationBar.setVisibilityAsync('hidden');
+
 const App = () => {
+  NavigationBar.addVisibilityListener(() => {
+    setTimeout(() => {
+      NavigationBar.setVisibilityAsync('hidden')
+    }, 2000);
+  });
+  
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
