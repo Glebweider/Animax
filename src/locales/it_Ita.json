@@ -28,9 +28,8 @@
     "episodes": "Episodi",
     "episode": "Episodio",
     "modal": {
-      "giverating": "Dare valutazione",
-      "cancel": "Annulla",
-      "submit": "Invia",
+      "rating": "Valutazioni",
+      "close": "Chiudi",
       "users": "utenti"
     },
     "share": "Ti consiglio questo anime "

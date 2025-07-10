@@ -28,9 +28,8 @@
     "episodes": "エピソード",
     "episode": "エピソード",
     "modal": {
-      "giverating": "評価を付ける",
-      "cancel": "キャンセル",
-      "submit": "送信",
+      "rating": "評価",
+      "close": "閉じる",
       "users": "ユーザー"
     },
     "share": "このアニメをお勧めします "

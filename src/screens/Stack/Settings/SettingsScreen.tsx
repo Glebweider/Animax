@@ -69,7 +69,7 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
-                <TouchableOpacity 
+                {/* <TouchableOpacity 
                     onPress={() => navigation.navigate('SecurityScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
@@ -92,7 +92,7 @@ const SettingsScreen = ({ navigation }) => {
                         <Text style={styles.labelLeftText}>{i18n.t('profile.security')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity 
                     onPress={() => navigation.navigate('LanguageScreen')}
                     style={styles.labelContainer}>

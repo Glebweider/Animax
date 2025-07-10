@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -35,7 +35,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
             style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modalShelf}/>
-                <Text style={styles.modalTitle}>{i18n.t('anime.modal.giverating')}</Text>
+                <Text style={styles.modalTitle}>{i18n.t('anime.modal.rating')}</Text>
                 <View style={styles.modalHorizontalLine}/>
                 <View style={styles.modalRatingsContainer}>
                     <View style={styles.scoreDataContainer}>
@@ -53,47 +53,25 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
                         <Text style={styles.userVoting}>({totalVotes} {i18n.t('anime.modal.users')})</Text>
                     </View>
                     <View style={styles.modalVerticalLine}/>
-                    <View style={styles.ratingsContainer}>
-                        <FlatList
-                            data={anime.scoresStats}
-                            keyExtractor={(item) => item.score}
-                            style={{}}
-                            renderItem={({ item }) => 
-                                <View key={item.score} style={styles.scoreLineContainer}>
-                                    <Text style={styles.scoreLineText}>{item.score}</Text>
-
-                                    <ProgressBar progress={(item.count / totalVotes) * 100} />
-                                </View>
-                            }
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{paddingHorizontal: 15}}/>
-                    </View>
+                    <FlatList
+                        data={anime.scoresStats}
+                        keyExtractor={(item) => item.score}
+                        style={{}}
+                        renderItem={({ item }) => 
+                            <View key={item.score} style={styles.scoreLineContainer}>
+                                <Text style={styles.scoreLineText}>{item.score}</Text>
+                                <ProgressBar progress={(item.count / totalVotes) * 100} />
+                            </View>
+                        }
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{paddingHorizontal: 15}}/>
                 </View>
                 <View style={styles.modalHorizontalLine}/>
-                <View style={styles.stars}>
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                    <StarIcon Style={{}} Color={'#06C149'} Width={25} Height={23} />
-                </View>
-                <View style={styles.modalButtons}>
-                    <TouchableOpacity
-                        onPress={() => setVisible(false)}
-                        style={styles.modalButtonCancel}>
-                        <Text style={styles.modalButtonCancelText}>{i18n.t('anime.modal.cancel')}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setVisible(false)}
-                        style={styles.modalButtonApply}>
-                        <Text style={styles.modalButtonApplyText}>{i18n.t('anime.modal.submit')}</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    onPress={() => setVisible(false)}
+                    style={styles.modalButtonClose}>
+                    <Text style={styles.modalButtonCloseText}>{i18n.t('anime.modal.close')}</Text>
+                </TouchableOpacity>
             </View>
         </Modal>
     );
@@ -143,6 +121,7 @@ const styles = StyleSheet.create({
         width: '30%',
         height: '100%',
         alignItems: 'center',
+        marginRight: 15
     },
     scoreContainer: {
         flexDirection: 'row',
@@ -171,9 +150,6 @@ const styles = StyleSheet.create({
         fontSize: 8,
         fontFamily: 'Outfit',
     },
-    ratingsContainer: {
-
-    },
     modalRatingsContainer: {
         marginTop: 23,
         marginBottom: 10,
@@ -182,22 +158,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     },
-    modalButtons: {
-        flexDirection: 'row',
+    modalButtonClose: {
+        marginTop: 25,
         width: '90%',
-        justifyContent: 'space-between',
-        marginTop: 15,
-    },
-    modalButtonCancel: {
-        width: '48%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#35383F',
-        borderRadius: 50,
-        height: 58, 
-    },
-    modalButtonApply: {
-        width: '48%',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#06C149',
@@ -209,12 +172,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 8, 
     },
-    modalButtonCancelText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 14
-    },
-    modalButtonApplyText: {
+    modalButtonCloseText: {
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 14
@@ -241,7 +199,7 @@ const styles = StyleSheet.create({
         height: 270
     },
     modalTitle: {
-        marginTop: 10,
+        marginTop: 12,
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 18

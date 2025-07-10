@@ -28,10 +28,9 @@
     "episodes": "Episoden",
     "episode": "Episode",
     "modal": {
-      "giverating": "Bewertung abgeben",
-      "cancel": "Abbrechen",
-      "submit": "Einreichen",
-      "users": "Benutzer"
+      "rating": "Bewertungen",
+      "close": "Schließen",
+      "users": "Nutzer"
     },
     "share": "Ich empfehle dir diesen Anime "
   },

@@ -170,7 +170,7 @@ const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpi
 						</View>
 						<View style={styles.controls}>
 							<View style={styles.volumeView}>
-								<TouchableOpacity style={[styles.fullScreenToggle, { marginLeft: 20 }]}>
+								<TouchableOpacity style={[styles.Btn, { marginLeft: 20 }]}>
 									<AutoVolumeVideoPlayerIcon
 											Color={'#fff'}
 											Style={{}}
@@ -195,12 +195,15 @@ const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpi
 								justifyContent: 'space-evenly', 
 								alignItems: 'flex-end', 
 								width: '36%' }}>
-								<TouchableOpacity style={styles.rewindButton} onPress={() => handleSkip(-10000)}>
+
+								<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(-10000)}>
 									<RewindBackVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26}/>
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.stepButton} onPress={handleNextEpisodePress}>
+
+								<TouchableOpacity style={styles.Btn} onPress={handleNextEpisodePress}>
 									<BackwardStepVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 								</TouchableOpacity>
+
 								<TouchableOpacity
 									style={styles.button}
 									onPress={() =>
@@ -212,15 +215,18 @@ const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpi
 										<PlayVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 									}
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.stepButton} onPress={handleNextEpisodePress}>
+
+								<TouchableOpacity style={styles.Btn} onPress={handleNextEpisodePress}>
 									<ForwardStepVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 								</TouchableOpacity>
-								<TouchableOpacity style={styles.rewindButton} onPress={() => handleSkip(10000)}>
+
+								<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(10000)}>
 									<RewindForwVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26}/>
 								</TouchableOpacity>
+
 							</View>
 							<TouchableOpacity
-								style={[styles.fullScreenToggle, {marginRight: 20}]}
+								style={[styles.Btn, {marginRight: 20}]}
 								onPress={toggleFullscreen}>
 								<MinimizeVideoPlayerIcon 
 									Color={'#fff'} 
@@ -248,7 +254,7 @@ const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpi
 						</View> 
 						<View style={styles.controls}>
 							<View style={styles.volumeViewMinimize}>
-								<TouchableOpacity style={[styles.fullScreenToggle, { marginLeft: 20 }]}>
+								<TouchableOpacity style={[styles.Btn, { marginLeft: 20 }]}>
 									<AutoVolumeVideoPlayerIcon
 										Color={'#fff'}
 										Style={{}}
@@ -279,7 +285,7 @@ const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpi
 								}
 							</TouchableOpacity>
 							<TouchableOpacity
-								style={[styles.fullScreenToggle, {marginRight: 20}]}
+								style={[styles.Btn, {marginRight: 20}]}
 								onPress={toggleFullscreen}>
 								<ExpendVideoPlayerIcon 
 									Color={'#fff'} 
@@ -374,18 +380,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
-	fullScreenToggle: {
+	Btn: {
 		padding: 7,
 		borderRadius: 5,
 	},
-	stepButton: {
-		padding: 7,
-		borderRadius: 5,
-	},
-	rewindButton: {
-		padding: 7,
-		borderRadius: 5,
-	}
 });
   
 export default AnilibriaPlayer;

@@ -92,7 +92,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     </View>
                 </View>
             </View>
-            <View style={styles.statsContainer}>
+            {/* <View style={styles.statsContainer}>
                 <View style={styles.statContainer}>
                     <Text style={styles.statTitleText}>Просмотренно аниме</Text>
                     <Text style={styles.statDataText}>{isLoading && user.animestats.counterWatchedAnime}</Text>
@@ -105,7 +105,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     <Text style={styles.statTitleText}>Время проведённое за просмотром</Text>
                     <Text style={styles.statDataTimeText}>{isLoading && formattedTime(user.animestats.timeSpentWatchingAnime)}</Text>
                 </View>
-            </View>
+            </View> */}
             <FlatList
                 data={user.animelist}
                 keyExtractor={(item) => item.animeId.toString()}

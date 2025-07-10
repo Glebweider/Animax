@@ -28,9 +28,8 @@
     "episodes": "Episodes",
     "episode": "Episode",
     "modal": {
-      "giverating": "Give Rating",
-      "cancel": "Cancel",
-      "submit": "Submit",
+      "rating": "Ratings",
+      "close": "Close",
       "users": "users"
     },
     "share": "I recommend anime to you "

@@ -31,6 +31,7 @@ import SecurityScreen from '@Stack/Settings/SecurityScreen';
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
+    
     return (
         <Stack.Navigator initialRouteName='Preloader' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Preloader" component={PreloaderScreen} />
@@ -59,7 +60,7 @@ const StackNavigator = () => {
             <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
             <Stack.Screen name="ReportScreen" component={ReportScreen} />
-            <Stack.Screen name="SecurityScreen" component={SecurityScreen} />
+            {/* <Stack.Screen name="SecurityScreen" component={SecurityScreen} /> */}
         </Stack.Navigator>
     );
 };
