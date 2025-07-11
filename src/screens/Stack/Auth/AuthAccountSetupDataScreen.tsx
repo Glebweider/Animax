@@ -57,7 +57,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     useEffect(() => {
         if (textFullName.length >= 1) {
             if (textFullName.length < 3) {
-                setFullNameError('Полное имя должно содержать не менее 4 символов');
+                setFullNameError(' Full name must be at least 4 characters long');
                 setFullNameVerify(false);
             } else {
                 setFullNameError(null);
@@ -70,7 +70,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     
         if (textNickname.length >= 3) {
             if (textNickname.length < 4) {
-                setNicknameError('Никнейм должен содержать не менее 4 символов');
+                setNicknameError('Nickname must be at least 4 characters long');
                 setNicknameVerify(false);
             } else {
                 setNicknameError(null);
@@ -83,7 +83,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
         if (textPhoneNumber.length >= 3) {
             if (!isPhoneNumber(textPhoneNumber)) {
-                setPhoneNumberError('Введите действительный номер телефона');
+                setPhoneNumberError('Please enter a valid phone number');
                 setPhoneNumberVerify(false);
             } else {
                 setPhoneNumberError(null);
@@ -154,7 +154,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
             }
 
         } else {
-            setPhoneNumberError('Введите действительный номер телефона');
+            setPhoneNumberError('Please enter a valid phone number');
             setActiveButton(true);
         }
     };

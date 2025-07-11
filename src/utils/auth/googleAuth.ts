@@ -1,5 +1,5 @@
 const googleAuth = async () => {
-  alert('На данный момент авторизация через google невозможна');
+  alert('Sign in with Google is currently unavailable');
 };
 
 export default googleAuth;

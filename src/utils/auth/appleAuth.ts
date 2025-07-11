@@ -1,5 +1,5 @@
 const appleAuth = () => {
-  alert('На данный момент авторизация через apple невозможна');
+  alert('Sign in with Apple is currently unavailable');
 };
 
 export default appleAuth;

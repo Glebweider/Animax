@@ -33,7 +33,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
     useEffect(() => {
         if (textPassword.length >= 1) {
             if (textPassword.length < 6) {
-                setPasswordError('Пароль должен содержать не менее 6 символов');
+                setPasswordError('Password must be at least 6 characters and include at least one letter');
                 setEmailVerify(false);
             } else {
                 setPasswordError(null);
@@ -70,7 +70,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
             }));
             navigation.navigate('AuthAccountSetupInterest');
         } else {
-            setEmailError('Введите действительный адрес электронной почты');
+            setEmailError('Please enter a valid email address');
             setActiveButton(true);
         }
     }

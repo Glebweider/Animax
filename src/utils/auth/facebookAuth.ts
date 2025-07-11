@@ -1,5 +1,5 @@
 const facebookAuth = () => {
-  alert('На данный момент авторизация через facebook невозможна');
+  alert('Sign in with Facebook is currently unavailable');
 };
 
 export default facebookAuth;
