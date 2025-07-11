@@ -218,7 +218,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ArrowLeftIcon Style={styles.headerIconArrow} Color={'#fff'} />
                 </TouchableOpacity>
-            </View>   
+            </View>  
             <View style={styles.previewAnimeContainer}>
                 {anime.poster.originalUrl !== '' ?
                     <View style={{

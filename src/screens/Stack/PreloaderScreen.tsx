@@ -32,9 +32,7 @@ const PreloaderScreen = ({ navigation }: any) => {
     
     const bootStart = useCallback(async () => {
         try {
-            if (!loaded && !error) {
-                return;
-            }
+            if (!loaded && !error) return;
     
             if (error) {
                 showAlert(`Ошибка при загрузке шрифта: ${error.message}`);

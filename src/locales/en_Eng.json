@@ -63,7 +63,8 @@
     "language": "Language",
     "helpcenter": "Help Center",
     "privacypolicy": "Privacy Policy",
-    "logout": "Logout"
+    "logout": "Logout",
+    "favoriteanime": "Favorite animes"
   },
   "privacyPolicy": {
     "section1": "1. Types of Data We Collect",

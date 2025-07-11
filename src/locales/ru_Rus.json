@@ -64,7 +64,8 @@
     "language": "Язык",
     "helpcenter": "Тех. Поддержка",
     "privacypolicy": "Политика Конфиденциальности",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "favoriteanime": "Любимые аниме"
   },
   "privacyPolicy": {
     "section1": "1. Типы данных, которые мы собираем",

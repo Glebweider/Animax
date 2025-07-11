@@ -63,7 +63,8 @@
     "language": "Sprache",
     "helpcenter": "Hilfe-Center",
     "privacypolicy": "Datenschutz-Bestimmungen",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "favoriteanime": "Lieblingsanimes"
   },
   "privacyPolicy": {
     "section1": "1. Arten von Daten, die wir sammeln",

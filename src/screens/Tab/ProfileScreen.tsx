@@ -106,6 +106,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     <Text style={styles.statDataTimeText}>{isLoading && formattedTime(user.animestats.timeSpentWatchingAnime)}</Text>
                 </View>
             </View> */}
+            <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text> 
             <FlatList
                 data={user.animelist}
                 keyExtractor={(item) => item.animeId.toString()}
@@ -128,7 +129,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     </TouchableOpacity>
                 )}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 5, marginTop: 17, height: '100%' }}
+                contentContainerStyle={{ paddingHorizontal: 5, height: '100%' }}
                 horizontal
             />
         </View>
@@ -164,6 +165,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         fontSize: 10,
         marginTop: 10,
+    },
+    favoriteAnimelistText: {
+        width: '90%', 
+        color: '#fff', 
+        marginTop: 15,
+        fontSize: 18
     },
     statDataText: {
         color: '#06C149',

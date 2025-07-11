@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     },
     inputsContainer: {
         width: '90%',
-        height: '55%'
+        height: '52%'
     },
     fullNameSection: {
         flexDirection: 'row',

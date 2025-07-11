@@ -63,7 +63,8 @@
     "language": "Langue",
     "helpcenter": "Centre d'aide",
     "privacypolicy": "Politique de confidentialité",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "favoriteanime": "Animes préférés"
   },
   "privacyPolicy": {
     "section1": "1. Types de données que nous collectons",

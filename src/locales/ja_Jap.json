@@ -63,7 +63,8 @@
     "language": "言語",
     "helpcenter": "ヘルプセンター",
     "privacypolicy": "プライバシーポリシー",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "favoriteanime": "好きなアニメたち"
   },
   "privacyPolicy": {
     "section1": "1. 収集するデータの種類",
