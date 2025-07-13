@@ -27,6 +27,9 @@
     "nonedescription": "説明なし",
     "episodes": "エピソード",
     "episode": "エピソード",
+    "comments": "コメント",
+    "morelikethis": "こちらもおすすめ",
+    "addcomment": "コメントを追加",
     "modal": {
       "rating": "評価",
       "close": "閉じる",

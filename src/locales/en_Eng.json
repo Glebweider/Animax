@@ -27,6 +27,9 @@
     "nonedescription": "None description",
     "episodes": "Episodes",
     "episode": "Episode",
+    "comments": "Comments",
+    "morelikethis": "More like this",
+    "addcomment": "Add comment",
     "modal": {
       "rating": "Ratings",
       "close": "Close",

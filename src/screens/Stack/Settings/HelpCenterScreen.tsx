@@ -123,7 +123,7 @@ const HelpCenterScreen = ({ navigation }) => {
                             setSelectMethodHelp('SUPPORT');
                             setMoveLeft(true);
                         }}
-                        style={styles.FAQContainer}>
+                        style={styles.methodContainer}>
                         <Text style={selectMethodHelp == 'SUPPORT' ? styles.methodTextActive : styles.methodText}>{i18n.t('helpCenter.support')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -131,7 +131,7 @@ const HelpCenterScreen = ({ navigation }) => {
                             setSelectMethodHelp('ContactUs');
                             setMoveLeft(false);
                         }}
-                        style={styles.ContactUsContainer}>
+                        style={styles.methodContainer}>
                         <Text style={selectMethodHelp == 'ContactUs' ? styles.methodTextActive : styles.methodText}>{i18n.t('helpCenter.contactUs')}</Text>
                     </TouchableOpacity>
                 </View>
@@ -216,12 +216,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    FAQContainer: {
-        width: '50%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    ContactUsContainer: {
+    methodContainer: {
         width: '50%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -246,7 +241,7 @@ const styles = StyleSheet.create({
     lineActive: {
         width: '50%',
         backgroundColor: '#06C149',
-        height: 3,
+        height: 4,
         borderRadius: 50,
     },
 });

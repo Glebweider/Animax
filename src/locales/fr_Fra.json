@@ -27,6 +27,9 @@
     "nonedescription": "Aucune description",
     "episodes": "Épisodes",
     "episode": "Épisode",
+    "comments": "Commentaires",
+    "morelikethis": "Dans le même genre",
+    "addcomment": "Ajouter un commentaire",
     "modal": {
       "rating": "Notes",
       "close": "Fermer",

@@ -27,6 +27,7 @@ import NotificationScreen from '@Stack/Settings/NotificationScreen';
 import SettingsScreen from '@Stack/Settings/SettingsScreen';
 import ReportScreen from '@Stack/ReportScreen';
 import SecurityScreen from '@Stack/Settings/SecurityScreen';
+import CommentsScreen from '@Stack/CommentsScreen';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +61,7 @@ const StackNavigator = () => {
             <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
             <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
             <Stack.Screen name="ReportScreen" component={ReportScreen} />
+            <Stack.Screen name="CommentsScreen" component={CommentsScreen}/>
             {/* <Stack.Screen name="SecurityScreen" component={SecurityScreen} /> */}
         </Stack.Navigator>
     );

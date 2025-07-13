@@ -1,4 +1,4 @@
-export interface Anime {
+export interface IAnime {
     id: number;
     name: string;
     russian: string;

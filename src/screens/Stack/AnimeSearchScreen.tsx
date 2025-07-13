@@ -34,7 +34,7 @@ const AnimeSearchScreen = ({ navigation }) => {
                 setErrorSearch(false);
 
                 const query = search ? GET_ANIMEBYSEARCH : GET_ANIMEBYGENRES;
-                const variables = search ? { page: newPage, search, genreIds: tags } : { page: newPage, limit: 50, genreIds: tags };
+                const variables = search ? { page: newPage, search, genreIds: tags } : { page: newPage, limit: 50, genreIds: tags, excludeIds: '' };
 
                 const { data } = await client.query({ query, variables });
 
