@@ -3,6 +3,7 @@ export interface IComment{
     userId: string;
     username: string;
     avatar: string;
+    premium: string;
     text: string;
     createdAt: Date;
     likes: number;

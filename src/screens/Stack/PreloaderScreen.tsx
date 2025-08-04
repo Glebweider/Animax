@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { BallIndicator } from 'react-native-indicators';
 import { useDispatch } from 'react-redux';
@@ -73,7 +73,6 @@ const PreloaderScreen = ({ navigation }: any) => {
     if (!loaded && !error) {
         return null;
     }
-
 
     return (
         <View style={styles.container}>

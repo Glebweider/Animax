@@ -11,6 +11,8 @@ import { StatusBar } from 'expo-status-bar';
 import { i18n } from '@Utils/localization';
 import NotificationIcon from '@Components/icons/NotificationIcon';
 import BackButton from '@Components/BackButton';
+import * as Updates from 'expo-updates';
+
 
 const SettingsScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
@@ -164,6 +166,9 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
             </View>
+            <Text style={styles.updateText}>
+                {Updates.updateId}
+            </Text>
         </View>
     );
 };
@@ -175,9 +180,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#181A20',
     },
+    updateText: {
+        marginTop: 15,
+        fontSize: 12,
+        color: '#666',
+    },
     labelsContainer: {
         width: '100%',
-        height: '100%',
+        height: '64%',
         alignItems: 'center',
         marginTop: 10
     },

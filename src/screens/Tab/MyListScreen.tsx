@@ -46,9 +46,9 @@ const MyListScreen = ({ navigation }) => {
                     <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>                    
                 </View>
             </View>
-            <View style={{width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
                 {isLoading ? (
-                    <BallIndicator color='#06C149' size={80} animationDuration={700} />  
+                    <BallIndicator color='#06C149' size={80} animationDuration={700} />
                 ) : (
                     userAnimeList?.length >= 1 ?
                     <FlatList
@@ -83,7 +83,7 @@ const MyListScreen = ({ navigation }) => {
                             <Text style={styles.errorText}>{i18n.t('mylist.emptytext')}</Text>
                         </View>
                     </View>
-                )}                
+                )}
             </View>
         </View>
     );
@@ -137,15 +137,15 @@ const styles = StyleSheet.create({
     },
     animeContainerAnimeTop: {
         margin: 7,
-        width: 182,
-        height: 242,
+        width: 172,
+        height: 232,
         borderRadius: 15,
         flexDirection: 'row',
         backgroundColor: '#1F222A'
     },
     animeImageAnimeTop: {
-        width: 182,
-        height: 242,
+        width: '100%',
+        height: '100%',
         zIndex: 1,
         borderRadius: 10,
         position: 'absolute'

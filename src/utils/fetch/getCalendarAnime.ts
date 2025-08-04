@@ -10,8 +10,9 @@ const useGetCalendarAnime = () => {
       if (response.ok) {
         return await response.json();
       } else {
-        const errorData = await response.json(); 
-        showAlert(errorData.message);
+        const errorData = await response.text(); 
+        showAlert(errorData);
+        console.log(errorData)
         return null;
       }
     } catch (error) {

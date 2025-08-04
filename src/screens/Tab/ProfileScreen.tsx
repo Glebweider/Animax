@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native';
-import LogoutModal from '@Modal/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
 import { i18n } from '@Utils/localization';
 import { BallIndicator } from 'react-native-indicators';
@@ -48,9 +47,8 @@ const ProfileScreen = ({ navigation, route }) => {
         fetchData();
     }, [userId]);
 
-    if (!user) {
+    if (!user) 
         return <BallIndicator color="#13D458" size={70} animationDuration={700} />;
-    }
 
     return (
         <View style={styles.container}>

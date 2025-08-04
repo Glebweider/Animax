@@ -25,6 +25,7 @@ import useChangeLikeComment from '@Utils/fetch/changeLikeComment';
 import useAddComment from '@Utils/fetch/addComment';
 import LikeIcon from '@Components/icons/LikeIcon';
 import { getTokenFromStorage } from '@Utils/token';
+import CrownIcon from '@Components/icons/CrownIcon';
 
 interface IReplyingUser {
     messageId: string;
@@ -50,6 +51,7 @@ const CommentsScreen = ({ navigation, route }) => {
     const [isCommentVerify, setCommentVerify] = useState<boolean>(false);
     const [repliesPagination, setRepliesPagination] = useState<{ [commentId: string]: number }>({});
     const [commentsCountNew, setCommentsCountNew] = useState<number>(0);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const { getComments } = useGetComments();
     const { getRepliesByComment } = useGetRepliesByComment();
@@ -60,11 +62,10 @@ const CommentsScreen = ({ navigation, route }) => {
     const inputRef = useRef<TextInput>(null);
 
     const loadComments = async () => {
-        if (loading) return;
+        if (loading || (repliesPagination && repliesPagination[animeId] >= commentsCount)) return;
         setLoading(true);
 
         setCommentsCountNew(commentsCount);
-
         const data = await getComments(animeId, page);
         if (data) {
             setComments(prev => [...prev, ...data]);
@@ -255,13 +256,18 @@ const CommentsScreen = ({ navigation, route }) => {
                 renderItem={({ item }) => (
                     <View>
                         <View style={styles.commentContainer}>
-                            <Image
-                                source={{ uri: item.avatar }}
-                                style={styles.avatar}/>
+                            <TouchableOpacity onPress={() => navigation.navigate('Profile', { userId: item.userId })}>
+                                <Image
+                                    source={{ uri: item.avatar }}
+                                    style={styles.avatar}/>
+                            </TouchableOpacity>
                             <View style={styles.commentContent}>
-                                <Text style={styles.username}>
-                                    {item.username}
-                                </Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+                                    {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} /> }
+                                    <Text style={styles.username}>
+                                        {item.username}
+                                    </Text>
+                                </View>
                                 <Text style={styles.commentText}>
                                     {item.text}
                                 </Text>
@@ -269,7 +275,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <View style={styles.commentInfo}>
                                             <Text style={styles.commentDate}>{formatDateComment(item.createdAt)}</Text>
-                                            { !item.parentCommentId && (
+                                            {!item.parentCommentId && (
                                                 <TouchableOpacity onPress={() => handleReply(item.id, item.userId, item.username)}>
                                                     <Text style={styles.replyText}>Reply</Text>
                                                 </TouchableOpacity>
@@ -288,18 +294,23 @@ const CommentsScreen = ({ navigation, route }) => {
                         <View style={{ marginLeft: 25 }}>
                             {openedReplies[item.id] && item.replies && item.replies.map((reply, index) => (
                                 <View key={index} style={styles.replyContainer}>
-                                    <Image
-                                        source={{ uri: reply.avatar }}
-                                        style={styles.avatar}/>
+                                    <TouchableOpacity onPress={() => navigation.navigate('Profile', { userId: item.userId })}>
+                                        <Image
+                                            source={{ uri: item.avatar }}
+                                            style={styles.avatar}/>
+                                    </TouchableOpacity>
                                     <View style={styles.commentContent}>
                                         {reply.parentCommentId && (
                                             <Text style={styles.replyLabel}>
                                                 Ответ → {getParentUsername(reply.parentCommentId)}
                                             </Text>
                                         )}
-                                        <Text style={styles.username}>
-                                            {reply.username}
-                                        </Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+                                            {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} /> }
+                                            <Text style={styles.username}>
+                                                {item.username}
+                                            </Text>
+                                        </View>
                                         <Text style={styles.commentText}>
                                             {reply.text}
                                         </Text>
@@ -344,8 +355,9 @@ const CommentsScreen = ({ navigation, route }) => {
                     </View>
                 )}
                 onEndReached={loadComments}
-                onEndReachedThreshold={0.3}
-                ListFooterComponent={loading ? <BallIndicator color="#06C049" size={50} animationDuration={700} /> : null}/>
+                onEndReachedThreshold={0.1}
+                ListEmptyComponent={<BallIndicator color="#06C049" size={50} animationDuration={700} />}
+                 />
             <View style={styles.footer}>
                 <TextInput
                     ref={inputRef}
@@ -447,6 +459,7 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 20,
+        backgroundColor: '#464648',
     },
     commentContent: {
         flex: 1,
@@ -460,7 +473,7 @@ const styles = StyleSheet.create({
     username: {
         fontFamily: 'Outfit',
         color: '#fff',
-        fontSize: 14,
+        fontSize: 14,  
     },
     commentText: {
         color: '#ccc',
@@ -469,7 +482,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
     },
     commentFooter: {
-        
         marginTop: 4,
     },
     likesContainer: {

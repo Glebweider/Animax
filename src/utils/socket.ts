@@ -50,6 +50,6 @@ const connectSocket = async () => {
     });
 };
 
-connectSocket();
+//connectSocket();
 
 export { socket, isConnection };

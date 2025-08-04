@@ -12,10 +12,13 @@ const useGetCommentsCount = () => {
                     'Content-Type': 'application/json',
                 },
             });
-        
+            
+            const data = await response.json();
             if (response.ok) {
-                return await response.json();
+                return data;
             } else {
+                showAlert(data?.message || 'Failed to get comments count');
+                console.error('Server error:', data);
                 return 0;
             }
         } catch (error) {

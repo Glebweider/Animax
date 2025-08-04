@@ -160,6 +160,7 @@ const AnimeScreen = ({ navigation, route }) => {
                         id: String(animeId) 
                     },
                 });
+                
                 if (data && !error) {
                     setAnime(data.animes[0]);
                     searchRecomendationAnime(data.animes[0].genres);
@@ -215,7 +216,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 }
             }
         } catch (error) {
-         showAlert('Error fetching comments');
+            showAlert('Error fetching comments');
         }
     };
 
@@ -286,7 +287,7 @@ const AnimeScreen = ({ navigation, route }) => {
     return (
         <ScrollView 
             scrollEnabled={isScroll} 
-            contentContainerStyle={styles.scrollContainer}
+            contentContainerStyle={[styles.scrollContainer, isPlaying && { maxHeight: '100%' }]}
             showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
             <RatingModal 
@@ -389,7 +390,7 @@ const AnimeScreen = ({ navigation, route }) => {
             }
             {isLoading ? (
                 <BallIndicator style={{ marginTop: 55, marginBottom: 40 }} color="#13D458" size={70} animationDuration={700} />
-            ) : selectedEpisodeAnime ? (
+            ) : selectedEpisodeAnime !== null ? (
                 <>
                     <View style={styles.animeEpisodesContainer}>
                         <View style={styles.animeEpisodesHeader}>
@@ -424,7 +425,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             contentContainerStyle={{paddingHorizontal: 10}}/>
                     </View>
                     <AnilibriaPlayer
-                        url={`https://${episodesAnimeHost}${selectedEpisodeAnime.hls.fhd}`}
+                        url={`https://${episodesAnimeHost}${selectedEpisodeAnime?.hls?.fhd}`}
                         setPlaying={setPlaying}
                         setScroll={setScroll}
                         hasNextEpisode={true}
@@ -442,7 +443,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             setMoveLeft(true);
                         }}
                         style={styles.methodContainer}>
-                        <Text style={selectInfoAnime == 'MoreLikeThis' ? styles.infoTextActive : styles.infoText}>{i18n.t('anime.morelikethis')}</Text>
+                        <Text style={selectInfoAnime == 'MoreLikeThis' ? styles.infoTextActive : styles.infoText}>{i18n.t('anime.morelikethis')} ({animeRecomendations.length ? animeRecomendations.length : 0})</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -514,10 +515,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20'
     },
     commentsContainer: {
-        width: '94%', 
+        width: '92%', 
         flexDirection: 'row', 
         justifyContent: 'space-between', 
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 15
     },
     seeAllComments: {
         color: '#06C049',

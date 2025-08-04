@@ -9,9 +9,12 @@ const useGetComments = () => {
                 method: 'GET',
             });
         
+            const data = await response.json();
             if (response.ok) {
-                return await response.json();
+                return data;
             } else {
+                showAlert(data?.message || 'Failed to get comments');
+                console.error('Server error:', data);
                 return;
             }
         } catch (error) {

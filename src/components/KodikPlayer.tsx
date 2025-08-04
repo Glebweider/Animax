@@ -24,6 +24,7 @@ const KodikPlayer = ({ shikimoriId }: any) => {
             style={{ backgroundColor: '#181A20', flex: 1, marginTop: 20 }}
             containerStyle={{ width: '94%', height: 280 }}
             ref={webViewRef}
+            allowsFullscreenVideo={true}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             startInLoadingState={true}

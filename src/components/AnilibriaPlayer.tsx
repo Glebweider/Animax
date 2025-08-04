@@ -140,7 +140,7 @@ const AnilibriaPlayer = ({ url, setScroll, setPlaying, hasNextEpisode, onNextEpi
 					ref={video}
 					style={isFullScreen ? [styles.fullScreenVideo, { width: screenWidth, height: screenHeight }] : styles.video}
 					source={{
-					uri: url,
+						uri: url,
 					}}
 					resizeMode={ResizeMode.COVER}
 					useNativeControls={false}
