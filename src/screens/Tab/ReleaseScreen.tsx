@@ -147,7 +147,7 @@ const ReleaseScreen = ({ navigation }) => {
                                     onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
                                     style={styles.animeCardImage}>
                                     <Image
-                                        source={{ uri: `https://shikimori.me${item.anime.image.original}` }}
+                                        source={{ uri: `https://shikimori.one${item.anime.image.original}` }}
                                         style={styles.animeCardImage}/>
                                 </TouchableOpacity>
                                 <View style={styles.animeCardData}>
