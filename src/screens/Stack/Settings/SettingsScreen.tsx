@@ -16,44 +16,44 @@ import * as Updates from 'expo-updates';
 
 const SettingsScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
-    const [isOpenModalLogout, setOpenModalLogout] = useState<boolean>(false); 
+    const [isOpenModalLogout, setOpenModalLogout] = useState<boolean>(false);
 
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
-            <LogoutModal 
+            <LogoutModal
                 visible={isOpenModalLogout}
                 setVisible={setOpenModalLogout}
                 navigation={navigation} />
             <BackButton navigation={navigation} text={i18n.t('profile.settings')} />
             <View style={styles.profileContainer}>
                 <View style={styles.avatarContainer}>
-                    <Image 
-                        source={{ uri: userState.profile.avatar }} 
-                        style={styles.avatarImage} />  
+                    <Image
+                        source={{ uri: userState.profile.avatar }}
+                        style={styles.avatarImage} />
                 </View>
                 <View style={styles.profileUserData}>
                     <Text style={styles.profileUsername}>{userState.profile.nickname}</Text>
                     <Text style={styles.profileUserEmail}>{userState.email}</Text>
                 </View>
             </View>
-            {!userState.premium.premium && 
+            {!userState.premium.premium &&
                 <TouchableOpacity
                     onPress={() => navigation.navigate('SubcribeScreen')}
                     style={styles.premiumContainer}>
                     <CrownIcon Width={60} Height={55} Color={'#06C149'} />
                     <View style={styles.premiumTextContainer}>
                         <Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
-                        <Text 
-                            numberOfLines={2} 
-                            ellipsizeMode="tail" 
+                        <Text
+                            numberOfLines={2}
+                            ellipsizeMode="tail"
                             style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#06C149'} Width={30} Height={30} />
                 </TouchableOpacity>
             }
             <View style={styles.labelsContainer}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('EditDataScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
@@ -62,7 +62,7 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('NotificationScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
@@ -95,7 +95,7 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity> */}
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('LanguageScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
@@ -107,23 +107,23 @@ const SettingsScreen = ({ navigation }) => {
                             <G stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
                                 <Path
                                     d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"
-                                    strokeWidth={1.5}/>
+                                    strokeWidth={1.5} />
                                 <Path
                                     d="M15.204 13.9h.01M12.204 9.9h.01M9.196 13.9h.009"
-                                    strokeWidth={2}/>
+                                    strokeWidth={2} />
                             </G>
                         </Svg>
                         <Text style={styles.labelLeftText}>{i18n.t('profile.language')}</Text>
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('HelpCenterScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
                             <G stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-                                <Path d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z"/>
+                                <Path d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z" />
                                 <Path d="M12 15.895V12M12.005 8.5h-.01" />
                             </G>
                         </Svg>
@@ -131,13 +131,13 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('PrivacyPolicyScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
                             <G stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-                                <Path d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"/>
+                                <Path d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z" />
                                 <Path d="M12 8.105V12M11.995 15.5h.01" />
                             </G>
                         </Svg>
@@ -145,7 +145,7 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                     <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => setOpenModalLogout(true)}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 100,
         flexDirection: 'row',
-        marginTop:25,
+        marginTop: 25,
     },
     profileUserData: {
         justifyContent: 'center',
@@ -275,5 +275,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
-    
+
 export default SettingsScreen;

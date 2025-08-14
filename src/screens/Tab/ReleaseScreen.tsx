@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
 import MyAnimeListButton from '@Components/MyAnimeListButton';
 import { BallIndicator } from 'react-native-indicators';

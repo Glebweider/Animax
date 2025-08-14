@@ -10,7 +10,7 @@ const useGetAnimeEpisodes = () => {
     }, 40000);
 
     try {
-      const response = await fetch(`https://api.anilibria.tv/v3/title/search?search=${animeName}`, {
+      const response = await fetch(`https://www.anilibria.top/api/v1/anime/releases/${animeName}`, {
         method: 'GET',
         signal: controller.signal
       });

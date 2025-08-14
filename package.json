@@ -70,11 +70,11 @@
     "react-native-svg": "15.8.0",
     "react-native-video": "^6.4.3",
     "react-native-web": "~0.19.13",
+    "react-native-webview": "13.12.5",
     "react-redux": "^8.0.5",
     "redux-devtools-expo-dev-plugin": "^0.2.1",
     "socket.io-client": "^4.7.5",
-    "validator": "^13.11.0",
-    "react-native-webview": "13.12.5"
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

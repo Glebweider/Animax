@@ -21,23 +21,23 @@ const AuthFGAScreen = ({ navigation }) => {
                 <Text style={styles.titleText}>Let's you in</Text>
             </View>
             <View style={styles.authContainer}>
-                <TouchableOpacity 
-                onPress={() => facebookAuth()} 
-                style={styles.facebookContainer}>
+                <TouchableOpacity
+                    onPress={() => facebookAuth()}
+                    style={styles.socialContainer}>
                     <Image source={require('../../../../assets/icons/facebook-icon.png')} style={styles.facebookImage} />
-                    <Text style={styles.facebookText}>Continue with Facebook</Text>
+                    <Text style={styles.socialText}>Continue with Facebook</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => googleAuth()} 
-                style={styles.googleContainer}>
+                <TouchableOpacity
+                    onPress={() => googleAuth()}
+                    style={styles.socialContainer}>
                     <Image source={require('../../../../assets/icons/google-icon.png')} style={styles.googleImage} />
-                    <Text style={styles.googleText}>Continue with Google</Text>
+                    <Text style={styles.socialText}>Continue with Google</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => appleAuth()} 
-                style={styles.appleContainer}>
+                <TouchableOpacity
+                    onPress={() => appleAuth()}
+                    style={styles.socialContainer}>
                     <Image source={require('../../../../assets/icons/apple-icon.png')} style={styles.appleImage} />
-                    <Text style={styles.appleText}>Continue with Apple</Text>
+                    <Text style={styles.socialText}>Continue with Apple</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles.intermediateContainer}>
@@ -45,14 +45,14 @@ const AuthFGAScreen = ({ navigation }) => {
                 <Text style={styles.text}>or</Text>
                 <View style={styles.line} />
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
                 onPress={() => navigation.navigate('AuthSignIn')}
                 style={styles.signInButton}>
                 <Text style={styles.signInText}>Sign in with password</Text>
             </TouchableOpacity>
             <View style={styles.signUpContainer}>
                 <Text style={styles.signUpText}>Don't have an account?</Text>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => navigation.navigate('AuthSignUp')}>
                     <Text style={styles.clicableSignUpText}>Sign up</Text>
                 </TouchableOpacity>
@@ -60,7 +60,7 @@ const AuthFGAScreen = ({ navigation }) => {
         </View>
     );
 };
-    
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
     },
-    facebookContainer: {
+    socialContainer: {
         width: '90%',
         height: 59,
         backgroundColor: '#1F222A',
@@ -101,58 +101,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+    },
+    socialText: {
+        color: '#fff',
+        fontFamily: 'Outfit',
+        fontSize: 12
     },
     facebookImage: {
         width: 28,
         height: 28,
         marginRight: 14,
     },
-    facebookText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 12
-    },
-    googleContainer: {
-        width: '90%',
-        height: 59,
-        backgroundColor: '#1F222A',
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
     googleImage: {
         width: 24,
         height: 24,
         marginRight: 14,
     },
-    googleText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 12
-    },
-    appleContainer: {
-        width: '90%',
-        height: 59,
-        backgroundColor: '#1F222A',
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-    },
     appleImage: {
         width: 25,
         height: 31,
         marginRight: 14,
-    },
-    appleText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 12
     },
     intermediateContainer: {
         marginTop: 20,
@@ -184,7 +152,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
         shadowRadius: 4,
-        elevation: 8, 
+        elevation: 8,
     },
     signInText: {
         color: '#fff',
@@ -211,5 +179,5 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
 });
-    
+
 export default AuthFGAScreen;

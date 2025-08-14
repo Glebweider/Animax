@@ -49,6 +49,20 @@ const arrayRatings = {
     nc_17: 18,
 };
 
+export interface IEpisode {
+    id: string;
+    ordinal: number;
+    name: string;
+    preview: {
+        optimized: {
+            src: string;
+        };
+    };
+    hls_480: string;
+    hls_720: string;
+    hls_1080: string;
+}
+
 const AnimeScreen = ({ navigation, route }) => {
     const client = useApolloClient();
     const { showAlert } = useAlert();
@@ -87,10 +101,9 @@ const AnimeScreen = ({ navigation, route }) => {
     });
     const [animeRecomendations, setAnimeRecomendations] = useState<any[]>([]);
     const [isInMyList, setIsInMyList] = useState<boolean>(false);
-    const [episodesAnime, setEpisodesAnime] = useState<any>([]);
-    const [episodesAnimeHost, setEpisodesAnimeHost] = useState<string>('');
+    const [episodes, setEpisodes] = useState<IEpisode[]>([]);
     const [commentsCount, setCommentsCount] = useState<number>(0);
-    const [selectedEpisodeAnime, setSelectedEpisodeAnime] = useState<any>(null);
+    const [selectedEpisodeId, setSelectedEpisodeId] = useState<number>(1);
     const [isScroll, setScroll] = useState<boolean>(true);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
     const [isPlaying, setPlaying] = useState<boolean>(false);
@@ -105,7 +118,7 @@ const AnimeScreen = ({ navigation, route }) => {
     const { getAnimeListUser } = useGetAnimeListUser();
     const { updateTimeSpent } = useUpdateTimeSpent();
     const { getCommentsCount } = useGetCommentsCount();
-    
+
     const moveValue = useRef(new Animated.Value(0)).current;
     const startTime = useRef<number | null>(null);
     const endTime = useRef<number | null>(null);
@@ -113,7 +126,7 @@ const AnimeScreen = ({ navigation, route }) => {
     // useFocusEffect(
     //     React.useCallback(() => {
     //         startTime.current = Date.now();
-        
+
     //         return () => {
     //             endTime.current = Date.now();
     //         };
@@ -142,7 +155,7 @@ const AnimeScreen = ({ navigation, route }) => {
     //         }
     //     };
     //     const subscription = AppState.addEventListener('change', handleAppStateChange);
-        
+
     //     fetchData();
     //     return () => {
     //         subscription.remove();
@@ -156,37 +169,35 @@ const AnimeScreen = ({ navigation, route }) => {
                 setLoading(true);
                 const { data, error } = await client.query({
                     query: GET_ANIME,
-                    variables: { 
-                        id: String(animeId) 
+                    variables: {
+                        id: String(animeId)
                     },
                 });
-                
+
                 if (data && !error) {
                     setAnime(data.animes[0]);
                     searchRecomendationAnime(data.animes[0].genres);
-                    const animeNameArray = [data.animes[0].name, data.animes[0].russian, data.animes[0].japanese];
-                    
-                    for (let anime of animeNameArray) {
-                        const animeEpisodes = await getAnimeEpisodes(anime);
-                        if (animeEpisodes.list[0]) {
 
-                            if (Object.keys(animeEpisodes.list[0].player.list).length === 0) {
-                                showAlert('Error, not found this anime episodes');
-                                setEpisodesAnime(null);
-                                break;
-                            }
+                    const animeName = data.animes[0].name
+                        .toLowerCase()
+                        .replace(/[^a-z0-9\s]/gi, '')
+                        .trim()
+                        .replace(/\s+/g, '-');
 
-                            const arrayData = Object.values(animeEpisodes.list[0].player.list);
-                            setEpisodesAnime(arrayData);
-                            setEpisodesAnimeHost(animeEpisodes.list[0].player.host);
-                            setSelectedEpisodeAnime(arrayData[0]);
-                            break;
+                    const animeEpisodes = await getAnimeEpisodes(animeName);
+                    if (animeEpisodes) {
+                        if (Object.keys(animeEpisodes.episodes).length === 0) {
+                            showAlert('Error, not found this anime episodes');
+                            setEpisodes(null);
+                            return;
                         }
+
+                        setEpisodes(animeEpisodes.episodes);
                     }
                 }
 
                 setLoading(false);
-            }            
+            }
         }
         fetchData()
     }, [animeId, client]);
@@ -202,7 +213,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 showAlert('Error MyListAnime');
             }
         };
-  
+
         fetchMyAnimeList();
     }, [anime.id]);
 
@@ -233,9 +244,9 @@ const AnimeScreen = ({ navigation, route }) => {
             easing: Easing.linear,
             useNativeDriver: false,
         });
-    
+
         animation.start();
-    
+
         return () => {
             animation.stop();
         };
@@ -249,7 +260,7 @@ const AnimeScreen = ({ navigation, route }) => {
 
         const { data, error } = await client.query({
             query: GET_ANIMEBYGENRES,
-            variables: { 
+            variables: {
                 page: 1,
                 limit: 12,
                 genreIds: randomGenreIds,
@@ -261,7 +272,7 @@ const AnimeScreen = ({ navigation, route }) => {
             setAnimeRecomendations(data.animes);
         }
     }
-  
+
     const handlePressMyList = async () => {
         let token = await getTokenFromStorage();
         if (isInMyList) {
@@ -285,55 +296,56 @@ const AnimeScreen = ({ navigation, route }) => {
     };
 
     return (
-        <ScrollView 
-            scrollEnabled={isScroll} 
+        <ScrollView
+            scrollEnabled={isScroll}
             contentContainerStyle={[styles.scrollContainer, isPlaying && { maxHeight: '100%' }]}
             showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
-            <RatingModal 
-                visible={isOpenRatingWindow} 
+            <RatingModal
+                visible={isOpenRatingWindow}
                 setVisible={setOpenRatingWindow}
                 anime={anime} />
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ArrowLeftIcon Style={styles.headerIconArrow} Color={'#fff'} />
                 </TouchableOpacity>
-            </View>  
+            </View>
             <View style={styles.previewAnimeContainer}>
                 {anime.poster.originalUrl !== '' ?
                     <View style={{ width: '100%', height: '100%' }}>
                         <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.3)', 
-                            width: '100%', 
-                            height: '100%', 
-                            zIndex: 2, 
-                            position: 'absolute'}}>
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            width: '100%',
+                            height: '100%',
+                            zIndex: 2,
+                            position: 'absolute'
+                        }}>
                         </View>
-                        <Image 
-                            source={{ uri: anime.poster.originalUrl }} 
+                        <Image
+                            source={{ uri: anime.poster.originalUrl }}
                             style={styles.previewAnimeImage} />
                     </View>
                     :
-                    <BallIndicator 
-                        color='#13D458' size={70} 
+                    <BallIndicator
+                        color='#13D458' size={70}
                         animationDuration={700} />
                 }
             </View>
             <View style={styles.titleContainer}>
-                <Text 
-                    numberOfLines={1} 
-                    ellipsizeMode="tail" 
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
                     style={styles.titleText}>{
-                                (i18n.locale === 'ru' || i18n.locale === 'uk') 
-                                ? anime.russian 
-                                : anime.name}</Text>
+                        (i18n.locale === 'ru' || i18n.locale === 'uk')
+                            ? anime.russian
+                            : anime.name}</Text>
                 <View style={styles.titleContainerButtons}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => handlePressMyList()}
                         style={styles.titleButtonMyList}>
                         <MyListIcon Style={{}} Color={isInMyList ? '#06C149' : '#fff'} />
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => handleShare()}
                         style={styles.titleButtonSend}>
                         <SendIcon Style={{}} Color={'#fff'} />
@@ -347,7 +359,7 @@ const AnimeScreen = ({ navigation, route }) => {
                     <StarIcon Style={{}} Color={'#06C149'} Width={24} Height={24} />
                     <Text style={styles.animeScore}>
                         {Number(anime.score).toFixed(1)}
-                    </Text>                    
+                    </Text>
                 </TouchableOpacity>
                 <ArrowRightIcon Color={'#06C149'} Width={22} Height={22} />
                 <Text style={styles.animeDate}>
@@ -355,34 +367,34 @@ const AnimeScreen = ({ navigation, route }) => {
                 </Text>
                 <View style={styles.genresContainer}>
                     {anime.genres.length > 0 &&
-                        <ScrollView 
-                            horizontal 
-                            showsHorizontalScrollIndicator={false} 
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
                             style={styles.genresScrollView}>
                             <View style={styles.genreContainer}>
-                                <Text style={styles.genreText}>{arrayRatings[anime.rating]}+</Text>                                
+                                <Text style={styles.genreText}>{arrayRatings[anime.rating]}+</Text>
                             </View>
                             {anime.genres.map((genre) => (
-                                <View 
+                                <View
                                     style={styles.genreContainer}
                                     key={genre.id}>
-                                    <Text style={styles.genreText}>{(i18n.locale === 'ru' || i18n.locale === 'uk') 
-                                        ? genre.russian 
+                                    <Text style={styles.genreText}>{(i18n.locale === 'ru' || i18n.locale === 'uk')
+                                        ? genre.russian
                                         : genre.name}
-                                    </Text>                                
+                                    </Text>
                                 </View>
-                            ))}                    
+                            ))}
                         </ScrollView>
                     }
                 </View>
             </View>
             {anime.description &&
                 <View style={styles.animeDescriptionContainer}>
-                    <Text 
-                        numberOfLines={3} 
+                    <Text
+                        numberOfLines={3}
                         ellipsizeMode='tail'
                         style={styles.animeDescriptionText}>
-                            {anime.description.replace(/\[character=\d+](.*?)\[\/character]/g, '$1')
+                        {anime.description.replace(/\[character=\d+](.*?)\[\/character]/g, '$1')
                             .replace(/\[anime=\d+](.*?)\[\/anime]/g, '$1')
                             .replace(/\[i](.*?)\[\/i]/g, '')}
                     </Text>
@@ -390,46 +402,48 @@ const AnimeScreen = ({ navigation, route }) => {
             }
             {isLoading ? (
                 <BallIndicator style={{ marginTop: 55, marginBottom: 40 }} color="#13D458" size={70} animationDuration={700} />
-            ) : selectedEpisodeAnime !== null ? (
+            ) : selectedEpisodeId !== null ? (
                 <>
                     <View style={styles.animeEpisodesContainer}>
                         <View style={styles.animeEpisodesHeader}>
-                            <Text style={styles.animeEpisodesText}>{i18n.t('anime.episodes')}</Text>                  
+                            <Text style={styles.animeEpisodesText}>{i18n.t('anime.episodes')}</Text>
                         </View>
                         <FlatList
-                            data={episodesAnime}
+                            data={episodes}
                             horizontal
-                            keyExtractor={(item) => item.uuid}
-                            style={{marginTop: 15}}
-                            renderItem={({ item }) => 
-                                <TouchableOpacity 
-                                    key={item.uuid}
-                                    onPress={() => setSelectedEpisodeAnime(item)}
-                                    style={styles.cardEpisodeContainer}>
-                                    <Image 
-                                        source={item.preview ? 
-                                            {uri: `https://anilibria.tv${item.preview}`} 
-                                            : 
-                                            require('../../../assets/default-to-poster.jpg') 
+                            keyExtractor={(item) => item.id}
+                            style={{ marginTop: 15 }}
+                            renderItem={({ item }) =>
+                                <TouchableOpacity
+                                    key={item.id}
+                                    onPress={() => setSelectedEpisodeId(item.ordinal)}
+                                    style={[item.ordinal === selectedEpisodeId && styles.selectedEpisode, styles.cardEpisodeContainer]}>
+                                    <Image
+                                        source={item.preview ?
+                                            { uri: `https://www.anilibria.top${item.preview.optimized.src}` }
+                                            :
+                                            require('../../../assets/default-to-poster.jpg')
                                         }
                                         style={styles.cardEpisodeImage} />
-                                    <PlayIcon 
-                                        Color={'#fff'} 
+                                    <PlayIcon
+                                        Color={'#fff'}
                                         Style={{}}
                                         Width={23}
                                         Height={23} />
-                                    <Text style={styles.cardEpisodeText}>{i18n.t('anime.episode')} {item.episode}</Text>
+                                    <Text style={styles.cardEpisodeText}>{i18n.t('anime.episode')} {item.ordinal}</Text>
                                 </TouchableOpacity>
                             }
                             showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{paddingHorizontal: 10}}/>
+                            contentContainerStyle={{ paddingHorizontal: 10 }} />
                     </View>
                     <AnilibriaPlayer
-                        url={`https://${episodesAnimeHost}${selectedEpisodeAnime?.hls?.fhd}`}
+                        episode={episodes[selectedEpisodeId]}
                         setPlaying={setPlaying}
                         setScroll={setScroll}
-                        hasNextEpisode={true}
-                        onNextEpisode={() => { console.log(343343434) }}/>
+                        hasNextEpisode={episodes.findIndex(ep => ep.ordinal === selectedEpisodeId) < episodes.length - 1}
+                        hasPrevEpisode={episodes.findIndex(ep => ep.ordinal === selectedEpisodeId) > 0}
+                        onNextEpisode={() => { setSelectedEpisodeId(selectedEpisodeId + 1) }}
+                        onPrevEpisode={() => { setSelectedEpisodeId(selectedEpisodeId - 1) }} />
                 </>
             ) : (
                 <KodikPlayer shikimoriId={anime.id} />
@@ -483,15 +497,15 @@ const AnimeScreen = ({ navigation, route }) => {
                                         )}
                                         <Image
                                             source={{ uri: item.poster.originalUrl }}
-                                            style={styles.animeImageAnimeTop}/>
+                                            style={styles.animeImageAnimeTop} />
                                     </TouchableOpacity>
                                 )}
                                 showsVerticalScrollIndicator={false}
                                 contentContainerStyle={styles.containerAnimeTop}
-                                numColumns={2}/>
+                                numColumns={2} />
                             :
                             <BallIndicator
-                                color='#13D458' size={70} 
+                                color='#13D458' size={70}
                                 animationDuration={700} />
                         }
                     </View>
@@ -515,9 +529,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20'
     },
     commentsContainer: {
-        width: '92%', 
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
+        width: '92%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 15
     },
@@ -646,6 +660,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#1F222A',
         borderRadius: 10
     },
+    selectedEpisode: {
+        borderColor: '#06C149',
+        borderWidth: 1,
+    },
     cardEpisodeImage: {
         width: '100%',
         height: '100%',
@@ -657,9 +675,9 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 11,
         fontFamily: 'Outfit',
-        position: 'absolute', 
-        margin: 10, 
-        left: 0, 
+        position: 'absolute',
+        margin: 10,
+        left: 0,
         bottom: 0
     },
     animeEpisodesContainer: {
@@ -706,7 +724,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 26,
         flexGrow: 1,
-        paddingRight: 10,  
+        paddingRight: 10,
     },
     genreContainer: {
         height: 26,
@@ -811,5 +829,5 @@ const styles = StyleSheet.create({
         height: '100%',
     }
 });
-    
+
 export default AnimeScreen;

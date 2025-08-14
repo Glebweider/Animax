@@ -15,11 +15,11 @@ import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+    }),
 });
 
 const PreloaderScreen = ({ navigation }: any) => {
@@ -29,16 +29,16 @@ const PreloaderScreen = ({ navigation }: any) => {
     const [loaded, error] = useFonts({
         'Outfit': require('../../../assets/fonts/Outfit.ttf'),
     });
-    
+
     const bootStart = useCallback(async () => {
         try {
             if (!loaded && !error) return;
-    
+
             if (error) {
                 showAlert(`Ошибка при загрузке шрифта: ${error.message}`);
                 return;
             }
-    
+
             if (!__DEV__ && Constants.executionEnvironment === 'standalone') {
                 const update = await Updates.checkForUpdateAsync();
                 if (update.isAvailable) {
@@ -47,11 +47,11 @@ const PreloaderScreen = ({ navigation }: any) => {
                     return;
                 }
             }
-    
+
             let userToken = await getTokenFromStorage();
             if (userToken) {
                 const user = await authUserInToken(userToken);
-        
+
                 if (user) {
                     dispatch(setUser(user));
                     navigation.reset({ index: 0, routes: [{ name: 'HomeScreen' }] });
@@ -65,11 +65,11 @@ const PreloaderScreen = ({ navigation }: any) => {
             showAlert(`Ошибка: ${error.message}`);
         }
     }, [dispatch, navigation, loaded, error]);
-    
+
     useEffect(() => {
         bootStart();
     }, [bootStart]);
-    
+
     if (!loaded && !error) {
         return null;
     }
@@ -81,7 +81,7 @@ const PreloaderScreen = ({ navigation }: any) => {
                 <Image source={require('../../../assets/logo.png')} style={styles.logo} />
                 <View style={styles.loaderIndicatorContainer}>
                     <BallIndicator color="#13D458" size={70} animationDuration={700} />
-                </View>                
+                </View>
             </View>
             <Text style={styles.updateText}>
                 {Updates.updateId}
