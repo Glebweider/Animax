@@ -19,9 +19,7 @@
     "home": "Startseite",
     "release": "Veröffentlichung",
     "mylist": "Meine Liste",
-    "profile": "Profil",
-    "localizationShowcase": "Lokalisierungs-Demo",
-    "сommunity": "Gemeinschaft"
+    "profile": "Profil"
   },
   "anime": {
     "nonedescription": "Keine Beschreibung",
@@ -76,6 +74,11 @@
     "section2Content": "Die gesammelten Daten werden für verschiedene Zwecke verwendet, einschließlich:\n- Verbesserung unserer Dienste und Bereitstellung personalisierter Inhalte, die auf Ihre Interessen zugeschnitten sind.\n- Anzeigen Ihrer beeindruckenden Fotos auf Websites gegen eine bescheidene Gebühr von 10 $, damit jeder Ihren Hintern bewundern kann.\n- Versand von Werbeangeboten und Updates zu unseren Dienstleistungen, es sei denn, Sie lehnen ab.\n- Durchführung von Forschungen und Analysen, um unsere Nutzerbasis und Markttrends besser zu verstehen.\n",
     "section3": "3. Offenlegung Ihrer persönlichen Daten",
     "section3Content": "Wir nehmen Ihre Privatsphäre ernst und werden Ihre Daten nur in folgenden Fällen weitergeben:\n- An vertrauenswürdige Drittanbieter, die uns bei der Bereitstellung unserer Dienste unterstützen, sofern sie bereit sind, Ihre Datenschutzrechte einzuhalten.\n- Wenn gesetzlich erforderlich oder auf eine gültige rechtliche Anfrage, wie eine Vorladung.\n- Wenn Sie uns ausdrücklich die Erlaubnis geben, Ihre Daten an andere weiterzugeben.\n- Im unwahrscheinlichen Fall einer Unternehmensfusion, -akquisition oder -verkaufs können Ihre Daten an die neue Einheit übertragen werden.\n"
+  },
+  "logout": {
+    "cancel": "Abbrechen",
+    "apply": "Ja, abmelden",
+    "description": "Sind Sie sicher, dass Sie sich abmelden möchten?"
   },
   "premium": {
     "join": "Premium beitreten!",

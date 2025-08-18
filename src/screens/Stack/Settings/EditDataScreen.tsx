@@ -4,19 +4,25 @@ import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import * as FileSystem from 'expo-file-system';
 
-import BackButton from '@Components/BackButton';
+// Components
+import BackButton from '@Components/buttons/Back';
+import { useAlert } from '@Components/AlertContext';
+import ApplyButton from '@Components/buttons/Apply';
+
+// Icons
 import PencilIcon from '@Icons/PencilIcon';
 
-//Redux
+// Redux
 import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
 
-//Utils
-import { getTokenFromStorage, saveTokenToStorage } from '@Utils/token';
-import { isPhoneNumber } from '@Utils/validator';
+// Utils
+import { getTokenFromStorage, saveTokenToStorage } from '@Utils/functions';
+import { isPhoneNumber } from '@Utils/validators';
 import { i18n } from '@Utils/localization';
-import useAuthUserInToken from '@Utils/fetch/authUserInToken';
-import { useAlert } from '@Components/AlertContext';
+
+// Rest
+import useAuthUserInToken from '@Rest/auth/authUserInToken';
 
 
 const EditDataScreen = ({ navigation }) => {
@@ -24,7 +30,7 @@ const EditDataScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
     const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
-    
+
     const [form, setForm] = React.useState({
         fullName: userState.profile.fullname,
         nickname: userState.profile.nickname,
@@ -32,18 +38,18 @@ const EditDataScreen = ({ navigation }) => {
         description: userState.description,
         avatar: null,
     });
-    
+
     const [errors, setErrors] = React.useState({
         fullName: "",
         nickname: "",
         phoneNumber: "",
     });
-    
+
     const [isActiveButton, setActiveButton] = React.useState(true);
-    
+
     useEffect(() => {
         const newErrors: any = {};
-        
+
         if (form.fullName.length > 0 && form.fullName.length < 4) {
             newErrors.fullName = 'Полное имя должно содержать не менее 4 символов';
         }
@@ -56,42 +62,42 @@ const EditDataScreen = ({ navigation }) => {
         if (form.description.length > 48) {
             newErrors.description = `Описание не может содержать более 48 символов`;
         }
-    
+
         setErrors(newErrors);
-        
+
         setActiveButton(
-            Object.keys(newErrors).length > 0 || 
-            !form.fullName || 
-            !form.nickname || 
-            !form.phoneNumber || 
+            Object.keys(newErrors).length > 0 ||
+            !form.fullName ||
+            !form.nickname ||
+            !form.phoneNumber ||
             form.description.length === 0
         );
     }, [form]);
-    
+
     const handleChange = (key: string, value: string) => {
         setForm((prev) => ({ ...prev, [key]: value }));
     };
-    
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             quality: 1,
         });
-    
+
         if (!result.canceled) {
             handleChange("avatar", result.assets[0].uri);
         }
     };
-    
+
     const update = async () => {
         const token = await getTokenFromStorage();
 
         let response;
         if (form.avatar) {
             response = await FileSystem.uploadAsync(
-                `${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`, 
-                form.avatar, 
+                `${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`,
+                form.avatar,
                 {
                     fieldName: 'avatar',
                     httpMethod: 'POST',
@@ -121,13 +127,13 @@ const EditDataScreen = ({ navigation }) => {
                     description: form.description,
                 })
             });
-    
+
             response = {
                 status: response.status,
                 body: await response.text()
             };
         }
-    
+
         if (response.status == 200) {
             const user = await authUserInToken(response.body);
             if (user) {
@@ -139,7 +145,7 @@ const EditDataScreen = ({ navigation }) => {
             showAlert(response.body);
         }
     };
-    
+
     return (
         <View style={styles.container}>
             <View style={{ flex: 1, alignItems: 'center', width: '100%' }}>
@@ -169,12 +175,12 @@ const EditDataScreen = ({ navigation }) => {
                     ))}
                 </View>
             </View>
-            <TouchableOpacity 
-                onPress={update} 
-                disabled={isActiveButton}
-                style={isActiveButton ? styles.continueButtonDisabled : styles.continueButtonEnabled}>
-                <Text style={styles.buttonTitle}>{i18n.t('update')}</Text>
-            </TouchableOpacity>
+
+            <ApplyButton
+                onPress={update}
+                isActiveButton={isActiveButton}
+                style={styles.applyButton}
+                text={i18n.t('update')} />
         </View>
     );
 }
@@ -185,6 +191,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#181A20',
         justifyContent: 'space-between'
+    },
+    applyButton: {
+        width: '90%',
+        marginBottom: 20,
     },
     pencilContainer: {
         backgroundColor: "#06C149",
@@ -250,34 +260,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         fontSize: 14,
     },
-    continueButtonDisabled: {
-        backgroundColor: '#0E9E42',
-        width: '90%',
-        height: 60,
-        marginBottom: 20,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    continueButtonEnabled: {
-        backgroundColor: '#06C149',
-        width: '90%',
-        marginBottom: 20,
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8,
-    },
-    buttonTitle: {
-        color: '#fff',
-        fontSize: 15,
-        fontFamily: 'Outfit',
-    },
 });
-    
+
 export default EditDataScreen;

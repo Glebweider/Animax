@@ -1,8 +1,8 @@
 import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 
-import BackButton from '@Components/BackButton';
-import useRecoverPassword from '@Utils/fetch/recoverPasswordUser';
+import BackButton from '@Components/buttons/Back';
+import useRecoverPassword from '@Utils/api/rest/user/recoverPasswordUser';
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
     const { data } = route.params;
@@ -12,15 +12,15 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-        const now = Date.now();
-        const remainingTime = expiresAt - now;
+            const now = Date.now();
+            const remainingTime = expiresAt - now;
 
-        if (remainingTime <= 0) {
-            setTimeLeft(0);
-            clearInterval(interval);
-        } else {
-            setTimeLeft(remainingTime);
-        }
+            if (remainingTime <= 0) {
+                setTimeLeft(0);
+                clearInterval(interval);
+            } else {
+                setTimeLeft(remainingTime);
+            }
         }, 1000);
 
         return () => clearInterval(interval);
@@ -38,22 +38,22 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
     const handlePinInputChange = (index: number, pin: string) => {
         const newPins = [...pins];
         newPins[index] = pin;
-    
+
         if (pin !== '' && index < pins.length - 1) {
-          const nextInput = inputRefs.current[index + 1];
-          if (nextInput) {
-            nextInput.focus();
-          }
+            const nextInput = inputRefs.current[index + 1];
+            if (nextInput) {
+                nextInput.focus();
+            }
         } else if (newPins.join('').length < pins.join('').length) {
-          const prevInput = inputRefs.current[index - 1];
-          if (prevInput) {
-            prevInput.focus();
-          }
+            const prevInput = inputRefs.current[index - 1];
+            if (prevInput) {
+                prevInput.focus();
+            }
         }
-    
+
         setPins(newPins);
-      };
-  
+    };
+
     const handlePinSubmit = async () => {
         const enteredPin = pins.join('');
         const response = await recoverPasswordUser(data.text, enteredPin);
@@ -65,14 +65,14 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
             })
         }
     };
-    
+
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text="Forgot Password" />
             <View style={styles.content}>
-                <Text 
-                    numberOfLines={1} 
-                    ellipsizeMode="tail" 
+                <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
                     style={styles.contentText}>Code had been send to {data.text}
                 </Text>
                 <View style={styles.pinContainer}>
@@ -85,8 +85,8 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
                             onFocus={() => setFocusedIndex(index)}
                             value={pin}
                             keyboardType="numeric"
-                            maxLength={1}/>
-                    ))}                        
+                            maxLength={1} />
+                    ))}
                 </View>
                 <View style={styles.resendCodeContainer}>
                     <Text style={styles.resendCodeText}>Resend code in </Text>
@@ -94,12 +94,12 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
                     <Text style={styles.resendCodeTime}> s</Text>
                 </View>
             </View>
-            <TouchableOpacity 
-                onPress={() => handlePinSubmit()} 
+            <TouchableOpacity
+                onPress={() => handlePinSubmit()}
                 //disabled={false}
                 style={styles.buttonContinue}>
-                    <Text style={styles.buttonContinueText}>Verify</Text>
-            </TouchableOpacity>  
+                <Text style={styles.buttonContinueText}>Verify</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
         shadowRadius: 4,
-        elevation: 8, 
+        elevation: 8,
     },
     buttonContinueText: {
         color: '#fff',
@@ -189,5 +189,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 });
-    
+
 export default ForgotPasswordCodeVerifyScreen;

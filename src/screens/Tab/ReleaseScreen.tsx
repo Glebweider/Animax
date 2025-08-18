@@ -1,11 +1,11 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import MyAnimeListButton from '@Components/MyAnimeListButton';
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
 import { useIsFocused } from '@react-navigation/native';
-import useGetCalendarAnime from '@Utils/fetch/getCalendarAnime';
+import useGetCalendarAnime from '@Utils/api/rest/anime/getCalendarAnime';
 
 interface IDate {
     dayOfMonth: string;
@@ -34,10 +34,10 @@ const getDateArrayForMonth = () => {
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
     const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  
+
     const dateArray = [];
     let currentDate = new Date(firstDayOfMonth);
-  
+
     while (currentDate <= lastDayOfMonth) {
         dateArray.push({
             dayOfWeek: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(currentDate),
@@ -46,7 +46,7 @@ const getDateArrayForMonth = () => {
         });
         currentDate.setDate(currentDate.getDate() + 1);
     }
-  
+
     return dateArray;
 };
 
@@ -68,7 +68,7 @@ const ReleaseScreen = ({ navigation }) => {
         const fetchData = async () => {
             const Animes = await getCalendarAnime();
             setAnimes(Animes);
-    
+
             const today = new Date();
             setSelectedDate({
                 dayOfMonth: today.getDate().toString(),
@@ -82,7 +82,7 @@ const ReleaseScreen = ({ navigation }) => {
             fetchData();
         }
     }, [isFocused]);
-    
+
     const animeCardTime = (data: string) => {
         const date = new Date(data);
         const hours = date.getHours();
@@ -96,12 +96,12 @@ const ReleaseScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        if(selectedDate) {
+        if (selectedDate) {
             if (Animes) {
                 const animeForDate = Animes.filter((anime) => {
-                    if (anime.anime.score >= 7) {                
+                    if (anime.anime.score >= 7) {
                         return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
-                    } 
+                    }
                 });
 
                 setSelectedAnimes(animeForDate);
@@ -122,59 +122,59 @@ const ReleaseScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item) => item.dayOfMonth.toString()}
                     renderItem={({ item }) => (
-                        <MemoizedDateItem 
-                            isSelected={selectedDate.dayOfMonth == item.dayOfMonth} 
-                            onPress={setSelectedDate} 
+                        <MemoizedDateItem
+                            isSelected={selectedDate.dayOfMonth == item.dayOfMonth}
+                            onPress={setSelectedDate}
                             item={item} />
-                    )}/>
+                    )} />
             </View>
-            <View style={{width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center'}}>
-            {isLoading ? (
-                <BallIndicator color='#06C149' size={80} animationDuration={700} />
-            ) : (
-                selectedAnimes.length >= 1 ? 
-                <FlatList
-                    data={selectedAnimes}
-                    keyExtractor={(item) => item.anime.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={{marginTop: 15}}>
-                            <View style={styles.animeCardTimeContainer}>
-                                <View style={styles.animeCardTimeLine} /> 
-                                <Text style={styles.animeCardTimeText}>{animeCardTime(item.next_episode_at)}</Text>                                
-                            </View>
-                            <View key={item.anime.id} style={styles.animeCardContainer}>
-                                <TouchableOpacity
-                                    onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
-                                    style={styles.animeCardImage}>
-                                    <Image
-                                        source={{ uri: `https://shikimori.one${item.anime.image.original}` }}
-                                        style={styles.animeCardImage}/>
-                                </TouchableOpacity>
-                                <View style={styles.animeCardData}>
-                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
-                                        {item.anime.russian ? item.anime.russian : item.anime.name}
-                                    </Text>
-                                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
-                                        {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
-                                    </Text>
-                                    <View style={{ marginTop: 10 }}>
-                                        <MyAnimeListButton anime={item.anime} />
+            <View style={{ width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center' }}>
+                {isLoading ? (
+                    <BallIndicator color='#06C149' size={80} animationDuration={700} />
+                ) : (
+                    selectedAnimes.length >= 1 ?
+                        <FlatList
+                            data={selectedAnimes}
+                            keyExtractor={(item) => item.anime.id.toString()}
+                            renderItem={({ item }) => (
+                                <View style={{ marginTop: 15 }}>
+                                    <View style={styles.animeCardTimeContainer}>
+                                        <View style={styles.animeCardTimeLine} />
+                                        <Text style={styles.animeCardTimeText}>{animeCardTime(item.next_episode_at)}</Text>
+                                    </View>
+                                    <View key={item.anime.id} style={styles.animeCardContainer}>
+                                        <TouchableOpacity
+                                            onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
+                                            style={styles.animeCardImage}>
+                                            <Image
+                                                source={{ uri: `https://shikimori.one${item.anime.image.original}` }}
+                                                style={styles.animeCardImage} />
+                                        </TouchableOpacity>
+                                        <View style={styles.animeCardData}>
+                                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
+                                                {item.anime.russian ? item.anime.russian : item.anime.name}
+                                            </Text>
+                                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
+                                                {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
+                                            </Text>
+                                            <View style={{ marginTop: 10 }}>
+                                                <MyAnimeListButton anime={item.anime} />
+                                            </View>
+                                        </View>
                                     </View>
                                 </View>
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={styles.animesContainer} />
+                        :
+                        <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+                            <Image style={{ marginTop: 80 }} source={require('../../../assets/error404Anime.png')} />
+                            <View style={styles.errorTextContainer}>
+                                <Text style={styles.errorTitle}>{i18n.t('release.norelease')}</Text>
+                                <Text style={styles.errorText}>{i18n.t('release.noreleasetext')}</Text>
                             </View>
                         </View>
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.animesContainer}/>
-                    :
-                    <View style={{width: '100%', height: '100%', alignItems: 'center'}}>
-                        <Image style={{marginTop: 80}} source={require('../../../assets/error404Anime.png')} />
-                        <View style={styles.errorTextContainer}>
-                            <Text style={styles.errorTitle}>{i18n.t('release.norelease')}</Text>
-                            <Text style={styles.errorText}>{i18n.t('release.noreleasetext')}</Text>
-                        </View>
-                    </View>
-            )}              
+                )}
             </View>
         </View>
     );
@@ -326,5 +326,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 });
-    
+
 export default ReleaseScreen;

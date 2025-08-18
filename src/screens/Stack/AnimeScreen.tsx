@@ -24,17 +24,17 @@ import PlayIcon from '@Icons/PlayIcon';
 import ArrowRightIcon from '@Icons/ArrowRightIcon';
 
 //Utils
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { i18n } from '@Utils/localization';
-import { GET_ANIME } from '@Utils/graphql/getAnime';
-import useAddAnimeList from '@Utils/fetch/addAnimeListUser';
-import useGetAnimeEpisodes from '@Utils/fetch/getAnimeEpisodes';
-import useRemoveAnimeListUser from '@Utils/fetch/removeAnimeListUser';
-import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
-import useUpdateTimeSpent from '@Utils/fetch/updateTimeSpent';
-import useGetCommentsCount from '@Utils/fetch/getCommentsCount';
-import formatViews from '@Utils/formaterViews';
-import { GET_ANIMEBYGENRES } from '@Utils/graphql/getAnimeByGenres';
+import { GET_ANIME } from '@Utils/api/graphql/getAnime';
+import useAddAnimeList from '@Utils/api/rest/anime/addAnimeListUser';
+import useGetAnimeEpisodes from '@Utils/api/rest/anime/getAnimeEpisodes';
+import useRemoveAnimeListUser from '@Utils/api/rest/anime/removeAnimeListUser';
+import useGetAnimeListUser from '@Utils/api/rest/anime/getAnimeListUser';
+import useUpdateTimeSpent from '@Utils/api/rest/analytics/updateTimeSpent';
+import useGetCommentsCount from '@Utils/api/rest/comments/getCommentsCount';
+import formatViews from '@Utils/formatters/views';
+import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
 
 //Interface
 import { IAnime } from '@Interfaces/animeAnimeScreen.interface';

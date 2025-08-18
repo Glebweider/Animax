@@ -25,7 +25,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
     );
 
     return (
-        <Modal 
+        <Modal
             isVisible={visible}
             animationIn="fadeInUp"
             animationOut="fadeOutDown"
@@ -34,9 +34,9 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
             statusBarTranslucent
             style={styles.modalContainer}>
             <View style={styles.modalContent}>
-                <View style={styles.modalShelf}/>
+                <View style={styles.modalShelf} />
                 <Text style={styles.modalTitle}>{i18n.t('anime.modal.rating')}</Text>
-                <View style={styles.modalHorizontalLine}/>
+                <View style={styles.modalHorizontalLine} />
                 <View style={styles.modalRatingsContainer}>
                     <View style={styles.scoreDataContainer}>
                         <View style={styles.scoreContainer}>
@@ -52,21 +52,21 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
                         </View>
                         <Text style={styles.userVoting}>({totalVotes} {i18n.t('anime.modal.users')})</Text>
                     </View>
-                    <View style={styles.modalVerticalLine}/>
+                    <View style={styles.modalVerticalLine} />
                     <FlatList
                         data={anime.scoresStats}
                         keyExtractor={(item) => item.score}
                         style={{}}
-                        renderItem={({ item }) => 
+                        renderItem={({ item }) =>
                             <View key={item.score} style={styles.scoreLineContainer}>
                                 <Text style={styles.scoreLineText}>{item.score}</Text>
                                 <ProgressBar progress={(item.count / totalVotes) * 100} />
                             </View>
                         }
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{paddingHorizontal: 15}}/>
+                        contentContainerStyle={{ paddingHorizontal: 15 }} />
                 </View>
-                <View style={styles.modalHorizontalLine}/>
+                <View style={styles.modalHorizontalLine} />
                 <TouchableOpacity
                     onPress={() => setVisible(false)}
                     style={styles.modalButtonClose}>
@@ -165,12 +165,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#06C149',
         borderRadius: 50,
-        height: 58, 
+        height: 58,
         shadowColor: 'rgba(6, 193, 73, 0.4)',
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
         shadowRadius: 4,
-        elevation: 8, 
+        elevation: 8,
     },
     modalButtonCloseText: {
         color: '#fff',

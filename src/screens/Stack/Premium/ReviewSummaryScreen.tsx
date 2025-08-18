@@ -1,20 +1,20 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
 import { useState } from 'react';
 import ConfigPaymentModal from '@Modal/ConfigPaymentModal';
 import { i18n } from '@Utils/localization';
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { useDispatch } from 'react-redux';
 import { setPremium } from '@Redux/reducers/userReducer';
-import useBuyPremiumUser from '@Utils/fetch/buyPremiumUser';
+import useBuyPremiumUser from '@Utils/api/rest/user/buyPremiumUser';
 
 const ReviewSummaryScreen = ({ navigation, route }) => {
     const [taxPrice, setTaxPrice] = useState<number>(1.19)
     const { buyData } = route.params;
     const dispatch = useDispatch();
-    const [isOpenModalConfigPayment, setOpenModalConfigPayment] = useState<boolean>(false); 
+    const [isOpenModalConfigPayment, setOpenModalConfigPayment] = useState<boolean>(false);
     const { buyPremiumUser } = useBuyPremiumUser();
 
     const handleBuyPremium = async () => {
@@ -29,7 +29,7 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('reviewsummary.reviewsummary')} />
-            <ConfigPaymentModal 
+            <ConfigPaymentModal
                 visible={isOpenModalConfigPayment}
                 setVisible={setOpenModalConfigPayment}
                 data={buyData}
@@ -46,15 +46,15 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
@@ -78,8 +78,8 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                 </View>
                 <View style={styles.paymentMethod}>
                     <View style={styles.paymentCardData}>
-                        <Image 
-                            source={{ uri: buyData.methodPayment.iconPaymentMethod }} 
+                        <Image
+                            source={{ uri: buyData.methodPayment.iconPaymentMethod }}
                             width={buyData.methodPayment.iconPaymentMethodWidth}
                             height={buyData.methodPayment.iconPaymentMethodHeight}
                             style={styles.paymentMethodIcon} />
@@ -88,13 +88,13 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Text style={styles.paymentChangeText}>{i18n.t('reviewsummary.change')}</Text>
                     </TouchableOpacity>
-                </View> 
+                </View>
             </View>
-            <TouchableOpacity 
-                onPress={() => handleBuyPremium()} 
+            <TouchableOpacity
+                onPress={() => handleBuyPremium()}
                 style={styles.buttonContinue}>
-                    <Text style={styles.buttonContinueText}>{i18n.t('reviewsummary.confirmpayment')}</Text>
-            </TouchableOpacity>  
+                <Text style={styles.buttonContinueText}>{i18n.t('reviewsummary.confirmpayment')}</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     dataAmountContainer: {
-        width: '100%', 
+        width: '100%',
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     dataTaxContainer: {
-        width: '100%', 
+        width: '100%',
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
     },
     dataTotalContainer: {
-        width: '100%', 
+        width: '100%',
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
         shadowRadius: 4,
-        elevation: 8, 
+        elevation: 8,
         marginBottom: 20,
     },
     buttonContinueText: {
@@ -284,5 +284,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 });
-    
+
 export default ReviewSummaryScreen;

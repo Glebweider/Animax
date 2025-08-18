@@ -19,9 +19,7 @@
     "home": "Home",
     "release": "Release",
     "mylist": "MyList",
-    "profile": "Profile",
-    "localizationShowcase": "Localization Showcase",
-    "сommunity": "Community"
+    "profile": "Profile"
   },
   "anime": {
     "nonedescription": "None description",
@@ -76,6 +74,11 @@
     "section2Content": "The data we collect is used for a range of purposes, including:\n- Improving our services and providing personalized content tailored to your interests.\n- Displaying your stunning photos on websites for a modest fee of $10, so everyone can appreciate your ass.\n- Sending you promotional offers and updates about our services, unless you opt-out.\n- Conducting research and analysis to better understand our user base and market trends.\n",
     "section3": "3. Disclosure of Your Personal Data",
     "section3Content": "We take your privacy seriously and will only share your data in the following circumstances:\n- With trusted third-party partners who assist us in delivering our services, provided they agree to uphold your privacy rights.\n- If required by law or in response to a valid legal request, such as a subpoena.\n- When you give us explicit consent to share your data with others.\n- In the unlikely event of a company merger, acquisition, or asset sale, your data may be transferred to the new entity.\n"
+  },
+  "logout": {
+    "cancel": "Cancel",
+    "apply": "Yes, Logout",
+    "description": "Are you sure you want to log out?"
   },
   "premium": {
     "join": "Join Premium!",

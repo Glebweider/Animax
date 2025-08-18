@@ -1,12 +1,12 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Image } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import ContactUs from '@Components/ContactUs';
 import { i18n } from '@Utils/localization';
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { FlatList } from 'react-native-gesture-handler';
-import formatDate from '@Utils/formaterDate';
+import formatDate from '@Utils/formatters/date';
 import CreateTicketModal from '@Components/modals/CreateTicketModal';
 import { socket } from '@Utils/socket';
 
@@ -23,7 +23,7 @@ export interface ITicket {
     userNickname: string;
 }
 
-export interface IMessage { 
+export interface IMessage {
     id: string;
     text: string;
     senderId: string;
@@ -43,7 +43,7 @@ const HelpCenterScreen = ({ navigation }) => {
         const fetchData = async () => {
             const token = await getTokenFromStorage();
 
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/tickets/user`,{
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/tickets/user`, {
                 "method": 'GET',
                 "headers": {
                     "Authorization": token || ''
@@ -66,8 +66,8 @@ const HelpCenterScreen = ({ navigation }) => {
             socket?.off('ticketCreated');
         };
     }, []);
-    
-    
+
+
     useEffect(() => {
         const animation = Animated.timing(moveValue, {
             toValue: moveLeft ? 0 : 176,
@@ -75,9 +75,9 @@ const HelpCenterScreen = ({ navigation }) => {
             easing: Easing.linear,
             useNativeDriver: false,
         });
-    
+
         animation.start();
-    
+
         return () => {
             animation.stop();
         };
@@ -92,12 +92,12 @@ const HelpCenterScreen = ({ navigation }) => {
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                         source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/cdn/avatar/${item.adminId}` }}
-                        style={styles.avatarTicket}/>
+                        style={styles.avatarTicket} />
                     <View style={styles.dataTicket}>
                         <Text style={{ color: '#ffffff' }}>{item.adminNickname}</Text>
                         <Text
-                            numberOfLines={1} 
-                            ellipsizeMode="tail"  
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                             style={{ color: '#9CA3AF', marginTop: 5, fontSize: 13 }}>
                             {item.reason}
                         </Text>
@@ -113,9 +113,9 @@ const HelpCenterScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('profile.helpcenter')} />
-            <CreateTicketModal 
-                visible={openModal} 
-                setVisible={setOpenModal}/>
+            <CreateTicketModal
+                visible={openModal}
+                setVisible={setOpenModal} />
             <View style={styles.methodsContainer}>
                 <View style={styles.methodsTextContainer}>
                     <TouchableOpacity
@@ -142,12 +142,12 @@ const HelpCenterScreen = ({ navigation }) => {
                 </View>
             </View>
             <View style={styles.containerContent}>
-                {moveLeft ? 
+                {moveLeft ?
                     <>
-                        <FlatList 
+                        <FlatList
                             style={{ width: '92%', flexGrow: 0 }}
-                            data={tickets} 
-                            renderItem={(item) => <TicketCard item={item.item} />} 
+                            data={tickets}
+                            renderItem={(item) => <TicketCard item={item.item} />}
                         />
                         {tickets.length < 2 && (
                             <TouchableOpacity style={styles.containerButton} onPress={() => setOpenModal(true)}>
@@ -245,5 +245,5 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
 });
-    
+
 export default HelpCenterScreen;

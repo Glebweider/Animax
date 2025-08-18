@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import { i18n } from '@Utils/localization';
 
 const PrivacyPolicyScreen = ({ navigation }) => {
@@ -10,12 +10,12 @@ const PrivacyPolicyScreen = ({ navigation }) => {
                 <Text style={styles.contentTitle}>{i18n.t('privacyPolicy.section1')}</Text>
                 <Text style={styles.contentText}>{i18n.t('privacyPolicy.section1Content')}</Text>
             </View>
-            
+
             <View style={styles.contentContainer}>
                 <Text style={styles.contentTitle}>{i18n.t('privacyPolicy.section2')}</Text>
                 <Text style={styles.contentText}>{i18n.t('privacyPolicy.section2Content')}</Text>
             </View>
-            
+
             <View style={styles.contentContainer}>
                 <Text style={styles.contentTitle}>{i18n.t('privacyPolicy.section3')}</Text>
                 <Text style={styles.contentText}>{i18n.t('privacyPolicy.section3Content')}</Text>
@@ -47,5 +47,5 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     }
 });
-    
+
 export default PrivacyPolicyScreen;

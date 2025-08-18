@@ -3,15 +3,14 @@ import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
 //Components
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
+import ApplyButton from '@Components/buttons/Apply';
 
 //Utils
-import facebookAuth from '@Utils/auth/facebookAuth';
-import googleAuth from '@Utils/auth/googleAuth';
-import appleAuth from '@Utils/auth/appleAuth';
+import { facebookAuth, googleAuth, appleAuth } from '@Utils/functions';
+
 
 const AuthFGAScreen = ({ navigation }) => {
-
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
@@ -24,20 +23,26 @@ const AuthFGAScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => facebookAuth()}
                     style={styles.socialContainer}>
-                    <Image source={require('../../../../assets/icons/facebook-icon.png')} style={styles.facebookImage} />
-                    <Text style={styles.socialText}>Continue with Facebook</Text>
+                    <View style={{ flexDirection: 'row', width: '68%', alignItems: 'center' }}>
+                        <Image source={require('../../../../assets/icons/facebook-icon.png')} style={styles.facebookImage} />
+                        <Text style={styles.socialText}>Continue with Facebook</Text>
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => googleAuth()}
                     style={styles.socialContainer}>
-                    <Image source={require('../../../../assets/icons/google-icon.png')} style={styles.googleImage} />
-                    <Text style={styles.socialText}>Continue with Google</Text>
+                    <View style={{ flexDirection: 'row', width: '68%', alignItems: 'center' }}>
+                        <Image source={require('../../../../assets/icons/google-icon.png')} style={styles.googleImage} />
+                        <Text style={styles.socialText}>Continue with Google</Text>
+                    </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => appleAuth()}
                     style={styles.socialContainer}>
-                    <Image source={require('../../../../assets/icons/apple-icon.png')} style={styles.appleImage} />
-                    <Text style={styles.socialText}>Continue with Apple</Text>
+                    <View style={{ flexDirection: 'row', width: '68%', alignItems: 'center' }}>
+                        <Image source={require('../../../../assets/icons/apple-icon.png')} style={styles.appleImage} />
+                        <Text style={styles.socialText}>Continue with Apple</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
             <View style={styles.intermediateContainer}>
@@ -45,11 +50,12 @@ const AuthFGAScreen = ({ navigation }) => {
                 <Text style={styles.text}>or</Text>
                 <View style={styles.line} />
             </View>
-            <TouchableOpacity
+
+            <ApplyButton
                 onPress={() => navigation.navigate('AuthSignIn')}
-                style={styles.signInButton}>
-                <Text style={styles.signInText}>Sign in with password</Text>
-            </TouchableOpacity>
+                isActiveButton={false}
+                text={'Sign in with password'}
+                style={styles.applyButton} />
             <View style={styles.signUpContainer}>
                 <Text style={styles.signUpText}>Don't have an account?</Text>
                 <TouchableOpacity
@@ -66,6 +72,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    applyButton: {
+        width: '90%'
     },
     titleContainer: {
         width: '100%',
@@ -108,19 +117,19 @@ const styles = StyleSheet.create({
         fontSize: 12
     },
     facebookImage: {
-        width: 28,
-        height: 28,
-        marginRight: 14,
+        width: 26,
+        height: 26,
+        marginHorizontal: 19
     },
     googleImage: {
         width: 24,
         height: 24,
-        marginRight: 14,
+        marginHorizontal: 20
     },
     appleImage: {
         width: 25,
         height: 31,
-        marginRight: 14,
+        marginHorizontal: 20
     },
     intermediateContainer: {
         marginTop: 20,
@@ -139,25 +148,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontFamily: 'Outfit',
         fontSize: 16,
-    },
-    signInButton: {
-        marginTop: 20,
-        backgroundColor: '#06C149',
-        width: '90%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8,
-    },
-    signInText: {
-        color: '#fff',
-        fontSize: 15,
-        fontFamily: 'Outfit',
     },
     signUpContainer: {
         width: '90%',

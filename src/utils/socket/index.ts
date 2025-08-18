@@ -1,5 +1,5 @@
 import { io, Socket } from 'socket.io-client';
-import { getTokenFromStorage } from './token';
+import { getTokenFromStorage } from '../functions/token';
 
 let socket: Socket | null = null;
 let isConnection: boolean = false;

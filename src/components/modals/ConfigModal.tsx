@@ -11,7 +11,7 @@ interface ModalProps {
 const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 
     useEffect(() => {
-        if (visible) {                
+        if (visible) {
             setTimeout(() => {
                 setVisible(false);
             }, 5000);
@@ -22,7 +22,7 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
         <Modal transparent visible={visible} animationType="slide">
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Image 
+                    <Image
                         source={require('../../../assets/backgroundConfigurator.png')}
                         style={styles.modalImage} />
                     <Text style={styles.modalTitle}>{i18n.t('configModal.congratulations')}</Text>

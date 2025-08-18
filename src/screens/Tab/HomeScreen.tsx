@@ -3,13 +3,13 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from 'rea
 import { StatusBar } from "expo-status-bar";
 import SearchIcon from '@Components/icons/SearchIcon';
 import { useQuery } from '@apollo/client';
-import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
+import { GET_ANIMES } from '@Utils/api/graphql/getTopHitsAnimes';
 import { LinearGradient } from 'expo-linear-gradient';
 import PlayIcon from '@Components/icons/PlayIcon';
-import MyAnimeListButton from '@Components/MyAnimeListButton';
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 import TopHitsAnime from '@Components/TopHitsAnime';
 import RecomendationAnime from '@Components/RecomendationAnime';
-import { GET_RECOMENDATIONANIME } from '@Utils/graphql/getRecomendationAnime';
+import { GET_RECOMENDATIONANIME } from '@Utils/api/graphql/getRecomendationAnime';
 import { i18n } from '@Utils/localization';
 import { Anime } from '@Interfaces/animeHomeScreen.interface';
 import { useSelector } from 'react-redux';
@@ -31,13 +31,13 @@ const HomeScreen = ({ navigation }) => {
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
     const { data: topHitsData } = useQuery(GET_ANIMES, {
-        variables: { 
+        variables: {
             page: 1,
             limit: 6,
             order: 'ranked',
             season: String(new Date().getFullYear())
         },
-    });   
+    });
 
     useEffect(() => {
         if (!genreId && userInterests.length > 0) {
@@ -55,12 +55,12 @@ const HomeScreen = ({ navigation }) => {
     }, [topHitsData]);
 
     const { data: recomendationData } = useQuery(GET_RECOMENDATIONANIME, {
-        variables: { 
+        variables: {
             limit: 6,
             order: 'ranked',
             genre: genreId
         },
-    });   
+    });
 
     useEffect(() => {
         if (recomendationData) {
@@ -74,22 +74,23 @@ const HomeScreen = ({ navigation }) => {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
                     <Image source={require('../../../assets/icon.png')} style={styles.headerLogo} />
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => navigation.navigate('AnimeSearchScreen')}
                         style={styles.headerIconSearch}>
-                        <SearchIcon Color={'#fff'} Style={styles.headerIconSearch} />                            
+                        <SearchIcon Color={'#fff'} Style={styles.headerIconSearch} />
                     </TouchableOpacity>
-                </View>               
+                </View>
                 <View style={styles.selectAnimeContainer}>
                     <LinearGradient
                         colors={['rgba(24, 26, 32, 0)', 'rgba(24, 26, 32, 100)']}
-                        start={{ x: 1, y: 0,}}
+                        start={{ x: 1, y: 0, }}
                         end={{ x: 0.1, y: 1 }}
                         style={styles.backgroundShadow}>
                     </LinearGradient>
                     {selectAnime.poster.originalUrl !== '' ?
                         <Image source={{
-                            uri: selectAnime.poster.originalUrl}} 
+                            uri: selectAnime.poster.originalUrl
+                        }}
                             style={styles.selectAnimeImage} />
                         :
                         <Text>{i18n.t('loading')}</Text>
@@ -97,21 +98,21 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.animeDataContainer}>
                         <View style={styles.animeContent}>
                             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeName}>{
-                                (i18n.locale === 'ru' || i18n.locale === 'uk') 
-                                ? selectAnime.russian 
-                                : selectAnime.name}
+                                (i18n.locale === 'ru' || i18n.locale === 'uk')
+                                    ? selectAnime.russian
+                                    : selectAnime.name}
                             </Text>
                             <View style={styles.tagsContainer}>
-                                {selectAnime.genres ? 
-                                    <Text 
-                                        numberOfLines={1} 
-                                        ellipsizeMode="tail" 
+                                {selectAnime.genres ?
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode="tail"
                                         style={styles.animeDescription}>
-                                            {selectAnime.genres.map(genre => (
-                                                i18n.locale === 'ru' || i18n.locale === 'uk') 
-                                                ? genre.russian 
-                                                : genre.name
-                                            ).join(', ')}
+                                        {selectAnime.genres.map(genre => (
+                                            i18n.locale === 'ru' || i18n.locale === 'uk')
+                                            ? genre.russian
+                                            : genre.name
+                                        ).join(', ')}
                                     </Text>
                                     :
                                     <Text>{i18n.t('loading')}</Text>
@@ -119,18 +120,18 @@ const HomeScreen = ({ navigation }) => {
                             </View>
                             <View style={styles.animeButtonsContainer}>
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate('AnimeScreen', {animeId: selectAnime.id})} 
+                                    onPress={() => navigation.navigate('AnimeScreen', { animeId: selectAnime.id })}
                                     style={styles.animeButtonPlay}>
-                                    <PlayIcon Color={'#fff'} Style={{marginRight: 7, marginLeft: 13,}} Width={16} Height={16} />
+                                    <PlayIcon Color={'#fff'} Style={{ marginRight: 7, marginLeft: 13, }} Width={16} Height={16} />
                                     <Text style={styles.animeButtonTextPlay}>{i18n.t('play')}</Text>
                                 </TouchableOpacity>
-                                <View style={{marginLeft: 10}}>
+                                <View style={{ marginLeft: 10 }}>
                                     <MyAnimeListButton anime={selectAnime} />
                                 </View>
                             </View>
                         </View>
                     </View>
-                </View>                    
+                </View>
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.hitsAnimeTextContainer}>
                         <Text style={styles.hitsAnimeText}>{i18n.t('home.tophitsanime')}</Text>
@@ -138,7 +139,7 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.hitsAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
-                    <TopHitsAnime data={topHitsAnime} onSelect={setSelectAnime} />              
+                    <TopHitsAnime data={topHitsAnime} onSelect={setSelectAnime} />
                 </View>
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.newEpisodeAnimeTextContainer}>
@@ -147,14 +148,14 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.newEpisodeAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
-                    <RecomendationAnime data={recomendationAnime} onSelect={setSelectAnime} />                   
+                    <RecomendationAnime data={recomendationAnime} onSelect={setSelectAnime} />
                 </View>
-            </View>            
+            </View>
         </ScrollView>
     );
 };
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         height: '114%'
@@ -226,13 +227,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     topAnimeContainer: {
-        width: '100%', 
-        height: 280, 
+        width: '100%',
+        height: 280,
         alignItems: 'center'
     },
     selectContainer: {
-        width: '100%', 
-        height: '48%', 
+        width: '100%',
+        height: '48%',
         alignItems: 'center'
     },
     backgroundShadow: {
@@ -242,8 +243,8 @@ const styles = StyleSheet.create({
         zIndex: 2
     },
     newEpisodeAnimeContainer: {
-        width: '100%', 
-        height: 300, 
+        width: '100%',
+        height: 300,
         alignItems: 'center'
     },
     selectAnimeContainer: {
@@ -359,5 +360,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
-    
+
 export default HomeScreen;

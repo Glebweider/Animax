@@ -1,14 +1,22 @@
 import { RouteProp, useRoute } from '@react-navigation/native';
-import { socket } from '@Utils/socket';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
-import { IMessage, ITicket } from './Settings/HelpCenterScreen';
-import BackButton from '@Components/BackButton';
-import encryptor from '@Utils/encryptor';
-import decryptor from '@Utils/decryptor';
-import { useSelector } from 'react-redux';
+
+// Stack
+import { IMessage, ITicket } from '@Stack/Settings/HelpCenterScreen';
+
+// Components
+import BackButton from '@Components/buttons/Back';
+
+// Redux
 import { RootState } from '@Redux/store';
-import sendNotification from '@Utils/notification';
+
+// Utils
+import encryptor from '@Utils/crypto/encryptor';
+import decryptor from '@Utils/crypto/decryptor';
+import sendNotification from '@Utils/notifications';
+import { socket } from '@Utils/socket';
 
 
 type TicketDetailsRouteProp = RouteProp<{ TicketDetails: { ticket: ITicket } }, 'TicketDetails'>;
@@ -67,14 +75,14 @@ const ReportScreen = ({ navigation }) => {
                 renderItem={renderMessage}
                 keyExtractor={(item, index) => index.toString()}
                 contentContainerStyle={styles.messagesContainer}
-                style={{ width: '94%' }}/>
+                style={{ width: '94%' }} />
             <View style={styles.inputContainer}>
                 <TextInput
                     value={newMessage}
                     onChangeText={setNewMessage}
                     placeholderTextColor="#9E9E9E"
                     placeholder="Type a message..."
-                    style={styles.input}/>
+                    style={styles.input} />
                 <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
                     <Text style={styles.sendText}>Send</Text>
                 </TouchableOpacity>
@@ -136,5 +144,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
     },
 });
-    
+
 export default ReportScreen;

@@ -3,15 +3,15 @@ import { StyleSheet, View, Image, Text, ScrollView, FlatList, TouchableOpacity }
 import { StatusBar } from 'expo-status-bar';
 import { i18n } from '@Utils/localization';
 import { BallIndicator } from 'react-native-indicators';
-import useGetUserProfile from '@Utils/fetch/getUserProfile';
-import { getTokenFromStorage } from '@Utils/token';
+import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { IUserProfile } from '@Interfaces/userProfileScreen.interface';
 import CrownIcon from '@Components/icons/CrownIcon';
-import formattedTime from '@Utils/formattedTime';
+import formattedTime from '@Utils/formatters/time';
 import SettingsIcon from '@Components/icons/SettingsIcon';
 
 const ProfileScreen = ({ navigation, route }) => {
-    const [isLoading, setLoading] = useState<boolean>(true); 
+    const [isLoading, setLoading] = useState<boolean>(true);
     const [user, setUser] = useState<IUserProfile>({
         uuid: "",
         interests: [],
@@ -20,7 +20,7 @@ const ProfileScreen = ({ navigation, route }) => {
         description: "",
         profile: {
             avatar: "",
-            nickname: "",  
+            nickname: "",
         },
         animestats: {
             counterWatchedAnime: 0,
@@ -29,7 +29,7 @@ const ProfileScreen = ({ navigation, route }) => {
         }
     });
 
-    const { getUserProfile } =  useGetUserProfile();
+    const { getUserProfile } = useGetUserProfile();
     const { userId } = route.params;
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const ProfileScreen = ({ navigation, route }) => {
             let token = await getTokenFromStorage();
             if (token && userId) {
                 const data = await getUserProfile(token, userId);
-                if(data) {
+                if (data) {
                     setUser(data);
                     setLoading(true);
                 }
@@ -47,45 +47,45 @@ const ProfileScreen = ({ navigation, route }) => {
         fetchData();
     }, [userId]);
 
-    if (!user) 
+    if (!user)
         return <BallIndicator color="#13D458" size={70} animationDuration={700} />;
 
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
             <View style={styles.headerContainer}>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
-                    <Text style={styles.headerText}>{i18n.t('navigation.profile')}</Text>                       
+                    <Text style={styles.headerText}>{i18n.t('navigation.profile')}</Text>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
                     <SettingsIcon Color={'#fff'} Style={{}} />
                 </TouchableOpacity>
-            </View> 
+            </View>
             <View style={styles.profileContainer}>
                 <View style={styles.avatarContainer}>
-                    <Image 
-                        source={ isLoading && { uri: user.profile.avatar }} 
-                        style={styles.avatarImage} />  
+                    <Image
+                        source={isLoading && { uri: user.profile.avatar }}
+                        style={styles.avatarImage} />
                 </View>
                 <View style={styles.profileUserData}>
                     <View style={{ flexDirection: 'row' }}>
-                        {user.premium && <CrownIcon Width={34} Height={34} Color={'#06C149'} /> }
+                        {user.premium && <CrownIcon Width={34} Height={34} Color={'#06C149'} />}
                         <Text style={styles.profileUsername}>{isLoading && user.profile.nickname}</Text>
                     </View>
                     <Text style={styles.profileDescription}>{isLoading && user.description}</Text>
                     <View style={styles.genresContainer}>
-                        <ScrollView 
-                            horizontal 
-                            showsHorizontalScrollIndicator={false} 
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
                             style={styles.genresScrollView}>
                             {isLoading && user.interests.map((genre) => (
-                                <View 
+                                <View
                                     style={styles.genreContainer}
                                     key={genre.id}>
-                                    <Text style={styles.genreText}>{genre.text}</Text>                                
+                                    <Text style={styles.genreText}>{genre.text}</Text>
                                 </View>
-                            ))}                    
+                            ))}
                         </ScrollView>
                     </View>
                 </View>
@@ -104,7 +104,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     <Text style={styles.statDataTimeText}>{isLoading && formattedTime(user.animestats.timeSpentWatchingAnime)}</Text>
                 </View>
             </View> */}
-            <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text> 
+            <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text>
             <FlatList
                 data={user.animelist}
                 keyExtractor={(item) => item.animeId.toString()}
@@ -123,7 +123,7 @@ const ProfileScreen = ({ navigation, route }) => {
                         )}
                         <Image
                             source={{ uri: item.poster.originalUrl }}
-                            style={styles.animeImageAnimeTop}/>
+                            style={styles.animeImageAnimeTop} />
                     </TouchableOpacity>
                 )}
                 showsHorizontalScrollIndicator={false}
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     favoriteAnimelistText: {
-        width: '90%', 
-        color: '#fff', 
+        width: '90%',
+        color: '#fff',
         marginTop: 15,
         fontSize: 18
     },
@@ -374,5 +374,5 @@ const styles = StyleSheet.create({
         marginLeft: 15,
     },
 });
-    
+
 export default ProfileScreen;

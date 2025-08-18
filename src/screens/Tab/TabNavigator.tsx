@@ -25,76 +25,76 @@ const TabNavigator = () => {
     ScreenOrientation.unlockAsync();
 
     return (
-        <Tab.Navigator 
-        screenOptions={{ 
-            headerShown: false,
-            tabBarBackground: () => <BlurView 
-                intensity={4} 
-                tint="dark"
-                style={{
-                    ...StyleSheet.absoluteFillObject,
-                    borderTopLeftRadius: 22,
-                    borderTopRightRadius: 22,
-                    overflow: 'hidden',
-                    backgroundColor: '#222222b3',
-                    borderBottomWidth: 0,
-                }} />,
-            tabBarStyle: {
-                position: 'absolute',
-                height: '9%',
-                borderTopWidth: 0,
-                backgroundColor: 'transparent',
-            },
-            tabBarLabelStyle: {
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                marginBottom: 13,
-            },
-            tabBarIconStyle: {
-                marginTop: 15,
-            },
-            tabBarActiveTintColor: '#06C149',
-            tabBarInactiveTintColor: '#9E9E9E'
-        }}>
-            <Tab.Screen 
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false,
+                tabBarBackground: () => <BlurView
+                    intensity={4}
+                    tint="dark"
+                    style={{
+                        ...StyleSheet.absoluteFillObject,
+                        borderTopLeftRadius: 22,
+                        borderTopRightRadius: 22,
+                        overflow: 'hidden',
+                        backgroundColor: '#222222b3',
+                        borderBottomWidth: 0,
+                    }} />,
+                tabBarStyle: {
+                    position: 'absolute',
+                    height: '9%',
+                    borderTopWidth: 0,
+                    backgroundColor: 'transparent',
+                },
+                tabBarLabelStyle: {
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    marginBottom: 13,
+                },
+                tabBarIconStyle: {
+                    marginTop: 15,
+                },
+                tabBarActiveTintColor: '#06C149',
+                tabBarInactiveTintColor: '#9E9E9E'
+            }}>
+            <Tab.Screen
                 name='Home'
                 component={HomeScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <HomeIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
+                        <HomeIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.home'),
                 }} />
-            <Tab.Screen 
+            <Tab.Screen
                 name='Release'
                 component={ReleaseScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CalendarIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
+                        <CalendarIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.release'),
-                }}  />
-            <Tab.Screen 
-                name='MyList'  
+                }} />
+            <Tab.Screen
+                name='MyList'
                 component={MyListScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <MyListIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
+                        <MyListIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.mylist'),
-                }}  />
-            <Tab.Screen 
+                }} />
+            <Tab.Screen
                 name='Profile'
                 initialParams={{ "userId": currentUserStateId }}
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon}/>
+                        <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.profile'),
-                }}  />
-        </Tab.Navigator>  
+                }} />
+        </Tab.Navigator>
     )
 }
 

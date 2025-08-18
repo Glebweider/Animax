@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList } from 'react-native';
 import { useApolloClient } from '@apollo/client';
-import MyAnimeListButton from '@Components/MyAnimeListButton';
-import BackButton from '@Components/BackButton';
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
+import BackButton from '@Components/buttons/Back';
 import { i18n } from '@Utils/localization';
-import { GET_RECOMENDATIONANIME } from '@Utils/graphql/getRecomendationAnime';
+import { GET_RECOMENDATIONANIME } from '@Utils/api/graphql/getRecomendationAnime';
 import { useSelector } from 'react-redux';
 import { RootState } from '@Redux/store';
 import { useAlert } from '@Components/AlertContext';
@@ -28,7 +28,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
         if (genreId) {
             client.query({
                 query: GET_RECOMENDATIONANIME,
-                variables: { 
+                variables: {
                     page,
                     limit: 50,
                     order: 'ranked',
@@ -43,7 +43,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
             });
         }
     }, [page, genreId]);
-    
+
     const handleEndReached = async () => {
         setPage(prevPage => prevPage + 1);
         const newGenreId = userInterests[Math.floor(Math.random() * userInterests.length)].id;
@@ -58,7 +58,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
                     style={styles.animeCardImageContainer}>
                     <Image
                         source={{ uri: item.poster.originalUrl }}
-                        style={styles.animeCardImage}/>
+                        style={styles.animeCardImage} />
                     <View style={styles.scoreContainer}>
                         <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
                     </View>
@@ -76,9 +76,9 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
                         <Text style={styles.animeCardYear}>
                             {item.airedOn.year ? item.airedOn.year : '????'}
                         </Text>
-                        <Text 
-                            numberOfLines={3} 
-                            ellipsizeMode="tail" 
+                        <Text
+                            numberOfLines={3}
+                            ellipsizeMode="tail"
                             style={styles.animeCardGenre}>
                             {i18n.t('genre')}: {item.genres.map(genre => genre.russian).join(', ')}
                         </Text>
@@ -94,7 +94,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('home.yourecomendationanimes')} />
-            <View style={{width: '90%', height: '87%', alignItems: 'center'}}>
+            <View style={{ width: '90%', height: '87%', alignItems: 'center' }}>
                 {animes.length >= 1 && (
                     <FlatList
                         data={animes}
@@ -103,7 +103,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={styles.containerAnimes}
                         onEndReached={handleEndReached}
-                        onEndReachedThreshold={0.1}/>
+                        onEndReachedThreshold={0.1} />
                 )}
             </View>
         </View>
@@ -197,5 +197,5 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
 });
-    
+
 export default RecomendationsAnimeScreen;

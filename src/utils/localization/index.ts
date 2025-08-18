@@ -1,6 +1,8 @@
 import * as Localization from 'expo-localization'
 import { I18n } from 'i18n-js'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Locales
 import en_Eng from '@locales/en_Eng.json';
 import fr_Fra from '@locales/fr_Fra.json';
 import de_Ger from '@locales/de_Ger.json';

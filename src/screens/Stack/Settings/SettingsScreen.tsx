@@ -10,7 +10,7 @@ import LogoutModal from '@Modal/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
 import { i18n } from '@Utils/localization';
 import NotificationIcon from '@Components/icons/NotificationIcon';
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import * as Updates from 'expo-updates';
 
 

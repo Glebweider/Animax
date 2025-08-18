@@ -19,9 +19,7 @@
     "home": "Accueil",
     "release": "Publication",
     "mylist": "Ma Liste",
-    "profile": "Profil",
-    "localizationShowcase": "Démonstration de localisation",
-    "сommunity": "Communauté"
+    "profile": "Profil"
   },
   "anime": {
     "nonedescription": "Aucune description",
@@ -76,6 +74,11 @@
     "section2Content": "Les données que nous collectons sont utilisées pour divers objectifs, notamment :\n- Améliorer nos services et fournir un contenu personnalisé adapté à vos intérêts.\n- Afficher vos superbes photos sur des sites web pour une modeste somme de 10 $, afin que tout le monde puisse admirer votre derrière.\n- Vous envoyer des offres promotionnelles et des mises à jour sur nos services, sauf si vous vous désabonnez.\n- Réaliser des recherches et des analyses pour mieux comprendre notre base d'utilisateurs et les tendances du marché.\n",
     "section3": "3. Divulgation de vos données personnelles",
     "section3Content": "Nous prenons votre vie privée au sérieux et partagerons vos données uniquement dans les circonstances suivantes :\n- Avec des partenaires de confiance nous aidant à fournir nos services, à condition qu'ils acceptent de respecter vos droits à la vie privée.\n- Si la loi l'exige ou en réponse à une demande légale valide, comme une assignation à comparaître.\n- Lorsque vous nous donnez explicitement votre consentement pour partager vos données avec d'autres.\n- Dans le cas peu probable d'une fusion, acquisition ou vente d'actifs de l'entreprise, vos données peuvent être transférées à la nouvelle entité.\n"
+  },
+  "logout": {
+    "cancel": "Annuler",
+    "apply": "Oui, déconnexion",
+    "description": "Êtes-vous sûr de vouloir vous déconnecter ?"
   },
   "premium": {
     "join": "Rejoindre Premium !",

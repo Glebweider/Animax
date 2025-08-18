@@ -1,13 +1,13 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useEffect, useState } from 'react';
 
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
 import { useDispatch } from 'react-redux';
 import { setUser } from '@Redux/reducers/userReducer';
 import ConfigModal from '@Components/modals/ConfigModal';
-import { saveTokenToStorage } from '@Utils/token';
-import useResetPassword from '@Utils/fetch/resetPasswordUser';
+import { saveTokenToStorage } from '@Utils/functions/token';
+import useResetPassword from '@Utils/api/rest/user/resetPasswordUser';
 
 const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const { data } = route.params;
@@ -17,7 +17,7 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const [isOpenModal, setOpenModal] = useState<boolean>(false);
     const [isEnabledButton, setEnabledButton] = useState<boolean>(true);
     const { resetPasswordUser } = useResetPassword();
-    
+
     useEffect(() => {
         if (textNewPassword == textVerifyPassword) {
             setEnabledButton(false);
@@ -53,12 +53,12 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
                 <PasswordSection placeholder={"New Password"} textPassword={textNewPassword} setTextPassword={setTextNewPassword} />
                 <PasswordSection placeholder={"Verify Password"} textPassword={textVerifyPassword} setTextPassword={setTextVerifyPassword} />
             </View>
-            <TouchableOpacity 
-                onPress={() => handleResetPassword()} 
+            <TouchableOpacity
+                onPress={() => handleResetPassword()}
                 disabled={isEnabledButton}
                 style={styles.buttonContinue}>
-                    <Text style={styles.buttonContinueText}>Verify</Text>
-            </TouchableOpacity>  
+                <Text style={styles.buttonContinueText}>Verify</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
         shadowRadius: 4,
-        elevation: 8, 
+        elevation: 8,
     },
     buttonContinueText: {
         color: '#fff',
@@ -99,5 +99,5 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 });
-    
+
 export default ForgotPasswordResetPasswordScreen;

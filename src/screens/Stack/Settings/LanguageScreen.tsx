@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import { i18n, languageNames, translations } from '@Utils/localization';
 import { saveLocalizationToStorage } from '@Utils/localization';
 import * as Updates from 'expo-updates';
@@ -24,14 +24,14 @@ const LanguageScreen = ({ navigation }) => {
             <BackButton navigation={navigation} text={i18n.t('profile.language')} />
             <Text style={styles.cautionLangText}>{i18n.t('caution_lang')}</Text>
             {languageOptions.map((lang) => (
-                <TouchableOpacity 
+                <TouchableOpacity
                     key={lang}
                     onPress={() => handleChangeLanguage(lang)}
                     style={styles.laguageContainer} >
                     <Text style={styles.laguageText}>{languageNames[lang] || lang.toUpperCase()}</Text>
                     <View style={styles.buttonSelect}>
                         {i18n.locale == lang && (
-                            <View style={styles.buttonSelected}/>
+                            <View style={styles.buttonSelected} />
                         )}
                     </View>
                 </TouchableOpacity>
@@ -86,5 +86,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#06C149',
     },
 });
-    
+
 export default LanguageScreen;

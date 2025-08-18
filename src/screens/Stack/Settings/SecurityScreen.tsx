@@ -1,9 +1,9 @@
-import { StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '@Redux/store';
 import { StatusBar } from 'expo-status-bar';
 import { i18n } from '@Utils/localization';
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 
 const SecurityScreen = ({ navigation }) => {
     const userState = useSelector((state: RootState) => state.userReducer);
@@ -12,7 +12,7 @@ const SecurityScreen = ({ navigation }) => {
         <View style={styles.container}>
             <StatusBar style='light' />
             <BackButton navigation={navigation} text={i18n.t('profile.security')} />
-            
+
         </View>
     );
 };
@@ -25,5 +25,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#181A20',
     },
 });
-    
+
 export default SecurityScreen;

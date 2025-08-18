@@ -1,37 +1,41 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
+import { registerForPushNotificationsAsync } from 'notification-config';
 
-//Components
-import BackButton from '@Components/BackButton';
+// Components
+import BackButton from '@Components/buttons/Back';
+import ApplyButton from '@Components/buttons/Apply';
+import { useAlert } from '@Components/AlertContext';
 
-//Modals
+// Modals
 import ConfigModal from '@Modal/ConfigModal';
 
-//Icons
+// Icons
 import PencilIcon from '@Icons/PencilIcon';
 
-//Utils
-import { isPhoneNumber } from '@Utils/validator';
-import { saveTokenToStorage } from '@Utils/token'; 
+// Utils
+import { isPhoneNumber } from '@Utils/validators';
+import { saveTokenToStorage } from '@Utils/functions';
+import { useFormValidation } from '@Utils/hooks';
 
-//Redux
+// Redux
 import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
-import useCheckPhoneNumberAvailability from '@Utils/fetch/authCheckPhoneNumberAvailability';
-import useCheckNicknameAvailability from '@Utils/fetch/authCheckNicknameAvailability';
-import useAuthUserInToken from '@Utils/fetch/authUserInToken';
-import { useAlert } from '@Components/AlertContext';
-import { registerForPushNotificationsAsync } from 'notification-config';
+
+// Rest
+import useCheckPhoneNumberAvailability from '@Rest/auth/authCheckPhoneNumberAvailability';
+import useCheckNicknameAvailability from '@Rest/auth/authCheckNicknameAvailability';
+import useAuthUserInToken from '@Rest/auth/authUserInToken';
 
 
 const AuthAccountSetupDataScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const authState = useSelector((state: RootState) => state.authReducer);
-    
+
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
     const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
 
@@ -41,67 +45,33 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const [selectedGender, setSelectedGender] = React.useState<string>('');
     const [avatar, setAvatar] = React.useState<any>(null);
 
-    const [fullNameError, setFullNameError] = React.useState<string | null>(null);
-    const [nicknameError, setNicknameError] = React.useState<string | null>(null);
-    const [phoneNumberError, setPhoneNumberError] = React.useState<string | null>(null);
-
-    const [isFullNameVerify, setFullNameVerify] = React.useState<boolean>(false);
-    const [isNicknameVerify, setNicknameVerify] = React.useState<boolean>(false);
-    const [isPhoneNumberVerify, setPhoneNumberVerify] = React.useState<boolean>(false);
-
     const { checkPhoneNumberAvailability } = useCheckPhoneNumberAvailability();
     const { checkNicknameAvailability } = useCheckNicknameAvailability();
     const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
 
-    useEffect(() => {
-        if (textFullName.length >= 1) {
-            if (textFullName.length < 3) {
-                setFullNameError(' Full name must be at least 4 characters long');
-                setFullNameVerify(false);
-            } else {
-                setFullNameError(null);
-                setFullNameVerify(true);
-            }
-        } else {
-            setFullNameError(null);
-            setFullNameVerify(false);
-        }
-    
-        if (textNickname.length >= 3) {
-            if (textNickname.length < 4) {
-                setNicknameError('Nickname must be at least 4 characters long');
-                setNicknameVerify(false);
-            } else {
-                setNicknameError(null);
-                setNicknameVerify(true);
-            }            
-        } else {
-            setNicknameError(null);
-            setNicknameVerify(false);
-        }
+    const formConfig = useMemo(() => ({
+        fullName: {
+            value: textFullName,
+            rules: [
+                (v) => v.length < 3 ? "Full name must be at least 3 characters" : null,
+            ],
+        },
+        nickname: {
+            value: textNickname,
+            rules: [
+                (v) => v.length < 4 ? "Nickname must be at least 4 characters" : null,
+            ],
+        },
+        phone: {
+            value: textPhoneNumber,
+            rules: [
+                (v) => !isPhoneNumber(v) ? "Please enter a valid phone number" : null,
+            ],
+        },
+    }), [textFullName, textNickname, textPhoneNumber]);
 
-        if (textPhoneNumber.length >= 3) {
-            if (!isPhoneNumber(textPhoneNumber)) {
-                setPhoneNumberError('Please enter a valid phone number');
-                setPhoneNumberVerify(false);
-            } else {
-                setPhoneNumberError(null);
-                setPhoneNumberVerify(true);
-            }            
-        } else {
-            setPhoneNumberError(null);
-            setPhoneNumberVerify(false);
-        }
-    
-        if (textFullName.length >= 3 && textNickname.length >= 4 && isPhoneNumber(textPhoneNumber) && avatar) {
-            if (isFullNameVerify && isNicknameVerify && isPhoneNumberVerify && avatar) {
-                setActiveButton(false);                
-            }
-        } else {
-            setActiveButton(true);
-        }
-    }, [textFullName, textNickname, textPhoneNumber, avatar]);
+    const { errors, activeButton } = useFormValidation(formConfig);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -137,24 +107,24 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
             })
 
             if (response.status == 200) {
-                    setOpenModal(true);
-                    setTimeout(async () => {
-                        const user = await authUserInToken(response.body);
-                        if (user) {
-                            saveTokenToStorage(response.body);
-                            dispatch(setUser(user));
-                            navigation.navigate('HomeScreen');
-                        } else {
-                            setOpenModal(false); 
-                        }
-                    }, 5000);                          
+                setOpenModal(true);
+                setTimeout(async () => {
+                    const user = await authUserInToken(response.body);
+                    if (user) {
+                        saveTokenToStorage(response.body);
+                        dispatch(setUser(user));
+                        navigation.navigate('HomeScreen');
+                    } else {
+                        setOpenModal(false);
+                    }
+                }, 5000);
             } else {
-                setOpenModal(false); 
+                setOpenModal(false);
                 showAlert(response.body);
             }
 
         } else {
-            setPhoneNumberError('Please enter a valid phone number');
+            showAlert('Please enter a valid phone number');
             setActiveButton(true);
         }
     };
@@ -163,17 +133,17 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         <View style={styles.container}>
             <BackButton navigation={navigation} text="Fill Your Profile" />
             <View style={styles.avatarContainer}>
-                <TouchableOpacity 
+                <TouchableOpacity
                     onPress={() => pickImage()}
                     style={styles.containerImageAvatar}>
-                    { avatar ? 
-                    <Image 
-                        source={{ uri: avatar.uri }} 
-                        style={styles.imageAvatar} />   
-                    :
-                    <Image 
-                        source={require('../../../../assets/avatar.png')} 
-                        style={styles.imageNullAvatar} />   
+                    {avatar ?
+                        <Image
+                            source={{ uri: avatar.uri }}
+                            style={styles.imageAvatar} />
+                        :
+                        <Image
+                            source={require('../../../../assets/avatar.png')}
+                            style={styles.imageNullAvatar} />
                     }
                 </TouchableOpacity>
                 <View style={styles.pencilContainer}>
@@ -187,18 +157,20 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         placeholderTextColor="#9E9E9E"
                         placeholder="Full Name"
                         onChangeText={(newText) => setTextFullName(newText)}
-                        value={textFullName}/>
+                        value={textFullName} />
                 </View>
-                {fullNameError && <Text style={styles.fullNameError}>{fullNameError}</Text>}
+                {errors.fullname && <Text style={styles.errorMessage}>{errors.fullname}</Text>}
+
                 <View style={styles.nicknameSection}>
                     <TextInput
                         style={styles.nicknameInput}
                         placeholderTextColor="#9E9E9E"
                         placeholder="Nickname"
                         onChangeText={(newText) => setTextNickname(newText)}
-                        value={textNickname}/>
+                        value={textNickname} />
                 </View>
-                {nicknameError && <Text style={styles.nicknameError}>{nicknameError}</Text>}    
+                {errors.nickname && <Text style={styles.errorMessage}>{errors.nickname}</Text>}
+
                 <View style={styles.phoneNumberSection}>
                     <TextInput
                         style={styles.phoneNumberInput}
@@ -206,9 +178,10 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         placeholder="Phone Number"
                         keyboardType="phone-pad"
                         onChangeText={(newText) => setTextPhoneNumber(newText)}
-                        value={textPhoneNumber}/>
+                        value={textPhoneNumber} />
                 </View>
-                {phoneNumberError && <Text style={styles.phoneNumberError}>{phoneNumberError}</Text>}     
+                {errors.phone && <Text style={styles.errorMessage}>{errors.phone}</Text>}
+
                 <View style={styles.genderSection}>
                     <Picker
                         style={styles.genderPicker}
@@ -217,30 +190,39 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         mode='dropdown'
                         dropdownIconColor={'#fff'}
                         onValueChange={(value) => setSelectedGender(value)}>
-                            <Picker.Item label="Male" value="male" />
-                            <Picker.Item label="Female" value="female" />
-                            <Picker.Item label="Other" value="other" />
+
+                        <Picker.Item label="Male" value="male" />
+                        <Picker.Item label="Female" value="female" />
+                        <Picker.Item label="Other" value="other" />
                     </Picker>
-                </View>    
+                </View>
             </View>
-            <TouchableOpacity 
-                onPress={() => registation()} 
-                disabled={isActiveButton}
-                style={isActiveButton ? styles.continueButtonDisabled : styles.continueButtonEnabled}>
-                <Text style={styles.buttonTitle}>Continue</Text>
-            </TouchableOpacity>
-            <ConfigModal 
-                visible={isOpenModal} 
+            <ApplyButton
+                onPress={registation}
+                isActiveButton={isActiveButton && activeButton}
+                style={{}}
+                text={'Continue'} />
+
+            <ConfigModal
+                visible={isOpenModal}
                 setVisible={setOpenModal} />
         </View>
     );
 };
-    
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    errorMessage: {
+        marginTop: 5,
+        color: 'red',
+        fontSize: 11,
+        fontFamily: 'Outfit',
+        justifyContent: 'center',
+        textAlign: 'center'
     },
     pencilContainer: {
         backgroundColor: "#06C149",
@@ -289,14 +271,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         marginLeft: 20,
     },
-    fullNameError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
     nicknameSection: {
         marginTop: 25,
         flexDirection: 'row',
@@ -314,14 +288,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         marginLeft: 20,
     },
-    nicknameError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
     phoneNumberSection: {
         marginTop: 25,
         flexDirection: 'row',
@@ -338,14 +304,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
         marginLeft: 20,
-    },
-    phoneNumberError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
     },
     genderSection: {
         marginTop: 25,
@@ -371,33 +329,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 14,
-    },
-    continueButtonDisabled: {
-        backgroundColor: '#0E9E42',
-        width: '90%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    continueButtonEnabled: {
-        backgroundColor: '#06C149',
-        width: '90%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8, 
-    },
-    buttonTitle: {
-        color: '#fff',
-        fontSize: 15,
-        fontFamily: 'Outfit',
-    },
+    }
 });
-    
+
 export default AuthAccountSetupDataScreen;

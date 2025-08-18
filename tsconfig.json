@@ -18,6 +18,8 @@
       "@Modal/*": ["src/components/modals/*"],
       "@Icons/*": ["src/components/icons/*"],
       "@Utils/*": ["src/utils/*"],
+      "@Rest/*": ["src/utils/api/rest/*"],
+      "@GraphQl/*": ["src/utils/api/graphql/*"],
       "@Stack/*": ["src/screens/Stack/*"],
       "@Tab/*": ["src/screens/Tab/*"],
       "@Redux/*": ["src/redux/*"],

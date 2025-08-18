@@ -1,86 +1,66 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
+import { registerForPushNotificationsAsync } from 'notification-config';
 
-//Components
-import BackButton from '@Components/BackButton';
+// Components
+import BackButton from '@Components/buttons/Back';
+import PasswordSection from '@Components/PasswordSection';
+import ApplyButton from '@Components/buttons/Apply';
 
-//Icons 
+// Icons 
 import EmailIcon from '@Icons/EmailIcon';
 
-//Utils
-import facebookAuth from '@Utils/auth/facebookAuth';
-import googleAuth from '@Utils/auth/googleAuth';
-import appleAuth from '@Utils/auth/appleAuth';
-import { isEmail } from '@Utils/validator';
-import { saveTokenToStorage } from '@Utils/token';
+// Utils
+import { facebookAuth, googleAuth, appleAuth, saveTokenToStorage } from '@Utils/functions';
+import { isEmail } from '@Utils/validators';
+import { useFormValidation } from '@Utils/hooks';
 
-//Redux
+// Redux
 import { setUser } from '@Redux/reducers/userReducer';
-import PasswordSection from '@Components/PasswordSection';
-import useAuthUserInToken from '@Utils/fetch/authUserInToken';
-import useAuthSignIn from '@Utils/fetch/authUserSignIn';
 
-import { registerForPushNotificationsAsync } from 'notification-config';
+// Rest
+import useAuthUserInToken from '@Rest/auth/authUserInToken';
+import useAuthSignIn from '@Rest/auth/authUserSignIn';
+
 
 const AuthSignInScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [textEmail, setTextEmail] = React.useState<string>('');
     const [textPassword, setTextPassword] = React.useState<string>('');
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const [passwordError, setPasswordError] = React.useState<string | null>(null);
-    const [emailError, setEmailError] = React.useState<string | null>(null);
-    const [isEmailVerify, setEmailVerify] = React.useState<boolean>(false);
-    const [isPasswordVerify, setPasswordVerify] = React.useState<boolean>(false);
     const { authUserInToken } = useAuthUserInToken();
     const { authSignIn } = useAuthSignIn();
-    
-    useEffect(() => {
-        if (textPassword.length >= 1) {
-            if (textPassword.length < 6) {
-                setPasswordError('Password must be at least 6 characters');
-                setEmailVerify(false);
-            } else {
-                setPasswordError(null);
-                setEmailVerify(true);
-            }
-        } else {
-            setPasswordError(null);
-            setEmailVerify(false);
-        }
-    
-        if (textEmail.length >= 3) {
-            if (!isEmail(textEmail)) {
-                setEmailError('Please enter a valid email address');
-                setPasswordVerify(false);
-            } else {
-                setEmailError(null)
-                setPasswordVerify(true);
-            }            
-        } else {
-            setEmailError(null)
-            setPasswordVerify(false);
-        }
-    
-        if (isEmail(textEmail) && textPassword.length >= 6) {
-            if (isEmailVerify && isPasswordVerify) {
-                setActiveButton(false);                
-            }
-        } else {
-            setActiveButton(true);
-        }
-    }, [textEmail, textPassword]);
+
+    const formConfig = useMemo(() => ({
+        email: {
+            value: textEmail,
+            rules: [
+                (v) => !isEmail(v) ? "Please enter a valid email address" : null,
+            ],
+        },
+        password: {
+            value: textPassword,
+            rules: [
+                (v) => v.length < 6 ? "Password must be at least 6 characters" : null,
+            ],
+        },
+    }), [textEmail, textPassword]);
+
+    const { errors, activeButton } = useFormValidation(formConfig);
+
 
     const authorization = async () => {
         setActiveButton(true);
 
         const pushToken = await registerForPushNotificationsAsync();
         const response = await authSignIn({
-            email: textEmail, 
+            email: textEmail,
             password: textPassword,
             pushToken: pushToken
         });
+
         if (response) {
             saveTokenToStorage(response);
             const user = await authUserInToken(response);
@@ -89,7 +69,7 @@ const AuthSignInScreen = ({ navigation }) => {
                 navigation.navigate('HomeScreen');
             }
         }
-        setActiveButton(false); 
+        setActiveButton(false);
     }
 
     return (
@@ -101,9 +81,10 @@ const AuthSignInScreen = ({ navigation }) => {
                 <Text style={styles.titleText}>Login Your Account</Text>
             </View>
             <View style={styles.authContainer}>
+
                 <View style={styles.emailSection}>
-                    <EmailIcon 
-                        Color={textEmail ? '#fff' : '#9E9E9E'} 
+                    <EmailIcon
+                        Color={textEmail ? '#fff' : '#9E9E9E'}
                         Style={styles.icon} />
                     <TextInput
                         style={styles.emailInput}
@@ -111,53 +92,57 @@ const AuthSignInScreen = ({ navigation }) => {
                         placeholder="Email"
                         keyboardType="email-address"
                         onChangeText={(newText) => setTextEmail(newText)}
-                        value={textEmail}/>
+                        value={textEmail} />
                 </View>
-                {emailError && <Text style={styles.emailError}>{emailError}</Text>}
+                {errors.email && <Text style={styles.errorMessage}>{errors.email}</Text>}
+
                 <PasswordSection placeholder='Password' textPassword={textPassword} setTextPassword={setTextPassword} />
-                {passwordError && <Text style={styles.passwordError}>{passwordError}</Text>}
-                <TouchableOpacity 
-                    onPress={() => authorization()}
-                    disabled={isActiveButton}
-                    style={isActiveButton ? styles.signInButtonDisabled : styles.signInButtonEnabled}>
-                    <Text style={styles.signInText}>Sign in</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
+                {errors.password && <Text style={styles.errorMessage}>{errors.password}</Text>}
+
+                <ApplyButton
+                    onPress={authorization}
+                    isActiveButton={isActiveButton && activeButton}
+                    style={styles.applyButton}
+                    text={'Sign in'} />
+
+                <TouchableOpacity
                     onPress={() => navigation.navigate('ForgotPasswordMethodsScreen')}
                     style={styles.clicableForgotPassword}>
                     <Text style={styles.clicableForgotPasswordText}>Forgot the password?</Text>
                 </TouchableOpacity>
+
                 <View style={styles.intermediateContainer}>
                     <View style={styles.line} />
                     <Text style={styles.text}>or continue with</Text>
                     <View style={styles.line} />
                 </View>
+
                 <View style={styles.authFGAContainer}>
-                    <TouchableOpacity 
-                        onPress={() => facebookAuth()} 
+                    <TouchableOpacity
+                        onPress={() => facebookAuth()}
                         style={styles.facebookContainer}>
-                        <Image 
-                            source={require('../../../../assets/icons/facebook-icon.png')} 
+                        <Image
+                            source={require('../../../../assets/icons/facebook-icon.png')}
                             style={styles.facebookImage} />
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        onPress={() => googleAuth()} 
+                    <TouchableOpacity
+                        onPress={() => googleAuth()}
                         style={styles.googleContainer}>
-                        <Image 
-                            source={require('../../../../assets/icons/google-icon.png')} 
+                        <Image
+                            source={require('../../../../assets/icons/google-icon.png')}
                             style={styles.googleImage} />
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        onPress={() => appleAuth()} 
+                    <TouchableOpacity
+                        onPress={() => appleAuth()}
                         style={styles.appleContainer}>
-                        <Image 
-                            source={require('../../../../assets/icons/apple-icon.png')} 
+                        <Image
+                            source={require('../../../../assets/icons/apple-icon.png')}
                             style={styles.appleImage} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.signUpContainer}>
                     <Text style={styles.signUpText}>Don't have an account?</Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => navigation.navigate('AuthSignUp')}>
                         <Text style={styles.clicableSignUpText}>Sign up</Text>
                     </TouchableOpacity>
@@ -166,9 +151,9 @@ const AuthSignInScreen = ({ navigation }) => {
         </View>
     );
 };
-    
+
 const styles = StyleSheet.create({
-    passwordError: {
+    errorMessage: {
         marginTop: 5,
         color: 'red',
         fontSize: 11,
@@ -176,41 +161,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center'
     },
-    emailError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    signInButtonEnabled: {
+    applyButton: {
         marginTop: 30,
-        backgroundColor: '#06C149',
-        width: '100%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8, 
-    },
-    signInButtonDisabled: {
-        marginTop: 30,
-        backgroundColor: '#0E9E42',
-        width: '100%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    signInText: {
-        color: '#fff',
-        fontSize: 15,
-        fontFamily: 'Outfit',
+        width: '100%'
     },
     emailSection: {
         marginTop: 30,
@@ -221,7 +174,7 @@ const styles = StyleSheet.create({
         height: 64,
         borderRadius: 20,
         backgroundColor: '#1F222A',
-    },    
+    },
     emailInput: {
         flex: 1,
         height: '100%',
@@ -237,7 +190,7 @@ const styles = StyleSheet.create({
         height: 64,
         borderRadius: 20,
         backgroundColor: '#1F222A',
-    },    
+    },
     passwordInput: {
         flex: 1,
         height: '100%',
@@ -247,7 +200,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        marginLeft: 22, 
+        marginLeft: 22,
         marginRight: 20,
     },
     container: {
@@ -372,5 +325,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
     },
 });
-    
+
 export default AuthSignInScreen;

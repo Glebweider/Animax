@@ -1,76 +1,64 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput} from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch } from 'react-redux';
 
-//Components
-import BackButton from '@Components/BackButton';
+// Components
+import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
+import ApplyButton from '@Components/buttons/Apply';
+import { useAlert } from '@Components/AlertContext';
 
-//Icons
+// Icons
 import EmailIcon from '@Icons/EmailIcon';
 
-//Utils
-import facebookAuth from '@Utils/auth/facebookAuth';
-import googleAuth from '@Utils/auth/googleAuth';
-import appleAuth from '@Utils/auth/appleAuth';
+// Utils
+import { facebookAuth, googleAuth, appleAuth } from '@Utils/functions';
+import { useFormValidation } from '@Utils/hooks';
+import { isEmail } from '@Utils/validators';
 
-//Redux
+// Rest
+import useCheckEmailAvailability from '@Rest/auth/authCheckEmailAvailability';
+
+// Redux
 import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';
-import useCheckEmailAvailability from '@Utils/fetch/authCheckEmailAvailability';
 
 
 const AuthSignUpScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
+    const { showAlert } = useAlert();
     const [textEmail, setTextEmail] = React.useState<string>('');
     const [textPassword, setTextPassword] = React.useState<string>('');
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const [passwordError, setPasswordError] = React.useState<string | null>(null);
-    const [emailError, setEmailError] = React.useState<string | null>(null);
-    const [isEmailVerify, setEmailVerify] = React.useState<boolean>(false);
-    const [isPasswordVerify, setPasswordVerify] = React.useState<boolean>(false);
     const { checkEmailAvailability } = useCheckEmailAvailability();
 
-    useEffect(() => {
-        if (textPassword.length >= 1) {
-            if (textPassword.length < 6) {
-                setPasswordError('Password must be at least 6 characters and include at least one letter');
-                setEmailVerify(false);
-            } else {
-                setPasswordError(null);
-                setEmailVerify(true);
-            }
-        } else {
-            setPasswordError(null);
-            setEmailVerify(false);
+    const formConfig = useMemo(() => ({
+        email: {
+            value: textEmail,
+            rules: [
+                (v) => !isEmail(v) ? "Please enter a valid email" : null
+            ]
+        },
+        password: {
+            value: textPassword,
+            rules: [
+                (v) => v.length < 6 ? "Password must be at least 6 characters" : null
+            ]
         }
-    
-        if (textEmail.length >= 3) {
-            setEmailError(null)
-            setPasswordVerify(true);           
-        } else {
-            setEmailError(null)
-            setPasswordVerify(false);
-        }
-    
-        if (textEmail.length >= 6 && textPassword.length >= 6) {
-            if (isEmailVerify && isPasswordVerify) {
-                setActiveButton(false);                
-            }
-        } else {
-            setActiveButton(true);
-        }
-    }, [textEmail, textPassword]);
+    }), [textEmail, textPassword]);
+
+    const { errors, activeButton } = useFormValidation(formConfig);
+
 
     const registration = async () => {
         const checkEmail = await checkEmailAvailability(textEmail);
         if (checkEmail) {
             dispatch(setEmailAndPasswordUser({
-                email: textEmail, 
+                email: textEmail,
                 password: textPassword
             }));
             navigation.navigate('AuthAccountSetupInterest');
         } else {
-            setEmailError('Please enter a valid email address');
+            showAlert('Please enter a valid email address');
             setActiveButton(true);
         }
     }
@@ -84,8 +72,8 @@ const AuthSignUpScreen = ({ navigation }: any) => {
             </View>
             <View style={styles.authContainer}>
                 <View style={styles.emailSection}>
-                    <EmailIcon 
-                        Color={textEmail ? '#fff' : '#9E9E9E'} 
+                    <EmailIcon
+                        Color={textEmail ? '#fff' : '#9E9E9E'}
                         Style={styles.icon} />
                     <TextInput
                         style={styles.emailInput}
@@ -93,48 +81,51 @@ const AuthSignUpScreen = ({ navigation }: any) => {
                         placeholder="Email"
                         keyboardType="email-address"
                         onChangeText={(newText) => setTextEmail(newText)}
-                        value={textEmail}/>
+                        value={textEmail} />
                 </View>
-                {emailError && <Text style={styles.emailError}>{emailError}</Text>}
+                {errors.email && <Text style={styles.errorMessage}>{errors.email}</Text>}
+
                 <PasswordSection placeholder='Password' textPassword={textPassword} setTextPassword={setTextPassword} />
-                {passwordError && <Text style={styles.passwordError}>{passwordError}</Text>}
-                <TouchableOpacity 
-                    onPress={() => registration()}
-                    disabled={isActiveButton}
-                    style={isActiveButton ? styles.signUpButtonDisabled : styles.signUpButtonEnabled}>
-                    <Text style={styles.signUpText}>Sign up</Text>
-                </TouchableOpacity>
+                {errors.password && <Text style={styles.errorMessage}>{errors.password}</Text>}
+
+                <ApplyButton
+                    onPress={registration}
+                    isActiveButton={isActiveButton && activeButton}
+                    style={styles.applyButton}
+                    text={'Sign up'} />
+
                 <View style={styles.intermediateContainer}>
                     <View style={styles.line} />
                     <Text style={styles.text}>or continue with</Text>
                     <View style={styles.line} />
                 </View>
+
                 <View style={styles.authFGAContainer}>
-                    <TouchableOpacity 
-                        onPress={() => facebookAuth()} 
+                    <TouchableOpacity
+                        onPress={() => facebookAuth()}
                         style={styles.facebookContainer}>
-                        <Image 
-                            source={require('../../../../assets/icons/facebook-icon.png')} 
+                        <Image
+                            source={require('../../../../assets/icons/facebook-icon.png')}
                             style={styles.facebookImage} />
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        onPress={() => googleAuth()} 
+                    <TouchableOpacity
+                        onPress={() => googleAuth()}
                         style={styles.googleContainer}>
-                        <Image 
-                            source={require('../../../../assets/icons/google-icon.png')} 
+                        <Image
+                            source={require('../../../../assets/icons/google-icon.png')}
                             style={styles.googleImage} />
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        onPress={() => appleAuth()} 
+                    <TouchableOpacity
+                        onPress={() => appleAuth()}
                         style={styles.appleContainer}>
-                        <Image 
-                            source={require('../../../../assets/icons/apple-icon.png')} 
+                        <Image
+                            source={require('../../../../assets/icons/apple-icon.png')}
                             style={styles.appleImage} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.signInContainer}>
                     <Text style={styles.signInText}>Already have an account?</Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => navigation.navigate('AuthSignIn')}>
                         <Text style={styles.clicableSignInText}>Sign in</Text>
                     </TouchableOpacity>
@@ -143,9 +134,9 @@ const AuthSignUpScreen = ({ navigation }: any) => {
         </View>
     );
 };
-    
+
 const styles = StyleSheet.create({
-    passwordError: {
+    errorMessage: {
         marginTop: 5,
         color: 'red',
         fontSize: 11,
@@ -153,41 +144,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center'
     },
-    emailError: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    signUpButtonEnabled: {
+    applyButton: {
         marginTop: 30,
-        backgroundColor: '#06C149',
-        width: '100%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8, 
-    },
-    signUpButtonDisabled: {
-        marginTop: 30,
-        backgroundColor: '#0E9E42',
-        width: '100%',
-        height: 60,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    signUpText: {
-        color: '#fff',
-        fontSize: 15,
-        fontFamily: 'Outfit',
+        width: '100%'
     },
     emailSection: {
         marginTop: 30,
@@ -198,7 +157,7 @@ const styles = StyleSheet.create({
         height: 64,
         borderRadius: 20,
         backgroundColor: '#1F222A',
-    },    
+    },
     emailInput: {
         flex: 1,
         height: '100%',
@@ -214,7 +173,7 @@ const styles = StyleSheet.create({
         height: 64,
         borderRadius: 20,
         backgroundColor: '#1F222A',
-    },    
+    },
     passwordInput: {
         flex: 1,
         height: '100%',
@@ -224,7 +183,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        margin: 22, 
+        margin: 22,
     },
     container: {
         flex: 1,
@@ -338,5 +297,5 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
 });
-    
+
 export default AuthSignUpScreen;

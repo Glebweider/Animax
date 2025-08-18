@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, FlatList } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/client';
-import { GET_ANIMES } from '@Utils/graphql/getTopHitsAnimes';
-import MyAnimeListButton from '@Components/MyAnimeListButton';
-import BackButton from '@Components/BackButton';
+import { GET_ANIMES } from '@Utils/api/graphql/getTopHitsAnimes';
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
+import BackButton from '@Components/buttons/Back';
 import { i18n } from '@Utils/localization';
 import { useAlert } from '@Components/AlertContext';
 
 const TopHitsAnimeScreen = ({ navigation }: any) => {
-const client = useApolloClient();
+    const client = useApolloClient();
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);
     const { showAlert } = useAlert();
     const { data } = useQuery(GET_ANIMES, {
-        variables: { 
+        variables: {
             page: 1,
             limit: 50,
             order: 'ranked',
@@ -32,7 +32,7 @@ const client = useApolloClient();
                 try {
                     const { data } = await client.query({
                         query: GET_ANIMES,
-                        variables: { 
+                        variables: {
                             page,
                             limit: 50,
                             order: 'ranked',
@@ -62,7 +62,7 @@ const client = useApolloClient();
                     style={styles.animeCardImageContainer}>
                     <Image
                         source={{ uri: item.poster.originalUrl }}
-                        style={styles.animeCardImage}/>
+                        style={styles.animeCardImage} />
                     <View style={styles.scoreContainer}>
                         <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
                     </View>
@@ -80,9 +80,9 @@ const client = useApolloClient();
                         <Text style={styles.animeCardYear}>
                             {item.airedOn.year ? item.airedOn.year : '????'}
                         </Text>
-                        <Text 
-                            numberOfLines={3} 
-                            ellipsizeMode="tail" 
+                        <Text
+                            numberOfLines={3}
+                            ellipsizeMode="tail"
                             style={styles.animeCardGenre}>
                             {i18n.t('genre')}: {item.genres.map(genre => genre.russian).join(', ')}
                         </Text>
@@ -98,7 +98,7 @@ const client = useApolloClient();
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('home.tophitsanime')} />
-            <View style={{width: '90%', height: '87%', alignItems: 'center'}}>
+            <View style={{ width: '90%', height: '87%', alignItems: 'center' }}>
                 {animes.length >= 1 && (
                     <FlatList
                         data={animes}
@@ -107,7 +107,7 @@ const client = useApolloClient();
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={styles.containerAnimes}
                         onEndReached={handleEndReached}
-                        onEndReachedThreshold={0.1}/>
+                        onEndReachedThreshold={0.1} />
                 )}
             </View>
         </View>
@@ -201,5 +201,5 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
 });
-    
+
 export default TopHitsAnimeScreen;

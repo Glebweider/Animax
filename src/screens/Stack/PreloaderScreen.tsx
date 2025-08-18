@@ -5,11 +5,11 @@ import { useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
 
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { setUser } from '@Redux/reducers/userReducer';
 
 import * as Notifications from 'expo-notifications';
-import useAuthUserInToken from '@Utils/fetch/authUserInToken';
+import useAuthUserInToken from '@Utils/api/rest/auth/authUserInToken';
 import { useAlert } from '@Components/AlertContext';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';

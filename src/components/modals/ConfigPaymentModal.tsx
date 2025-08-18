@@ -14,7 +14,7 @@ interface ModalProps {
 const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, navigation }) => {
 
     useEffect(() => {
-        if (visible) {                
+        if (visible) {
             setTimeout(() => {
                 setVisible(false);
                 navigation.navigate('Profile');
@@ -26,16 +26,16 @@ const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, n
         <Modal transparent visible={visible} animationType="slide">
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Image 
+                    <Image
                         source={require('../../../assets/backgroundConfigurator.png')} //Заменить на другую иконку
                         style={styles.modalImage} />
                     <Text style={styles.modalTitle}>{i18n.t('reviewsummary.modal.congratulations')}</Text>
                     <Text style={styles.modalText}>{
-                        i18n.t('reviewsummary.modal.youhave') + 
-                        i18n.t(data.objecyBuy.date) + 
+                        i18n.t('reviewsummary.modal.youhave') +
+                        i18n.t(data.objecyBuy.date) +
                         i18n.t('reviewsummary.modal.enjoy')
                     }</Text>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => {
                             setVisible(false);
                             navigation.navigate('Profile');

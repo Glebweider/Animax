@@ -3,7 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 
 //Utils
-import { removeTokenFromStorage } from '@Utils/token';
+import { removeTokenFromStorage } from '@Utils/functions/token';
+import ApplyButton from '@Components/buttons/Apply';
+import { i18n } from '@Utils/localization';
 
 interface ModalProps {
     visible: boolean;
@@ -12,14 +14,14 @@ interface ModalProps {
 }
 
 const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) => {
-    const deAuthorization = async () => {
+    const logout = async () => {
         setVisible(false);
         await removeTokenFromStorage();
         navigation.navigate('AuthFGA');
     };
 
     return (
-        <Modal 
+        <Modal
             isVisible={visible}
             animationIn="fadeInUp"
             animationOut="fadeOutDown"
@@ -29,20 +31,20 @@ const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) 
             style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modalShelf} />
-                <Text style={styles.modalTitle}>Logout</Text>
+                <Text style={styles.modalTitle}>{i18n.t('profile.logout')}</Text>
                 <View style={styles.modalLine} />
-                <Text style={styles.modalText}>Are you sure you want to log out?</Text>
+                <Text style={styles.modalText}>{i18n.t('logout.description')}</Text>
                 <View style={styles.modalButtons}>
-                    <TouchableOpacity
+                    <ApplyButton
                         onPress={() => setVisible(false)}
-                        style={styles.modalButtonCancel}>
-                        <Text style={styles.modalButtonCancelText}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => deAuthorization()}
-                        style={styles.modalButtonApply}>
-                        <Text style={styles.modalButtonApplyText}>Yes, Logout</Text>
-                    </TouchableOpacity>
+                        isActiveButton={false}
+                        style={styles.cancelButton}
+                        text={i18n.t('logout.cancel')} />
+                    <ApplyButton
+                        onPress={logout}
+                        isActiveButton={false}
+                        style={styles.applyButton}
+                        text={i18n.t('logout.apply')} />
                 </View>
             </View>
         </Modal>
@@ -58,42 +60,21 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0
     },
+    applyButton: {
+        width: '48%',
+        marginTop: 0
+    },
+    cancelButton: {
+        width: '48%',
+        backgroundColor: '#35383F',
+        marginTop: 0,
+        elevation: 0,
+    },
     modalButtons: {
         flexDirection: 'row',
         width: '90%',
         justifyContent: 'space-between',
         marginTop: 25,
-    },
-    modalButtonCancel: {
-        width: '48%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#35383F',
-        borderRadius: 50,
-        height: 58, 
-    },
-    modalButtonApply: {
-        width: '48%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#06C149',
-        borderRadius: 50,
-        height: 58, 
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8, 
-    },
-    modalButtonCancelText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 14
-    },
-    modalButtonApplyText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 14
     },
     modalContent: {
         backgroundColor: '#1F222A',

@@ -9,22 +9,22 @@ import { RootState } from '@Redux/store';
 
 //Utils
 import { i18n } from '@Utils/localization';
-import useGetComments from '@Utils/fetch/getComments';
-import formatViews from '@Utils/formaterViews';
-import useGetRepliesByComment from '@Utils/fetch/getRepliesByComment';
-import formatDateComment from '@Utils/formaterDateComment';
+import useGetComments from '@Utils/api/rest/comments/getComments';
+import formatViews from '@Utils/formatters/views';
+import useGetRepliesByComment from '@Utils/api/rest/comments/getRepliesByComment';
+import formatDateComment from '@Utils/formatters/comment';
 
 //Components
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/AlertContext';
 import SendIcon from '@Components/icons/SendIcon';
 
 //Interfaces
 import { IComment } from '@Interfaces/comments.interface';
-import useChangeLikeComment from '@Utils/fetch/changeLikeComment';
-import useAddComment from '@Utils/fetch/addComment';
+import useChangeLikeComment from '@Utils/api/rest/comments/changeLikeComment';
+import useAddComment from '@Utils/api/rest/comments/addComment';
 import LikeIcon from '@Components/icons/LikeIcon';
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import CrownIcon from '@Components/icons/CrownIcon';
 
 interface IReplyingUser {
@@ -95,14 +95,14 @@ const CommentsScreen = ({ navigation, route }) => {
 
     const getParentUsername = (parentCommentId: string): string => {
         const parentComment = comments.find(comment => comment.id === parentCommentId);
-        return parentComment ? parentComment.username : ''; 
+        return parentComment ? parentComment.username : '';
     };
 
     const handleReply = (id: string, userId: string, username: string) => {
         inputRef.current?.focus();
         setReplyingUser({
             messageId: id,
-            userId: userId, 
+            userId: userId,
             username: username
         });
     };
@@ -111,7 +111,7 @@ const CommentsScreen = ({ navigation, route }) => {
         inputRef.current?.blur();
         setReplyingUser({
             messageId: '',
-            userId: '', 
+            userId: '',
             username: ''
         });
     };
@@ -142,9 +142,9 @@ const CommentsScreen = ({ navigation, route }) => {
             setComments(prev =>
                 prev.map(comment =>
                     comment.id === commentId
-                        ? { 
-                            ...comment, 
-                            replies: [...(comment.replies || []), ...data] 
+                        ? {
+                            ...comment,
+                            replies: [...(comment.replies || []), ...data]
                         }
                         : comment
                 )
@@ -235,7 +235,7 @@ const CommentsScreen = ({ navigation, route }) => {
                 );
             } else {
                 setComments(prevComments => [
-                    ...prevComments, 
+                    ...prevComments,
                     data
                 ]);
             }
@@ -259,11 +259,11 @@ const CommentsScreen = ({ navigation, route }) => {
                             <TouchableOpacity onPress={() => navigation.navigate('Profile', { userId: item.userId })}>
                                 <Image
                                     source={{ uri: item.avatar }}
-                                    style={styles.avatar}/>
+                                    style={styles.avatar} />
                             </TouchableOpacity>
                             <View style={styles.commentContent}>
                                 <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                                    {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} /> }
+                                    {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} />}
                                     <Text style={styles.username}>
                                         {item.username}
                                     </Text>
@@ -297,7 +297,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                     <TouchableOpacity onPress={() => navigation.navigate('Profile', { userId: item.userId })}>
                                         <Image
                                             source={{ uri: item.avatar }}
-                                            style={styles.avatar}/>
+                                            style={styles.avatar} />
                                     </TouchableOpacity>
                                     <View style={styles.commentContent}>
                                         {reply.parentCommentId && (
@@ -306,7 +306,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                             </Text>
                                         )}
                                         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                                            {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} /> }
+                                            {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} />}
                                             <Text style={styles.username}>
                                                 {item.username}
                                             </Text>
@@ -318,7 +318,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <View style={styles.commentInfo}>
                                                     <Text style={styles.commentDate}>{formatDateComment(reply.createdAt)}</Text>
-                                                    { !reply.parentCommentId && (
+                                                    {!reply.parentCommentId && (
                                                         <TouchableOpacity onPress={() => handleReply(reply.id, reply.userId, reply.username)}>
                                                             <Text style={styles.replyText}>Reply</Text>
                                                         </TouchableOpacity>
@@ -330,21 +330,21 @@ const CommentsScreen = ({ navigation, route }) => {
                                                     </TouchableOpacity>
                                                     <Text style={styles.likesCount}>{formatViews(reply.likes)}</Text>
                                                 </View>
-                                            </View>                            
+                                            </View>
                                         </View>
                                     </View>
                                 </View>
-                            ))} 
+                            ))}
                             {item.repliesCount > 0 && (
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <View style={styles.line} />
-                                    <TouchableOpacity 
+                                    <TouchableOpacity
                                         onPress={() => handleToggleReplies(item.id, item.repliesCount)}>
                                         <Text style={styles.replyViewText}>
                                             {openedReplies[item.id]
-                                                ? ( (repliesPagination[item.id] || 0) >= item.repliesCount 
-                                                    ? 'Hide' 
-                                                    : `View ${item.repliesCount - (repliesPagination[item.id] || 0)} more replies` )
+                                                ? ((repliesPagination[item.id] || 0) >= item.repliesCount
+                                                    ? 'Hide'
+                                                    : `View ${item.repliesCount - (repliesPagination[item.id] || 0)} more replies`)
                                                 : `View ${item.repliesCount} Replies`
                                             }
                                         </Text>
@@ -357,7 +357,7 @@ const CommentsScreen = ({ navigation, route }) => {
                 onEndReached={loadComments}
                 onEndReachedThreshold={0.1}
                 ListEmptyComponent={<BallIndicator color="#06C049" size={50} animationDuration={700} />}
-                 />
+            />
             <View style={styles.footer}>
                 <TextInput
                     ref={inputRef}
@@ -367,11 +367,11 @@ const CommentsScreen = ({ navigation, route }) => {
                     placeholder={replyingUser.username ? `Replying to ${replyingUser.username}` : "Add comment..."}
                     keyboardType="default"
                     onChangeText={(newText) => setTextInput(newText)}
-                    value={textInput}/>
+                    value={textInput} />
                 <TouchableOpacity
                     onPress={() => handleSendComment()}
                     disabled={!isCommentVerify}
-                    style={[ styles.buttonApplyContainer, isCommentVerify ? { backgroundColor: '#15D75A' } : { backgroundColor: '#06C149' } ]}>
+                    style={[styles.buttonApplyContainer, isCommentVerify ? { backgroundColor: '#15D75A' } : { backgroundColor: '#06C149' }]}>
                     <SendIcon Color={'#fff'} Style={{}} />
                 </TouchableOpacity>
             </View>
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
     username: {
         fontFamily: 'Outfit',
         color: '#fff',
-        fontSize: 14,  
+        fontSize: 14,
     },
     commentText: {
         color: '#ccc',
@@ -507,5 +507,5 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
     },
 });
-    
+
 export default CommentsScreen;

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
 import { useIsFocused } from '@react-navigation/native';
-import useGetAnimeListUser from '@Utils/fetch/getAnimeListUser';
+import useGetAnimeListUser from '@Utils/api/rest/anime/getAnimeListUser';
 import { useAlert } from '@Components/AlertContext';
 import { StatusBar } from 'expo-status-bar';
 
@@ -43,7 +43,7 @@ const MyListScreen = ({ navigation }) => {
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
                     <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
-                    <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>                    
+                    <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>
                 </View>
             </View>
             <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -51,38 +51,38 @@ const MyListScreen = ({ navigation }) => {
                     <BallIndicator color='#06C149' size={80} animationDuration={700} />
                 ) : (
                     userAnimeList?.length >= 1 ?
-                    <FlatList
-                        data={userAnimeList}
-                        keyExtractor={(item) => item.animeId.toString()}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('AnimeScreen', { animeId: item.animeId })}
-                                key={item.animeId}
-                                style={styles.animeContainerAnimeTop}>
-                                <View style={styles.scoreContainer}>
-                                    <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
-                                </View>
-                                {(item.rating === 'r_plus' || item.rating === 'rx') && (
-                                    <View style={styles.ratingContainer}>
-                                        <Text style={styles.ratingText}>18+</Text>
+                        <FlatList
+                            data={userAnimeList}
+                            keyExtractor={(item) => item.animeId.toString()}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('AnimeScreen', { animeId: item.animeId })}
+                                    key={item.animeId}
+                                    style={styles.animeContainerAnimeTop}>
+                                    <View style={styles.scoreContainer}>
+                                        <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
                                     </View>
-                                )}
-                                <Image
-                                    source={{ uri: item.poster.originalUrl }}
-                                    style={styles.animeImageAnimeTop}/>
-                            </TouchableOpacity>
-                        )}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={styles.containerAnimeTop}
-                        numColumns={2}/>
-                    :
-                    <View style={{width: '100%', height: '100%', alignItems: 'center'}}>
-                        <Image style={{marginTop: 80}} source={require('../../../assets/error404MyList.png')} />
-                        <View style={styles.errorTextContainer}>
-                            <Text style={styles.errorTitle}>{i18n.t('mylist.listempty')}</Text>
-                            <Text style={styles.errorText}>{i18n.t('mylist.emptytext')}</Text>
+                                    {(item.rating === 'r_plus' || item.rating === 'rx') && (
+                                        <View style={styles.ratingContainer}>
+                                            <Text style={styles.ratingText}>18+</Text>
+                                        </View>
+                                    )}
+                                    <Image
+                                        source={{ uri: item.poster.originalUrl }}
+                                        style={styles.animeImageAnimeTop} />
+                                </TouchableOpacity>
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={styles.containerAnimeTop}
+                            numColumns={2} />
+                        :
+                        <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+                            <Image style={{ marginTop: 80 }} source={require('../../../assets/error404MyList.png')} />
+                            <View style={styles.errorTextContainer}>
+                                <Text style={styles.errorTitle}>{i18n.t('mylist.listempty')}</Text>
+                                <Text style={styles.errorText}>{i18n.t('mylist.emptytext')}</Text>
+                            </View>
                         </View>
-                    </View>
                 )}
             </View>
         </View>
@@ -198,5 +198,5 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
 });
-    
+
 export default MyListScreen;

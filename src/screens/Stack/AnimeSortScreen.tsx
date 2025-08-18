@@ -4,22 +4,23 @@ import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-nati
 import { useDispatch, useSelector } from 'react-redux';
 
 //Components
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 
 //Utils
-import { GET_GENRES } from '@Utils/graphql/getGenres';
+import { GET_GENRES } from '@Utils/api/graphql/getGenres';
 import { i18n } from '@Utils/localization';
 
 //Redux
 import { RootState } from '@Redux/store';
 import { addFilter, reset } from '@Redux/reducers/sortReducer';
+import ApplyButton from '@Components/buttons/Apply';
 
 const AnimeSortScreen = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { data } = useQuery(GET_GENRES);   
+    const { data } = useQuery(GET_GENRES);
     const [genresAnime, setGenresAnime] = useState([]);
     const FilterState = useSelector((state: RootState) => state.sortReducer);
-    
+
     useEffect(() => {
         if (data) {
             setGenresAnime(data.genres);
@@ -30,45 +31,47 @@ const AnimeSortScreen = ({ navigation }) => {
         genresAnime.map((data) => (
             <TouchableOpacity
                 key={data.id}
-                onPress={() => dispatch(addFilter({ id: data.id, text: (i18n.locale === 'ru' || i18n.locale === 'uk') 
-                    ? data.russian 
-                    : data.name }))}
+                onPress={() => dispatch(addFilter({
+                    id: data.id, text: (i18n.locale === 'ru' || i18n.locale === 'uk')
+                        ? data.russian
+                        : data.name
+                }))}
                 style={FilterState.filter.some((i) => i.id === data.id)
                     ? styles.filterContainerEnabled
                     : styles.filterContainerDisabled}>
                 <Text style={FilterState.filter.some((i) => i.id === data.id)
                     ? styles.filterTextEnabled
-                    : styles.filterTextDisabled}>{(i18n.locale === 'ru' || i18n.locale === 'uk') 
-                        ? data.russian 
+                    : styles.filterTextDisabled}>{(i18n.locale === 'ru' || i18n.locale === 'uk')
+                        ? data.russian
                         : data.name}
                 </Text>
             </TouchableOpacity>
         )
-    ), [genresAnime, FilterState.filter]);
-    
+        ), [genresAnime, FilterState.filter]);
+
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('sortfilter.sortfilter')} />
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                {genresAnime.length >= 1 ?            
+                {genresAnime.length >= 1 ?
                     <View style={styles.filtersContainer}>
                         {renderItems}
-                    </View>   
+                    </View>
                     :
                     <Text>{i18n.t('loading')}</Text>
-                }                
+                }
             </ScrollView>
             <View style={styles.buttons}>
-                <TouchableOpacity
+                <ApplyButton
                     onPress={() => dispatch(reset())}
-                    style={styles.buttonResetContainer}>
-                    <Text style={styles.buttonResetText}>{i18n.t('sortfilter.reset')}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+                    isActiveButton={false}
+                    style={styles.cancelButton}
+                    text={i18n.t('sortfilter.reset')} />
+                <ApplyButton
                     onPress={() => navigation.navigate('AnimeSearchScreen')}
-                    style={styles.buttonApplyContainer}>
-                    <Text style={styles.buttonApplyText}>{i18n.t('sortfilter.apply')}</Text>
-                </TouchableOpacity>
+                    isActiveButton={false}
+                    style={styles.applyButton}
+                    text={i18n.t('sortfilter.apply')} />
             </View>
         </View>
     );
@@ -78,6 +81,16 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         paddingBottom: 85,
+    },
+    cancelButton: {
+        width: '40%',
+        marginTop: 0,   
+        backgroundColor: '#35383F',
+        elevation: 0,
+    },
+    applyButton: {
+        width: '40%',
+        marginTop: 0,
     },
     container: {
         width: '100%',
@@ -97,39 +110,8 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    buttonResetContainer: {
-        backgroundColor: '#35383F',
-        width: '40%',
-        height: 58,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    buttonResetText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
-    buttonApplyContainer: {
-        backgroundColor: '#06C149',
-        width: '40%',
-        height: 58,
-        borderRadius: 50,
-        justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 15,
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8, 
-    },
-    buttonApplyText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 15,
+        gap: 15
     },
     filtersContainer: {
         width: '94%',
@@ -172,5 +154,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
 });
-    
+
 export default AnimeSortScreen;

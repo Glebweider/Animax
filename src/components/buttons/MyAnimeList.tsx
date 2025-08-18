@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 //Utils
-import { getTokenFromStorage } from '@Utils/token';
+import { getTokenFromStorage } from '@Utils/functions/token';
 
 //Icons
 import AddIcon from '@Icons/AddIcon';
@@ -13,8 +13,8 @@ import CheckIcon from '@Icons/CheckIcon';
 import { RootState } from '@Redux/store';
 import { addAnime, removeAnime } from '@Redux/reducers/userReducer';
 import { i18n } from '@Utils/localization';
-import useAddAnimeList from '@Utils/fetch/addAnimeListUser';
-import useRemoveAnimeListUser from '@Utils/fetch/removeAnimeListUser';
+import useAddAnimeList from '@Utils/api/rest/anime/addAnimeListUser';
+import useRemoveAnimeListUser from '@Utils/api/rest/anime/removeAnimeListUser';
 
 const MyAnimeListButton = ({ anime }) => {
     const [isInMyList, setIsInMyList] = useState(false);
@@ -27,7 +27,7 @@ const MyAnimeListButton = ({ anime }) => {
         const fetchMyAnimeList = async () => {
             if (userAnimeList) {
                 const isAnimeInList = userAnimeList.find((userAnime) => userAnime.animeId == anime.id)
-                
+
                 if (isAnimeInList) {
                     setIsInMyList(true);
                 } else {
@@ -37,7 +37,7 @@ const MyAnimeListButton = ({ anime }) => {
         };
         fetchMyAnimeList();
     }, [anime.id]);
-  
+
     const handlePress = async () => {
         let token = await getTokenFromStorage();
         if (isInMyList) {
@@ -63,18 +63,18 @@ const MyAnimeListButton = ({ anime }) => {
     };
 
     return (
-        isInMyList ? 
+        isInMyList ?
             <TouchableOpacity
-                onPress={() => handlePress()} 
+                onPress={() => handlePress()}
                 style={styles.animeButtonMyListEnabled}>
-                <CheckIcon Color={'#06C149'} Style={{marginRight: 7, marginLeft: 13}} Width={20} Height={20} />
+                <CheckIcon Color={'#06C149'} Style={{ marginRight: 7, marginLeft: 13 }} Width={20} Height={20} />
                 <Text style={styles.animeButtonTextMyListEnabled}>{i18n.t('mylisttext')}</Text>
             </TouchableOpacity>
-            : 
+            :
             <TouchableOpacity
-                onPress={() => handlePress()} 
+                onPress={() => handlePress()}
                 style={styles.animeButtonMyListDisabled}>
-                <AddIcon Color={'#fff'} Style={{marginRight: 7, marginLeft: 13, width: 20, height: 20}} />
+                <AddIcon Color={'#fff'} Style={{ marginRight: 7, marginLeft: 13, width: 20, height: 20 }} />
                 <Text style={styles.animeButtonTextMyListDisabled}>{i18n.t('mylisttext')}</Text>
             </TouchableOpacity>
     );
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginRight: 13,
     },
-   
+
 });
 
 export default MyAnimeListButton;

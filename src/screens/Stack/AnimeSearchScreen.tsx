@@ -8,8 +8,8 @@ import SearchIcon from '@Icons/SearchIcon';
 import SortIcon from '@Icons/SortIcon';
 
 //Utils
-import { GET_ANIMEBYGENRES } from '@Utils/graphql/getAnimeByGenres';
-import { GET_ANIMEBYSEARCH } from '@Utils/graphql/getAnimeBySearch';
+import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
+import { GET_ANIMEBYSEARCH } from '@Utils/api/graphql/getAnimeBySearch';
 import { i18n } from '@Utils/localization';
 
 //Redux
@@ -83,74 +83,74 @@ const AnimeSearchScreen = ({ navigation }) => {
             )}
             <Image
                 source={{ uri: item.poster.originalUrl || item.poster.mainUrl }}
-                style={styles.animeImageAnimeTop}/>
+                style={styles.animeImageAnimeTop} />
         </TouchableOpacity>
     ));
 
-  return (
-    <View style={styles.container}>
-        <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-                onPress={() => navigation.navigate('HomeScreen')}
-                style={[styles.sortButton, {backgroundColor: '#1F222A'}]}>
-                <ArrowLeftIcon Color={'#fff'} Style={{ width: 200, height: 200 }} />
-            </TouchableOpacity>
-            <View style={styles.searchSection}>
-                <SearchIcon Color={textSearch ? '#fff' : '#9E9E9E'} Style={styles.icon} />
-                <TextInput
-                    style={styles.searchInput}
-                    placeholderTextColor="#9E9E9E"
-                    placeholder={i18n.t('searchanime.search')}
-                    keyboardType="default"
-                    returnKeyType="search"
-                    onSubmitEditing={searchAnime}
-                    onChangeText={setTextSearch}
-                    value={textSearch}/>
-            </View>
-            <TouchableOpacity
-                onPress={() => navigation.navigate('AnimeSortScreen')}
-                style={styles.sortButton}>
-                <SortIcon Color={'#06C149'} Style={{ width: 200, height: 200 }} />
-            </TouchableOpacity>
-        </View>
-        {FilterState.filter.length >= 1 && (
-            <View style={styles.filters}>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScrollView}>
-                    {FilterState.filter.map(tag => (
-                        <View style={styles.tag} key={tag.id}>
-                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.tagText}>
-                                {tag.text}
-                            </Text>
-                        </View>
-                    ))}
-                </ScrollView>
-            </View>
-        )}
-        <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
-        {!errorSearch ? (
-            animes.length >= 1 && (
-                <FlatList
-                data={animes}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => <AnimeCard item={item} />}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.containerAnimeTop}
-                onEndReached={handleEndReached}
-                onEndReachedThreshold={0.1}
-                numColumns={2}/>
-            )
-        ) : (
-            <View style={styles.errorContainer}>
-                <Image source={require('../../../assets/404.png')} style={styles.errorImage} />
-                <View style={styles.errorTextContainer}>
-                    <Text style={styles.errorTitle}>{i18n.t('searchanime.notfound')}</Text>
-                    <Text style={styles.errorText}>{i18n.t('searchanime.sorrytext')}</Text>
+    return (
+        <View style={styles.container}>
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('HomeScreen')}
+                    style={[styles.sortButton, { backgroundColor: '#1F222A' }]}>
+                    <ArrowLeftIcon Color={'#fff'} Style={{ width: 200, height: 200 }} />
+                </TouchableOpacity>
+                <View style={styles.searchSection}>
+                    <SearchIcon Color={textSearch ? '#fff' : '#9E9E9E'} Style={styles.icon} />
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholderTextColor="#9E9E9E"
+                        placeholder={i18n.t('searchanime.search')}
+                        keyboardType="default"
+                        returnKeyType="search"
+                        onSubmitEditing={searchAnime}
+                        onChangeText={setTextSearch}
+                        value={textSearch} />
                 </View>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('AnimeSortScreen')}
+                    style={styles.sortButton}>
+                    <SortIcon Color={'#06C149'} Style={{ width: 200, height: 200 }} />
+                </TouchableOpacity>
             </View>
-        )}
+            {FilterState.filter.length >= 1 && (
+                <View style={styles.filters}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtersScrollView}>
+                        {FilterState.filter.map(tag => (
+                            <View style={styles.tag} key={tag.id}>
+                                <Text numberOfLines={1} ellipsizeMode="tail" style={styles.tagText}>
+                                    {tag.text}
+                                </Text>
+                            </View>
+                        ))}
+                    </ScrollView>
+                </View>
+            )}
+            <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+                {!errorSearch ? (
+                    animes.length >= 1 && (
+                        <FlatList
+                            data={animes}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={({ item }) => <AnimeCard item={item} />}
+                            showsVerticalScrollIndicator={false}
+                            contentContainerStyle={styles.containerAnimeTop}
+                            onEndReached={handleEndReached}
+                            onEndReachedThreshold={0.1}
+                            numColumns={2} />
+                    )
+                ) : (
+                    <View style={styles.errorContainer}>
+                        <Image source={require('../../../assets/404.png')} style={styles.errorImage} />
+                        <View style={styles.errorTextContainer}>
+                            <Text style={styles.errorTitle}>{i18n.t('searchanime.notfound')}</Text>
+                            <Text style={styles.errorText}>{i18n.t('searchanime.sorrytext')}</Text>
+                        </View>
+                    </View>
+                )}
+            </View>
         </View>
-    </View>
-  );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     filtersScrollView: {
         width: '100%',
         height: 45,
-        flexGrow: 1,  
+        flexGrow: 1,
         borderRadius: 10,
     },
     tag: {
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
         height: 62,
         borderRadius: 15,
         backgroundColor: '#1F222A',
-    },   
+    },
     searchInput: {
         flex: 1,
         height: '100%',
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     icon: {
         width: 28,
         height: 28,
-        margin: 22, 
+        margin: 22,
     },
     scoreContainer: {
         zIndex: 2,
@@ -306,5 +306,5 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 });
-    
+
 export default AnimeSearchScreen;

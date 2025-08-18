@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import BackButton from '@Components/BackButton';
+import BackButton from '@Components/buttons/Back';
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
 import { i18n } from '@Utils/localization';
@@ -14,8 +14,8 @@ const SubcribeScreen = ({ navigation }: any) => {
                 <Text style={styles.headerText}>{i18n.t('premium.details')}</Text>
             </View>
             <View style={styles.cardsContainer}>
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate('PaymentScreen', { 
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('PaymentScreen', {
                         objecyBuy: {
                             price: 0.99,
                             date: "month"
@@ -32,21 +32,21 @@ const SubcribeScreen = ({ navigation }: any) => {
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={() => navigation.navigate('PaymentScreen', { 
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('PaymentScreen', {
                         objecyBuy: {
                             price: 9.99,
                             date: "year"
@@ -63,15 +63,15 @@ const SubcribeScreen = ({ navigation }: any) => {
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{marginLeft: 10}} />
+                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
@@ -161,5 +161,5 @@ const styles = StyleSheet.create({
         fontSize: 13,
     }
 });
-    
+
 export default SubcribeScreen;
