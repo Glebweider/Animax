@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import SearchIcon from '@Components/icons/SearchIcon';
 import { useQuery } from '@apollo/client';
-import { GET_ANIMES } from '@Utils/api/graphql/getTopHitsAnimes';
+import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
 import { LinearGradient } from 'expo-linear-gradient';
 import PlayIcon from '@Components/icons/PlayIcon';
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
-import TopHitsAnime from '@Components/TopHitsAnime';
-import RecomendationAnime from '@Components/RecomendationAnime';
-import { GET_RECOMENDATIONANIME } from '@Utils/api/graphql/getRecomendationAnime';
+import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
 import { i18n } from '@Utils/localization';
 import { Anime } from '@Interfaces/animeHomeScreen.interface';
 import { useSelector } from 'react-redux';
 import { RootState } from '@Redux/store';
+import AnimeCard from '@Components/cards/Anime';
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
-        poster: { originalUrl: '', mainUrl: '' },
+        poster: { originalUrl: '' },
         russian: '',
         score: 0,
         id: 0,
@@ -30,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
     const [genreId, setGenreId] = useState<number>(null);
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
-    const { data: topHitsData } = useQuery(GET_ANIMES, {
+    const { data: topHitsData } = useQuery(GET_TOPHITSANIME, {
         variables: {
             page: 1,
             limit: 6,
@@ -139,7 +138,25 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.hitsAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
-                    <TopHitsAnime data={topHitsAnime} onSelect={setSelectAnime} />
+                    <FlatList
+                        data={topHitsAnime}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }: any) => (
+                            <AnimeCard
+                                onPress={() => setSelectAnime(item.id)}
+                                item={item}
+                                isLoading={topHitsAnime?.length < 1}
+                                width={150}
+                                height={200} />
+                        )}
+                        ListEmptyComponent={() => (
+                            <View style={{ alignItems: 'center' }}>
+                                <Text style={{ marginTop: 20, color: '#FFF' }}>Not found</Text>
+                            </View>
+                        )}
+                        contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }} />
                 </View>
                 <View style={styles.topAnimeContainer}>
                     <View style={styles.newEpisodeAnimeTextContainer}>
@@ -148,7 +165,25 @@ const HomeScreen = ({ navigation }) => {
                             <Text style={styles.newEpisodeAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>
                     </View>
-                    <RecomendationAnime data={recomendationAnime} onSelect={setSelectAnime} />
+                    <FlatList
+                        data={recomendationAnime}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }: any) => (
+                            <AnimeCard
+                                onPress={() => setSelectAnime(item.id)}
+                                item={item}
+                                isLoading={recomendationAnime?.length < 1}
+                                width={150}
+                                height={200} />
+                        )}
+                        ListEmptyComponent={() => (
+                            <View style={{ alignItems: 'center' }}>
+                                <Text style={{ marginTop: 20, color: '#FFF' }}>Not found</Text>
+                            </View>
+                        )}
+                        contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }} />
                 </View>
             </View>
         </ScrollView>
@@ -209,31 +244,9 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginRight: 13,
     },
-    animeButtonMyList: {
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 105,
-        height: 36,
-        borderColor: '#fff',
-        borderWidth: 2,
-        flexDirection: 'row',
-        marginLeft: 10
-    },
-    animeButtonTextMyList: {
-        color: '#fff',
-        fontSize: 13,
-        fontFamily: 'Outfit',
-        overflow: 'hidden',
-    },
     topAnimeContainer: {
         width: '100%',
         height: 280,
-        alignItems: 'center'
-    },
-    selectContainer: {
-        width: '100%',
-        height: '48%',
         alignItems: 'center'
     },
     backgroundShadow: {
@@ -241,11 +254,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         zIndex: 2
-    },
-    newEpisodeAnimeContainer: {
-        width: '100%',
-        height: 300,
-        alignItems: 'center'
     },
     selectAnimeContainer: {
         width: '100%',
@@ -292,9 +300,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Outfit',
     },
-    animeHitsContainer: {
-        flexDirection: 'row'
-    },
     newEpisodeAnimeTextContainer: {
         flexDirection: 'row',
         width: '90%',
@@ -310,54 +315,10 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Outfit',
     },
-    cardContainer: {
-        width: 150,
-        height: 200,
-        backgroundColor: 'red',
-        borderRadius: 15,
-    },
     selectAnimeImage: {
         width: '100%',
         height: '100%',
         zIndex: 1,
-    },
-    scoreContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        backgroundColor: '#06C149',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 12
-    },
-    scoreText: {
-        color: '#fff',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-    },
-    containerAnimeTop: {
-        width: '100%',
-        marginTop: 20,
-        paddingLeft: 20,
-        flexGrow: 1,
-    },
-    animeContainerAnimeTop: {
-        marginRight: 10,
-        width: 150,
-        height: 200,
-        borderRadius: 15,
-    },
-    animeImageAnimeTop: {
-        width: 150,
-        height: 200,
-        zIndex: 1,
-        borderRadius: 10,
-        position: 'absolute',
-    },
-    animeTitleAnimeTop: {
-        marginTop: 5,
-        textAlign: 'center',
     },
 });
 

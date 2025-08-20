@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useGetAnimeEpisodes = () => {
   const { showAlert } = useAlert();

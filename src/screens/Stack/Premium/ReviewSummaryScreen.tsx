@@ -71,8 +71,8 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                         </View>
                         <View style={styles.dataLine} />
                         <View style={styles.dataTotalContainer}>
-                            <Text style={styles.dataTotalText}>{i18n.t('reviewsummary.total')}</Text>
-                            <Text style={styles.dataTotalPrice}>${(buyData.objecyBuy.price + taxPrice).toFixed(2)}</Text>
+                            <Text style={styles.dataTotal}>{i18n.t('reviewsummary.total')}</Text>
+                            <Text style={styles.dataTotal}>${(buyData.objecyBuy.price + taxPrice).toFixed(2)}</Text>
                         </View>
                     </View>
                 </View>
@@ -197,12 +197,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 22
     },
-    dataTotalText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 12,
-    },
-    dataTotalPrice: {
+    dataTotal: {
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 12,

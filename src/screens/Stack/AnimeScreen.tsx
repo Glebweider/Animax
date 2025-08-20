@@ -13,7 +13,7 @@ import RatingModal from '@Modal/RatingModal';
 //Components
 import AnilibriaPlayer from '@Components/AnilibriaPlayer';
 import KodikPlayer from '@Components/KodikPlayer';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 
 //Icons
 import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
@@ -69,7 +69,7 @@ const AnimeScreen = ({ navigation, route }) => {
     const { animeId } = route.params;
 
     const [anime, setAnime] = useState<IAnime>({
-        id: 0,
+        id: '',
         name: '',
         russian: '',
         poster: {
@@ -278,7 +278,7 @@ const AnimeScreen = ({ navigation, route }) => {
         if (isInMyList) {
             await removeAnimeListUser(token, String(anime.id));
         } else {
-            await addAnimeListUser(token, anime);
+            await addAnimeListUser(token, anime.id);
         }
         setIsInMyList((prev) => !prev);
     };
@@ -636,20 +636,6 @@ const styles = StyleSheet.create({
         height: 4,
         borderRadius: 50,
     },
-    backgroundShadow: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        zIndex: 2
-    },
-    video: {
-        height: '100%',
-        width: '100%',
-    },
-    animeEpisodesCards: {
-        alignItems: 'center',
-        width: '100%',
-    },
     cardEpisodeContainer: {
         width: 150,
         height: 110,
@@ -708,12 +694,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         width: '100%'
     },
-    animeNoneDescriptionText: {
-        color: '#fff',
-        fontSize: 13,
-        fontFamily: 'Outfit',
-        marginTop: 18,
-    },
     genresContainer: {
         flex: 1,
         height: 26,
@@ -751,9 +731,6 @@ const styles = StyleSheet.create({
         color: '#06C149',
         fontSize: 12,
         fontFamily: 'Outfit',
-    },
-    animeRightArrow: {
-        marginLeft: 3,
     },
     animeData: {
         width: '90%',
@@ -801,20 +778,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         marginTop: 60,
-    },
-    headerLogo: {
-        width: 35,
-        height: 35,
-    },
-    headerIconsContainer: {
-        width: 84,
-        height: 35,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-    headerIconSearch: {
-        width: 30,
-        height: 30,
     },
     headerIconArrow: {
         width: 30,

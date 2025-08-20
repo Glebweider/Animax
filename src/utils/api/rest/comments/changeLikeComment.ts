@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useChangeLikeComment = () => {
     const { showAlert } = useAlert();
@@ -11,11 +11,11 @@ const useChangeLikeComment = () => {
                     'Authorization': token,
                 },
             });
-        
+
             if (response.ok) {
                 return true;
             } else {
-                const errorData = await response.json(); 
+                const errorData = await response.json();
                 showAlert(errorData.message);
                 return false;
             }

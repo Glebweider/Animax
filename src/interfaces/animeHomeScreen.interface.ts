@@ -1,7 +1,6 @@
 export interface Anime {
     poster: {
         originalUrl: string;
-        mainUrl: string;
     };
     russian: string;
     score: number;

@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 import { IUserNotificationSettings } from "@Redux/reducers/userReducer";
 
 const useUpdateNotificationSettings = () => {
@@ -13,13 +13,13 @@ const useUpdateNotificationSettings = () => {
           'Content-Type': 'application/json',
           'X-Request-Source': 'app',
         },
-      body: JSON.stringify({
-        newEpisodes: alert.newEpisodes,
-        newReleases: alert.newReleases,
-        generalNotification: alert.generalNotification,
-        appUpdates: alert.appUpdates,
-        subscription: alert.subscription
-      })
+        body: JSON.stringify({
+          newEpisodes: alert.newEpisodes,
+          newReleases: alert.newReleases,
+          generalNotification: alert.generalNotification,
+          appUpdates: alert.appUpdates,
+          subscription: alert.subscription
+        })
       });
 
       if (response.ok) {

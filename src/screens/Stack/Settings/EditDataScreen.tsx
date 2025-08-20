@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +6,7 @@ import * as FileSystem from 'expo-file-system';
 
 // Components
 import BackButton from '@Components/buttons/Back';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Icons
@@ -20,6 +20,7 @@ import { setUser } from '@Redux/reducers/userReducer';
 import { getTokenFromStorage, saveTokenToStorage } from '@Utils/functions';
 import { isPhoneNumber } from '@Utils/validators';
 import { i18n } from '@Utils/localization';
+import { useFormValidation } from '@Utils/hooks';
 
 // Rest
 import useAuthUserInToken from '@Rest/auth/authUserInToken';
@@ -39,44 +40,31 @@ const EditDataScreen = ({ navigation }) => {
         avatar: null,
     });
 
-    const [errors, setErrors] = React.useState({
-        fullName: "",
-        nickname: "",
-        phoneNumber: "",
-    });
-
-    const [isActiveButton, setActiveButton] = React.useState(true);
-
-    useEffect(() => {
-        const newErrors: any = {};
-
-        if (form.fullName.length > 0 && form.fullName.length < 4) {
-            newErrors.fullName = 'Полное имя должно содержать не менее 4 символов';
-        }
-        if (form.nickname.length > 0 && form.nickname.length < 4) {
-            newErrors.nickname = 'Никнейм должен содержать не менее 4 символов';
-        }
-        if (form.phoneNumber.length > 0 && !isPhoneNumber(form.phoneNumber)) {
-            newErrors.phoneNumber = 'Введите действительный номер телефона';
-        }
-        if (form.description.length > 48) {
-            newErrors.description = `Описание не может содержать более 48 символов`;
-        }
-
-        setErrors(newErrors);
-
-        setActiveButton(
-            Object.keys(newErrors).length > 0 ||
-            !form.fullName ||
-            !form.nickname ||
-            !form.phoneNumber ||
-            form.description.length === 0
-        );
-    }, [form]);
-
     const handleChange = (key: string, value: string) => {
         setForm((prev) => ({ ...prev, [key]: value }));
     };
+
+    const formConfig = useMemo(() => ({
+        fullName: {
+            value: form.fullName,
+            rules: [(v: string) => v.length < 4 ? 'Полное имя должно содержать не менее 4 символов' : null]
+        },
+        nickname: {
+            value: form.nickname,
+            rules: [(v: string) => v.length < 4 ? 'Никнейм должен содержать не менее 4 символов' : null]
+        },
+        phoneNumber: {
+            value: form.phoneNumber,
+            rules: [(v: string) => !isPhoneNumber(v) ? 'Введите действительный номер телефона' : null]
+        },
+        description: {
+            value: form.description,
+            rules: [(v: string) => v.length > 48 ? 'Описание не может содержать более 48 символов' : null]
+        }
+    }), [form]);
+
+    const { errors, activeButton } = useFormValidation(formConfig);
+
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -148,7 +136,7 @@ const EditDataScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View style={{ flex: 1, alignItems: 'center', width: '100%' }}>
+            <View style={styles.content}>
                 <BackButton navigation={navigation} text={i18n.t('profile.edit')} />
                 <View style={styles.avatarContainer}>
                     <TouchableOpacity onPress={pickImage} style={styles.containerImageAvatar}>
@@ -167,8 +155,7 @@ const EditDataScreen = ({ navigation }) => {
                                     placeholderTextColor="#9E9E9E"
                                     placeholder={i18n.t(field)}
                                     value={form[field]}
-                                    onChangeText={(text) => handleChange(field, text)}
-                                />
+                                    onChangeText={(text) => handleChange(field, text)} />
                             </View>
                             {errors[field] && <Text style={styles.errorText}>{errors[field]}</Text>}
                         </>
@@ -178,7 +165,7 @@ const EditDataScreen = ({ navigation }) => {
 
             <ApplyButton
                 onPress={update}
-                isActiveButton={isActiveButton}
+                isActiveButton={activeButton}
                 style={styles.applyButton}
                 text={i18n.t('update')} />
         </View>
@@ -191,6 +178,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#181A20',
         justifyContent: 'space-between'
+    },
+    content: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
     },
     applyButton: {
         width: '90%',
@@ -251,14 +243,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         justifyContent: 'center',
         textAlign: 'center',
-    },
-    titleContainer: {
-        width: '90%',
-    },
-    titleText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 14,
     },
 });
 

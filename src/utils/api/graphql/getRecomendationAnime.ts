@@ -5,7 +5,6 @@ export const GET_RECOMENDATIONANIME = gql`
         animes(limit: $limit, order: $order, genre: $genre) {
             poster {
                 originalUrl
-                mainUrl
             }
             russian
             name

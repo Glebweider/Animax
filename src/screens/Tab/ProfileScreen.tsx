@@ -5,14 +5,16 @@ import { i18n } from '@Utils/localization';
 import { BallIndicator } from 'react-native-indicators';
 import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
 import { getTokenFromStorage } from '@Utils/functions/token';
-import { IUserProfile } from '@Interfaces/userProfileScreen.interface';
 import CrownIcon from '@Components/icons/CrownIcon';
 import formattedTime from '@Utils/formatters/time';
 import SettingsIcon from '@Components/icons/SettingsIcon';
+import AnimeCard from '@Components/cards/Anime';
+import { GET_ANIMES } from '@GraphQl/getAnimes';
+import { useQuery } from '@apollo/client';
 
 const ProfileScreen = ({ navigation, route }) => {
     const [isLoading, setLoading] = useState<boolean>(true);
-    const [user, setUser] = useState<IUserProfile>({
+    const [user, setUser] = useState<any>({
         uuid: "",
         interests: [],
         animelist: [],
@@ -28,6 +30,7 @@ const ProfileScreen = ({ navigation, route }) => {
             achievementsCountWatchedAnime: 0,
         }
     });
+    const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
 
     const { getUserProfile } = useGetUserProfile();
     const { userId } = route.params;
@@ -39,13 +42,23 @@ const ProfileScreen = ({ navigation, route }) => {
                 const data = await getUserProfile(token, userId);
                 if (data) {
                     setUser(data);
-                    setLoading(true);
+                    setLoading(false);
                 }
             }
         };
 
         fetchData();
     }, [userId]);
+
+    const { data: animeList } = useQuery(GET_ANIMES, {
+        variables: {
+            ids: user.animelist?.join(",")
+        },
+    });
+
+    useEffect(() => {
+        setUserAnimeList(animeList?.animes);
+    }, [animeList]);
 
     if (!user)
         return <BallIndicator color="#13D458" size={70} animationDuration={700} />;
@@ -65,21 +78,21 @@ const ProfileScreen = ({ navigation, route }) => {
             <View style={styles.profileContainer}>
                 <View style={styles.avatarContainer}>
                     <Image
-                        source={isLoading && { uri: user.profile.avatar }}
+                        source={!isLoading && { uri: user.profile.avatar }}
                         style={styles.avatarImage} />
                 </View>
                 <View style={styles.profileUserData}>
                     <View style={{ flexDirection: 'row' }}>
                         {user.premium && <CrownIcon Width={34} Height={34} Color={'#06C149'} />}
-                        <Text style={styles.profileUsername}>{isLoading && user.profile.nickname}</Text>
+                        <Text style={styles.profileUsername}>{!isLoading && user.profile.nickname}</Text>
                     </View>
-                    <Text style={styles.profileDescription}>{isLoading && user.description}</Text>
+                    <Text style={styles.profileDescription}>{!isLoading && user.description}</Text>
                     <View style={styles.genresContainer}>
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             style={styles.genresScrollView}>
-                            {isLoading && user.interests.map((genre) => (
+                            {!isLoading && user.interests.map((genre) => (
                                 <View
                                     style={styles.genreContainer}
                                     key={genre.id}>
@@ -106,30 +119,19 @@ const ProfileScreen = ({ navigation, route }) => {
             </View> */}
             <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text>
             <FlatList
-                data={user.animelist}
-                keyExtractor={(item) => item.animeId.toString()}
+                data={userAnimeList}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('AnimeScreen', { animeId: item.animeId })}
-                        key={item.animeId}
-                        style={styles.animeContainerAnimeTop}>
-                        <View style={styles.scoreContainer}>
-                            <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
-                        </View>
-                        {(item.rating === 'r_plus' || item.rating === 'rx') && (
-                            <View style={styles.ratingContainer}>
-                                <Text style={styles.ratingText}>18+</Text>
-                            </View>
-                        )}
-                        <Image
-                            source={{ uri: item.poster.originalUrl }}
-                            style={styles.animeImageAnimeTop} />
-                    </TouchableOpacity>
+                    <AnimeCard
+                        navigation={navigation}
+                        item={item}
+                        width={130}
+                        height={175}
+                        isLoading={!item?.id} />
                 )}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 5, height: '100%' }}
-                horizontal
-            />
+                contentContainerStyle={{ paddingHorizontal: 5, height: '100%', marginTop: 9 }}
+                horizontal />
         </View>
     );
 };
@@ -164,23 +166,17 @@ const styles = StyleSheet.create({
         fontSize: 10,
         marginTop: 10,
     },
+    statDataText: {
+        color: '#06C149',
+        fontFamily: 'Outfit',
+        fontSize: 24,
+        marginBottom: 10,
+    },
     favoriteAnimelistText: {
         width: '90%',
         color: '#fff',
         marginTop: 15,
         fontSize: 18
-    },
-    statDataText: {
-        color: '#06C149',
-        fontFamily: 'Outfit',
-        fontSize: 32,
-        marginBottom: 5,
-    },
-    statDataTimeText: {
-        color: '#06C149',
-        fontFamily: 'Outfit',
-        fontSize: 24,
-        marginBottom: 10,
     },
     genresContainer: {
         width: '100%',
@@ -209,117 +205,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         fontSize: 8
     },
-    animeImageAnimeTop: {
-        width: 130,
-        height: 175,
-        zIndex: 1,
-        borderRadius: 10,
-        position: 'absolute',
-    },
-    ratingContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        borderColor: 'red',
-        borderWidth: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 12,
-    },
-    ratingText: {
-        color: 'red',
-        fontFamily: 'Outfit',
-        fontSize: 11,
-    },
-    scoreContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        backgroundColor: '#06C149',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 12
-    },
-    scoreText: {
-        color: '#fff',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-    },
-    animeContainerAnimeTop: {
-        margin: 9,
-        width: 130,
-        height: 175,
-        borderRadius: 15,
-        flexDirection: 'row',
-        backgroundColor: '#1F222A'
-    },
-    labelsContainer: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        marginTop: 10
-    },
-    topAnimeListUserContainer: {
-        width: '100%',
-    },
     profileDescription: {
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 11,
         marginLeft: 6,
         width: '62%'
-    },
-    labelContainer: {
-        width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: 30,
-        marginTop: 20,
-    },
-    labelLeftContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    labelLeftText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 14,
-        marginLeft: 15
-    },
-    labelLeftTextLogout: {
-        color: '#F75555',
-        fontFamily: 'Outfit',
-        fontSize: 14,
-        marginLeft: 15
-    },
-    premiumContainer: {
-        flexDirection: 'row',
-        width: '90%',
-        height: 110,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: '#06C149',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        marginTop: 25,
-    },
-    premiumTextContainer: {
-        width: '60%',
-    },
-    premiumTitle: {
-        color: '#06C149',
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
-    premiumDescription: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 10,
-        marginTop: 10,
     },
     profileContainer: {
         width: '90%',
@@ -338,12 +229,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginLeft: 6,
         marginTop: 4
-    },
-    profileUserEmail: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 12,
-        marginTop: 10,
     },
     avatarImage: {
         width: 100,

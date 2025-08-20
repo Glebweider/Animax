@@ -15,12 +15,14 @@ import { i18n } from '@Utils/localization';
 //Redux
 import { RootState } from '@Redux/store';
 import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
+import AnimeCard from '@Components/cards/Anime';
+
 
 const AnimeSearchScreen = ({ navigation }) => {
     const client = useApolloClient();
     const [textSearch, setTextSearch] = useState<string>('');
-    const [errorSearch, setErrorSearch] = useState<boolean>(false);
+    const [isErrorSearch, setIsErrorSearch] = useState<boolean>(false);
     const FilterState = useSelector((state: RootState) => state.sortReducer);
     const [animes, setAnimes] = useState([]);
     const [page, setPage] = useState(1);
@@ -31,7 +33,7 @@ const AnimeSearchScreen = ({ navigation }) => {
             try {
                 const idArray = FilterState.filter.map(item => item.id);
                 const tags = idArray.join(',');
-                setErrorSearch(false);
+                setIsErrorSearch(false);
 
                 const query = search ? GET_ANIMEBYSEARCH : GET_ANIMEBYGENRES;
                 const variables = search ? { page: newPage, search, genreIds: tags } : { page: newPage, limit: 50, genreIds: tags, excludeIds: '' };
@@ -41,11 +43,11 @@ const AnimeSearchScreen = ({ navigation }) => {
                 if (data && data.animes.length) {
                     setAnimes(prevAnimes => (newPage === 1 ? data.animes : [...prevAnimes, ...data.animes]));
                 } else {
-                    setErrorSearch(true);
+                    setIsErrorSearch(true);
                 }
             } catch (error) {
                 showAlert(error);
-                setErrorSearch(true);
+                setIsErrorSearch(true);
             }
         },
         [FilterState.filter, client]
@@ -67,25 +69,6 @@ const AnimeSearchScreen = ({ navigation }) => {
             fetchAnimes(1, textSearch);
         }
     };
-
-    const AnimeCard = React.memo(({ item }: any) => (
-        <TouchableOpacity
-            onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
-            key={item.id}
-            style={styles.animeContainerAnimeTop}>
-            <View style={styles.scoreContainer}>
-                <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
-            </View>
-            {(item.rating === 'r_plus' || item.rating === 'rx') && (
-                <View style={styles.ratingContainer}>
-                    <Text style={styles.ratingText}>18+</Text>
-                </View>
-            )}
-            <Image
-                source={{ uri: item.poster.originalUrl || item.poster.mainUrl }}
-                style={styles.animeImageAnimeTop} />
-        </TouchableOpacity>
-    ));
 
     return (
         <View style={styles.container}>
@@ -126,19 +109,21 @@ const AnimeSearchScreen = ({ navigation }) => {
                     </ScrollView>
                 </View>
             )}
-            <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
-                {!errorSearch ? (
-                    animes.length >= 1 && (
-                        <FlatList
-                            data={animes}
-                            keyExtractor={item => item.id.toString()}
-                            renderItem={({ item }) => <AnimeCard item={item} />}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.containerAnimeTop}
-                            onEndReached={handleEndReached}
-                            onEndReachedThreshold={0.1}
-                            numColumns={2} />
-                    )
+            <View style={styles.content}>
+                {!isErrorSearch ? (
+                    <FlatList
+                        data={animes.length < 1 ? Array(6).fill({}) : animes}
+                        keyExtractor={(item, index) => (item.id ? item.id.toString() : `skeleton-${index}`)}
+                        renderItem={({ item }) => <AnimeCard
+                            navigation={navigation}
+                            item={item}
+                            isLoading={animes.length < 1} />}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={styles.containerAnimeTop}
+                        onEndReached={animes.length >= 1 ? handleEndReached : undefined}
+                        onEndReachedThreshold={0.1}
+                        numColumns={2}
+                    />
                 ) : (
                     <View style={styles.errorContainer}>
                         <Image source={require('../../../assets/404.png')} style={styles.errorImage} />
@@ -160,21 +145,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#181A20',
     },
-    ratingContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        borderColor: 'red',
-        borderWidth: 2,
+    content: {
+        flexGrow: 1,
+        width: '100%',
         justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 12,
-    },
-    ratingText: {
-        color: 'red',
-        fontFamily: 'Outfit',
-        fontSize: 11,
+        alignItems: 'center'
     },
     errorContainer: {
         width: '100%',
@@ -265,45 +240,12 @@ const styles = StyleSheet.create({
         height: 28,
         margin: 22,
     },
-    scoreContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        backgroundColor: '#06C149',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 12
-    },
-    scoreText: {
-        color: '#fff',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-    },
     containerAnimeTop: {
         width: '100%',
         flexGrow: 1,
         paddingBottom: 210,
         marginTop: 15,
-    },
-    animeContainerAnimeTop: {
-        margin: 7,
-        width: 182,
-        height: 242,
-        borderRadius: 15,
-        flexDirection: 'row',
-        backgroundColor: '#1F222A'
-    },
-    animeImageAnimeTop: {
-        width: 182,
-        height: 242,
-        zIndex: 1,
-        borderRadius: 10,
-        position: 'absolute'
-    },
-    animeTitleAnimeTop: {
-        marginTop: 5,
-        textAlign: 'center',
+        gap: 14,
     },
 });
 

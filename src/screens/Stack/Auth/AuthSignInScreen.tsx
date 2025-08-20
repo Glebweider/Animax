@@ -181,22 +181,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
     },
-    passwordSection: {
-        marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: '#1F222A',
-    },
-    passwordInput: {
-        flex: 1,
-        height: '100%',
-        color: '#fff',
-        fontFamily: 'Outfit',
-    },
     icon: {
         width: 20,
         height: 20,

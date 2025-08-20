@@ -12,7 +12,6 @@ const SecurityScreen = ({ navigation }) => {
         <View style={styles.container}>
             <StatusBar style='light' />
             <BackButton navigation={navigation} text={i18n.t('profile.security')} />
-
         </View>
     );
 };

@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useGetRepliesByComment = () => {
     const { showAlert } = useAlert();
@@ -8,7 +8,7 @@ const useGetRepliesByComment = () => {
             const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/${animeId}/${commentId}/replies?page=${page}`, {
                 method: 'GET',
             });
-        
+
             const data = await response.json();
             if (response.ok) {
                 return data;

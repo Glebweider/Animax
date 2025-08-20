@@ -5,18 +5,19 @@ import BackButton from '@Components/buttons/Back';
 import EmailIcon from '@Icons/EmailIcon';
 import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
 import useForgotPassword from '@Utils/api/rest/user/forgotPasswordUser';
-import { useAlert } from '@Components/AlertContext';
+import ApplyButton from '@Components/buttons/Apply';
 
 const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const [methodResetPassword, setMethodResetPassword] = useState<string>('SMS');
     const [viaData, setViaData] = useState<string>(null);
     const [isOpenModalForgotPasswordInput, setOpenModalForgotPasswordInput] = useState<boolean>(false);
     const { forgotPasswordUser } = useForgotPassword();
-    const { showAlert } = useAlert()
 
     const fetchData = async () => {
-        const response = await forgotPasswordUser(viaData)
-        if (response.success) {
+        console.log(viaData)
+        const response = await forgotPasswordUser(viaData);
+
+        if (response) {
             navigation.navigate('ForgotPasswordCodeVerifyScreen', {
                 data: {
                     method: methodResetPassword,
@@ -24,8 +25,6 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                     expiresAt: response.expiresAt
                 }
             })
-        } else {
-            showAlert('Error from request email');
         }
     }
     return (
@@ -77,12 +76,11 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                     <Text style={styles.contentMethodViaText}>Email</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity
+            <ApplyButton
                 onPress={() => fetchData()}
-                disabled={viaData == null}
-                style={styles.buttonContinue}>
-                <Text style={styles.buttonContinueText}>Continue</Text>
-            </TouchableOpacity>
+                isActiveButton={viaData == null}
+                style={styles.applyButton}
+                text={'Continue'} />
         </View>
     );
 };
@@ -92,6 +90,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    applyButton: {
+        marginTop: 0
     },
     content: {
         width: '90%',
@@ -140,25 +141,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 14,
-    },
-    buttonContinue: {
-        width: '90%',
-        height: 58,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#06C149',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8,
-    },
-    buttonContinueText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
+    }
 });
 
 export default ForgotPasswordMethodsScreen;

@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useGetCalendarAnime = () => {
   const { showAlert } = useAlert();
@@ -6,11 +6,11 @@ const useGetCalendarAnime = () => {
   const getCalendarAnime = async () => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/calendar`);
-      
+
       if (response.ok) {
         return await response.json();
       } else {
-        const errorData = await response.text(); 
+        const errorData = await response.text();
         showAlert(errorData);
         console.log(errorData)
         return null;

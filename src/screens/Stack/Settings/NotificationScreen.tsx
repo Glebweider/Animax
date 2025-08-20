@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // Components
 import BackButton from '@Components/buttons/Back';
 import ToggleSwitch from '@Components/ToggleSwitch';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Redux

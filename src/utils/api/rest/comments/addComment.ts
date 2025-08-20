@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useAddComment = () => {
     const { showAlert } = useAlert();
@@ -16,11 +16,11 @@ const useAddComment = () => {
                     ...(parentCommentId ? { parentCommentId } : {}),
                 }),
             });
-        
+
             if (response.ok) {
                 return await response.json();
             } else {
-                const errorData = await response.json(); 
+                const errorData = await response.json();
                 const errorMessage = typeof errorData.message === 'string' ? errorData.message : 'An error occurred';
                 showAlert(errorMessage);
                 return null;

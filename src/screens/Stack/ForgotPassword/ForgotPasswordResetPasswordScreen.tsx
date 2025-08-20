@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import BackButton from '@Components/buttons/Back';
@@ -7,7 +7,8 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '@Redux/reducers/userReducer';
 import ConfigModal from '@Components/modals/ConfigModal';
 import { saveTokenToStorage } from '@Utils/functions/token';
-import useResetPassword from '@Utils/api/rest/user/resetPasswordUser';
+import useResetPassword from '@Rest/user/resetPasswordUser';
+import ApplyButton from '@Components/buttons/Apply';
 
 const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const { data } = route.params;
@@ -19,7 +20,7 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const { resetPasswordUser } = useResetPassword();
 
     useEffect(() => {
-        if (textNewPassword == textVerifyPassword) {
+        if (textNewPassword == textVerifyPassword && textNewPassword.length > 0) {
             setEnabledButton(false);
         } else {
             setEnabledButton(true);
@@ -53,12 +54,11 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
                 <PasswordSection placeholder={"New Password"} textPassword={textNewPassword} setTextPassword={setTextNewPassword} />
                 <PasswordSection placeholder={"Verify Password"} textPassword={textVerifyPassword} setTextPassword={setTextVerifyPassword} />
             </View>
-            <TouchableOpacity
+            <ApplyButton
                 onPress={() => handleResetPassword()}
-                disabled={isEnabledButton}
-                style={styles.buttonContinue}>
-                <Text style={styles.buttonContinueText}>Verify</Text>
-            </TouchableOpacity>
+                isActiveButton={isEnabledButton}
+                style={styles.applyButton}
+                text={'Verify'} />
         </View>
     );
 };
@@ -68,6 +68,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    applyButton: {
+        marginTop: 0
     },
     content: {
         width: '90%',
@@ -79,24 +82,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 13,
-    },
-    buttonContinue: {
-        width: '90%',
-        height: 58,
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#06C149',
-        shadowColor: 'rgba(6, 193, 73, 0.4)',
-        shadowOffset: { width: 4, height: 8 },
-        shadowOpacity: 0.24,
-        shadowRadius: 4,
-        elevation: 8,
-    },
-    buttonContinueText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 15,
     },
 });
 

@@ -1,5 +1,5 @@
 export interface IAnime {
-    id: number;
+    id: string;
     name: string;
     russian: string;
     poster: {

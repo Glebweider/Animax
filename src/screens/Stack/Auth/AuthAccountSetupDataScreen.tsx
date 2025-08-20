@@ -9,7 +9,7 @@ import { registerForPushNotificationsAsync } from 'notification-config';
 // Components
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 
 // Modals
 import ConfigModal from '@Modal/ConfigModal';
@@ -321,14 +321,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontFamily: 'Outfit',
         height: '100%',
-    },
-    titleContainer: {
-        width: '90%',
-    },
-    titleText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 14,
     }
 });
 

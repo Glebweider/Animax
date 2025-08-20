@@ -16,7 +16,7 @@ import formatDateComment from '@Utils/formatters/comment';
 
 //Components
 import BackButton from '@Components/buttons/Back';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 import SendIcon from '@Components/icons/SendIcon';
 
 //Interfaces
@@ -51,7 +51,6 @@ const CommentsScreen = ({ navigation, route }) => {
     const [isCommentVerify, setCommentVerify] = useState<boolean>(false);
     const [repliesPagination, setRepliesPagination] = useState<{ [commentId: string]: number }>({});
     const [commentsCountNew, setCommentsCountNew] = useState<number>(0);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const { getComments } = useGetComments();
     const { getRepliesByComment } = useGetRepliesByComment();

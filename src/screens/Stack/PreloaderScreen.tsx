@@ -10,7 +10,7 @@ import { setUser } from '@Redux/reducers/userReducer';
 
 import * as Notifications from 'expo-notifications';
 import useAuthUserInToken from '@Utils/api/rest/auth/authUserInToken';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 

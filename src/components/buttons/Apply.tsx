@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     containerButton: {
         marginTop: 20,
         backgroundColor: '#06C149',
-        width: '100%',
+        width: '90%',
         height: 60,
         borderRadius: 50,
         justifyContent: 'center',
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     containerButtonDisabled: {
+        marginTop: 20,
         backgroundColor: '#0E9E42',
         width: '90%',
         height: 60,

@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useResetPassword = () => {
   const { showAlert } = useAlert();
@@ -15,7 +15,7 @@ const useResetPassword = () => {
           newPassword,
         }),
       });
-      
+
       if (response.ok) {
         return await response.json();
       } else {

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { AlertProvider } from '@Components/AlertContext';
+import { AlertProvider } from '@Components/alert/AlertContext';
 import * as NavigationBar from 'expo-navigation-bar';
 
 
@@ -34,12 +34,12 @@ const App = () => {
       NavigationBar.setVisibilityAsync('hidden')
     }, 2000);
   });
-  
+
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>
         <AlertProvider>
-          <StatusBar backgroundColor="#181A20" />  
+          <StatusBar backgroundColor="#181A20" />
           <NavigationContainer>
             <StackNavigator />
           </NavigationContainer>

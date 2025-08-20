@@ -5,15 +5,6 @@ interface IInterest {
   text: string;
 }
 
-interface IAnime {
-  animeId: string;
-  poster: {
-    originalUrl: string;
-  };
-  score: number;
-  rating: string;
-}
-
 interface IUserPremium {
   premium: boolean;
   duration: number;
@@ -50,7 +41,7 @@ interface IUserState {
   preferences: {
     phonenumber: string;
   };
-  animelist: IAnime[];
+  animelist: string[];
   animestats: IUserAnimeStats;
   notificationSettings: IUserNotificationSettings;
 }
@@ -104,9 +95,9 @@ const userSlice = createSlice({
       state.notificationSettings = action.payload.notificationSettings
     },
     removeAnime: (state, action: PayloadAction<string>) => {
-      state.animelist = state.animelist.filter(anime => anime.animeId !== action.payload);
+      state.animelist = state.animelist.filter(animeId => animeId !== action.payload);
     },
-    addAnime: (state, action: PayloadAction<IAnime>) => {
+    addAnime: (state, action: PayloadAction<string>) => {
       state.animelist.push(action.payload);
     },
     setPremium: (state, action: PayloadAction<IUserPremium>) => {

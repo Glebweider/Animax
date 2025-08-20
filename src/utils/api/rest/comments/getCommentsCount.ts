@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useGetCommentsCount = () => {
     const { showAlert } = useAlert();
@@ -12,7 +12,7 @@ const useGetCommentsCount = () => {
                     'Content-Type': 'application/json',
                 },
             });
-            
+
             const data = await response.json();
             if (response.ok) {
                 return data;

@@ -26,7 +26,7 @@ const MyAnimeListButton = ({ anime }) => {
     useEffect(() => {
         const fetchMyAnimeList = async () => {
             if (userAnimeList) {
-                const isAnimeInList = userAnimeList.find((userAnime) => userAnime.animeId == anime.id)
+                const isAnimeInList = userAnimeList.find((userAnimeId) => userAnimeId == anime.id)
 
                 if (isAnimeInList) {
                     setIsInMyList(true);
@@ -48,14 +48,9 @@ const MyAnimeListButton = ({ anime }) => {
                 setIsInMyList(true);
             }
         } else {
-            dispatch(addAnime({
-                animeId: anime.id,
-                poster: anime.poster,
-                score: anime.score,
-                rating: anime.rating
-            }));
+            dispatch(addAnime(anime.id));
             setIsInMyList(true);
-            const response = await addAnimeListUser(token, anime);
+            const response = await addAnimeListUser(token, anime.id);
             if (!response) {
                 setIsInMyList(false);
             }

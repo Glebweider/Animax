@@ -1,9 +1,9 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useAddAnimeList = () => {
   const { showAlert } = useAlert();
 
-  const addAnimeListUser = async (token: string, anime: any) => {
+  const addAnimeListUser = async (token: string, animeId: string) => {
     try {
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/add-animelist`, {
         method: 'POST',
@@ -11,14 +11,7 @@ const useAddAnimeList = () => {
           'Authorization': token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          animeId: anime.id,
-          poster: {
-            originalUrl: anime.poster?.originalUrl || `https://shikimori.me${anime.image.original}`,
-          },
-          score: Number(anime.score),
-          rating: anime.rating,
-        }),
+        body: JSON.stringify({ animeId }),
       });
 
       if (response.ok) {

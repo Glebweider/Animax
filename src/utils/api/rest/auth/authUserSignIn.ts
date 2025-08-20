@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 import { Platform } from "react-native";
 // import { getSystemVersion, getDeviceName, getUniqueId } from 'react-native-device-info';
 

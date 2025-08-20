@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 //Components
 import BackButton from '@Components/buttons/Back';
+import ApplyButton from '@Components/buttons/Apply';
 
 //Utils
 import { GET_GENRES } from '@Utils/api/graphql/getGenres';
@@ -13,7 +14,7 @@ import { i18n } from '@Utils/localization';
 //Redux
 import { RootState } from '@Redux/store';
 import { addFilter, reset } from '@Redux/reducers/sortReducer';
-import ApplyButton from '@Components/buttons/Apply';
+
 
 const AnimeSortScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         width: '40%',
-        marginTop: 0,   
+        marginTop: 0,
         backgroundColor: '#35383F',
         elevation: 0,
     },

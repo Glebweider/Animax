@@ -3,7 +3,7 @@ import BackButton from '@Components/buttons/Back';
 import { i18n, languageNames, translations } from '@Utils/localization';
 import { saveLocalizationToStorage } from '@Utils/localization';
 import * as Updates from 'expo-updates';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 
 const LanguageScreen = ({ navigation }) => {
     const languageOptions = Object.keys(translations);

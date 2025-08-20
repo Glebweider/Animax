@@ -175,20 +175,6 @@ const styles = StyleSheet.create({
         borderRadius: 40,
         backgroundColor: '#06C149',
     },
-    addNewCard: {
-        backgroundColor: '#35383F',
-        borderRadius: 50,
-        width: '100%',
-        height: 58,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 30
-    },
-    addNewCardText: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
     buttonContinue: {
         width: '90%',
         height: 58,

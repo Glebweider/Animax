@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useUpdateTimeSpent = () => {
   const { showAlert } = useAlert();
@@ -12,7 +12,7 @@ const useUpdateTimeSpent = () => {
           'Content-Type': 'application/json',
           'X-Request-Source': 'app',
         },
-      body: JSON.stringify({ "timeSpent": timeSpent })
+        body: JSON.stringify({ "timeSpent": timeSpent })
       });
 
       if (response.ok) {

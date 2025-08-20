@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useForgotPassword = () => {
   const { showAlert } = useAlert();
@@ -12,7 +12,7 @@ const useForgotPassword = () => {
         },
         body: JSON.stringify({ email }),
       });
-      
+
       if (response.ok) {
         return await response.json();
       } else {

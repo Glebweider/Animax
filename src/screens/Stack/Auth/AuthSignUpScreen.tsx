@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
 import ApplyButton from '@Components/buttons/Apply';
-import { useAlert } from '@Components/AlertContext';
+import { useAlert } from '@Components/alert/AlertContext';
 
 // Icons
 import EmailIcon from '@Icons/EmailIcon';
@@ -159,22 +159,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#1F222A',
     },
     emailInput: {
-        flex: 1,
-        height: '100%',
-        color: '#fff',
-        fontFamily: 'Outfit',
-    },
-    passwordSection: {
-        marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: '#1F222A',
-    },
-    passwordInput: {
         flex: 1,
         height: '100%',
         color: '#fff',

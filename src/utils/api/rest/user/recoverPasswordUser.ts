@@ -1,4 +1,4 @@
-import { useAlert } from "@Components/AlertContext";
+import { useAlert } from "@Components/alert/AlertContext";
 
 const useRecoverPassword = () => {
   const { showAlert } = useAlert();
@@ -12,7 +12,7 @@ const useRecoverPassword = () => {
         },
         body: JSON.stringify({ email, code }),
       });
-      
+
       if (response.ok) {
         return true;
       } else {

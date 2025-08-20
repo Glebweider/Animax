@@ -25,8 +25,8 @@ const AuthWelcomeScreen = ({ navigation }) => {
                     <ApplyButton
                         onPress={() => navigation.navigate('AuthFGA')}
                         isActiveButton={false}
-                        text={'Get Started'} 
-                        style={undefined} />
+                        text={'Get Started'}
+                        style={styles.applyButton} />
                 </View>
             </View>
         </View>
@@ -39,6 +39,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    applyButton: {
+        width: '100%',
     },
     containerData: {
         width: '90%',
