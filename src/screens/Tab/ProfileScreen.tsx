@@ -10,9 +10,11 @@ import formattedTime from '@Utils/formatters/time';
 import SettingsIcon from '@Components/icons/SettingsIcon';
 import AnimeCard from '@Components/cards/Anime';
 import { GET_ANIMES } from '@GraphQl/getAnimes';
-import { useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
+
 
 const ProfileScreen = ({ navigation, route }) => {
+    const client = useApolloClient();
     const [isLoading, setLoading] = useState<boolean>(true);
     const [user, setUser] = useState<any>({
         uuid: "",
@@ -39,9 +41,21 @@ const ProfileScreen = ({ navigation, route }) => {
         const fetchData = async () => {
             let token = await getTokenFromStorage();
             if (token && userId) {
-                const data = await getUserProfile(token, userId);
-                if (data) {
-                    setUser(data);
+                const userData = await getUserProfile(token, userId);
+                if (userData) {
+                    setUser(userData);
+
+                    const { data } = await client.query({
+                        query: GET_ANIMES,
+                        variables: {
+                            ids: userData.animelist?.join(",")
+                        }
+                    });
+
+                    if (data?.animes) {
+                        setUserAnimeList(data?.animes);
+                    }
+
                     setLoading(false);
                 }
             }
@@ -49,16 +63,6 @@ const ProfileScreen = ({ navigation, route }) => {
 
         fetchData();
     }, [userId]);
-
-    const { data: animeList } = useQuery(GET_ANIMES, {
-        variables: {
-            ids: user.animelist?.join(",")
-        },
-    });
-
-    useEffect(() => {
-        setUserAnimeList(animeList?.animes);
-    }, [animeList]);
 
     if (!user)
         return <BallIndicator color="#13D458" size={70} animationDuration={700} />;

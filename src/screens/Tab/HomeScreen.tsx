@@ -145,7 +145,7 @@ const HomeScreen = ({ navigation }) => {
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }: any) => (
                             <AnimeCard
-                                onPress={() => setSelectAnime(item.id)}
+                                onPress={() => setSelectAnime(item)}
                                 item={item}
                                 isLoading={topHitsAnime?.length < 1}
                                 width={150}
@@ -172,7 +172,7 @@ const HomeScreen = ({ navigation }) => {
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }: any) => (
                             <AnimeCard
-                                onPress={() => setSelectAnime(item.id)}
+                                onPress={() => setSelectAnime(item)}
                                 item={item}
                                 isLoading={recomendationAnime?.length < 1}
                                 width={150}
