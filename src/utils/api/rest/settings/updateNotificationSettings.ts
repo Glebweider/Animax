@@ -6,7 +6,7 @@ const useUpdateNotificationSettings = () => {
 
   const updateNotificationSettings = async (token: string, alert: IUserNotificationSettings) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/update-notification-settings`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/notification-settings`, {
         method: 'POST',
         headers: {
           'Authorization': token,

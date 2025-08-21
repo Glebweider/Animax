@@ -5,7 +5,7 @@ const useGetUserProfile = () => {
 
   const getUserProfile = async (token: string, id: string) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/user-${id}`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/${id}`, {
         method: 'GET',
         headers: {
           'Authorization': token,

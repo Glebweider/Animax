@@ -17,7 +17,7 @@ import { useFormValidation } from '@Utils/hooks';
 import { isEmail } from '@Utils/validators';
 
 // Rest
-import useCheckEmailAvailability from '@Rest/auth/authCheckEmailAvailability';
+import useCheckFieldAvailability from '@Rest/auth/useCheckFieldAvailability';
 
 // Redux
 import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';
@@ -29,7 +29,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
     const [textEmail, setTextEmail] = React.useState<string>('');
     const [textPassword, setTextPassword] = React.useState<string>('');
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
-    const { checkEmailAvailability } = useCheckEmailAvailability();
+    const { checkFieldAvailability } = useCheckFieldAvailability();
 
     const formConfig = useMemo(() => ({
         email: {
@@ -50,7 +50,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
 
 
     const registration = async () => {
-        const checkEmail = await checkEmailAvailability(textEmail);
+        const checkEmail = await checkFieldAvailability("email", textEmail);
         if (checkEmail) {
             dispatch(setEmailAndPasswordUser({
                 email: textEmail,

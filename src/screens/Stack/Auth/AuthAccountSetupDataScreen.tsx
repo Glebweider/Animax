@@ -27,8 +27,7 @@ import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
 
 // Rest
-import useCheckPhoneNumberAvailability from '@Rest/auth/authCheckPhoneNumberAvailability';
-import useCheckNicknameAvailability from '@Rest/auth/authCheckNicknameAvailability';
+import useCheckFieldAvailability from '@Rest/auth/useCheckFieldAvailability';
 import useAuthUserInToken from '@Rest/auth/authUserInToken';
 
 
@@ -45,8 +44,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const [selectedGender, setSelectedGender] = React.useState<string>('');
     const [avatar, setAvatar] = React.useState<any>(null);
 
-    const { checkPhoneNumberAvailability } = useCheckPhoneNumberAvailability();
-    const { checkNicknameAvailability } = useCheckNicknameAvailability();
+    const { checkFieldAvailability } = useCheckFieldAvailability();
     const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
 
@@ -86,8 +84,8 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     };
 
     const registation = async () => {
-        const checkPhoneNumber = await checkPhoneNumberAvailability(textPhoneNumber);
-        const checkNickname = await checkNicknameAvailability(textNickname);
+        const checkPhoneNumber = await checkFieldAvailability("phonenumber", textPhoneNumber);
+        const checkNickname = await checkFieldAvailability("nickname", textNickname);
 
         if (checkPhoneNumber && checkNickname) {
             const pushToken = await registerForPushNotificationsAsync();

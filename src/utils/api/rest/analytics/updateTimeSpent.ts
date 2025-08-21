@@ -5,7 +5,7 @@ const useUpdateTimeSpent = () => {
 
   const updateTimeSpent = async (token: string, timeSpent: number) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/update-time-spent`, {
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/time-spent`, {
         method: 'POST',
         headers: {
           'Authorization': token,

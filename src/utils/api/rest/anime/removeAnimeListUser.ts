@@ -5,8 +5,8 @@ const useRemoveAnimeListUser = () => {
 
   const removeAnimeListUser = async (token: string, animeId: string) => {
     try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/remove-animelist`, {
-        method: 'POST',
+      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/animelist`, {
+        method: 'DELETE',
         headers: {
           'Authorization': token,
           'Content-Type': 'application/json',
