@@ -5,11 +5,12 @@ import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
 import useGetAnimeListUser from '@Rest/anime/getAnimeListUser';
 import { StatusBar } from 'expo-status-bar';
-import { useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { GET_ANIMES } from '@GraphQl/getAnimes';
 import AnimeCard from '@Components/cards/Anime';
 
 const MyListScreen = ({ navigation }) => {
+    const client = useApolloClient();
     const [userAnimeListId, setUserAnimeListId] = useState<string[]>([]);
     const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -21,6 +22,17 @@ const MyListScreen = ({ navigation }) => {
         if (token) {
             const userAnimeList = await getAnimeListUser(token);
             setUserAnimeListId(userAnimeList);
+
+            const { data } = await client.query({
+                query: GET_ANIMES,
+                variables: {
+                    ids: userAnimeListId?.join(",")
+                }
+            });
+
+            if (data?.animes) {
+                setUserAnimeList(data?.animes);
+            }
         }
 
         setIsLoading(false);
@@ -28,17 +40,7 @@ const MyListScreen = ({ navigation }) => {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
-
-    const { data: animeList } = useQuery(GET_ANIMES, {
-        variables: {
-            ids: userAnimeListId.join(",")
-        },
-    });
-
-    useEffect(() => {
-        setUserAnimeList(animeList?.animes);
-    }, [animeList]);
+    }, []);
 
     return (
         <View style={styles.container}>
