@@ -5,7 +5,6 @@ const useGetAnimeListUser = () => {
 
   const getAnimeListUser = async (token: string) => {
     try {
-      console.log(token)
       const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/animelist`, {
         method: 'GET',
         headers: {

@@ -87,9 +87,8 @@ const HomeScreen = ({ navigation }) => {
                         style={styles.backgroundShadow}>
                     </LinearGradient>
                     {selectAnime.poster.originalUrl !== '' ?
-                        <Image source={{
-                            uri: selectAnime.poster.originalUrl
-                        }}
+                        <Image 
+                            source={{ uri: selectAnime.poster.originalUrl }}
                             style={styles.selectAnimeImage} />
                         :
                         <Text>{i18n.t('loading')}</Text>
@@ -319,6 +318,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         zIndex: 1,
+        backgroundColor: '#1F222A'
     },
 });
 

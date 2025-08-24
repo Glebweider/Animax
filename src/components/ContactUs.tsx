@@ -72,12 +72,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
+        marginTop: 24,
+        gap: 14
     },
     contactContainer: {
         width: '92%',
         height: 72,
         backgroundColor: '#1F222A',
-        marginTop: 24,
         borderRadius: 20,
         alignItems: 'center',
         flexDirection: 'row',

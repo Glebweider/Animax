@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Image, Text, FlatList } from 'react-native';
 import { getTokenFromStorage } from '@Utils/functions/token';
 import { BallIndicator } from 'react-native-indicators';
 import { i18n } from '@Utils/localization';
 import useGetAnimeListUser from '@Rest/anime/getAnimeListUser';
 import { StatusBar } from 'expo-status-bar';
-import { useApolloClient, useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { GET_ANIMES } from '@GraphQl/getAnimes';
 import AnimeCard from '@Components/cards/Anime';
 
@@ -14,29 +14,58 @@ const MyListScreen = ({ navigation }) => {
     const [userAnimeListId, setUserAnimeListId] = useState<string[]>([]);
     const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [page, setPage] = useState<number>(1);
+    const limit = 40;
     const { getAnimeListUser } = useGetAnimeListUser();
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-    const fetchData = useCallback(async () => {
-        setIsLoading(true);
-        let token = await getTokenFromStorage();
-        if (token) {
-            const userAnimeList = await getAnimeListUser(token);
-            setUserAnimeListId(userAnimeList);
+    const fetchAnimes = useCallback(
+        async (ids: string[], pageToFetch: number) => {
+            const paginatedIds = ids.slice((pageToFetch - 1) * limit, pageToFetch * limit);
+            if (paginatedIds.length === 0) return;
 
             const { data } = await client.query({
                 query: GET_ANIMES,
                 variables: {
-                    ids: userAnimeListId?.join(",")
-                }
+                    ids: paginatedIds.join(","),
+                    limit,
+                    page
+                },
             });
 
-            if (data?.animes) {
-                setUserAnimeList(data?.animes);
+            if (data?.animes?.length) {
+                setUserAnimeList(prev =>
+                    pageToFetch === 1 ? data.animes : [...prev, ...data.animes]
+                );
             }
-        }
+        },
+        [client]
+    );
 
+    const fetchData = useCallback(async () => {
+        setIsLoading(true);
+        const token = await getTokenFromStorage();
+        if (token) {
+            const ids = await getAnimeListUser(token);
+            setUserAnimeListId(ids);
+            setPage(1);
+            setUserAnimeList([]);
+
+            await fetchAnimes(ids, 1);
+        }
         setIsLoading(false);
-    }, []);
+    }, [fetchAnimes]);
+
+    const handleEndReached = async () => {
+        if (isFetchingMore) return;
+        if (userAnimeList.length >= userAnimeListId.length) return;
+
+        setIsFetchingMore(true);
+        const newPage = page + 1;
+        setPage(newPage);
+        await fetchAnimes(userAnimeListId, newPage);
+        setIsFetchingMore(false);
+    };
 
     useEffect(() => {
         fetchData();
@@ -63,12 +92,14 @@ const MyListScreen = ({ navigation }) => {
                                 <AnimeCard
                                     navigation={navigation}
                                     item={item}
-                                    isLoading={userAnimeList?.length < 1}
+                                    isLoading={userAnimeList.length < 1}
                                     width={172}
                                     height={232} />
                             }
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={styles.containerAnimeTop}
+                            onEndReached={handleEndReached}
+                            onEndReachedThreshold={0.2}
                             numColumns={2} />
                         :
                         <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>

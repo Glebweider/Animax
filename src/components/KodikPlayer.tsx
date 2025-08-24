@@ -1,24 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { WebView } from 'react-native-webview';;
+import { WebView } from 'react-native-webview';
+import { Text, View } from 'react-native';
 
 const KodikPlayer = ({ shikimoriId }: any) => {
-    const [animeLink, setAnimeLink] = useState('');
+    const [animeLink, setAnimeLink] = useState<string>('');
     const webViewRef = useRef(null);
 
     const loadVideo = async () => {
         if (!shikimoriId) return;
 
-        const response = await fetch(`https://kodikapi.com/search?shikimori_id=${shikimoriId}&limit=1&token=${process.env.EXPO_PUBLIC_KODIK_API_KEY}`);
-        const data = await response.json();
-        if (data) {
-            setAnimeLink(`https:${data.results[0]?.link}`);
+        try {
+            const response = await fetch(
+                `https://kodikapi.com/search?shikimori_id=${shikimoriId}&limit=1&token=${process.env.EXPO_PUBLIC_KODIK_API_KEY}`
+            );
+            const data = await response.json();
+
+            if (data.results[0]?.link) {
+                setAnimeLink(`https:${data.results[0].link}`);
+            }
+        } catch (err) {
+            console.log('Error loading Kodik video:', err);
         }
     };
 
     useEffect(() => {
-        loadVideo()
-    }, [shikimoriId])
-  
+        loadVideo();
+    }, [shikimoriId]);
+
+    if (!animeLink) return <Text>Not Found</Text>;
+
     return (
         <WebView
             style={{ backgroundColor: '#181A20', flex: 1, marginTop: 20 }}
@@ -29,7 +39,8 @@ const KodikPlayer = ({ shikimoriId }: any) => {
             domStorageEnabled={true}
             startInLoadingState={true}
             scalesPageToFit={false}
-            source={{ html: `
+            source={{
+                html: `
             <iframe src=${animeLink} 
                 id="kodik-player"
                 frameborder="0" 
@@ -43,5 +54,5 @@ const KodikPlayer = ({ shikimoriId }: any) => {
         />
     );
 };
-  
+
 export default KodikPlayer;

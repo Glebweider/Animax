@@ -23,18 +23,19 @@ const MyAnimeListButton = ({ anime }) => {
     const { addAnimeListUser } = useAddAnimeList();
     const { removeAnimeListUser } = useRemoveAnimeListUser();
 
-    useEffect(() => {
-        const fetchMyAnimeList = async () => {
-            if (userAnimeList) {
-                const isAnimeInList = userAnimeList.find((userAnimeId) => userAnimeId == anime.id)
+    const fetchMyAnimeList = async () => {
+        if (userAnimeList) {
+            const isAnimeInList = userAnimeList.find((userAnimeId) => userAnimeId == anime.id)
 
-                if (isAnimeInList) {
-                    setIsInMyList(true);
-                } else {
-                    setIsInMyList(false);
-                }
+            if (isAnimeInList) {
+                setIsInMyList(true);
+            } else {
+                setIsInMyList(false);
             }
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchMyAnimeList();
     }, [anime.id]);
 

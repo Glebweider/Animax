@@ -6,7 +6,6 @@ import { BallIndicator } from 'react-native-indicators';
 import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
 import { getTokenFromStorage } from '@Utils/functions/token';
 import CrownIcon from '@Components/icons/CrownIcon';
-import formattedTime from '@Utils/formatters/time';
 import SettingsIcon from '@Components/icons/SettingsIcon';
 import AnimeCard from '@Components/cards/Anime';
 import { GET_ANIMES } from '@GraphQl/getAnimes';
@@ -48,7 +47,9 @@ const ProfileScreen = ({ navigation, route }) => {
                     const { data } = await client.query({
                         query: GET_ANIMES,
                         variables: {
-                            ids: userData.animelist?.join(",")
+                            ids: userData.animelist?.join(","),
+                            limit: 10,
+                            page: 1
                         }
                     });
 

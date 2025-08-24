@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList, AppStateStatus, AppState, Animated, Easing } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList, Animated, Easing } from 'react-native';
 import { useApolloClient } from '@apollo/client';
 import { BallIndicator } from 'react-native-indicators';
 import { useFocusEffect } from '@react-navigation/native';
@@ -30,7 +30,6 @@ import { GET_ANIME } from '@Utils/api/graphql/getAnime';
 import useAddAnimeList from '@Utils/api/rest/anime/addAnimeListUser';
 import useGetAnimeEpisodes from '@Utils/api/rest/anime/getAnimeEpisodes';
 import useRemoveAnimeListUser from '@Utils/api/rest/anime/removeAnimeListUser';
-import useGetAnimeListUser from '@Utils/api/rest/anime/getAnimeListUser';
 import useUpdateTimeSpent from '@Utils/api/rest/analytics/updateTimeSpent';
 import useGetCommentsCount from '@Utils/api/rest/comments/getCommentsCount';
 import formatViews from '@Utils/formatters/views';
@@ -38,6 +37,8 @@ import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
 
 //Interface
 import { IAnime } from '@Interfaces/animeAnimeScreen.interface';
+import { useSelector } from 'react-redux';
+import { RootState } from '@Redux/store';
 
 const arrayRatings = {
     g: 0,
@@ -67,6 +68,8 @@ const AnimeScreen = ({ navigation, route }) => {
     const client = useApolloClient();
     const { showAlert } = useAlert();
     const { animeId } = route.params;
+
+    const userAnimeList = useSelector((state: RootState) => state.userReducer.animelist);
 
     const [anime, setAnime] = useState<IAnime>({
         id: '',
@@ -115,7 +118,6 @@ const AnimeScreen = ({ navigation, route }) => {
     const { addAnimeListUser } = useAddAnimeList();
     const { getAnimeEpisodes } = useGetAnimeEpisodes();
     const { removeAnimeListUser } = useRemoveAnimeListUser();
-    const { getAnimeListUser } = useGetAnimeListUser();
     const { updateTimeSpent } = useUpdateTimeSpent();
     const { getCommentsCount } = useGetCommentsCount();
 
@@ -203,19 +205,8 @@ const AnimeScreen = ({ navigation, route }) => {
     }, [animeId, client]);
 
     useEffect(() => {
-        const fetchMyAnimeList = async () => {
-            try {
-                let token = await getTokenFromStorage();
-                const userAnimeList = await getAnimeListUser(token);
-                const isAnimeInList = userAnimeList.some((userAnime) => userAnime.animeId == anime.id);
-                setIsInMyList(isAnimeInList);
-            } catch (error) {
-                showAlert('Error MyListAnime');
-            }
-        };
-
-        fetchMyAnimeList();
-    }, [anime.id]);
+        setIsInMyList(userAnimeList.some(animeId => animeId == animeId));
+    }, [animeId]);
 
     const fetchCommentsCount = async () => {
         try {
@@ -402,7 +393,7 @@ const AnimeScreen = ({ navigation, route }) => {
             }
             {isLoading ? (
                 <BallIndicator style={{ marginTop: 55, marginBottom: 40 }} color="#13D458" size={70} animationDuration={700} />
-            ) : selectedEpisodeId !== null ? (
+            ) : episodes.length > 0 ? (
                 <>
                     <View style={styles.animeEpisodesContainer}>
                         <View style={styles.animeEpisodesHeader}>
@@ -790,6 +781,7 @@ const styles = StyleSheet.create({
     previewAnimeImage: {
         width: '100%',
         height: '100%',
+        backgroundColor: '#1F222A'
     }
 });
 

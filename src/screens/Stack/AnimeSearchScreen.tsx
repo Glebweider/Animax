@@ -24,8 +24,8 @@ const AnimeSearchScreen = ({ navigation }) => {
     const [textSearch, setTextSearch] = useState<string>('');
     const [isErrorSearch, setIsErrorSearch] = useState<boolean>(false);
     const FilterState = useSelector((state: RootState) => state.sortReducer);
-    const [animes, setAnimes] = useState([]);
-    const [page, setPage] = useState(1);
+    const [animes, setAnimes] = useState<any[]>([]);
+    const [page, setPage] = useState<number>(1);
     const { showAlert } = useAlert();
 
     const fetchAnimes = useCallback(
@@ -149,7 +149,8 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         width: '100%',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 12
     },
     errorContainer: {
         width: '100%',
