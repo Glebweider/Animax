@@ -16,9 +16,9 @@ import RewindBackVideoPlayerIcon from '@Icons/videoplayer/RewindBackVideoPlayerI
 import RewindForwVideoPlayerIcon from '@Icons/videoplayer/RewindForwPlayerIcon';
 import AutoVolumeVideoPlayerIcon from '@Icons/videoplayer/AutoVolumeVideoPlayerIcon';
 import { IEpisode } from '@Stack/AnimeScreen';
-import ArrowLeftIcon from './icons/ArrowLeftIcon';
+import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
 import { i18n } from '@Utils/localization';
-import SettingsIcon from './icons/SettingsIcon';
+import SettingsIcon from '@Icons/SettingsIcon';
 import QualityEpisodeModal from './modals/QualityEpisodeModal';
 
 interface AnilibriaPlayerProps {
@@ -190,7 +190,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 									<TouchableOpacity onPress={toggleFullscreen}>
 										<ArrowLeftIcon Color={'#FFFFFF'} Style={{}} />
 									</TouchableOpacity>
-									<Text style={styles.infoTitle}>{i18n.t('anime.episode')} {episode.ordinal}</Text>
+									<Text style={styles.infoTitle}>{i18n.t('anime.episode')} {episode?.ordinal}</Text>
 								</View>
 								<View>
 									<TouchableOpacity onPress={() => setOpenModalQuality(true)}>

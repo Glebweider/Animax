@@ -39,6 +39,7 @@ import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
 import { IAnime } from '@Interfaces/animeAnimeScreen.interface';
 import { useSelector } from 'react-redux';
 import { RootState } from '@Redux/store';
+import AnimeCard from '@Components/cards/Anime';
 
 const arrayRatings = {
     g: 0,
@@ -103,16 +104,16 @@ const AnimeScreen = ({ navigation, route }) => {
         ],
     });
     const [animeRecomendations, setAnimeRecomendations] = useState<any[]>([]);
-    const [isInMyList, setIsInMyList] = useState<boolean>(false);
     const [episodes, setEpisodes] = useState<IEpisode[]>([]);
+    const [selectInfoAnime, setSelectInfoAnime] = useState<string>('MoreLikeThis');
     const [commentsCount, setCommentsCount] = useState<number>(0);
     const [selectedEpisodeId, setSelectedEpisodeId] = useState<number>(1);
-    const [isScroll, setScroll] = useState<boolean>(true);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
+    const [isInMyList, setIsInMyList] = useState<boolean>(false);
     const [isPlaying, setPlaying] = useState<boolean>(false);
     const [isLoading, setLoading] = useState<boolean>(false);
-    const [selectInfoAnime, setSelectInfoAnime] = useState<string>('MoreLikeThis');
     const [moveLeft, setMoveLeft] = useState<boolean>(true);
+    const [isScroll, setScroll] = useState<boolean>(true);
 
 
     const { addAnimeListUser } = useAddAnimeList();
@@ -416,11 +417,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                             require('../../../assets/default-to-poster.jpg')
                                         }
                                         style={styles.cardEpisodeImage} />
-                                    <PlayIcon
-                                        Color={'#fff'}
-                                        Style={{}}
-                                        Width={23}
-                                        Height={23} />
+                                    <PlayIcon Color={'#fff'} Style={{}} Width={23} Height={23} />
                                     <Text style={styles.cardEpisodeText}>{i18n.t('anime.episode')} {item.ordinal}</Text>
                                 </TouchableOpacity>
                             }
@@ -428,7 +425,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             contentContainerStyle={{ paddingHorizontal: 10 }} />
                     </View>
                     <AnilibriaPlayer
-                        episode={episodes[selectedEpisodeId]}
+                        episode={episodes[selectedEpisodeId - 1]}
                         setPlaying={setPlaying}
                         setScroll={setScroll}
                         hasNextEpisode={episodes.findIndex(ep => ep.ordinal === selectedEpisodeId) < episodes.length - 1}
@@ -474,22 +471,12 @@ const AnimeScreen = ({ navigation, route }) => {
                                 scrollEnabled={false}
                                 keyExtractor={(item) => item.id.toString()}
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity
-                                        onPress={() => navigation.navigate('AnimeScreen', { animeId: item.id })}
-                                        key={item.id}
-                                        style={styles.animeContainerAnimeTop}>
-                                        <View style={styles.scoreContainer}>
-                                            <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
-                                        </View>
-                                        {(item.rating === 'r_plus' || item.rating === 'rx') && (
-                                            <View style={styles.ratingContainer}>
-                                                <Text style={styles.ratingText}>18+</Text>
-                                            </View>
-                                        )}
-                                        <Image
-                                            source={{ uri: item.poster.originalUrl }}
-                                            style={styles.animeImageAnimeTop} />
-                                    </TouchableOpacity>
+                                    <AnimeCard
+                                        navigation={navigation}
+                                        item={item}
+                                        isLoading={false}
+                                        width={165}
+                                        height={225} />
                                 )}
                                 showsVerticalScrollIndicator={false}
                                 contentContainerStyle={styles.containerAnimeTop}
@@ -536,56 +523,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Outfit'
     },
-    scoreContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        backgroundColor: '#06C149',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 12
-    },
-    ratingContainer: {
-        zIndex: 2,
-        borderRadius: 6,
-        width: 33,
-        height: 24,
-        borderColor: 'red',
-        borderWidth: 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 12,
-    },
-    ratingText: {
-        color: 'red',
-        fontFamily: 'Outfit',
-        fontSize: 11,
-    },
-    scoreText: {
-        color: '#fff',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-    },
     containerAnimeTop: {
         width: '100%',
         flexGrow: 1,
         marginBottom: 15
-    },
-    animeContainerAnimeTop: {
-        margin: 7,
-        width: 165,
-        height: 225,
-        borderRadius: 15,
-        flexDirection: 'row',
-        backgroundColor: '#1F222A'
-    },
-    animeImageAnimeTop: {
-        width: '100%',
-        height: '100%',
-        zIndex: 1,
-        borderRadius: 10,
-        position: 'absolute'
     },
     animeRecomendationContainer: {
         flexGrow: 1,
