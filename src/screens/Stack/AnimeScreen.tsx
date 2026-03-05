@@ -303,7 +303,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.previewAnimeContainer}>
-                {anime.poster.originalUrl !== '' ?
+                {anime?.poster?.originalUrl !== '' ?
                     <View style={{ width: '100%', height: '100%' }}>
                         <View style={{
                             backgroundColor: 'rgba(0, 0, 0, 0.3)',
@@ -314,7 +314,10 @@ const AnimeScreen = ({ navigation, route }) => {
                         }}>
                         </View>
                         <Image
-                            source={{ uri: anime.poster.originalUrl }}
+                            source={ anime?.poster?.originalUrl ? 
+                                { uri: anime.poster.originalUrl } :
+                                require('../../../assets/default-to-poster.jpg')
+                            }
                             style={styles.previewAnimeImage} />
                     </View>
                     :
@@ -526,7 +529,8 @@ const styles = StyleSheet.create({
     containerAnimeTop: {
         width: '100%',
         flexGrow: 1,
-        marginBottom: 15
+        marginBottom: 15,
+        gap: 12
     },
     animeRecomendationContainer: {
         flexGrow: 1,

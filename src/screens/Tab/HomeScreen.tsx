@@ -86,12 +86,13 @@ const HomeScreen = ({ navigation }) => {
                         end={{ x: 0.1, y: 1 }}
                         style={styles.backgroundShadow}>
                     </LinearGradient>
-                    {selectAnime.poster.originalUrl !== '' ?
-                        <Image 
-                            source={{ uri: selectAnime.poster.originalUrl }}
+                    {selectAnime?.poster?.originalUrl !== '' &&
+                        <Image
+                            source={selectAnime?.poster?.originalUrl ?
+                                { uri: selectAnime.poster.originalUrl } :
+                                require('../../../assets/default-to-poster.jpg')
+                            }
                             style={styles.selectAnimeImage} />
-                        :
-                        <Text>{i18n.t('loading')}</Text>
                     }
                     <View style={styles.animeDataContainer}>
                         <View style={styles.animeContent}>

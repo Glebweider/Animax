@@ -11,7 +11,7 @@ const useAddAnimeList = () => {
           'Authorization': token,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ animeId }),
+        body: JSON.stringify({ "animeId": `${animeId}` }),
       });
 
       if (response.ok) {

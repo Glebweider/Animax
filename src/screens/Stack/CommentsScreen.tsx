@@ -40,7 +40,7 @@ const CommentsScreen = ({ navigation, route }) => {
 
     const [comments, setComments] = useState<IComment[]>([]);
     const [openedReplies, setOpenedReplies] = useState<{ [commentId: string]: boolean }>({});
-    const [loading, setLoading] = useState<boolean>(false);
+    const [isLoading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(1);
     const [textInput, setTextInput] = useState<string>('');
     const [replyingUser, setReplyingUser] = useState<IReplyingUser>({
@@ -61,15 +61,16 @@ const CommentsScreen = ({ navigation, route }) => {
     const inputRef = useRef<TextInput>(null);
 
     const loadComments = async () => {
-        if (loading || (repliesPagination && repliesPagination[animeId] >= commentsCount)) return;
+        if (isLoading || (repliesPagination && repliesPagination[animeId] >= commentsCount)) return;
         setLoading(true);
 
         setCommentsCountNew(commentsCount);
         const data = await getComments(animeId, page);
-        if (data) {
+        if (data.lenght > 0) {
             setComments(prev => [...prev, ...data]);
             setPage(prev => prev + 1);
         }
+
         setLoading(false);
     };
 
@@ -355,7 +356,9 @@ const CommentsScreen = ({ navigation, route }) => {
                 )}
                 onEndReached={loadComments}
                 onEndReachedThreshold={0.1}
-                ListEmptyComponent={<BallIndicator color="#06C049" size={50} animationDuration={700} />}
+                ListEmptyComponent={isLoading &&
+                    <BallIndicator color="#06C049" size={50} animationDuration={700} />
+                }
             />
             <View style={styles.footer}>
                 <TextInput

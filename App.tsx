@@ -1,12 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { EventSubscription, StatusBar } from 'react-native';
+import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
+import * as NavigationBar from 'expo-navigation-bar';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+
+import { AlertProvider } from '@Components/alert/AlertContext';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { AlertProvider } from '@Components/alert/AlertContext';
-import * as NavigationBar from 'expo-navigation-bar';
-
 
 
 const client = new ApolloClient({

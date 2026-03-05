@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
+
 interface AnimeItem {
     id: string;
     score: number;
@@ -50,7 +51,11 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ navigation, onPress, item, width 
             )}
 
             <Image
-                source={{ uri: item.poster.originalUrl }}
+                source={
+                    item.poster?.originalUrl ?
+                        { uri: item.poster.originalUrl } :
+                        require('../../../assets/default-to-poster.jpg')
+                }
                 style={styles.posterImage} />
         </TouchableOpacity>
     );
@@ -58,7 +63,7 @@ const AnimeCard: React.FC<AnimeCardProps> = ({ navigation, onPress, item, width 
 
 const styles = StyleSheet.create({
     container: {
-        gap: 12,
+        margin: 0,
         marginHorizontal: 6,
         borderRadius: 15,
         flexDirection: 'row',
