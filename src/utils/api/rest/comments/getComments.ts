@@ -7,6 +7,10 @@ const useGetComments = () => {
         try {
             const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/${animeId}/comments?page=${page}`, {
                 method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
             });
 
             const data = await response.json();

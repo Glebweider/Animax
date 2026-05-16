@@ -1,35 +1,36 @@
 import { useAlert } from "@Components/alert/AlertContext";
 
 const useBuyPremiumUser = () => {
-  const { showAlert } = useAlert();
+	const { showAlert } = useAlert();
 
-  const buyPremiumUser = async (token: string, duration: string) => {
-    try {
-      const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/premium/buy`, {
-        method: 'POST',
-        headers: {
-          'Authorization': token,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          duration: duration,
-        }),
-      });
+	const buyPremiumUser = async (token: string, duration: string) => {
+		try {
+			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/premium/buy`, {
+				method: 'POST',
+				headers: {
+					'Authorization': token,
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+				},
+				body: JSON.stringify({
+					duration: duration,
+				}),
+			});
 
-      if (response.ok) {
-        return await response.json();
-      } else {
-        const errorData = await response.json();
-        showAlert(errorData.message);
-        return null;
-      }
-    } catch (error) {
-      showAlert(error.message);
-      return null;
-    }
-  };
+			if (response.ok) {
+				return await response.json();
+			} else {
+				const errorData = await response.json();
+				showAlert(errorData.message);
+				return null;
+			}
+		} catch (error) {
+			showAlert(error.message);
+			return null;
+		}
+	};
 
-  return { buyPremiumUser };
+	return { buyPremiumUser };
 };
 
 export default useBuyPremiumUser;

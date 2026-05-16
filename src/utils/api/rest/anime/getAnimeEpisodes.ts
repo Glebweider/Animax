@@ -12,7 +12,11 @@ const useGetAnimeEpisodes = () => {
 		try {
 			const response = await fetch(`https://www.anilibria.top/api/v1/anime/releases/${animeName}`, {
 				method: 'GET',
-				signal: controller.signal
+				signal: controller.signal,
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+				},
 			});
 
 			clearTimeout(timeoutId);

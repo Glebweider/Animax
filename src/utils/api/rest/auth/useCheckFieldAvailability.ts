@@ -10,6 +10,7 @@ const useCheckFieldAvailability = () => {
             const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/validate`, {
                 method: "POST",
                 headers: {
+                    'Accept': 'application/json',
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ field, value }),
