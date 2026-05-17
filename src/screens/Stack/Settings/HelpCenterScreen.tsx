@@ -46,7 +46,9 @@ const HelpCenterScreen = ({ navigation }) => {
             const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/tickets/user`, {
                 "method": 'GET',
                 "headers": {
-                    "Authorization": token || ''
+                    Authorization: token || '',
+                    "Content-Type": 'application/json',
+					"Accept": 'application/json',
                 }
             });
             if (!response.ok) {

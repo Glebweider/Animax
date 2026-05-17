@@ -5,3 +5,4 @@ export * from './getGenres';
 export * from './getRecomendationAnime';
 export * from './getTopHitsAnimes';
 export * from './getAnimes';
+export * from './getAnimesAnalytics';

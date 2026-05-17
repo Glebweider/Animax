@@ -10,43 +10,43 @@ import StackNavigator from './src/screens/Stack/StackNavigator';
 
 
 const client = new ApolloClient({
-  uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
-  cache: new InMemoryCache({
-    typePolicies: {
-      Anime: {
-        fields: {
-          poster: {
-            merge(existing = {}, incoming) {
-              return { ...existing, ...incoming };
-            },
-          },
-        },
-      },
-    },
-  }),
+	uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
+	cache: new InMemoryCache({
+		typePolicies: {
+			Anime: {
+				fields: {
+					poster: {
+						merge(existing = {}, incoming) {
+							return { ...existing, ...incoming };
+						},
+					},
+				},
+			},
+		},
+	}),
 });
 
 NavigationBar.setVisibilityAsync('hidden');
 
 const App = () => {
-  NavigationBar.addVisibilityListener(() => {
-    setTimeout(() => {
-      NavigationBar.setVisibilityAsync('hidden')
-    }, 2000);
-  });
+	NavigationBar.addVisibilityListener(() => {
+		setTimeout(() => {
+			NavigationBar.setVisibilityAsync('hidden')
+		}, 2000);
+	});
 
-  return (
-    <ApolloProvider client={client}>
-      <Provider store={store}>
-        <AlertProvider>
-          <StatusBar backgroundColor="#181A20" />
-          <NavigationContainer>
-            <StackNavigator />
-          </NavigationContainer>
-        </AlertProvider>
-      </Provider>
-    </ApolloProvider>
-  );
+	return (
+		<ApolloProvider client={client}>
+			<Provider store={store}>
+				<AlertProvider>
+					<StatusBar backgroundColor="#181A20" />
+					<NavigationContainer>
+						<StackNavigator />
+					</NavigationContainer>
+				</AlertProvider>
+			</Provider>
+		</ApolloProvider>
+	);
 };
 
 export default App;

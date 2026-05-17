@@ -84,7 +84,7 @@ const EditDataScreen = ({ navigation }) => {
         let response;
         if (form.avatar) {
             response = await FileSystem.uploadAsync(
-                `${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`,
+                `${process.env.EXPO_PUBLIC_API_URL}/user/user-data`,
                 form.avatar,
                 {
                     fieldName: 'avatar',
@@ -96,16 +96,19 @@ const EditDataScreen = ({ navigation }) => {
                         description: form.description,
                     },
                     headers: {
-                        Authorization: token
+                        Authorization: token,
+                        "Content-Type": 'application/json',
+                        "Accept": 'application/json',
                     },
                     uploadType: FileSystem.FileSystemUploadType.MULTIPART
                 }
             );
         } else {
-            response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/update-user-data`, {
+            response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/user-data`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": 'application/json',
+                    "Accept": 'application/json',
                     Authorization: token
                 },
                 body: JSON.stringify({

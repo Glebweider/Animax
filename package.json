@@ -63,6 +63,7 @@
     "react-native-device-info": "^14.0.2",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-gifted-charts": "^1.4.76",
     "react-native-indicators": "^0.17.0",
     "react-native-modal": "^13.0.1",
     "react-native-reanimated": "~3.16.1",

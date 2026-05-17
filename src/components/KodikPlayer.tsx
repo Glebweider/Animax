@@ -10,14 +10,17 @@ const KodikPlayer = ({ shikimoriId }: any) => {
         if (!shikimoriId) return;
 
         try {
-            const response = await fetch(
-                `https://kodikapi.com/search?shikimori_id=${shikimoriId}&limit=1&token=${process.env.EXPO_PUBLIC_KODIK_API_KEY}`
-            );
+            const response = await fetch(`https://kodikapi.com/search?shikimori_id=${shikimoriId}&limit=1&token=${process.env.EXPO_PUBLIC_KODIK_API_KEY}`, {
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Accept": 'application/json',
+                }
+            });
+
             const data = await response.json();
 
-            if (data.results[0]?.link) {
+            if (data.results[0]?.link)
                 setAnimeLink(`https:${data.results[0].link}`);
-            }
         } catch (err) {
             console.log('Error loading Kodik video:', err);
         }

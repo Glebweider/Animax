@@ -92,6 +92,10 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
             const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/register`, avatar.uri, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Accept": 'application/json',
+                },
                 parameters: {
                     email: authState.email,
                     password: authState.password,

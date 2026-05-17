@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { i18n } from '@Utils/localization';
+import { BarChart } from "react-native-gifted-charts";
 import { BallIndicator } from 'react-native-indicators';
+import { i18n } from '@Utils/localization';
 import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
 import { getTokenFromStorage } from '@Utils/functions/token';
 import CrownIcon from '@Components/icons/CrownIcon';
@@ -10,6 +11,7 @@ import SettingsIcon from '@Components/icons/SettingsIcon';
 import AnimeCard from '@Components/cards/Anime';
 import { GET_ANIMES } from '@GraphQl/getAnimes';
 import { useApolloClient } from '@apollo/client';
+import { GET_ANIMESANALYTICS } from '@Utils/api/graphql';
 
 
 const ProfileScreen = ({ navigation, route }) => {
@@ -32,6 +34,7 @@ const ProfileScreen = ({ navigation, route }) => {
         }
     });
     const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
+    const [topGenres, setTopGenres] = useState<{ label: string, value: number }[]>();
 
     const { getUserProfile } = useGetUserProfile();
     const { userId } = route.params;
@@ -55,6 +58,59 @@ const ProfileScreen = ({ navigation, route }) => {
 
                     if (data?.animes) {
                         setUserAnimeList(data?.animes);
+
+                        // Get Analytics
+                        const animeList = userData.animelist ?? [];
+                        const CHUNK_SIZE = 50;
+                        const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+                        const chunks = Array.from(
+                            { length: Math.ceil(animeList.length / CHUNK_SIZE) },
+                            (_, index) => animeList.slice(index * CHUNK_SIZE, index * CHUNK_SIZE + CHUNK_SIZE)
+                        );
+
+                        const allAnimes = [];
+                        for (const [index, ids] of chunks.entries()) {
+                            try {
+                                const dataAnalytics = await client.query({
+                                    query: GET_ANIMESANALYTICS,
+                                    variables: {
+                                        ids: ids.join(","),
+                                        page: 1,
+                                    },
+                                    fetchPolicy: "no-cache",
+                                });
+
+                                const animes = dataAnalytics.data?.animes ?? [];
+                                allAnimes.push(...animes);
+
+                                console.log(`Loaded chunk ${index + 1}/${chunks.length}`);
+
+                                if (index < chunks.length - 1)
+                                    await sleep(300);
+                            } catch (error) {
+                                console.log(`Chunk ${index + 1} failed`, error);
+                            }
+                        }
+
+                        const map = new Map<string, number>();
+
+                        for (const anime of allAnimes) {
+                            for (const genre of anime.genres || []) {
+                                const key = genre.russian;
+
+                                map.set(key, (map.get(key) || 0) + 1);
+                            }
+                        }
+
+                        const result = [...map.entries()]
+                            .sort((a, b) => b[1] - a[1])
+                            .slice(0, 5)
+                            .map(([label, value]) => ({
+                                label,
+                                value,
+                            }));
+
+                        setTopGenres(result);
                     }
 
                     setLoading(false);
@@ -69,7 +125,13 @@ const ProfileScreen = ({ navigation, route }) => {
         return <BallIndicator color="#13D458" size={70} animationDuration={700} />;
 
     return (
-        <View style={styles.container}>
+        <ScrollView
+            style={styles.container}
+            contentContainerStyle={{
+                alignItems: 'center',
+                paddingBottom: 70,
+            }}
+            showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
             <View style={styles.headerContainer}>
                 <View style={{ flexDirection: 'row' }}>
@@ -137,7 +199,40 @@ const ProfileScreen = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ paddingHorizontal: 5, height: '100%', marginTop: 9 }}
                 horizontal />
-        </View>
+            <View style={styles.chartContainer}>
+                <Text style={styles.chartTitle}>Улюблені жанри</Text>
+                {!isLoading &&
+                    <BarChart
+                        data={topGenres}
+                        barWidth={48}
+                        spacing={20}
+                        maxValue={Math.max(...topGenres.map(item => item.value)) + 5}
+                        noOfSections={6}
+                        barBorderRadius={6}
+                        yAxisThickness={0}
+                        xAxisThickness={0}
+                        initialSpacing={0}
+                        endSpacing={0}
+                        xAxisLabelTextStyle={{
+                            color: "#06C149",
+                            fontSize: 8,
+                            fontFamily: 'Outfit'
+                        }}
+                        topLabelTextStyle={{
+                            color: "#FFF",
+                            fontSize: 14,
+                            fontFamily: 'Outfit'
+                        }}
+                        hideYAxisText
+                        hideRules
+                        isAnimated
+                        showValuesAsTopLabel
+                        animationDuration={900}
+                        frontColor="#20aa50dc"
+                        height={250} />
+                }
+            </View>
+        </ScrollView>
     );
 };
 
@@ -146,8 +241,24 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        //alignItems: 'center',
         backgroundColor: '#181A20',
+    },
+    chartContainer: {
+        width: '94%',
+        alignSelf: 'center',
+        marginTop: 20,
+        borderRadius: 16,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
+        alignItems: 'center',
+    },
+    chartTitle: {
+        color: '#fff',
+        fontSize: 18,
+        fontFamily: 'Outfit',
+        alignSelf: 'flex-start',
+        marginBottom: 8
     },
     statsContainer: {
         marginTop: 22,
