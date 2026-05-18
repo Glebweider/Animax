@@ -1,30 +1,24 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { IComment } from "@Interfaces/comments.interface";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useGetRepliesByComment = () => {
     const { showAlert } = useAlert();
 
     const getRepliesByComment = async (animeId: string, commentId: string, page: number) => {
         try {
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/${animeId}/${commentId}/replies?page=${page}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                }
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                return data;
-            } else {
-                showAlert(data?.message || 'Failed to get comments replies');
-                console.error('Server error:', data);
-                return;
-            }
+            return await apiRequest<IComment[]>(
+                `/anime/${animeId}/${commentId}/replies?page=${page}`,
+                {
+                    method: 'GET',
+                },
+            );
         } catch (error) {
-            showAlert(error.message);
-            console.log(error)
-            return null;
+            if (error instanceof Error) {
+                showAlert(error.message || 'Failed to get comments replies');
+            }
+
+            return;
         }
     };
 

@@ -24,7 +24,7 @@ export interface IUserNotificationSettings {
 	subscription: boolean;
 }
 
-interface IUserState {
+export interface IUserState {
 	uuid: string;
 	email: string;
 	interests: IInterest[];

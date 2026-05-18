@@ -1,30 +1,28 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { IUserState } from "@Redux/reducers/userReducer";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useResetPassword = () => {
 	const { showAlert } = useAlert();
 
 	const resetPasswordUser = async (email: string, newPassword: string) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/reset-password`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
+			return await apiRequest<{ user: IUserState; token: string; }>(
+				`/auth/reset-password`,
+				{
+					method: 'POST',
+					body: {
+						email,
+						newPassword,
+					}
 				},
-				body: JSON.stringify({
-					email,
-					newPassword,
-				}),
-			});
-
-			if (response.ok) {
-				return await response.json();
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-			}
+			);
 		} catch (error) {
-			showAlert(error.message);
+			if (error instanceof Error) {
+				showAlert(error.message);
+			}
+
+			return;
 		}
 	};
 

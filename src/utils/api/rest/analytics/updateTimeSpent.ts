@@ -1,30 +1,29 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { IUserState } from "@Redux/reducers/userReducer";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useUpdateTimeSpent = () => {
 	const { showAlert } = useAlert();
 
 	const updateTimeSpent = async (token: string, timeSpent: number) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/time-spent`, {
-				method: 'POST',
-				headers: {
-					'Authorization': token,
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
-					'X-Request-Source': 'app',
+			await apiRequest<IUserState>(
+				`/user/time-spent`,
+				{
+					method: 'POST',
+					token,
+					body: {
+						timeSpent: timeSpent
+					}
 				},
-				body: JSON.stringify({ "timeSpent": timeSpent })
-			});
+			);
 
-			if (response.ok) {
-				return true;
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-				return false;
-			}
+			return true;
 		} catch (error) {
-			showAlert(error.message);
+			if (error instanceof Error) {
+				showAlert(error.message);
+			}
+
 			return false;
 		}
 	};

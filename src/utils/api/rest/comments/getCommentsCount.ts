@@ -1,30 +1,23 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useGetCommentsCount = () => {
     const { showAlert } = useAlert();
 
     const getCommentsCount = async (token: string, animeId: string) => {
         try {
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/${animeId}/comments-count`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': token,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+            return await apiRequest<number>(
+                `/anime/${animeId}/comments-count`,
+                {
+                    method: 'GET',
+                    token,
                 },
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                return data;
-            } else {
-                showAlert(data?.message || 'Failed to get comments count');
-                console.error('Server error:', data);
-                return 0;
-            }
+            );
         } catch (error) {
-            showAlert(error.message);
-            console.log(error)
+            if (error instanceof Error) {
+                showAlert(error.message);
+            }
+
             return 0;
         }
     };

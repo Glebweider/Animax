@@ -66,7 +66,7 @@ const CommentsScreen = ({ navigation, route }) => {
 
         setCommentsCountNew(commentsCount);
         const data = await getComments(animeId, page);
-        if (data.lenght > 0) {
+        if (data.length > 0) {
             setComments(prev => [...prev, ...data]);
             setPage(prev => prev + 1);
         }

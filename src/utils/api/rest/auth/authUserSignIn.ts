@@ -1,4 +1,5 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { apiRequest } from "@Utils/api/rest/api";
 import { Platform } from "react-native";
 // import { getSystemVersion, getDeviceName, getUniqueId } from 'react-native-device-info';
 
@@ -13,42 +14,23 @@ const useAuthSignIn = () => {
 
 	const authSignIn = async ({ email, password, pushToken }: iAuthSignIn) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/login`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
-					'X-Device-Platform': Platform.OS,
-					// 'X-Device-Version': getSystemVersion(),
-					// 'X-Device-Name': await getDeviceName(),
-					// 'X-Device-UniqId': await getUniqueId()
+			return await apiRequest<string>(
+				`/auth/login`,
+				{
+					method: 'POST',
+					body: {
+						email,
+						password,
+						pushToken,
+					}
 				},
-				body: JSON.stringify({
-					email,
-					password,
-					pushToken,
-				}),
-			});
-
-
-			if (response.ok) {
-				const data = await response.text();
-				return data;
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-				return null;
-			}
-		} catch (error: unknown) {
-			console.log(error);
-
+			);
+		} catch (error) {
 			if (error instanceof Error) {
 				showAlert(error.message);
-			} else {
-				showAlert('Unknown network error');
 			}
 
-			return null;
+			return;
 		}
 	};
 

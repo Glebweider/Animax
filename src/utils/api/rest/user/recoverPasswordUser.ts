@@ -1,28 +1,28 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useRecoverPassword = () => {
 	const { showAlert } = useAlert();
 
 	const recoverPasswordUser = async (email: string, code: string) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/recover-password`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
+			await apiRequest(
+				`/auth/recover-password`,
+				{
+					method: 'POST',
+					body: {
+						email,
+						code
+					}
 				},
-				body: JSON.stringify({ email, code }),
-			});
+			);
 
-			if (response.ok) {
-				return true;
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-				return false;
-			}
+			return true;
 		} catch (error) {
-			showAlert(error.message);
+			if (error instanceof Error) {
+				showAlert(error.message);
+			}
+
 			return false;
 		}
 	};

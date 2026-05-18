@@ -1,35 +1,29 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { IComment } from "@Interfaces/comments.interface";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useAddComment = () => {
     const { showAlert } = useAlert();
 
     const addComment = async (token: string, animeId: string, text: string, parentCommentId?: string) => {
         try {
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/${animeId}/comment`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': token,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+            return await apiRequest<IComment>(
+                `/anime/${animeId}/comment`,
+                {
+                    method: 'POST',
+                    token,
+                    body: {
+                        "text": text,
+                        ...(parentCommentId ? { parentCommentId } : {}),
+                    }
                 },
-                body: JSON.stringify({
-                    "text": text,
-                    ...(parentCommentId ? { parentCommentId } : {}),
-                }),
-            });
-
-            if (response.ok) {
-                return await response.json();
-            } else {
-                const errorData = await response.json();
-                const errorMessage = typeof errorData.message === 'string' ? errorData.message : 'An error occurred';
-                showAlert(errorMessage);
-                return null;
-            }
+            );
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-            showAlert(errorMessage);
-            return null;
+            if (error instanceof Error) {
+                showAlert(error.message);
+            }
+
+            return;
         }
     };
 

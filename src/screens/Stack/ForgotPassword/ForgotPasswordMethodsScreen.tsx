@@ -27,6 +27,8 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
             })
         }
     }
+
+
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text="Forgot Password" />

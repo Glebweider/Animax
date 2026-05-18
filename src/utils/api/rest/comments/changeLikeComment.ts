@@ -1,28 +1,25 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useChangeLikeComment = () => {
     const { showAlert } = useAlert();
 
     const changeLikeComment = async (token: string, animeId: string, commentId: string, action: 'like' | 'dislike') => {
         try {
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/anime/${animeId}/${commentId}/${action}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': token,
+            await apiRequest(
+                `/anime/${animeId}/${commentId}/${action}`,
+                {
+                    method: 'POST',
+                    token
                 },
-            });
+            );
 
-            if (response.ok) {
-                return true;
-            } else {
-                const errorData = await response.json();
-                showAlert(errorData.message);
-                return false;
-            }
+            return true;
         } catch (error) {
-            showAlert(error.message);
+            if (error instanceof Error) {
+                showAlert(error.message);
+            }
+
             return false;
         }
     };

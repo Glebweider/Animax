@@ -1,32 +1,27 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useBuyPremiumUser = () => {
 	const { showAlert } = useAlert();
 
 	const buyPremiumUser = async (token: string, duration: string) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/premium/buy`, {
-				method: 'POST',
-				headers: {
-					'Authorization': token,
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
+			return await apiRequest<{ premium: boolean; duration: number; }>(
+				`/premium/buy`,
+				{
+					method: 'POST',
+					token,
+					body: {
+						duration,
+					}
 				},
-				body: JSON.stringify({
-					duration: duration,
-				}),
-			});
-
-			if (response.ok) {
-				return await response.json();
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-				return null;
-			}
+			);
 		} catch (error) {
-			showAlert(error.message);
-			return null;
+			if (error instanceof Error) {
+				showAlert(error.message);
+			}
+
+			return;
 		}
 	};
 

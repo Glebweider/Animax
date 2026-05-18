@@ -1,28 +1,24 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { IUserState } from "@Redux/reducers/userReducer";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useAuthUserInToken = () => {
 	const { showAlert } = useAlert();
 
 	const authUserInToken = async (token: string) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/auth/verify`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
-					'Authorization': `${token}`,
+			return await apiRequest<IUserState>(
+				`/auth/verify`,
+				{
+					method: 'GET',
+					token,
 				},
-			});
-
-			if (response.ok) {
-				return await response.json();
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-				return;
-			}
+			);
 		} catch (error) {
-			showAlert(error.message);
+			if (error instanceof Error) {
+				showAlert(error.message);
+			}
+
 			return;
 		}
 	};

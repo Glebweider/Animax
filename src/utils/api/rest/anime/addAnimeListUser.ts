@@ -1,29 +1,29 @@
 import { useAlert } from "@Components/alert/AlertContext";
+import { apiRequest } from "@Utils/api/rest/api";
 
 const useAddAnimeList = () => {
 	const { showAlert } = useAlert();
 
 	const addAnimeListUser = async (token: string, animeId: string) => {
 		try {
-			const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/animelist`, {
-				method: 'POST',
-				headers: {
-					'Authorization': token,
-					'Content-Type': 'application/json',
-					'Accept': 'application/json',
+			await apiRequest(
+				`/user/animelist`,
+				{
+					method: 'POST',
+					token,
+					body: {
+						"animeId": `${animeId}`
+					}
 				},
-				body: JSON.stringify({ "animeId": `${animeId}` }),
-			});
+			);
 
-			if (response.ok) {
-				return true;
-			} else {
-				const errorData = await response.json();
-				showAlert(errorData.message);
-				return false;
-			}
+			return true;
 		} catch (error) {
-			showAlert(error.message);
+			if (error instanceof Error) {
+				showAlert(error.message);
+			}
+
+			return false;
 		}
 	};
 
