@@ -1,6 +1,6 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from "@react-navigation/material-top-tabs";
 import { BlurView } from "expo-blur";
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 import { i18n } from "@Utils/localization";
@@ -18,7 +18,7 @@ import { RootState } from "@Redux/store";
 import { useSelector } from "react-redux";
 
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
 const TabNavigator = () => {
     const currentUserStateId = useSelector((state: RootState) => state.userReducer.uuid);
@@ -26,36 +26,41 @@ const TabNavigator = () => {
 
     return (
         <Tab.Navigator
+            tabBarPosition="bottom"
+            tabBar={(props) => (
+                <View style={styles.tabBarWrapper}>
+                    <BlurView
+                        intensity={4}
+                        tint="dark"
+                        style={styles.blurStyle}
+                    />
+                    <MaterialTopTabBar {...props} />
+                </View>
+            )}
             screenOptions={{
-                headerShown: false,
-                tabBarBackground: () => <BlurView
-                    intensity={4}
-                    tint="dark"
-                    style={{
-                        ...StyleSheet.absoluteFillObject,
-                        borderTopLeftRadius: 22,
-                        borderTopRightRadius: 22,
-                        overflow: 'hidden',
-                        backgroundColor: '#222222b3',
-                        borderBottomWidth: 0,
-                    }} />,
                 tabBarStyle: {
-                    position: 'absolute',
-                    height: '9%',
+                    backgroundColor: 'transparent',
+                    elevation: 0,
+                    shadowOpacity: 0,
                     borderTopWidth: 0,
+                    height: Dimensions.get('window').height * 0.09,
+                },
+                tabBarIndicatorStyle: {
                     backgroundColor: 'transparent',
                 },
                 tabBarLabelStyle: {
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    marginBottom: 13,
+                    fontSize: 11,
+                    textTransform: 'none',
+                    marginBottom: 5,
                 },
                 tabBarIconStyle: {
-                    marginTop: 15,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 5,
                 },
                 tabBarActiveTintColor: '#06C149',
-                tabBarInactiveTintColor: '#9E9E9E'
+                tabBarInactiveTintColor: '#9E9E9E',
+                tabBarShowIcon: true,
             }}>
             <Tab.Screen
                 name='Home'
@@ -103,6 +108,20 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         elevation: 0,
+    },
+    tabBarWrapper: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: Dimensions.get('window').height * 0.1,
+        borderTopLeftRadius: 22,
+        borderTopRightRadius: 22,
+        overflow: 'hidden',
+    },
+    blurStyle: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: '#222222b3',
     }
 })
 

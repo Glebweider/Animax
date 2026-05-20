@@ -35,7 +35,7 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
                 await saveTokenToStorage(response.token);
                 setOpenModal(true);
                 setTimeout(() => {
-                    navigation.navigate('HomeScreen');
+                    navigation.replace('HomeScreen');
                 }, 5000);
             }
         };
@@ -44,7 +44,9 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Create New Password" />
+            <BackButton 
+                onPress={() => navigation.navigate('ForgotPasswordCodeVerifyScreen')} 
+                text="Create New Password" />
             <ConfigModal visible={isOpenModal} setVisible={setOpenModal} />
             <View style={styles.content}>
                 <Image

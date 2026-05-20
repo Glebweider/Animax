@@ -1,11 +1,17 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, FlatList } from 'react-native';
-import MyAnimeListButton from '@Components/buttons/MyAnimeList';
-import { BallIndicator } from 'react-native-indicators';
-import { i18n } from '@Utils/localization';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
 import { useIsFocused } from '@react-navigation/native';
+
+// Components
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
+import { BallIndicator } from '@Components/BallIndicator';
+
+// Utils
 import useGetCalendarAnime from '@Utils/api/rest/anime/getCalendarAnime';
+import { i18n } from '@Utils/localization';
+
 
 interface IDate {
     dayOfMonth: string;
@@ -130,7 +136,7 @@ const ReleaseScreen = ({ navigation }) => {
             </View>
             <View style={{ width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center' }}>
                 {isLoading ? (
-                    <BallIndicator color='#06C149' size={80} animationDuration={700} />
+                    <BallIndicator color='#06C149' size={80} count={8} />
                 ) : (
                     selectedAnimes.length >= 1 ?
                         <FlatList

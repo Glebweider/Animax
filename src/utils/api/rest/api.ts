@@ -14,7 +14,7 @@ export const apiRequest = async <T>(
 			'Content-Type': 'application/json',
 			'Accept': 'application/json',
 			'X-Device-Platform': Platform.OS,
-            'X-Request-Source': 'app',
+			'X-Request-Source': 'app',
 			...options.headers,
 		};
 
@@ -34,7 +34,18 @@ export const apiRequest = async <T>(
 		);
 
 		const text = await response.text();
-		const data = text ? JSON.parse(text) : null;
+		let data: any = null;
+
+		const contentType = response.headers.get('content-type');
+		if (contentType && contentType.includes('application/json')) {
+			try {
+				data = text ? JSON.parse(text) : null;
+			} catch {
+				data = text;
+			}
+		} else {
+			data = text || null;
+		}
 
 		if (!response.ok) {
 			throw new Error(data?.message?.message || 'Request failed');
@@ -43,7 +54,8 @@ export const apiRequest = async <T>(
 		return data;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
-            throw new Error(error.message);
+			console.log(error)
+			throw new Error(error.message);
 		}
 
 		throw new Error('Unknown network error');

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
 
+// Icons
 import PasswordIcon from '@Icons/PasswordIcon';
 import EyeOnIcon from '@Icons/EyeOnIcon';
 import EyeOffIcon from '@Icons/EyeOffIcon';

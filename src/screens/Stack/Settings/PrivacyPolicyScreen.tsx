@@ -1,5 +1,9 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
+
+// Components
 import BackButton from '@Components/buttons/Back';
+
+// Utils
 import { i18n } from '@Utils/localization';
 
 const PrivacyPolicyScreen = ({ navigation }) => {

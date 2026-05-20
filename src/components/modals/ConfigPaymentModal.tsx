@@ -4,6 +4,7 @@ import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-na
 //Utils
 import { i18n } from '@Utils/localization';
 
+
 interface ModalProps {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;

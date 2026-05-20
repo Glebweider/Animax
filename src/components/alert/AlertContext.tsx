@@ -1,6 +1,6 @@
-// AlertContext.tsx
 import React, { createContext, useState, ReactNode, useContext } from 'react';
 import Alert from './Alert';
+
 
 interface AlertContextProps {
     showAlert: (message: string) => void;

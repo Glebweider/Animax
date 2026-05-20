@@ -115,7 +115,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                     if (user) {
                         saveTokenToStorage(response.body);
                         dispatch(setUser(user));
-                        navigation.navigate('HomeScreen');
+                        navigation.replace('HomeScreen');
                     } else {
                         setOpenModal(false);
                     }
@@ -133,7 +133,9 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Fill Your Profile" />
+            <BackButton 
+                onPress={() => navigation.navigate('AuthAccountSetupInterest')} 
+                text="Fill Your Profile" />
             <View style={styles.avatarContainer}>
                 <TouchableOpacity
                     onPress={() => pickImage()}

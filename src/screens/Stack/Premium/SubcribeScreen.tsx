@@ -1,7 +1,13 @@
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+
+// Components
 import BackButton from '@Components/buttons/Back';
+
+// Icons
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
+
+// Utils
 import { i18n } from '@Utils/localization';
 
 const SubcribeScreen = ({ navigation }: any) => {

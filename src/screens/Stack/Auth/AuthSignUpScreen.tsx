@@ -65,7 +65,7 @@ const AuthSignUpScreen = ({ navigation }: any) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text='' />
+            <BackButton onPress={() => navigation.navigate('AuthFGA')} text='' />
             <View style={styles.titleContainer}>
                 <Image source={require('../../../../assets/logo.png')} style={styles.titleImage} />
                 <Text style={styles.titleText}>Create Your Account</Text>

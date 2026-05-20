@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
+
 interface ModalProps {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    navigation: any;
     setData: React.Dispatch<React.SetStateAction<string>>;
     data: any;
 }
 
-const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, setData, data, navigation }) => {
+const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, setData, data }) => {
 
     return (
         <Modal transparent visible={visible} animationType="slide">
@@ -27,7 +27,7 @@ const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, s
                             setVisible(false);
                         }}
                         style={styles.modalButtonContainer}>
-                        <Text style={styles.modalButtonText}>oк</Text>
+                        <Text style={styles.modalButtonText}>Oк</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#06C149',
         shadowRadius: 4,
         marginTop: 20,
+        marginBottom: 20
     },
     modalButtonText: {
         color: '#fff',
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: '#1F222A',
         width: '80%',
-        height: '22%',
         borderRadius: 40,
         alignItems: 'center',
     },

@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -8,6 +8,14 @@ import { AlertProvider } from '@Components/alert/AlertContext';
 import store from './src/redux/store';
 import StackNavigator from './src/screens/Stack/StackNavigator';
 
+
+const AppTheme = {
+	...DefaultTheme,
+	colors: {
+		...DefaultTheme.colors,
+		background: '#181A20',
+	},
+};
 
 const client = new ApolloClient({
 	uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL,
@@ -40,7 +48,7 @@ const App = () => {
 			<Provider store={store}>
 				<AlertProvider>
 					<StatusBar backgroundColor="#181A20" />
-					<NavigationContainer>
+					<NavigationContainer theme={AppTheme}>
 						<StackNavigator />
 					</NavigationContainer>
 				</AlertProvider>

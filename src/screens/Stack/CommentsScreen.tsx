@@ -2,7 +2,6 @@ import { FlatList, StyleSheet, View, Text, Image, TouchableOpacity, TextInput } 
 import { useSelector } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
-import { BallIndicator } from 'react-native-indicators';
 
 //Redux
 import { RootState } from '@Redux/store';
@@ -13,19 +12,21 @@ import useGetComments from '@Utils/api/rest/comments/getComments';
 import formatViews from '@Utils/formatters/views';
 import useGetRepliesByComment from '@Utils/api/rest/comments/getRepliesByComment';
 import formatDateComment from '@Utils/formatters/comment';
+import useChangeLikeComment from '@Utils/api/rest/comments/changeLikeComment';
+import useAddComment from '@Utils/api/rest/comments/addComment';
+import { getTokenFromStorage } from '@Utils/functions/token';
 
 //Components
 import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import SendIcon from '@Components/icons/SendIcon';
+import { BallIndicator } from '@Components/BallIndicator';
+import CrownIcon from '@Components/icons/CrownIcon';
+import LikeIcon from '@Components/icons/LikeIcon';
 
 //Interfaces
 import { IComment } from '@Interfaces/comments.interface';
-import useChangeLikeComment from '@Utils/api/rest/comments/changeLikeComment';
-import useAddComment from '@Utils/api/rest/comments/addComment';
-import LikeIcon from '@Components/icons/LikeIcon';
-import { getTokenFromStorage } from '@Utils/functions/token';
-import CrownIcon from '@Components/icons/CrownIcon';
+
 
 interface IReplyingUser {
     messageId: string;
@@ -357,7 +358,7 @@ const CommentsScreen = ({ navigation, route }) => {
                 onEndReached={loadComments}
                 onEndReachedThreshold={0.1}
                 ListEmptyComponent={isLoading &&
-                    <BallIndicator color="#06C049" size={50} animationDuration={700} />
+                    <BallIndicator color="#06C049" size={50} count={8} />
                 }
             />
             <View style={styles.footer}>

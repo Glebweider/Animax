@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useDispatch, useSelector } from 'react-redux';
 import * as FileSystem from 'expo-file-system';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import BackButton from '@Components/buttons/Back';

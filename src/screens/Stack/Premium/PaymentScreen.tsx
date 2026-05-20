@@ -1,8 +1,12 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
 
+// Components
 import BackButton from '@Components/buttons/Back';
+
+// Utils
 import { i18n } from '@Utils/localization';
+
 
 interface IPaymentMethod {
     textPaymentMethod: string;

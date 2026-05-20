@@ -31,13 +31,14 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Forgot Password" />
+            <BackButton 
+                onPress={() => navigation.navigate('AuthSignIn')} 
+                text="Forgot Password" />
             <ForgotPasswordInputModal
                 visible={isOpenModalForgotPasswordInput}
                 setVisible={setOpenModalForgotPasswordInput}
                 setData={setViaData}
-                data={methodResetPassword}
-                navigation={navigation} />
+                data={methodResetPassword} />
             <View style={styles.content}>
                 <Image
                     source={require('../../../../assets/backgroundForgotPassword.png')}

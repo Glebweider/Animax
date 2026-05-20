@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 
-//Utils
-import { removeTokenFromStorage } from '@Utils/functions/token';
+// Components
 import ApplyButton from '@Components/buttons/Apply';
+
+// Utils
+import { removeTokenFromStorage } from '@Utils/functions/token';
 import { i18n } from '@Utils/localization';
+
 
 interface ModalProps {
     visible: boolean;
@@ -17,7 +20,7 @@ const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) 
     const logout = async () => {
         setVisible(false);
         await removeTokenFromStorage();
-        navigation.navigate('AuthFGA');
+        navigation.navigate('AuthWelcome');
     };
 
     return (

@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { useDispatch } from 'react-redux';
+
+// Components
 import BackButton from '@Components/buttons/Back';
+
+// Icons
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
-import { useState } from 'react';
+
+// Modal
 import ConfigPaymentModal from '@Modal/ConfigPaymentModal';
+
+// Utils
 import { i18n } from '@Utils/localization';
 import { getTokenFromStorage } from '@Utils/functions/token';
-import { useDispatch } from 'react-redux';
-import { setPremium } from '@Redux/reducers/userReducer';
 import useBuyPremiumUser from '@Utils/api/rest/user/buyPremiumUser';
+
+// Redux
+import { setPremium } from '@Redux/reducers/userReducer';
+
 
 const ReviewSummaryScreen = ({ navigation, route }) => {
     const [taxPrice, setTaxPrice] = useState<number>(1.19)

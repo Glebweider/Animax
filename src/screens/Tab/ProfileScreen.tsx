@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { BarChart } from "react-native-gifted-charts";
-import { BallIndicator } from 'react-native-indicators';
-import { i18n } from '@Utils/localization';
-import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
-import { getTokenFromStorage } from '@Utils/functions/token';
+import { useApolloClient } from '@apollo/client';
+
+// Components
+import { BallIndicator } from '@Components/BallIndicator';
 import CrownIcon from '@Components/icons/CrownIcon';
 import SettingsIcon from '@Components/icons/SettingsIcon';
 import AnimeCard from '@Components/cards/Anime';
-import { GET_ANIMES } from '@GraphQl/getAnimes';
-import { useApolloClient } from '@apollo/client';
+
+// Utils
+import { i18n } from '@Utils/localization';
+import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
+import { getTokenFromStorage } from '@Utils/functions/token';
 import { GET_ANIMESANALYTICS } from '@Utils/api/graphql';
+
+// GraphQl
+import { GET_ANIMES } from '@GraphQl/getAnimes';
 
 
 const ProfileScreen = ({ navigation, route }) => {
@@ -122,7 +129,7 @@ const ProfileScreen = ({ navigation, route }) => {
     }, [userId]);
 
     if (!user)
-        return <BallIndicator color="#13D458" size={70} animationDuration={700} />;
+        return <BallIndicator color="#13D458" size={70} count={8} />;
 
     return (
         <ScrollView
@@ -187,6 +194,7 @@ const ProfileScreen = ({ navigation, route }) => {
             <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text>
             <FlatList
                 data={userAnimeList}
+                nestedScrollEnabled={true}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <AnimeCard

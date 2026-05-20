@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { socket } from '@Utils/socket';
+
 
 interface ModalProps {
     visible: boolean;

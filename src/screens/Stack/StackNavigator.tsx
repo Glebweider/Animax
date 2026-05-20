@@ -1,4 +1,4 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 
 import PreloaderScreen from '@Stack/PreloaderScreen';
 import AuthWelcomeScreen from '@Stack/Auth/AuthWelcomeScreen';
@@ -32,9 +32,16 @@ import CommentsScreen from '@Stack/CommentsScreen';
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
-    
+
     return (
-        <Stack.Navigator initialRouteName='Preloader' screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+            initialRouteName='Preloader'
+            screenOptions={{
+                headerShown: false,
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                gestureEnabled: false,
+                gestureDirection: 'horizontal',
+            }}>
             <Stack.Screen name="Preloader" component={PreloaderScreen} />
             <Stack.Screen name="AuthWelcome" component={AuthWelcomeScreen} />
             <Stack.Screen name="AuthFGA" component={AuthFGAScreen} />
@@ -42,27 +49,60 @@ const StackNavigator = () => {
             <Stack.Screen name="AuthSignIn" component={AuthSignInScreen} />
             <Stack.Screen name="AuthAccountSetupInterest" component={AuthAccountSetupInterestScreen} />
             <Stack.Screen name="AuthAccountSetupData" component={AuthAccountSetupDataScreen} />
-            <Stack.Screen name="HomeScreen" component={TabNavigator}/>
-            <Stack.Screen name="AnimeScreen" component={AnimeScreen}/>
-            <Stack.Screen name="AnimeSearchScreen" component={AnimeSearchScreen}/>
-            <Stack.Screen name="AnimeSortScreen" component={AnimeSortScreen}/>
-            <Stack.Screen name="TopHitsAnimeScreen" component={TopHitsAnimeScreen}/>
-            <Stack.Screen name="RecomendationsAnimeScreen" component={RecomendationsAnimeScreen}/>
-            <Stack.Screen name="EditDataScreen" component={EditDataScreen}/>
-            <Stack.Screen name="NotificationScreen" component={NotificationScreen}/>
-            <Stack.Screen name="SubcribeScreen" component={SubcribeScreen}/>
-            <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
-            <Stack.Screen name="PrivacyPolicyScreen" component={PrivacyPolicyScreen}/>
-            <Stack.Screen name="ReviewSummaryScreen" component={ReviewSummaryScreen}/>
-            <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen}/>
-            <Stack.Screen name="ForgotPasswordCodeVerifyScreen" component={ForgotPasswordCodeVerifyScreen}/>
-            <Stack.Screen name="ForgotPasswordResetPasswordScreen" component={ForgotPasswordResetPasswordScreen}/>
-            <Stack.Screen name="HelpCenterScreen" component={HelpCenterScreen} />
-            <Stack.Screen name="LanguageScreen" component={LanguageScreen} />
-            <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
-            <Stack.Screen name="ReportScreen" component={ReportScreen} />
-            <Stack.Screen name="CommentsScreen" component={CommentsScreen}/>
-            {/* <Stack.Screen name="SecurityScreen" component={SecurityScreen} /> */}
+            <Stack.Screen name="HomeScreen" component={TabNavigator} />
+            <Stack.Screen name="AnimeScreen" component={AnimeScreen} />
+            <Stack.Screen name="AnimeSearchScreen" component={AnimeSearchScreen} />
+            <Stack.Screen name="AnimeSortScreen" component={AnimeSortScreen} />
+            <Stack.Screen name="TopHitsAnimeScreen" component={TopHitsAnimeScreen} />
+            <Stack.Screen name="RecomendationsAnimeScreen" component={RecomendationsAnimeScreen} />
+            <Stack.Screen name="ForgotPasswordMethodsScreen" component={ForgotPasswordMethodsScreen} />
+            <Stack.Screen name="ForgotPasswordCodeVerifyScreen" component={ForgotPasswordCodeVerifyScreen} />
+            <Stack.Screen name="ForgotPasswordResetPasswordScreen" component={ForgotPasswordResetPasswordScreen} />
+            <Stack.Screen
+                name="HelpCenterScreen"
+                component={HelpCenterScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="LanguageScreen"
+                component={LanguageScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="SettingsScreen"
+                component={SettingsScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="ReportScreen"
+                component={ReportScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="EditDataScreen"
+                component={EditDataScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="NotificationScreen"
+                component={NotificationScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="SubcribeScreen"
+                component={SubcribeScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="PaymentScreen"
+                component={PaymentScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="PrivacyPolicyScreen"
+                component={PrivacyPolicyScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen
+                name="ReviewSummaryScreen"
+                component={ReviewSummaryScreen}
+                options={{ gestureEnabled: true }} />
+            <Stack.Screen name="CommentsScreen" component={CommentsScreen} />
+            {/* <Stack.Screen 
+                name="SecurityScreen" 
+                component={SecurityScreen}
+                options={{ gestureEnabled: true }} /> */}
         </Stack.Navigator>
     );
 };

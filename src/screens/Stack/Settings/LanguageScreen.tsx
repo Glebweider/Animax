@@ -1,9 +1,14 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import * as Updates from 'expo-updates';
+
+// Components
 import BackButton from '@Components/buttons/Back';
+import { useAlert } from '@Components/alert/AlertContext';
+
+// Utils
 import { i18n, languageNames, translations } from '@Utils/localization';
 import { saveLocalizationToStorage } from '@Utils/localization';
-import * as Updates from 'expo-updates';
-import { useAlert } from '@Components/alert/AlertContext';
+
 
 const LanguageScreen = ({ navigation }) => {
     const languageOptions = Object.keys(translations);

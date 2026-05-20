@@ -1,14 +1,18 @@
 import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing, Image } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
+import { FlatList } from 'react-native-gesture-handler';
 
+// Components
 import BackButton from '@Components/buttons/Back';
 import ContactUs from '@Components/ContactUs';
-import { i18n } from '@Utils/localization';
-import { getTokenFromStorage } from '@Utils/functions/token';
-import { FlatList } from 'react-native-gesture-handler';
-import formatDate from '@Utils/formatters/date';
 import CreateTicketModal from '@Components/modals/CreateTicketModal';
+
+// Utils
+import { getTokenFromStorage } from '@Utils/functions/token';
+import formatDate from '@Utils/formatters/date';
+import { i18n } from '@Utils/localization';
 import { socket } from '@Utils/socket';
+
 
 export interface ITicket {
     adminId: string;

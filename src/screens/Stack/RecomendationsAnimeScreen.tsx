@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/client';
-import BackButton from '@Components/buttons/Back';
-import { i18n } from '@Utils/localization';
-import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
 import { useSelector } from 'react-redux';
-import { RootState } from '@Redux/store';
+
+// Components
+import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import RecomendationAnimeCard from '@Components/cards/RecomendationAnime';
+
+// Utils
+import { i18n } from '@Utils/localization';
+
+// GraphQl
+import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
+
+// Redux
+import { RootState } from '@Redux/store';
+
 
 const RecomendationsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();

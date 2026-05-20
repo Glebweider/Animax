@@ -4,18 +4,20 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList, Animated, Easing } from 'react-native';
 import { useApolloClient } from '@apollo/client';
-import { BallIndicator } from 'react-native-indicators';
+import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 
-//Modal
+// Modal
 import RatingModal from '@Modal/RatingModal';
 
-//Components
+// Components
 import AnilibriaPlayer from '@Components/AnilibriaPlayer';
 import KodikPlayer from '@Components/KodikPlayer';
 import { useAlert } from '@Components/alert/AlertContext';
+import { BallIndicator } from '@Components/BallIndicator';
+import AnimeCard from '@Components/cards/Anime';
 
-//Icons
+// Icons
 import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
 import SendIcon from '@Icons/SendIcon';
 import MyListIcon from '@Icons/MyListIcon';
@@ -23,7 +25,7 @@ import StarIcon from '@Icons/StarIcon';
 import PlayIcon from '@Icons/PlayIcon';
 import ArrowRightIcon from '@Icons/ArrowRightIcon';
 
-//Utils
+// Utils
 import { getTokenFromStorage } from '@Utils/functions/token';
 import { i18n } from '@Utils/localization';
 import { GET_ANIME } from '@Utils/api/graphql/getAnime';
@@ -37,9 +39,9 @@ import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
 
 //Interface
 import { IAnime } from '@Interfaces/animeAnimeScreen.interface';
-import { useSelector } from 'react-redux';
+
+// Redux
 import { RootState } from '@Redux/store';
-import AnimeCard from '@Components/cards/Anime';
 
 const arrayRatings = {
     g: 0,
@@ -321,9 +323,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             style={styles.previewAnimeImage} />
                     </View>
                     :
-                    <BallIndicator
-                        color='#13D458' size={70}
-                        animationDuration={700} />
+                    <BallIndicator color='#13D458' size={70} count={8} />
                 }
             </View>
             <View style={styles.titleContainer}>
@@ -396,7 +396,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 </View>
             }
             {isLoading ? (
-                <BallIndicator style={{ marginTop: 55, marginBottom: 40 }} color="#13D458" size={70} animationDuration={700} />
+                <BallIndicator style={{ marginTop: 55, marginBottom: 40 }} color="#13D458" size={70} count={8} />
             ) : episodes.length > 0 ? (
                 <>
                     <View style={styles.animeEpisodesContainer}>
@@ -485,9 +485,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                 contentContainerStyle={styles.containerAnimeTop}
                                 numColumns={2} />
                             :
-                            <BallIndicator
-                                color='#13D458' size={70}
-                                animationDuration={700} />
+                            <BallIndicator color='#13D458' size={70} count={8} />
                         }
                     </View>
                     :

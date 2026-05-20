@@ -1,13 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, FlatList } from 'react-native';
-import { getTokenFromStorage } from '@Utils/functions/token';
-import { BallIndicator } from 'react-native-indicators';
-import { i18n } from '@Utils/localization';
-import useGetAnimeListUser from '@Rest/anime/getAnimeListUser';
 import { StatusBar } from 'expo-status-bar';
 import { useApolloClient } from '@apollo/client';
-import { GET_ANIMES } from '@GraphQl/getAnimes';
+
+// Components
+import { BallIndicator } from '@Components/BallIndicator';
 import AnimeCard from '@Components/cards/Anime';
+
+// Utils
+import { getTokenFromStorage } from '@Utils/functions/token';
+import { i18n } from '@Utils/localization';
+
+// Requests
+import useGetAnimeListUser from '@Rest/anime/getAnimeListUser';
+import { GET_ANIMES } from '@GraphQl/getAnimes';
+
 
 const MyListScreen = ({ navigation }) => {
     const client = useApolloClient();
@@ -82,7 +89,7 @@ const MyListScreen = ({ navigation }) => {
             </View>
             <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
                 {isLoading ? (
-                    <BallIndicator color='#06C149' size={80} animationDuration={700} />
+                    <BallIndicator color='#06C149' size={80} count={8} />
                 ) : (
                     userAnimeListId?.length >= 1 ?
                         <FlatList

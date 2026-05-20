@@ -1,7 +1,10 @@
-import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+
+// Components
+import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
+
 
 interface ModalProps {
     visible: boolean;

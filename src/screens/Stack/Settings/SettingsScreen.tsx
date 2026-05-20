@@ -1,17 +1,27 @@
 import { useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import * as Updates from 'expo-updates';
 import { useSelector } from 'react-redux';
-import { RootState } from '@Redux/store';
-import CrownIcon from '@Icons/CrownIcon';
 import Svg, { G, Path } from 'react-native-svg';
-import ArrowRightIcon from '@Components/icons/ArrowRightIcon';
-import ProfileIcon from '@Icons/ProfileIcon';
-import LogoutModal from '@Modal/LogoutModal';
 import { StatusBar } from 'expo-status-bar';
-import { i18n } from '@Utils/localization';
+
+// Icons
+import CrownIcon from '@Icons/CrownIcon';
+import ProfileIcon from '@Icons/ProfileIcon';
+
+// Components
+import ArrowRightIcon from '@Components/icons/ArrowRightIcon';
 import NotificationIcon from '@Components/icons/NotificationIcon';
 import BackButton from '@Components/buttons/Back';
-import * as Updates from 'expo-updates';
+
+// Modal
+import LogoutModal from '@Modal/LogoutModal';
+
+// Redux
+import { RootState } from '@Redux/store';
+
+// Utils
+import { i18n } from '@Utils/localization';
 
 
 const SettingsScreen = ({ navigation }) => {

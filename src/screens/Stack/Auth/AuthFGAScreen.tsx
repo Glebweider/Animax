@@ -14,7 +14,7 @@ const AuthFGAScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
-            <BackButton navigation={navigation} text='' />
+            <BackButton onPress={() => navigation.navigate('AuthWelcome')} text='' />
             <View style={styles.titleContainer}>
                 <Image source={require('../../../../assets/letsyouin.png')} style={styles.titleImage} />
                 <Text style={styles.titleText}>Let's you in</Text>

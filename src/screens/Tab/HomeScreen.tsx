@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
-import SearchIcon from '@Components/icons/SearchIcon';
 import { useQuery } from '@apollo/client';
-import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
-import { LinearGradient } from 'expo-linear-gradient';
-import PlayIcon from '@Components/icons/PlayIcon';
-import MyAnimeListButton from '@Components/buttons/MyAnimeList';
-import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
-import { i18n } from '@Utils/localization';
-import { Anime } from '@Interfaces/animeHomeScreen.interface';
 import { useSelector } from 'react-redux';
-import { RootState } from '@Redux/store';
+import { LinearGradient } from 'expo-linear-gradient';
+
+// Components
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
+import SearchIcon from '@Components/icons/SearchIcon';
+import PlayIcon from '@Components/icons/PlayIcon';
 import AnimeCard from '@Components/cards/Anime';
+
+// Utils
+import { i18n } from '@Utils/localization';
+
+// GraphQl
+import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
+import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
+
+// Interface
+import { Anime } from '@Interfaces/animeHomeScreen.interface';
+
+// Redux
+import { RootState } from '@Redux/store';
+
 
 const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<Anime>({
@@ -141,6 +153,7 @@ const HomeScreen = ({ navigation }) => {
                     <FlatList
                         data={topHitsAnime}
                         horizontal
+                        nestedScrollEnabled={true}
                         showsHorizontalScrollIndicator={false}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }: any) => (
@@ -168,6 +181,7 @@ const HomeScreen = ({ navigation }) => {
                     <FlatList
                         data={recomendationAnime}
                         horizontal
+                        nestedScrollEnabled={true}
                         showsHorizontalScrollIndicator={false}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }: any) => (

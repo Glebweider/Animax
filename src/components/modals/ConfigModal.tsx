@@ -1,7 +1,12 @@
-import { i18n } from '@Utils/localization';
 import React, { useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, Image } from 'react-native';
-import { BallIndicator } from 'react-native-indicators';
+
+// Components
+import { BallIndicator } from '@Components/BallIndicator';
+
+// Utils
+import { i18n } from '@Utils/localization';
+
 
 interface ModalProps {
     visible: boolean;
@@ -27,7 +32,7 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                         style={styles.modalImage} />
                     <Text style={styles.modalTitle}>{i18n.t('configModal.congratulations')}</Text>
                     <Text style={styles.modalText}>{i18n.t('configModal.text')}</Text>
-                    <BallIndicator color='#13D458' size={60} animationDuration={700} />
+                    <BallIndicator color='#13D458' size={60} count={8} />
                 </View>
             </View>
         </Modal>

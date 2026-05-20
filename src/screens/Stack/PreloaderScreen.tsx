@@ -1,18 +1,23 @@
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
-import { BallIndicator } from 'react-native-indicators';
 import { useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
-
-import { getTokenFromStorage } from '@Utils/functions/token';
-import { setUser } from '@Redux/reducers/userReducer';
-
-import * as Notifications from 'expo-notifications';
-import useAuthUserInToken from '@Utils/api/rest/auth/authUserInToken';
-import { useAlert } from '@Components/alert/AlertContext';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
+
+// Components
+import { BallIndicator } from '@Components/BallIndicator';
+import { useAlert } from '@Components/alert/AlertContext';
+
+// Utils
+import { getTokenFromStorage } from '@Utils/functions/token';
+import useAuthUserInToken from '@Utils/api/rest/auth/authUserInToken';
+
+// Redux
+import { setUser } from '@Redux/reducers/userReducer';
+
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -80,7 +85,7 @@ const PreloaderScreen = ({ navigation }: any) => {
             <View style={{ height: '95%' }}>
                 <Image source={require('../../../assets/logo.png')} style={styles.logo} />
                 <View style={styles.loaderIndicatorContainer}>
-                    <BallIndicator color="#13D458" size={70} animationDuration={700} />
+                    <BallIndicator color="#13D458" size={90} count={8} />
                 </View>
             </View>
             <Text style={styles.updateText}>
@@ -104,7 +109,9 @@ const styles = StyleSheet.create({
     },
     loaderIndicatorContainer: {
         height: 70,
-        marginTop: '60%'
+        marginTop: '60%',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     updateText: {
         marginTop: 5,

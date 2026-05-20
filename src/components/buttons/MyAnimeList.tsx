@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-//Utils
+// Utils
 import { getTokenFromStorage } from '@Utils/functions/token';
-
-//Icons
-import AddIcon from '@Icons/AddIcon';
-import CheckIcon from '@Icons/CheckIcon';
-
-//Redux
-import { RootState } from '@Redux/store';
-import { addAnime, removeAnime } from '@Redux/reducers/userReducer';
 import { i18n } from '@Utils/localization';
 import useAddAnimeList from '@Utils/api/rest/anime/addAnimeListUser';
 import useRemoveAnimeListUser from '@Utils/api/rest/anime/removeAnimeListUser';
+
+// Icons
+import AddIcon from '@Icons/AddIcon';
+import CheckIcon from '@Icons/CheckIcon';
+
+// Redux
+import { RootState } from '@Redux/store';
+import { addAnime, removeAnime } from '@Redux/reducers/userReducer';
+
 
 const MyAnimeListButton = ({ anime }) => {
     const [isInMyList, setIsInMyList] = useState(false);

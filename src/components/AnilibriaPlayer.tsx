@@ -5,7 +5,7 @@ import Slider from '@react-native-community/slider';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import * as NavigationBar from 'expo-navigation-bar';
 
-//Icons
+// Icons
 import PlayVideoPlayerIcon from '@Icons/videoplayer/PlayVideoPlayerIcon';
 import PauseVideoPlayerIcon from '@Icons/videoplayer/PauseVideoPlayerIcon';
 import MinimizeVideoPlayerIcon from '@Icons/videoplayer/MinimizeVideoPlayerIcon';
@@ -15,11 +15,18 @@ import ForwardStepVideoPlayerIcon from '@Icons/videoplayer/ForwardStepVideoPlaye
 import RewindBackVideoPlayerIcon from '@Icons/videoplayer/RewindBackVideoPlayerIcon';
 import RewindForwVideoPlayerIcon from '@Icons/videoplayer/RewindForwPlayerIcon';
 import AutoVolumeVideoPlayerIcon from '@Icons/videoplayer/AutoVolumeVideoPlayerIcon';
-import { IEpisode } from '@Stack/AnimeScreen';
 import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
-import { i18n } from '@Utils/localization';
 import SettingsIcon from '@Icons/SettingsIcon';
+
+// Stack
+import { IEpisode } from '@Stack/AnimeScreen';
+
+// Utils
+import { i18n } from '@Utils/localization';
+
+// Modals
 import QualityEpisodeModal from './modals/QualityEpisodeModal';
+
 
 interface AnilibriaPlayerProps {
 	episode: IEpisode;

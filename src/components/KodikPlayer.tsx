@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { WebView } from 'react-native-webview';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 
 const KodikPlayer = ({ shikimoriId }: any) => {
     const [animeLink, setAnimeLink] = useState<string>('');

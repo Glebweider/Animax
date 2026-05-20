@@ -66,7 +66,7 @@ const AuthSignInScreen = ({ navigation }) => {
             const user = await authUserInToken(response);
             if (user) {
                 dispatch(setUser(user));
-                navigation.navigate('HomeScreen');
+                navigation.replace('HomeScreen');
             }
         }
         setActiveButton(false);
@@ -75,7 +75,7 @@ const AuthSignInScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
-            <BackButton navigation={navigation} text='' />
+            <BackButton onPress={() => navigation.navigate('AuthFGA')} text='' />
             <View style={styles.titleContainer}>
                 <Image source={require('../../../../assets/logo.png')} style={styles.titleImage} />
                 <Text style={styles.titleText}>Login Your Account</Text>

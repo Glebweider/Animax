@@ -7,6 +7,11 @@ import { useApolloClient } from '@apollo/client';
 import SearchIcon from '@Icons/SearchIcon';
 import SortIcon from '@Icons/SortIcon';
 
+// Components
+import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
+import { useAlert } from '@Components/alert/AlertContext';
+import AnimeCard from '@Components/cards/Anime';
+
 //Utils
 import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
 import { GET_ANIMEBYSEARCH } from '@Utils/api/graphql/getAnimeBySearch';
@@ -14,9 +19,6 @@ import { i18n } from '@Utils/localization';
 
 //Redux
 import { RootState } from '@Redux/store';
-import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
-import { useAlert } from '@Components/alert/AlertContext';
-import AnimeCard from '@Components/cards/Anime';
 
 
 const AnimeSearchScreen = ({ navigation }) => {

@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { useApolloClient, useQuery } from '@apollo/client';
-import { GET_TOPHITSANIME } from '@Utils/api/graphql/getTopHitsAnimes';
+
+// Components
 import BackButton from '@Components/buttons/Back';
-import { i18n } from '@Utils/localization';
 import { useAlert } from '@Components/alert/AlertContext';
 import RecomendationAnimeCard from '@Components/cards/RecomendationAnime';
+
+// Utils
+import { GET_TOPHITSANIME } from '@Utils/api/graphql/getTopHitsAnimes';
+import { i18n } from '@Utils/localization';
 
 
 const TopHitsAnimeScreen = ({ navigation }: any) => {

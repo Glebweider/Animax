@@ -50,7 +50,9 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                <BackButton navigation={navigation} text="Choose Your Interest" />
+                <BackButton 
+                    onPress={() => navigation.navigate('AuthSignUp')} 
+                    text="Choose Your Interest" />
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>Choose your interests and get the best anime recommendations. Don't worry, you can always change it later.</Text>
                 </View>

@@ -69,7 +69,9 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton navigation={navigation} text="Forgot Password" />
+            <BackButton 
+                onPress={() => navigation.navigate('ForgotPasswordMethodsScreen')} 
+                text="Forgot Password" />
             <View style={styles.content}>
                 <Text
                     numberOfLines={1}

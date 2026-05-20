@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Linking } from 'react-native';
 
-//Icons
+// Icons
 import DiscordIcon from '@Icons/DiscordIcon';
 import WebSiteIcon from '@Icons/WebSiteIcon';
 import TwitterIcon from '@Icons/TwitterIcon';

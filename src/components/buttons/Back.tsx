@@ -1,25 +1,40 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { NavigationProp } from '@react-navigation/native';
 
 //Icons
 import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
 
-const BackButton = ({ navigation, text }) => {
+
+interface BallIndicatorProps {
+    navigation?: NavigationProp<any>;
+    text: string;
+    onPress?: () => void;
+}
+
+const BackButton: React.FC<BallIndicatorProps> = ({ navigation, text, onPress }) => {
+    const handlePress = () => {
+        if (onPress) {
+            onPress();
+        } else if (navigation) {
+            navigation.goBack();
+        }
+    };
 
     return (
-        <View style={styles.header}>
-            <View style={styles.headerLeft}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <ArrowLeftIcon Style={styles.headerButtonBack} Color={'#fff'} />
+        <View style={styles.container}>
+            <View style={styles.content}>
+                <TouchableOpacity onPress={handlePress}>
+                    <ArrowLeftIcon Style={styles.button} Color={'#fff'} />
                 </TouchableOpacity>
-                <Text style={styles.headerText}>{text}</Text>                    
-            </View>            
+                <Text style={styles.text}>{text}</Text>
+            </View>
         </View>
     );
 };
-    
+
 const styles = StyleSheet.create({
-    header: {
+    container: {
         width: '90%',
         flexDirection: 'row',
         alignItems: 'center',
@@ -27,20 +42,20 @@ const styles = StyleSheet.create({
         height: 60,
         marginTop: 50
     },
-    headerLeft: {
+    content: {
         flexDirection: 'row',
         alignItems: 'center'
     },
-    headerText: {
+    text: {
         color: '#fff',
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,
     },
-    headerButtonBack: {
+    button: {
         width: 28,
         height: 28,
     },
 });
-    
+
 export default BackButton;

@@ -1,8 +1,12 @@
-import MyAnimeListButton from '@Components/buttons/MyAnimeList';
-import { i18n } from '@Utils/localization';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import AnimeCard from './Anime';
+
+// Components
+import MyAnimeListButton from '@Components/buttons/MyAnimeList';
+
+// Utils
+import { i18n } from '@Utils/localization';
 
 
 interface Props {
