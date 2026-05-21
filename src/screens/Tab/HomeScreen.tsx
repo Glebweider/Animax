@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 // Components
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
@@ -27,15 +28,7 @@ import { RootState } from '@Redux/store';
 
 
 const HomeScreen = ({ navigation }) => {
-    const [selectAnime, setSelectAnime] = useState<Anime>({
-        poster: { originalUrl: '' },
-        russian: '',
-        score: 0,
-        id: 0,
-        name: '',
-        rating: '',
-        genres: [{ russian: '', name: '' }],
-    });
+    const [selectAnime, setSelectAnime] = useState<Anime>({ poster: { originalUrl: '' }, russian: '', score: 0, id: 0, name: '', rating: '', genres: [{ russian: '', name: '' }] });
     const [topHitsAnime, setTopHitsAnime] = useState<Anime[]>([]);
     const [recomendationAnime, setRecomendationAnime] = useState<Anime[]>([]);
     const [genreId, setGenreId] = useState<number>(null);
@@ -99,12 +92,17 @@ const HomeScreen = ({ navigation }) => {
                         style={styles.backgroundShadow}>
                     </LinearGradient>
                     {selectAnime?.poster?.originalUrl !== '' &&
-                        <Image
-                            source={selectAnime?.poster?.originalUrl ?
-                                { uri: selectAnime.poster.originalUrl } :
-                                require('../../../assets/default-to-poster.jpg')
-                            }
-                            style={styles.selectAnimeImage} />
+                        <View style={styles.imageWrapper}>
+                            <Animated.Image
+                                key={selectAnime.id}
+                                source={selectAnime?.poster?.originalUrl ?
+                                    { uri: selectAnime.poster.originalUrl } :
+                                    require('../../../assets/default-to-poster.jpg')
+                                }
+                                style={styles.selectAnimeShiftedImage}
+                                resizeMode="cover"
+                                entering={FadeIn.duration(500)} />
+                        </View>
                     }
                     <View style={styles.animeDataContainer}>
                         <View style={styles.animeContent}>
@@ -329,12 +327,17 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Outfit',
     },
-    selectAnimeImage: {
+    imageWrapper: {
         width: '100%',
         height: '100%',
-        zIndex: 1,
-        backgroundColor: '#1F222A'
+        overflow: 'hidden',
     },
+    selectAnimeShiftedImage: {
+        width: '100%',
+        height: '140%',
+        position: 'absolute',
+        top: 0,
+    }
 });
 
 export default HomeScreen;

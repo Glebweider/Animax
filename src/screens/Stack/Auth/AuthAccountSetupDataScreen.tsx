@@ -73,7 +73,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ['images'],
             allowsEditing: true,
             quality: 1,
         });
@@ -89,7 +89,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
         if (checkPhoneNumber && checkNickname) {
             const pushToken = await registerForPushNotificationsAsync();
-            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/auth/register`, avatar.uri, {
+            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/register`, avatar.uri, {
                 fieldName: 'avatar',
                 httpMethod: 'POST',
                 headers: {

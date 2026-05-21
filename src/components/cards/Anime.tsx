@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 
-interface AnimeItem {
+export interface AnimeItem {
     id: string;
     score: number;
     rating: string;

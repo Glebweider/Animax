@@ -10,7 +10,7 @@ const useGetAnimeEpisodes = () => {
 		}, 40000);
 
 		try {
-			const response = await fetch(`https://www.anilibria.top/api/v1/anime/releases/${animeName}`, {
+			const response = await fetch(`${process.env.EXPO_PUBLIC_ANILIBIRTY_API_URL}/api/v1/anime/releases/${animeName}`, {
 				method: 'GET',
 				signal: controller.signal,
 				headers: {

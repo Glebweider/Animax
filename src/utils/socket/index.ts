@@ -18,7 +18,7 @@ const connectSocket = async () => {
     }
 
     console.log('Токен получен, подключаем сокет...');
-    socket = io(process.env.EXPO_PUBLIC_API_SOCKET, {
+    socket = io(process.env.EXPO_PUBLIC_API_URL, {
         reconnection: true,
         reconnectionAttempts: MAX_ATTEMPTS,
         reconnectionDelay: 1500,

@@ -50,6 +50,7 @@ const CommentsScreen = ({ navigation, route }) => {
         username: ''
     });
     const [isCommentVerify, setCommentVerify] = useState<boolean>(false);
+    const [hasMore, setHasMore] = useState(true);
     const [repliesPagination, setRepliesPagination] = useState<{ [commentId: string]: number }>({});
     const [commentsCountNew, setCommentsCountNew] = useState<number>(0);
 
@@ -62,17 +63,24 @@ const CommentsScreen = ({ navigation, route }) => {
     const inputRef = useRef<TextInput>(null);
 
     const loadComments = async () => {
-        if (isLoading || (repliesPagination && repliesPagination[animeId] >= commentsCount)) return;
+        if (isLoading || !hasMore || (repliesPagination && repliesPagination[animeId] >= commentsCount)) return;
+
         setLoading(true);
 
-        setCommentsCountNew(commentsCount);
-        const data = await getComments(animeId, page);
-        if (data.length > 0) {
-            setComments(prev => [...prev, ...data]);
-            setPage(prev => prev + 1);
-        }
+        try {
+            const data = await getComments(animeId, page);
 
-        setLoading(false);
+            if (data && data.length > 0) {
+                setComments(prev => [...prev, ...data]);
+                setPage(prev => prev + 1);
+            } else {
+                setHasMore(false);
+            }
+        } catch (error) {
+            console.error("Ошибка загрузки комментариев:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -358,7 +366,9 @@ const CommentsScreen = ({ navigation, route }) => {
                 onEndReached={loadComments}
                 onEndReachedThreshold={0.1}
                 ListEmptyComponent={isLoading &&
-                    <BallIndicator color="#06C049" size={50} count={8} />
+                    <View style={{ height: 80 }}>
+                        <BallIndicator color="#06C049" size={50} count={8} />
+                    </View>
                 }
             />
             <View style={styles.footer}>

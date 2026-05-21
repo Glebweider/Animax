@@ -47,7 +47,7 @@ const HelpCenterScreen = ({ navigation }) => {
         const fetchData = async () => {
             const token = await getTokenFromStorage();
 
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/tickets/user`, {
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/tickets/user`, {
                 "method": 'GET',
                 "headers": {
                     Authorization: token || '',
@@ -97,7 +97,7 @@ const HelpCenterScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate('ReportScreen', { ticket: item })}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
-                        source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/cdn/avatar/${item.adminId}` }}
+                        source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/api/cdn/avatar/${item.adminId}` }}
                         style={styles.avatarTicket} />
                     <View style={styles.dataTicket}>
                         <Text style={{ color: '#ffffff' }}>{item.adminNickname}</Text>

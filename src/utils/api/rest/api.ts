@@ -23,7 +23,7 @@ export const apiRequest = async <T>(
 		}
 
 		const response = await fetch(
-			`${process.env.EXPO_PUBLIC_API_URL}${endpoint}`,
+			`${process.env.EXPO_PUBLIC_API_URL}/api${endpoint}`,
 			{
 				...options,
 				headers,

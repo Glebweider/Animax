@@ -65,7 +65,8 @@
     "helpcenter": "Help Center",
     "privacypolicy": "Privacy Policy",
     "logout": "Logout",
-    "favoriteanime": "Favorite animes"
+    "favoriteanime": "Favorite animes",
+    "favoritegenres": "Favorite genres"
   },
   "privacyPolicy": {
     "section1": "1. Types of Data We Collect",

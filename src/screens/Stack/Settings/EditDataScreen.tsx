@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { useMemo } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,6 +32,7 @@ const EditDataScreen = ({ navigation }) => {
     const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
 
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [form, setForm] = React.useState({
         fullName: userState.profile.fullname,
         nickname: userState.profile.nickname,
@@ -63,12 +64,12 @@ const EditDataScreen = ({ navigation }) => {
         }
     }), [form]);
 
-    const { errors, activeButton } = useFormValidation(formConfig);
+    let { errors, activeButton } = useFormValidation(formConfig);
 
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ['images'],
             allowsEditing: true,
             quality: 1,
         });
@@ -79,61 +80,69 @@ const EditDataScreen = ({ navigation }) => {
     };
 
     const update = async () => {
+        setIsSubmitting(true);
         const token = await getTokenFromStorage();
 
-        let response;
-        if (form.avatar) {
-            response = await FileSystem.uploadAsync(
-                `${process.env.EXPO_PUBLIC_API_URL}/user/user-data`,
-                form.avatar,
-                {
-                    fieldName: 'avatar',
-                    httpMethod: 'POST',
-                    parameters: {
+        try {
+            let response;
+            if (form.avatar) {
+                response = await FileSystem.uploadAsync(
+                    `${process.env.EXPO_PUBLIC_API_URL}/api/user/user-data`,
+                    form.avatar,
+                    {
+                        fieldName: 'avatar',
+                        httpMethod: 'POST',
+                        parameters: {
+                            fullname: form.fullName,
+                            nickname: form.nickname,
+                            phonenumber: form.phoneNumber,
+                            description: form.description,
+                        },
+                        headers: {
+                            Authorization: token,
+                            "Content-Type": 'application/json',
+                            "Accept": 'application/json',
+                        },
+                        uploadType: FileSystem.FileSystemUploadType.MULTIPART
+                    }
+                );
+            } else {
+                response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/user/user-data`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": 'application/json',
+                        "Accept": 'application/json',
+                        Authorization: token
+                    },
+                    body: JSON.stringify({
                         fullname: form.fullName,
                         nickname: form.nickname,
                         phonenumber: form.phoneNumber,
                         description: form.description,
-                    },
-                    headers: {
-                        Authorization: token,
-                        "Content-Type": 'application/json',
-                        "Accept": 'application/json',
-                    },
-                    uploadType: FileSystem.FileSystemUploadType.MULTIPART
-                }
-            );
-        } else {
-            response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/user/user-data`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": 'application/json',
-                    "Accept": 'application/json',
-                    Authorization: token
-                },
-                body: JSON.stringify({
-                    fullname: form.fullName,
-                    nickname: form.nickname,
-                    phonenumber: form.phoneNumber,
-                    description: form.description,
-                })
-            });
+                    })
+                });
 
-            response = {
-                status: response.status,
-                body: await response.text()
-            };
-        }
-
-        if (response.status == 200) {
-            const user = await authUserInToken(response.body);
-            if (user) {
-                saveTokenToStorage(response.body);
-                dispatch(setUser(user));
-                navigation.navigate('HomeScreen');
+                response = {
+                    status: response.status,
+                    body: await response.text()
+                };
             }
-        } else {
-            showAlert(response.body);
+
+            if (response.status == 200) {
+                const user = await authUserInToken(response.body);
+                if (user) {
+                    saveTokenToStorage(response.body);
+                    dispatch(setUser(user));
+                    navigation.navigate('HomeScreen');
+                }
+            } else {
+                showAlert(response.body);
+            }
+        } catch (error) {
+            console.error("Ошибка при обновлении профиля:", error);
+            showAlert("Что-то пошло не так...");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -150,7 +159,7 @@ const EditDataScreen = ({ navigation }) => {
                     </View>
                 </View>
                 <View style={styles.inputsContainer}>
-                    {['fullName', 'nickname', 'phoneNumber', 'description'].map((field) => (
+                    {['fullName', 'nickname', 'phoneNumber', 'description'].map(field => (
                         <>
                             <View key={field} style={styles.inputSection}>
                                 <TextInput
@@ -168,14 +177,47 @@ const EditDataScreen = ({ navigation }) => {
 
             <ApplyButton
                 onPress={update}
-                isActiveButton={activeButton}
+                isActiveButton={!activeButton && isSubmitting}
                 style={styles.applyButton}
                 text={i18n.t('update')} />
+
+            {isSubmitting && (
+                <View style={styles.loadingOverlay}>
+                    <View style={styles.loadingBox}>
+                        <ActivityIndicator size="large" color="#FFFFFF" />
+                        <Text style={styles.loadingText}>Сохраняем данные...</Text>
+                    </View>
+                </View>
+            )}
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    loadingOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 9999,
+    },
+    loadingBox: {
+        backgroundColor: '#181A20',
+        padding: 24,
+        borderRadius: 16,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    loadingText: {
+        color: '#FFFFFF',
+        marginTop: 12,
+        fontSize: 16,
+        fontWeight: '500',
+    },
     container: {
         flex: 1,
         alignItems: 'center',

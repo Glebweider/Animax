@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client';
 
 // Components
 import { BallIndicator } from '@Components/BallIndicator';
-import AnimeCard from '@Components/cards/Anime';
+import AnimeCard, { AnimeItem } from '@Components/cards/Anime';
 
 // Utils
 import { getTokenFromStorage } from '@Utils/functions/token';
@@ -19,7 +19,7 @@ import { GET_ANIMES } from '@GraphQl/getAnimes';
 const MyListScreen = ({ navigation }) => {
     const client = useApolloClient();
     const [userAnimeListId, setUserAnimeListId] = useState<string[]>([]);
-    const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
+    const [userAnimeList, setUserAnimeList] = useState<AnimeItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [page, setPage] = useState<number>(1);
     const limit = 40;

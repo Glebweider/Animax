@@ -4,6 +4,7 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { BarChart } from "react-native-gifted-charts";
 import { useApolloClient } from '@apollo/client';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import { BallIndicator } from '@Components/BallIndicator';
@@ -16,13 +17,27 @@ import { i18n } from '@Utils/localization';
 import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
 import { getTokenFromStorage } from '@Utils/functions/token';
 import { GET_ANIMESANALYTICS } from '@Utils/api/graphql';
+import { CacheMyFavoriteGenresService, ICachedMyFavoriteGenres } from '@Utils/services/MyFavoriteGenresCache';
 
 // GraphQl
 import { GET_ANIMES } from '@GraphQl/getAnimes';
 
+// Redux
+import { RootState } from '@Redux/store';
+import { addFilter } from '@Redux/reducers/sortReducer';
+
+
+interface IMyFavoriteGenre {
+    id: string;
+    label: string;
+    value: number;
+    onPress?: () => void;
+}
 
 const ProfileScreen = ({ navigation, route }) => {
     const client = useApolloClient();
+    const dispatch = useDispatch();
+    const uuid = useSelector((state: RootState) => state.userReducer.uuid);
     const [isLoading, setLoading] = useState<boolean>(true);
     const [user, setUser] = useState<any>({
         uuid: "",
@@ -41,7 +56,7 @@ const ProfileScreen = ({ navigation, route }) => {
         }
     });
     const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
-    const [topGenres, setTopGenres] = useState<{ label: string, value: number }[]>();
+    const [topGenres, setTopGenres] = useState<IMyFavoriteGenre[]>();
 
     const { getUserProfile } = useGetUserProfile();
     const { userId } = route.params;
@@ -53,11 +68,14 @@ const ProfileScreen = ({ navigation, route }) => {
                 const userData = await getUserProfile(token, userId);
                 if (userData) {
                     setUser(userData);
+                    let animeList = userData.animelist ?? [];
+                    const CHUNK_SIZE = 50;
 
+                    // ===== Get Favorite Animes =====
                     const { data } = await client.query({
                         query: GET_ANIMES,
                         variables: {
-                            ids: userData.animelist?.join(","),
+                            ids: animeList.join(","),
                             limit: 10,
                             page: 1
                         }
@@ -65,60 +83,95 @@ const ProfileScreen = ({ navigation, route }) => {
 
                     if (data?.animes) {
                         setUserAnimeList(data?.animes);
-
-                        // Get Analytics
-                        const animeList = userData.animelist ?? [];
-                        const CHUNK_SIZE = 50;
-                        const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-                        const chunks = Array.from(
-                            { length: Math.ceil(animeList.length / CHUNK_SIZE) },
-                            (_, index) => animeList.slice(index * CHUNK_SIZE, index * CHUNK_SIZE + CHUNK_SIZE)
-                        );
-
-                        const allAnimes = [];
-                        for (const [index, ids] of chunks.entries()) {
-                            try {
-                                const dataAnalytics = await client.query({
-                                    query: GET_ANIMESANALYTICS,
-                                    variables: {
-                                        ids: ids.join(","),
-                                        page: 1,
-                                    },
-                                    fetchPolicy: "no-cache",
-                                });
-
-                                const animes = dataAnalytics.data?.animes ?? [];
-                                allAnimes.push(...animes);
-
-                                console.log(`Loaded chunk ${index + 1}/${chunks.length}`);
-
-                                if (index < chunks.length - 1)
-                                    await sleep(300);
-                            } catch (error) {
-                                console.log(`Chunk ${index + 1} failed`, error);
-                            }
-                        }
-
-                        const map = new Map<string, number>();
-
-                        for (const anime of allAnimes) {
-                            for (const genre of anime.genres || []) {
-                                const key = genre.russian;
-
-                                map.set(key, (map.get(key) || 0) + 1);
-                            }
-                        }
-
-                        const result = [...map.entries()]
-                            .sort((a, b) => b[1] - a[1])
-                            .slice(0, 5)
-                            .map(([label, value]) => ({
-                                label,
-                                value,
-                            }));
-
-                        setTopGenres(result);
                     }
+
+                    // ===== Get Favorite Genres =====
+                    let allAnimes = [];
+                    let localCache = [];
+
+                    if (uuid == userId) {
+                        localCache = await CacheMyFavoriteGenresService.getList();
+                        if (localCache) {
+                            const liveIdsSet = new Set(animeList);
+                            const updatedCache = localCache.filter(cachedAnime => liveIdsSet.has(cachedAnime.id));
+                            allAnimes = updatedCache;
+
+                            const idsSet = new Set(localCache.map(obj => obj.id));
+                            animeList = animeList.filter(animeId => !idsSet.has(animeId));
+                        }
+                    }
+
+                    const chunks = Array.from(
+                        { length: Math.ceil(animeList.length / CHUNK_SIZE) },
+                        (_, index) => animeList.slice(index * CHUNK_SIZE, index * CHUNK_SIZE + CHUNK_SIZE)
+                    );
+
+                    for (const [index, ids] of chunks.entries()) {
+                        try {
+                            const dataAnalytics = await client.query({
+                                query: GET_ANIMESANALYTICS,
+                                variables: {
+                                    ids: ids.join(","),
+                                    page: 1,
+                                },
+                                fetchPolicy: "no-cache",
+                            });
+
+                            const animes = dataAnalytics.data?.animes ?? [];
+                            allAnimes.push(...animes);
+
+                            console.log(`Loaded chunk ${index + 1}/${chunks.length}`);
+                        } catch (error: any) {
+                            console.log(`Error: Чанк ${index + 1} окончательно зафейлился`, error);
+                            break;
+                        }
+                    }
+
+                    const map = new Map<string, { id: string; count: number }>();
+                    const cache: ICachedMyFavoriteGenres[] = [];
+
+                    for (const anime of allAnimes) {
+                        for (const genre of anime.genres || []) {
+                            const key = genre.russian;
+                            const genreId = genre.id;
+
+                            const current = map.get(key);
+                            if (current) {
+                                current.count += 1;
+                            } else {
+                                map.set(key, { id: genreId, count: 1 });
+                            }
+                        }
+                    }
+
+                    for (const anime of allAnimes) {
+                        if (!anime.id || !anime.genres) continue;
+                        const animeGenres = anime.genres.map((genre: any) => ({ id: genre.id, russian: genre.russian }));
+
+                        cache.push({
+                            id: String(anime.id),
+                            genres: animeGenres,
+                        });
+                    }
+
+                    const result = [...map.entries()]
+                        .sort((a, b) => b[1].count - a[1].count)
+                        .slice(0, 5)
+                        .map(([label, dataObj]) => {
+                            const item: IMyFavoriteGenre = {
+                                id: dataObj.id,
+                                label: label,
+                                value: dataObj.count
+                            };
+                            item.onPress = () => handleClickFavoriteGenre(item);
+
+                            return item;
+                        });
+
+                    setTopGenres(result);
+
+                    if (uuid == userId && (animeList.length != 0 || localCache.length > allAnimes.length))
+                        await CacheMyFavoriteGenresService.saveList(cache);
 
                     setLoading(false);
                 }
@@ -127,6 +180,15 @@ const ProfileScreen = ({ navigation, route }) => {
 
         fetchData();
     }, [userId]);
+
+    // Добавить возможность ставить что например аниме просмотренно или ожидает просмотра и тд.
+    // Добавить отображенния статуса аниме для человека, рядом с оценкой показывать просмотренно или нет
+    // Начать вести статистику просмотра аниме и тд.
+
+    const handleClickFavoriteGenre = (data: IMyFavoriteGenre) => {
+        dispatch(addFilter({ id: Number(data.id), text: data.label }));
+        navigation.navigate('AnimeSearchScreen');
+    }
 
     if (!user)
         return <BallIndicator color="#13D458" size={70} count={8} />;
@@ -208,7 +270,7 @@ const ProfileScreen = ({ navigation, route }) => {
                 contentContainerStyle={{ paddingHorizontal: 5, height: '100%', marginTop: 9 }}
                 horizontal />
             <View style={styles.chartContainer}>
-                <Text style={styles.chartTitle}>Улюблені жанри</Text>
+                <Text style={styles.chartTitle}>{i18n.t('profile.favoritegenres')}</Text>
                 {!isLoading &&
                     <BarChart
                         data={topGenres}
@@ -231,6 +293,7 @@ const ProfileScreen = ({ navigation, route }) => {
                             fontSize: 14,
                             fontFamily: 'Outfit'
                         }}
+
                         hideYAxisText
                         hideRules
                         isAnimated

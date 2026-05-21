@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, Image, TextInput, ScrollView, FlatList } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useApolloClient } from '@apollo/client';
 
 //Icons
@@ -19,10 +19,12 @@ import { i18n } from '@Utils/localization';
 
 //Redux
 import { RootState } from '@Redux/store';
+import { reset } from '@Redux/reducers/sortReducer';
 
 
 const AnimeSearchScreen = ({ navigation }) => {
     const client = useApolloClient();
+    const dispatch = useDispatch();
     const [textSearch, setTextSearch] = useState<string>('');
     const [isErrorSearch, setIsErrorSearch] = useState<boolean>(false);
     const FilterState = useSelector((state: RootState) => state.sortReducer);
@@ -72,11 +74,16 @@ const AnimeSearchScreen = ({ navigation }) => {
         }
     };
 
+    const handleBackScreen = () => {
+        dispatch(reset());
+        navigation.navigate('HomeScreen');
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('HomeScreen')}
+                    onPress={handleBackScreen}
                     style={[styles.sortButton, { backgroundColor: '#1F222A' }]}>
                     <ArrowLeftIcon Color={'#fff'} Style={{ width: 200, height: 200 }} />
                 </TouchableOpacity>

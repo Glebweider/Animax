@@ -43,6 +43,7 @@ import { IAnime } from '@Interfaces/animeAnimeScreen.interface';
 // Redux
 import { RootState } from '@Redux/store';
 
+
 const arrayRatings = {
     g: 0,
     pg: 10,
@@ -208,7 +209,7 @@ const AnimeScreen = ({ navigation, route }) => {
     }, [animeId, client]);
 
     useEffect(() => {
-        setIsInMyList(userAnimeList.some(animeId => animeId == animeId));
+        setIsInMyList(userAnimeList.some(id => id == animeId));
     }, [animeId]);
 
     const fetchCommentsCount = async () => {
@@ -305,26 +306,28 @@ const AnimeScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.previewAnimeContainer}>
-                {anime?.poster?.originalUrl !== '' ?
-                    <View style={{ width: '100%', height: '100%' }}>
+                {anime?.poster?.originalUrl !== '' ? (
+                    <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                        <Image
+                            source={anime?.poster?.originalUrl ? { uri: anime.poster.originalUrl } : require('../../../assets/default-to-poster.jpg')}
+                            style={[styles.previewAnimeImage, { position: 'absolute' }]}
+                            resizeMode="cover"
+                            blurRadius={15} />
                         <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
                             width: '100%',
                             height: '100%',
                             zIndex: 2,
                             position: 'absolute'
-                        }}>
-                        </View>
+                        }} />
                         <Image
-                            source={ anime?.poster?.originalUrl ? 
-                                { uri: anime.poster.originalUrl } :
-                                require('../../../assets/default-to-poster.jpg')
-                            }
-                            style={styles.previewAnimeImage} />
+                            source={anime?.poster?.originalUrl ? { uri: anime.poster.originalUrl } : require('../../../assets/default-to-poster.jpg')}
+                            style={{ width: '60%', height: '90%', zIndex: 3 }}
+                            resizeMode="contain" />
                     </View>
-                    :
+                ) : (
                     <BallIndicator color='#13D458' size={70} count={8} />
-                }
+                )}
             </View>
             <View style={styles.titleContainer}>
                 <Text
@@ -415,7 +418,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                     style={[item.ordinal === selectedEpisodeId && styles.selectedEpisode, styles.cardEpisodeContainer]}>
                                     <Image
                                         source={item.preview ?
-                                            { uri: `https://www.anilibria.top${item.preview.optimized.src}` }
+                                            { uri: `${process.env.EXPO_PUBLIC_ANILIBIRTY_API_URL}/${item.preview.optimized.src}` }
                                             :
                                             require('../../../assets/default-to-poster.jpg')
                                         }
@@ -724,7 +727,7 @@ const styles = StyleSheet.create({
     previewAnimeImage: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#1F222A'
+        backgroundColor: '#1F222A',
     }
 });
 
