@@ -46,7 +46,10 @@ $ EXPO_PUBLIC_SECRET_KEY
 
 ```bash
 
-# start  
+# start development mode(use .env.dev)
+$ npx expo start:dev
+
+# start default mode(use .env)
 $ npx expo start
 
 # start android
@@ -54,7 +57,4 @@ $ npm expo android
 
 # start ios
 $ npm expo ios
-
-# start development
-$ npm expo start:dev
 ```
