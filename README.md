@@ -25,11 +25,20 @@ $ npm install
 
 ```bash
 
-# Main Api  
+# Main Api(Server)
 $ EXPO_PUBLIC_API_URL
 
-# Anime Api
+# Anime Api(Shikamori)
 $ EXPO_PUBLIC_ANIME_API_GRAPHQL
+
+# Anime Episodes and Video Player Api(Aniliberty)
+$ EXPO_PUBLIC_ANILIBIRTY_API_URL
+
+# Secret key for Alt Video player(Aniliberty)
+$ EXPO_PUBLIC_KODIK_API_KEY
+
+# Secret key for encryption
+$ EXPO_PUBLIC_SECRET_KEY
 
 ```
 
@@ -37,7 +46,10 @@ $ EXPO_PUBLIC_ANIME_API_GRAPHQL
 
 ```bash
 
-# start  
+# start development mode(use .env.dev)
+$ npx expo start:dev
+
+# start default mode(use .env)
 $ npx expo start
 
 # start android
@@ -45,7 +57,4 @@ $ npm expo android
 
 # start ios
 $ npm expo ios
-
-# start development
-$ npm expo start:dev
 ```
