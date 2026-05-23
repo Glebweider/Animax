@@ -69,8 +69,8 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton 
-                onPress={() => navigation.navigate('ForgotPasswordMethodsScreen')} 
+            <BackButton
+                onPress={() => navigation.navigate('ForgotPasswordMethodsScreen')}
                 text="Forgot Password" />
             <View style={styles.content}>
                 <Text
@@ -82,7 +82,9 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
                     {pins.map((pin, index) => (
                         <TextInput
                             key={index}
-                            ref={(ref) => (inputRefs.current[index] = ref)}
+                            ref={(ref) => {
+                                inputRefs.current[index] = ref;
+                            }}
                             style={index === focusedIndex ? styles.pinInputDisabled : styles.pinInputEnabled}
                             onChangeText={(text) => handlePinInputChange(index, text)}
                             onFocus={() => setFocusedIndex(index)}

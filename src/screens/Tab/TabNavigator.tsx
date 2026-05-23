@@ -2,20 +2,25 @@ import { createMaterialTopTabNavigator, MaterialTopTabBar } from "@react-navigat
 import { BlurView } from "expo-blur";
 import { Dimensions, StyleSheet, View } from "react-native";
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { useSelector } from "react-redux";
 
+// Utils
 import { i18n } from "@Utils/localization";
 
+// Tabs
 import HomeScreen from '@Tab/HomeScreen';
 import ReleaseScreen from '@Tab/ReleaseScreen';
 import MyListScreen from '@Tab/MyListScreen';
 import ProfileScreen from '@Tab/ProfileScreen';
 
+// Icons
 import ProfileIcon from "@Icons/ProfileIcon";
 import HomeIcon from "@Icons/HomeIcon";
 import CalendarIcon from "@Icons/CalendarIcon";
 import MyListIcon from "@Icons/MyListIcon";
+
+// Redux
 import { RootState } from "@Redux/store";
-import { useSelector } from "react-redux";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -26,6 +31,7 @@ const TabNavigator = () => {
 
     return (
         <Tab.Navigator
+            id="MainTabs"
             tabBarPosition="bottom"
             tabBar={(props) => (
                 <View style={styles.tabBarWrapper}>
@@ -55,11 +61,11 @@ const TabNavigator = () => {
                     padding: 0,
                     width: '100%',
                 },
-                tabBarIconStyle: {
+                tabBarItemStyle: {
+                    flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: 4,
-                    marginBottom: 2,
+                    marginTop: 7,
                 },
                 tabBarActiveTintColor: '#06C149',
                 tabBarInactiveTintColor: '#9E9E9E',
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     blurStyle: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: '#222222b3',
     }
 })

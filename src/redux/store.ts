@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './reducers/authReducer';
 import userReducer from './reducers/userReducer';
 import sortReducer from './reducers/sortReducer';
-import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
+//import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 
 const store = configureStore({
 	reducer: {
@@ -11,10 +11,10 @@ const store = configureStore({
 		sortReducer,
 	},
 	devTools: false,
-	enhancers: (defaultEnhancers) => [
-		...defaultEnhancers,
-		devToolsEnhancer(),
-	],
+	// enhancers: (defaultEnhancers) => [
+	// 	...defaultEnhancers,
+	// 	devToolsEnhancer(),
+	// ],
 });
 
 export type RootState = ReturnType<typeof store.getState>;

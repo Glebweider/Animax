@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, Dimensions, StatusBar, Text, TouchableWithoutFeedback } from 'react-native';
-import { Video, AVPlaybackStatusSuccess, AVPlaybackStatus, ResizeMode } from 'expo-av';
+//import { Video, AVPlaybackStatusSuccess, AVPlaybackStatus, ResizeMode } from 'expo-av';
+import { useVideoPlayer, VideoView } from 'expo-video';
 import Slider from '@react-native-community/slider';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import * as NavigationBar from 'expo-navigation-bar';
+
 
 // Icons
 import PlayVideoPlayerIcon from '@Icons/videoplayer/PlayVideoPlayerIcon';
@@ -26,6 +27,7 @@ import { i18n } from '@Utils/localization';
 
 // Modals
 import QualityEpisodeModal from './modals/QualityEpisodeModal';
+import { NavigationBar } from 'expo-navigation-bar';
 
 
 interface AnilibriaPlayerProps {
@@ -47,8 +49,6 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 	onNextEpisode,
 	onPrevEpisode
 }) => {
-	const video = useRef<Video>(null);
-	const [status, setStatus] = useState<AVPlaybackStatusSuccess | null>(null);
 	const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 	const [qualityEpisode, setQualityEpisode] = useState<'hls_480' | 'hls_720' | 'hls_1080'>('hls_480');
 	const [screenWidth, setScreenWidth] = useState<number>(Dimensions.get('window').width);
@@ -56,13 +56,47 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 	const [volume, setVolume] = useState<number>(100);
 	const [controlsVisible, setControlsVisible] = useState<boolean>(true);
 	const [isOpenModalQuality, setOpenModalQuality] = useState<boolean>(false);
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	const [isPlayingState, setIsPlayingState] = useState<boolean>(false);
+	const [currentTime, setCurrentTime] = useState<number>(0);
+	const [duration, setDuration] = useState<number>(0);
+
+	// ИСПРАВЛЕНО: Кроссплатформенный тип для setTimeout в React Native
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const isSeekingRef = useRef(false);
 	const wasPlayingBeforeSeek = useRef<boolean>(false);
 
-	const isPlaying = (status: AVPlaybackStatus): status is AVPlaybackStatusSuccess => {
-		return (status as AVPlaybackStatusSuccess).isPlaying !== undefined;
-	};
+	const player = useVideoPlayer(episode?.[qualityEpisode] ?? '', (p) => {
+		p.volume = volume / 100;
+		p.loop = false;
+	});
+
+	useEffect(() => {
+		if (episode?.[qualityEpisode]) {
+			player.replace(episode[qualityEpisode]);
+		}
+	}, [qualityEpisode, episode, player]);
+
+	// ИСПРАВЛЕНО: Убрали несуществующий 'durationChange'. Длительность забираем прямо из плеера
+	useEffect(() => {
+		const timeSubscription = player.addListener('timeUpdate', (event) => {
+			if (!isSeekingRef.current) {
+				setCurrentTime(event.currentTime);
+			}
+			if (player.duration && player.duration !== duration) {
+				setDuration(player.duration);
+			}
+		});
+
+		const playingSubscription = player.addListener('playingChange', (event) => {
+			setIsPlayingState(event.isPlaying);
+		});
+
+		return () => {
+			timeSubscription.remove();
+			playingSubscription.remove();
+		};
+	}, [player, duration]);
 
 	const hideControls = () => {
 		setControlsVisible(false);
@@ -102,50 +136,51 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 			setScroll(false);
 			setPlaying(true);
 			ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-			NavigationBar.setVisibilityAsync('hidden');
+
+			NavigationBar.setHidden(true);
 		} else {
 			StatusBar.setHidden(false);
 			setScroll(true);
 			setPlaying(false);
 			ScreenOrientation.unlockAsync();
-			NavigationBar.setVisibilityAsync('visible');
-			NavigationBar.setBackgroundColorAsync('black');
+
+			NavigationBar.setHidden(false);
 		}
 	};
 
-	const handleSkip = async (ms: number) => {
-		if (status && video.current) {
-			const newPosition = Math.min(Math.max(status.positionMillis + ms, 0), status.durationMillis || 0);
-			await video.current.setPositionAsync(newPosition);
-		}
+	// ИСПРАВЛЕНО: Заменили .seekTo() на прямое изменение свойства .currentTime
+	const handleSkip = (seconds: number) => {
+		const newPosition = Math.min(Math.max(player.currentTime + seconds, 0), duration);
+		player.currentTime = newPosition;
 	};
 
 	const handleVolumeChange = (value: number) => {
 		setVolume(value);
-		if (video.current) video.current.setVolumeAsync(value / 100);
+		player.volume = value / 100;
 	};
 
 	const handleSeekStart = () => {
-		if (status?.isPlaying) {
+		if (player.playing) {
 			wasPlayingBeforeSeek.current = true;
-			video.current?.pauseAsync();
+			player.pause();
 		}
 		isSeekingRef.current = true;
 	};
 
-	const handleSeekComplete = async (value: number) => {
-		if (video.current) await video.current.setPositionAsync(value);
+	// ИСПРАВЛЕНО: Заменили .seekTo() на изменение свойства .currentTime
+	const handleSeekComplete = (value: number) => {
+		player.currentTime = value;
 		isSeekingRef.current = false;
 		if (wasPlayingBeforeSeek.current) {
 			wasPlayingBeforeSeek.current = false;
-			video.current?.playAsync();
+			player.play();
 		}
 	};
 
-	const formatTime = (millis: number) => {
-		const minutes = Math.floor(millis / 60000);
-		const seconds = Math.floor((millis % 60000) / 1000);
-		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+	const formatTime = (seconds: number) => {
+		const minutes = Math.floor(seconds / 60);
+		const remainingSeconds = Math.floor(seconds % 60);
+		return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
 	};
 
 	const handlePrevEpisodePress = () => {
@@ -160,7 +195,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 		<TouchableWithoutFeedback onPress={handleUserActivity}>
 			<View style={
 				isFullScreen ? [
-					StyleSheet.absoluteFillObject,
+					StyleSheet.absoluteFill,
 					styles.fullScreenContainer,
 					{ width: screenWidth, height: screenHeight }] :
 					styles.container}>
@@ -170,20 +205,12 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 					setVisible={setOpenModalQuality}
 					setQualityEpisode={setQualityEpisode} />
 
-				<Video
-					ref={video}
+				<VideoView
+					player={player}
 					style={isFullScreen ? [styles.fullScreenVideo, { width: screenWidth, height: screenHeight }] : styles.video}
-					source={{
-						uri: episode?.[qualityEpisode] ?? '',
-					}}
-					resizeMode={ResizeMode.COVER}
-					useNativeControls={false}
-					volume={volume}
-					onPlaybackStatusUpdate={(status) => {
-						if (isPlaying(status)) {
-							setStatus(status);
-						}
-					}} />
+					contentFit="cover"
+					nativeControls={false}
+				/>
 
 				{controlsVisible && (
 					<View style={styles.background} />
@@ -213,18 +240,18 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 					{controlsVisible && (isFullScreen ?
 						<View style={[styles.controlsView, { alignItems: 'center' }]}>
 							<View style={styles.progressBar}>
-								<Text style={styles.timeText}>{status?.positionMillis ? formatTime(status.positionMillis) : '00:00'}</Text>
+								<Text style={styles.timeText}>{formatTime(currentTime)}</Text>
 								<Slider
 									style={styles.slider}
 									minimumValue={0}
-									maximumValue={status?.durationMillis || 1}
-									value={status?.positionMillis || 0}
+									maximumValue={duration || 1}
+									value={currentTime}
 									onSlidingStart={handleSeekStart}
 									onSlidingComplete={handleSeekComplete}
 									minimumTrackTintColor="#06C149"
 									maximumTrackTintColor="#4F4F4F"
 									thumbTintColor="#06C149" />
-								<Text style={styles.timeText}>{status?.durationMillis ? formatTime(status.durationMillis) : '00:00'}</Text>
+								<Text style={styles.timeText}>{formatTime(duration)}</Text>
 							</View>
 							<View style={styles.controls}>
 								<View style={styles.volumeView}>
@@ -255,7 +282,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 									width: '36%'
 								}}>
 
-									<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(-10000)}>
+									<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(-10)}>
 										<RewindBackVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 									</TouchableOpacity>
 
@@ -265,10 +292,9 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 
 									<TouchableOpacity
 										style={styles.button}
-										onPress={() =>
-											status?.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync()
-										}>
-										{status?.isPlaying ?
+										onPress={() => isPlayingState ? player.pause() : player.play()}
+									>
+										{isPlayingState ?
 											<PauseVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 											:
 											<PlayVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
@@ -279,7 +305,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 										<ForwardStepVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 									</TouchableOpacity>
 
-									<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(10000)}>
+									<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(10)}>
 										<RewindForwVideoPlayerIcon Color={'#fff'} Style={{}} Width={26} Height={26} />
 									</TouchableOpacity>
 
@@ -298,18 +324,18 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 						:
 						<View style={styles.controlsView}>
 							<View style={styles.progressBar}>
-								<Text style={styles.timeText}>{status?.positionMillis ? formatTime(status.positionMillis) : '00:00'}</Text>
+								<Text style={styles.timeText}>{formatTime(currentTime)}</Text>
 								<Slider
 									style={[styles.slider, { width: '70%', }]}
 									minimumValue={0}
-									maximumValue={status?.durationMillis || 1}
-									value={status?.positionMillis || 0}
+									maximumValue={duration || 1}
+									value={currentTime}
 									onSlidingStart={handleSeekStart}
 									onSlidingComplete={handleSeekComplete}
 									minimumTrackTintColor="#06C149"
 									maximumTrackTintColor="#4F4F4F"
 									thumbTintColor="#06C149" />
-								<Text style={styles.timeText}>{status?.durationMillis ? formatTime(status.durationMillis) : '00:00'}</Text>
+								<Text style={styles.timeText}>{formatTime(duration)}</Text>
 							</View>
 							<View style={styles.controls}>
 								<View style={styles.volumeViewMinimize}>
@@ -334,13 +360,12 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 								</View>
 								<TouchableOpacity
 									style={[styles.button, { marginRight: 100 }]}
-									onPress={() =>
-										status?.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync()
-									}>
-									{status?.isPlaying ?
-										<PauseVideoPlayerIcon Color={'#fff'} Style={{}} Width={18} Height={18} />
+									onPress={() => isPlayingState ? player.pause() : player.play()}
+								>
+									{isPlayingState ?
+										<PauseVideoPlayerIcon Color={'#fff'} Width={18} Height={18} Style={{}} />
 										:
-										<PlayVideoPlayerIcon Color={'#fff'} Style={{}} Width={18} Height={18} />
+										<PlayVideoPlayerIcon Color={'#fff'} Width={18} Height={18} Style={{}} />
 									}
 								</TouchableOpacity>
 								<TouchableOpacity
@@ -388,7 +413,6 @@ const styles = StyleSheet.create({
 		width: '96%',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-
 		paddingHorizontal: 25
 	},
 	controlsContainer: {
@@ -416,12 +440,6 @@ const styles = StyleSheet.create({
 		color: '#fff',
 		fontSize: 12,
 		fontFamily: 'Outfit',
-	},
-	controlButton: {
-		paddingVertical: 10,
-		paddingHorizontal: 15,
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-		borderRadius: 5,
 	},
 	video: {
 		width: '100%',
@@ -456,10 +474,6 @@ const styles = StyleSheet.create({
 		padding: 11,
 		borderRadius: 5,
 	},
-	buttonText: {
-		color: '#fff',
-		fontSize: 16,
-	},
 	fullScreenContainer: {
 		zIndex: 1000,
 	},
@@ -467,11 +481,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: '100%',
 		position: 'absolute',
-	},
-	fullScreenButton: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	Btn: {
 		padding: 7,

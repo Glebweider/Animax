@@ -1,7 +1,7 @@
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
-import * as NavigationBar from 'expo-navigation-bar';
+import { NavigationBar } from 'expo-navigation-bar';
 import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache, Observable } from '@apollo/client';
 
 import { AlertProvider } from '@Components/alert/AlertContext';
@@ -94,15 +94,9 @@ const client = new ApolloClient({
 	}),
 });
 
-NavigationBar.setVisibilityAsync('hidden');
+NavigationBar.setHidden(true);
 
 const App = () => {
-	NavigationBar.addVisibilityListener(() => {
-		setTimeout(() => {
-			NavigationBar.setVisibilityAsync('hidden')
-		}, 2000);
-	});
-
 	return (
 		<ApolloProvider client={client}>
 			<Provider store={store}>

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Components
@@ -48,24 +48,27 @@ const EditDataScreen = ({ navigation }) => {
     const formConfig = useMemo(() => ({
         fullName: {
             value: form.fullName,
+            initialValue: userState.profile.fullname,
             rules: [(v: string) => v.length < 4 ? 'Полное имя должно содержать не менее 4 символов' : null]
         },
         nickname: {
             value: form.nickname,
+            initialValue: userState.profile.nickname,
             rules: [(v: string) => v.length < 4 ? 'Никнейм должен содержать не менее 4 символов' : null]
         },
         phoneNumber: {
             value: form.phoneNumber,
+            initialValue: userState.preferences.phonenumber,
             rules: [(v: string) => !isPhoneNumber(v) ? 'Введите действительный номер телефона' : null]
         },
         description: {
             value: form.description,
+            initialValue: userState.description,
             rules: [(v: string) => v.length > 48 ? 'Описание не может содержать более 48 символов' : null]
         }
     }), [form]);
 
     let { errors, activeButton } = useFormValidation(formConfig);
-
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -160,27 +163,26 @@ const EditDataScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.inputsContainer}>
                     {['fullName', 'nickname', 'phoneNumber', 'description'].map(field => (
-                        <>
-                            <View key={field} style={styles.inputSection}>
+                        <View key={field} >
+                            <View style={styles.inputSection}>
                                 <TextInput
                                     style={styles.input}
                                     placeholderTextColor="#9E9E9E"
                                     placeholder={i18n.t(field)}
                                     value={form[field]}
+                                    maxLength={field == 'fullName' || 'nickname' ? 26 : 64}
                                     onChangeText={(text) => handleChange(field, text)} />
                             </View>
                             {errors[field] && <Text style={styles.errorText}>{errors[field]}</Text>}
-                        </>
+                        </View>
                     ))}
                 </View>
             </View>
-
             <ApplyButton
                 onPress={update}
-                isActiveButton={!activeButton && isSubmitting}
+                isActiveButton={!activeButton && !isSubmitting}
                 style={styles.applyButton}
                 text={i18n.t('update')} />
-
             {isSubmitting && (
                 <View style={styles.loadingOverlay}>
                     <View style={styles.loadingBox}>
@@ -195,7 +197,7 @@ const EditDataScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     loadingOverlay: {
-        ...StyleSheet.absoluteFillObject,
+        ...StyleSheet.absoluteFill,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',

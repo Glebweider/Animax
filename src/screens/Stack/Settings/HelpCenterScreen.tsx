@@ -47,20 +47,22 @@ const HelpCenterScreen = ({ navigation }) => {
         const fetchData = async () => {
             const token = await getTokenFromStorage();
 
-            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/tickets/user`, {
-                "method": 'GET',
-                "headers": {
-                    Authorization: token || '',
-                    "Content-Type": 'application/json',
-					"Accept": 'application/json',
-                }
-            });
-            if (!response.ok) {
-                alert('Error')
-            }
+            // const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/tickets/user`, {
+            //     "method": 'GET',
+            //     "headers": {
+            //         Authorization: token || '',
+            //         "Content-Type": 'application/json',
+			// 		"Accept": 'application/json',
+            //     }
+            // });
 
-            const data = await response.json();
-            setTickets(data)
+            // if (!response.ok) {
+            //     alert('Error');
+            //     return;
+            // }
+
+            // const data = await response.json();
+            // setTickets(data)
         }
         fetchData();
 

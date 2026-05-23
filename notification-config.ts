@@ -1,25 +1,25 @@
 import * as Notifications from 'expo-notifications';
 
 export async function registerForPushNotificationsAsync() {
-  let token: string;
-  
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
-  
-  if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
+	let token: string;
 
-  if (finalStatus !== 'granted') {
-    return;
-  }
+	const { status: existingStatus } = await Notifications.getPermissionsAsync();
+	let finalStatus = existingStatus;
 
-  try {
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-  } catch (error) {
+	if (existingStatus !== 'granted') {
+		const { status } = await Notifications.requestPermissionsAsync();
+		finalStatus = status;
+	}
 
-  }
+	if (finalStatus !== 'granted') {
+		return;
+	}
 
-  return token;
+	try {
+		token = (await Notifications.getExpoPushTokenAsync()).data;
+	} catch (error) {
+		console.log(error)
+	}
+
+	return token;
 }
