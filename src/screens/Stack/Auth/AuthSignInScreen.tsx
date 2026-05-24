@@ -8,6 +8,7 @@ import { registerForPushNotificationsAsync } from 'notification-config';
 import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
 import ApplyButton from '@Components/buttons/Apply';
+import { USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH } from '@Components/constants';
 
 // Icons 
 import EmailIcon from '@Icons/EmailIcon';
@@ -37,15 +38,17 @@ const AuthSignInScreen = ({ navigation }) => {
         email: {
             value: textEmail,
             rules: [
-                (v) => !isEmail(v) ? "Please enter a valid email address" : null,
-            ],
+                (v) => !isEmail(v) ? "Please enter a valid email" : null
+            ]
         },
         password: {
             value: textPassword,
             rules: [
-                (v) => v.length < 6 ? "Password must be at least 6 characters" : null,
-            ],
-        },
+                (v) => (v.length < USER_PASSWORD_MIN_LENGTH || v.length > USER_PASSWORD_MAX_LENGTH)
+                    ? `Password must be between ${USER_PASSWORD_MIN_LENGTH} and ${USER_PASSWORD_MAX_LENGTH} characters`
+                    : null
+            ]
+        }
     }), [textEmail, textPassword]);
 
     const { errors, activeButton } = useFormValidation(formConfig);

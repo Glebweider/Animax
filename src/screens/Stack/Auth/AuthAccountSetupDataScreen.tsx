@@ -10,6 +10,12 @@ import { registerForPushNotificationsAsync } from 'notification-config';
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 import { useAlert } from '@Components/alert/AlertContext';
+import {
+    USER_FULLNAME_MAX_LENGTH,
+    USER_FULLNAME_MIN_LENGTH,
+    USER_NICKNAME_MAX_LENGTH,
+    USER_NICKNAME_MIN_LENGTH
+} from '@Components/constants';
 
 // Modals
 import ConfigModal from '@Modal/ConfigModal';
@@ -51,21 +57,21 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const formConfig = useMemo(() => ({
         fullName: {
             value: textFullName,
-            rules: [
-                (v) => v.length < 3 ? "Full name must be at least 3 characters" : null,
+            rules: [(v) => (v.length < USER_FULLNAME_MIN_LENGTH || v.length > USER_FULLNAME_MAX_LENGTH)
+                ? `Full name must be between ${USER_FULLNAME_MIN_LENGTH} and ${USER_FULLNAME_MAX_LENGTH} characters`
+                : null
             ],
         },
         nickname: {
             value: textNickname,
-            rules: [
-                (v) => v.length < 4 ? "Nickname must be at least 4 characters" : null,
+            rules: [(v) => (v.length < USER_NICKNAME_MIN_LENGTH || v.length > USER_NICKNAME_MAX_LENGTH)
+                ? `Nickname must be between ${USER_NICKNAME_MIN_LENGTH} and ${USER_NICKNAME_MAX_LENGTH} characters`
+                : null
             ],
         },
         phone: {
             value: textPhoneNumber,
-            rules: [
-                (v) => !isPhoneNumber(v) ? "Please enter a valid phone number" : null,
-            ],
+            rules: [(v) => !isPhoneNumber(v) ? "Please enter a valid phone number" : null],
         },
     }), [textFullName, textNickname, textPhoneNumber]);
 
@@ -133,8 +139,8 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton 
-                onPress={() => navigation.navigate('AuthAccountSetupInterest')} 
+            <BackButton
+                onPress={() => navigation.navigate('AuthAccountSetupInterest')}
                 text="Fill Your Profile" />
             <View style={styles.avatarContainer}>
                 <TouchableOpacity

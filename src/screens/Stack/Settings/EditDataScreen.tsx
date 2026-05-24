@@ -24,6 +24,7 @@ import { useFormValidation } from '@Utils/hooks';
 
 // Rest
 import useAuthUserInToken from '@Rest/auth/authUserInToken';
+import { USER_DESCRIPTION_MAX_LENGTH, USER_FULLNAME_MAX_LENGTH, USER_FULLNAME_MIN_LENGTH, USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH } from '@Components/constants';
 
 
 const EditDataScreen = ({ navigation }) => {
@@ -49,12 +50,20 @@ const EditDataScreen = ({ navigation }) => {
         fullName: {
             value: form.fullName,
             initialValue: userState.profile.fullname,
-            rules: [(v: string) => v.length < 4 ? 'Полное имя должно содержать не менее 4 символов' : null]
+            rules: [
+                (v: string) => (v.length < USER_FULLNAME_MIN_LENGTH || v.length > USER_FULLNAME_MAX_LENGTH)
+                    ? `Имя должно содержать от ${USER_FULLNAME_MIN_LENGTH} до ${USER_FULLNAME_MAX_LENGTH} символов`
+                    : null
+            ]
         },
         nickname: {
             value: form.nickname,
             initialValue: userState.profile.nickname,
-            rules: [(v: string) => v.length < 4 ? 'Никнейм должен содержать не менее 4 символов' : null]
+            rules: [
+                (v: string) => (v.length < USER_NICKNAME_MIN_LENGTH || v.length > USER_NICKNAME_MAX_LENGTH)
+                    ? `Никнейм должен содержать от ${USER_NICKNAME_MIN_LENGTH} до ${USER_NICKNAME_MAX_LENGTH} символов`
+                    : null
+            ]
         },
         phoneNumber: {
             value: form.phoneNumber,
@@ -64,9 +73,13 @@ const EditDataScreen = ({ navigation }) => {
         description: {
             value: form.description,
             initialValue: userState.description,
-            rules: [(v: string) => v.length > 48 ? 'Описание не может содержать более 48 символов' : null]
+            rules: [
+                (v: string) => v.length > USER_DESCRIPTION_MAX_LENGTH
+                    ? `Описание не может содержать более ${USER_DESCRIPTION_MAX_LENGTH} символов`
+                    : null
+            ]
         }
-    }), [form]);
+    }), [form, userState]);
 
     let { errors, activeButton } = useFormValidation(formConfig);
 
@@ -170,7 +183,6 @@ const EditDataScreen = ({ navigation }) => {
                                     placeholderTextColor="#9E9E9E"
                                     placeholder={i18n.t(field)}
                                     value={form[field]}
-                                    maxLength={field == 'fullName' || 'nickname' ? 26 : 64}
                                     onChangeText={(text) => handleChange(field, text)} />
                             </View>
                             {errors[field] && <Text style={styles.errorText}>{errors[field]}</Text>}

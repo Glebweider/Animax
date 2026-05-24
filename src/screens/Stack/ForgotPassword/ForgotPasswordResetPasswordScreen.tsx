@@ -1,14 +1,22 @@
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
-import { useDispatch } from 'react-redux';
-import { setUser } from '@Redux/reducers/userReducer';
 import ConfigModal from '@Components/modals/ConfigModal';
-import { saveTokenToStorage } from '@Utils/functions/token';
-import useResetPassword from '@Rest/user/resetPasswordUser';
 import ApplyButton from '@Components/buttons/Apply';
+import { USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH } from '@Components/constants';
+
+// Utils
+import { saveTokenToStorage } from '@Utils/functions/token';
+
+// Rest
+import useResetPassword from '@Rest/user/resetPasswordUser';
+
+// Redux
+import { setUser } from '@Redux/reducers/userReducer';
+
 
 const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const { data } = route.params;
@@ -20,7 +28,9 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
     const { resetPasswordUser } = useResetPassword();
 
     useEffect(() => {
-        if (textNewPassword == textVerifyPassword && textNewPassword.length > 0) {
+        if (textNewPassword == textVerifyPassword &&
+            textNewPassword.length >= USER_PASSWORD_MIN_LENGTH &&
+            textNewPassword.length <= USER_PASSWORD_MAX_LENGTH) {
             setEnabledButton(false);
         } else {
             setEnabledButton(true);
@@ -44,8 +54,8 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
 
     return (
         <View style={styles.container}>
-            <BackButton 
-                onPress={() => navigation.navigate('ForgotPasswordCodeVerifyScreen')} 
+            <BackButton
+                onPress={() => navigation.navigate('ForgotPasswordCodeVerifyScreen')}
                 text="Create New Password" />
             <ConfigModal visible={isOpenModal} setVisible={setOpenModal} />
             <View style={styles.content}>

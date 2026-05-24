@@ -1,0 +1,7 @@
+export const USER_FULLNAME_MIN_LENGTH = 4;
+export const USER_NICKNAME_MIN_LENGTH = 3;
+export const USER_PASSWORD_MIN_LENGTH = 6;
+export const USER_FULLNAME_MAX_LENGTH = 26;
+export const USER_NICKNAME_MAX_LENGTH = 24;
+export const USER_PASSWORD_MAX_LENGTH = 24;
+export const USER_DESCRIPTION_MAX_LENGTH = 48;
