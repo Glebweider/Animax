@@ -1,13 +1,20 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system/legacy';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import ApplyButton from '@Components/buttons/Apply';
+
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY, USER_DESCRIPTION_MAX_LENGTH,
+    USER_FULLNAME_MAX_LENGTH, USER_FULLNAME_MIN_LENGTH,
+    USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH
+} from '@Data/constants';
 
 // Icons
 import PencilIcon from '@Icons/PencilIcon';
@@ -17,20 +24,21 @@ import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
 
 // Utils
-import { getTokenFromStorage, saveTokenToStorage } from '@Utils/functions';
+import { saveTokenToStorage } from '@Utils/functions';
 import { isPhoneNumber } from '@Utils/validators';
 import { i18n } from '@Utils/localization';
 import { useFormValidation } from '@Utils/hooks';
 
 // Rest
 import useAuthUserInToken from '@Rest/auth/authUserInToken';
-import { USER_DESCRIPTION_MAX_LENGTH, USER_FULLNAME_MAX_LENGTH, USER_FULLNAME_MIN_LENGTH, USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH } from '@Components/constants';
+import useUpdateUserData from '@Rest/user/userUpdateData';
 
 
 const EditDataScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const userState = useSelector((state: RootState) => state.userReducer);
     const { authUserInToken } = useAuthUserInToken();
+    const { updateUserData } = useUpdateUserData();
     const { showAlert } = useAlert();
 
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -97,62 +105,24 @@ const EditDataScreen = ({ navigation }) => {
 
     const update = async () => {
         setIsSubmitting(true);
-        const token = await getTokenFromStorage();
 
         try {
-            let response;
-            if (form.avatar) {
-                response = await FileSystem.uploadAsync(
-                    `${process.env.EXPO_PUBLIC_API_URL}/api/user/user-data`,
-                    form.avatar,
-                    {
-                        fieldName: 'avatar',
-                        httpMethod: 'POST',
-                        parameters: {
-                            fullname: form.fullName,
-                            nickname: form.nickname,
-                            phonenumber: form.phoneNumber,
-                            description: form.description,
-                        },
-                        headers: {
-                            Authorization: token,
-                            "Content-Type": 'application/json',
-                            "Accept": 'application/json',
-                        },
-                        uploadType: FileSystem.FileSystemUploadType.MULTIPART
-                    }
-                );
-            } else {
-                response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/user/user-data`, {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": 'application/json',
-                        "Accept": 'application/json',
-                        Authorization: token
-                    },
-                    body: JSON.stringify({
-                        fullname: form.fullName,
-                        nickname: form.nickname,
-                        phonenumber: form.phoneNumber,
-                        description: form.description,
-                    })
-                });
+            const response = await updateUserData({
+                fullName: form.fullName,
+                nickname: form.nickname,
+                phoneNumber: form.phoneNumber,
+                description: form.description,
+                avatar: form.avatar,
+            });
 
-                response = {
-                    status: response.status,
-                    body: await response.text()
-                };
-            }
+            if (!response) return;
 
-            if (response.status == 200) {
-                const user = await authUserInToken(response.body);
-                if (user) {
-                    saveTokenToStorage(response.body);
-                    dispatch(setUser(user));
-                    navigation.navigate('HomeScreen');
-                }
-            } else {
-                showAlert(response.body);
+            await saveTokenToStorage(response);
+            
+            const user = await authUserInToken();
+            if (user) {
+                dispatch(setUser(user));
+                navigation.navigate("HomeScreen");
             }
         } catch (error) {
             console.error("Ошибка при обновлении профиля:", error);
@@ -171,7 +141,7 @@ const EditDataScreen = ({ navigation }) => {
                         <Image source={{ uri: form.avatar || userState.profile.avatar }} style={styles.imageAvatar} />
                     </TouchableOpacity>
                     <View style={styles.pencilContainer}>
-                        <PencilIcon Color={"#181A20"} Width={20} Height={20} />
+                        <PencilIcon Color={COLOR_BACKGROUND_PRIMARY} Width={20} Height={20} />
                     </View>
                 </View>
                 <View style={styles.inputsContainer}>
@@ -180,7 +150,7 @@ const EditDataScreen = ({ navigation }) => {
                             <View style={styles.inputSection}>
                                 <TextInput
                                     style={styles.input}
-                                    placeholderTextColor="#9E9E9E"
+                                    placeholderTextColor={COLOR_TEXT_TERTIARY}
                                     placeholder={i18n.t(field)}
                                     value={form[field]}
                                     onChangeText={(text) => handleChange(field, text)} />
@@ -198,7 +168,7 @@ const EditDataScreen = ({ navigation }) => {
             {isSubmitting && (
                 <View style={styles.loadingOverlay}>
                     <View style={styles.loadingBox}>
-                        <ActivityIndicator size="large" color="#FFFFFF" />
+                        <ActivityIndicator size="large" color={COLOR_TEXT_PRIMARY} />
                         <Text style={styles.loadingText}>Сохраняем данные...</Text>
                     </View>
                 </View>
@@ -216,7 +186,7 @@ const styles = StyleSheet.create({
         zIndex: 9999,
     },
     loadingBox: {
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         padding: 24,
         borderRadius: 16,
         alignItems: 'center',
@@ -227,7 +197,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     loadingText: {
-        color: '#FFFFFF',
+        color: COLOR_TEXT_PRIMARY,
         marginTop: 12,
         fontSize: 16,
         fontWeight: '500',
@@ -235,7 +205,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     content: {
@@ -248,7 +218,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     pencilContainer: {
-        backgroundColor: "#06C149",
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 10,
         padding: 8,
         position: 'absolute',
@@ -284,13 +254,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         justifyContent: 'center',
     },
     input: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         marginLeft: 20,
         paddingVertical: 10,

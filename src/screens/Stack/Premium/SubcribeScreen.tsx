@@ -3,12 +3,16 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 // Components
 import BackButton from '@Components/buttons/Back';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Icons
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
 
 // Utils
 import { i18n } from '@Utils/localization';
+
 
 const SubcribeScreen = ({ navigation }: any) => {
 
@@ -29,7 +33,7 @@ const SubcribeScreen = ({ navigation }: any) => {
                     })}
                     style={styles.cardPremium}>
                     <View style={styles.cardHeader}>
-                        <CrownIcon Color={'#06C149'} Width={70} Height={70} />
+                        <CrownIcon Color={COLOR_PRIMARY} Width={70} Height={70} />
                         <View style={styles.cardHeaderTextContainer}>
                             <Text style={styles.cardHeaderTextPrice}>$0.99</Text>
                             <Text style={styles.cardHeaderTextMonth}>/{i18n.t('month')}</Text>
@@ -38,15 +42,15 @@ const SubcribeScreen = ({ navigation }: any) => {
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
@@ -60,7 +64,7 @@ const SubcribeScreen = ({ navigation }: any) => {
                     })}
                     style={styles.cardPremium}>
                     <View style={styles.cardHeader}>
-                        <CrownIcon Color={'#06C149'} Width={70} Height={70} />
+                        <CrownIcon Color={COLOR_PRIMARY} Width={70} Height={70} />
                         <View style={styles.cardHeaderTextContainer}>
                             <Text style={styles.cardHeaderTextPrice}>$9.99</Text>
                             <Text style={styles.cardHeaderTextMonth}>/{i18n.t('year')}</Text>
@@ -69,15 +73,15 @@ const SubcribeScreen = ({ navigation }: any) => {
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         paddingBottom: 30,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     headerContainer: {
         width: '90%',
@@ -100,7 +104,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     headerTitle: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 22,
     },
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
     cardPremium: {
         height: 294,
         width: '100%',
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 2,
         marginTop: 25,
         borderRadius: 30
@@ -132,12 +136,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cardHeaderTextPrice: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 20,
     },
     cardHeaderTextMonth: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         marginLeft: 7
@@ -162,7 +166,7 @@ const styles = StyleSheet.create({
     },
     cardDataText: {
         marginLeft: 20,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
     }

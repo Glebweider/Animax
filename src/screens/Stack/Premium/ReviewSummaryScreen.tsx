@@ -5,6 +5,12 @@ import { useDispatch } from 'react-redux';
 // Components
 import BackButton from '@Components/buttons/Back';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+
 // Icons
 import CrownIcon from '@Icons/CrownIcon';
 import CheckIcon from '@Icons/CheckIcon';
@@ -14,8 +20,9 @@ import ConfigPaymentModal from '@Modal/ConfigPaymentModal';
 
 // Utils
 import { i18n } from '@Utils/localization';
-import { getTokenFromStorage } from '@Utils/functions/token';
-import useBuyPremiumUser from '@Utils/api/rest/user/buyPremiumUser';
+
+// Rest
+import useBuyPremiumUser from '@Rest/user/buyPremiumUser';
 
 // Redux
 import { setPremium } from '@Redux/reducers/userReducer';
@@ -29,8 +36,7 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
     const { buyPremiumUser } = useBuyPremiumUser();
 
     const handleBuyPremium = async () => {
-        const token = await getTokenFromStorage();
-        const response = await buyPremiumUser(token, buyData.objecyBuy.date);
+        const response = await buyPremiumUser(buyData.objecyBuy.date);
         if (response) {
             dispatch(setPremium(response));
             setOpenModalConfigPayment(true);
@@ -48,7 +54,7 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
             <View style={styles.content}>
                 <View style={styles.cardPremium}>
                     <View style={styles.cardHeader}>
-                        <CrownIcon Color={'#06C149'} Width={70} Height={70} />
+                        <CrownIcon Color={COLOR_PRIMARY} Width={70} Height={70} />
                         <View style={styles.cardHeaderTextContainer}>
                             <Text style={styles.cardHeaderTextPrice}>${buyData.objecyBuy.price}</Text>
                             <Text style={styles.cardHeaderTextMonth}>/{i18n.t(buyData.objecyBuy.date)}</Text>
@@ -57,15 +63,15 @@ const ReviewSummaryScreen = ({ navigation, route }) => {
                     <View style={styles.cardLine} />
                     <View style={styles.cardDataContainer}>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.watch')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.streaming')}</Text>
                         </View>
                         <View style={styles.cardData}>
-                            <CheckIcon Color={'#06C149'} Width={25} Height={25} Style={{ marginLeft: 10 }} />
+                            <CheckIcon Color={COLOR_PRIMARY} Width={25} Height={25} Style={{ marginLeft: 10 }} />
                             <Text style={styles.cardDataText}>{i18n.t('premium.quality')}</Text>
                         </View>
                     </View>
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     content: {
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
     paymentMethod: {
         width: '100%',
         height: 80,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 20,
         marginTop: 25,
         justifyContent: 'space-between',
@@ -141,12 +147,12 @@ const styles = StyleSheet.create({
         height: 30,
     },
     paymentMethodText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 16,
     },
     paymentChangeText: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         marginRight: 24,
@@ -155,7 +161,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 30,
         height: 173,
         marginTop: 20,
@@ -175,12 +181,12 @@ const styles = StyleSheet.create({
         height: 22
     },
     dataAmountText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 12,
     },
     dataAmountPrice: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
     },
@@ -192,12 +198,12 @@ const styles = StyleSheet.create({
         height: 22
     },
     dataTaxText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 12,
     },
     dataTaxPrice: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
     },
@@ -209,7 +215,7 @@ const styles = StyleSheet.create({
         height: 22
     },
     dataTotal: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 12,
     },
@@ -223,7 +229,7 @@ const styles = StyleSheet.create({
     cardPremium: {
         height: 294,
         width: '100%',
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 2,
         borderRadius: 30
     },
@@ -236,12 +242,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cardHeaderTextPrice: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 20,
     },
     cardHeaderTextMonth: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         marginLeft: 7
@@ -266,7 +272,7 @@ const styles = StyleSheet.create({
     },
     cardDataText: {
         marginLeft: 20,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
     },
@@ -276,7 +282,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         shadowColor: 'rgba(6, 193, 73, 0.4)',
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
@@ -285,7 +291,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     buttonContinueText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 15,
     },

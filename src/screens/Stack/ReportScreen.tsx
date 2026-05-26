@@ -3,11 +3,17 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
 
-// Stack
-import { IMessage, ITicket } from '@Stack/Settings/HelpCenterScreen';
+// Interface
+import { IMessage, ITicket } from '@Interfaces/HelpCenterScreen.interface';
 
 // Components
 import BackButton from '@Components/buttons/Back';
+
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
+} from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
@@ -80,7 +86,7 @@ const ReportScreen = ({ navigation }) => {
                 <TextInput
                     value={newMessage}
                     onChangeText={setNewMessage}
-                    placeholderTextColor="#9E9E9E"
+                    placeholderTextColor={COLOR_TEXT_TERTIARY}
                     placeholder="Type a message..."
                     style={styles.input} />
                 <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
@@ -95,7 +101,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     messagesContainer: {
         flexGrow: 1,
@@ -116,7 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2B2A2A',
     },
     messageText: {
-        color: '#FFF',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
     },
     inputContainer: {
@@ -129,8 +135,8 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 14,
         borderRadius: 15,
-        backgroundColor: '#1F222A',
-        color: '#fff',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
     },
     sendButton: {
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
     sendText: {
-        color: '#FFF',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
     },
 });

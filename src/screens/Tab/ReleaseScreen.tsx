@@ -7,64 +7,27 @@ import { useIsFocused } from '@react-navigation/native';
 // Components
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 import { BallIndicator } from '@Components/BallIndicator';
+import { ReleaseAnimeCard } from '@Components/cards/ReleaseAnime';
+
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
+// Rest
+import useGetCalendarAnime from '@Rest/anime/getCalendarAnime';
 
 // Utils
-import useGetCalendarAnime from '@Utils/api/rest/anime/getCalendarAnime';
 import { i18n } from '@Utils/localization';
+import { getDateArrayForMonth } from '@Utils/functions';
 
+// Interface
+import { IDate } from '@Interfaces/ReleaseScreen.interface';
 
-interface IDate {
-    dayOfMonth: string;
-    dayOfWeek: string;
-    dayOfDate: string;
-}
-
-const MemoizedDateItem = React.memo(({ isSelected, onPress, item }: any) => {
-    return (
-        <TouchableOpacity
-            style={isSelected ? styles.dataContainerEnabled : styles.dataContainerDisabled}
-            onPress={() => onPress(item)}>
-            <Text style={isSelected ? styles.dataTextWeekEnabled : styles.dataTextWeekDisabled}>
-                {item.dayOfWeek && i18n.t(`release.${item.dayOfWeek}`)}
-            </Text>
-            <Text style={isSelected ? styles.dataTextMonthEnabled : styles.dataTextMonthDisabled}>
-                {item.dayOfMonth}
-            </Text>
-        </TouchableOpacity>
-    );
-}, (prevProps, nextProps) => {
-    return prevProps.isSelected === nextProps.isSelected;
-});
-
-const getDateArrayForMonth = () => {
-    const today = new Date();
-    const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-    const dateArray = [];
-    let currentDate = new Date(firstDayOfMonth);
-
-    while (currentDate <= lastDayOfMonth) {
-        dateArray.push({
-            dayOfWeek: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(currentDate),
-            dayOfMonth: currentDate.getDate(),
-            dayOfDate: new Date(currentDate.getTime() + 86400000).toISOString().split('T')[0]
-        });
-        currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dateArray;
-};
 
 const ReleaseScreen = ({ navigation }) => {
-    const [selectedDate, setSelectedDate] = useState<IDate>({
-        dayOfMonth: '',
-        dayOfWeek: '',
-        dayOfDate: ''
-    });
-    const [Animes, setAnimes] = useState([]);
-    const [selectedAnimes, setSelectedAnimes] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState<IDate>({ dayOfMonth: '', dayOfWeek: '', dayOfDate: '' });
+    const [Animes, setAnimes] = useState<any[]>([]);
+    const [selectedAnimes, setSelectedAnimes] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const dateArray = useMemo(() => getDateArrayForMonth(), []);
     const isFocused = useIsFocused();
@@ -83,11 +46,25 @@ const ReleaseScreen = ({ navigation }) => {
             });
             setIsLoading(false);
         };
+
         if (isFocused) {
             setIsLoading(true)
             fetchData();
         }
     }, [isFocused]);
+
+    useEffect(() => {
+        if (selectedDate) {
+            if (Animes) {
+                const animeForDate = Animes.filter((anime) => {
+                    if (anime.anime.score >= 7)
+                        return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
+                });
+
+                setSelectedAnimes(animeForDate);
+            }
+        }
+    }, [selectedDate, Animes]);
 
     const animeCardTime = (data: string) => {
         const date = new Date(data);
@@ -100,20 +77,6 @@ const ReleaseScreen = ({ navigation }) => {
         const formattedTime = `${formattedHours}:${formattedMinutes}`;
         return formattedTime
     }
-
-    useEffect(() => {
-        if (selectedDate) {
-            if (Animes) {
-                const animeForDate = Animes.filter((anime) => {
-                    if (anime.anime.score >= 7) {
-                        return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
-                    }
-                });
-
-                setSelectedAnimes(animeForDate);
-            }
-        }
-    }, [selectedDate, Animes]);
 
     return (
         <View style={styles.container}>
@@ -128,7 +91,7 @@ const ReleaseScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={(item) => item.dayOfMonth.toString()}
                     renderItem={({ item }) => (
-                        <MemoizedDateItem
+                        <ReleaseAnimeCard
                             isSelected={selectedDate.dayOfMonth == item.dayOfMonth}
                             onPress={setSelectedDate}
                             item={item} />
@@ -136,7 +99,7 @@ const ReleaseScreen = ({ navigation }) => {
             </View>
             <View style={{ width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center' }}>
                 {isLoading ? (
-                    <BallIndicator color='#06C149' size={80} count={8} />
+                    <BallIndicator color={COLOR_PRIMARY} size={80} count={8} />
                 ) : (
                     selectedAnimes.length >= 1 ?
                         <FlatList
@@ -153,7 +116,7 @@ const ReleaseScreen = ({ navigation }) => {
                                             onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
                                             style={styles.animeCardImage}>
                                             <Image
-                                                source={{ uri: `https://shikimori.one${item.anime.image.original}` }}
+                                                source={{ uri: `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}${item.anime.image.original}` }}
                                                 style={styles.animeCardImage} />
                                         </TouchableOpacity>
                                         <View style={styles.animeCardData}>
@@ -191,21 +154,21 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     animeCardTimeContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     animeCardTimeLine: {
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         width: 16,
         height: 6,
         marginTop: 2,
         borderRadius: 50,
     },
     animeCardTimeText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         textAlign: 'center',
@@ -217,13 +180,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     errorTitle: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 20,
         marginTop: 20
     },
     errorText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         marginTop: 20,
@@ -235,14 +198,14 @@ const styles = StyleSheet.create({
         width: '55%'
     },
     animeCardTitle: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 13,
         fontFamily: 'Outfit',
         overflow: 'hidden',
         marginTop: 5,
     },
     animeCardEpisode: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
         overflow: 'hidden',
@@ -281,55 +244,10 @@ const styles = StyleSheet.create({
         height: 30,
     },
     headerText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,
-    },
-    contentDate: {
-        width: '100%',
-        height: 95,
-    },
-    dataContainerEnabled: {
-        margin: 7.5,
-        width: 50,
-        height: 78,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderColor: '#06C149',
-        backgroundColor: '#06C149',
-        borderRadius: 50,
-    },
-    dataContainerDisabled: {
-        margin: 7.5,
-        width: 50,
-        height: 78,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 2,
-        borderColor: '#616161',
-        borderRadius: 50,
-    },
-    dataTextWeekEnabled: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 12,
-    },
-    dataTextMonthEnabled: {
-        color: '#fff',
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
-    dataTextWeekDisabled: {
-        color: '#616161',
-        fontFamily: 'Outfit',
-        fontSize: 12,
-    },
-    dataTextMonthDisabled: {
-        color: '#616161',
-        fontFamily: 'Outfit',
-        fontSize: 15,
     },
 });
 

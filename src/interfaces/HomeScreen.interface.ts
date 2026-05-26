@@ -1,4 +1,4 @@
-export interface Anime {
+export interface IAnime {
     poster: {
         originalUrl: string;
     };

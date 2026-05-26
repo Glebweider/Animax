@@ -3,8 +3,12 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 // Components
 import BackButton from '@Components/buttons/Back';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
+
 
 const PrivacyPolicyScreen = ({ navigation }) => {
     return (
@@ -31,7 +35,7 @@ const PrivacyPolicyScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         paddingBottom: 25,
         width: '100%',
     },
@@ -40,12 +44,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     contentTitle: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
     },
     contentText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 12,
         marginLeft: 20,

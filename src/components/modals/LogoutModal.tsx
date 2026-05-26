@@ -5,6 +5,9 @@ import Modal from 'react-native-modal';
 // Components
 import ApplyButton from '@Components/buttons/Apply';
 
+// Data
+import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Utils
 import { removeTokenFromStorage } from '@Utils/functions/token';
 import { i18n } from '@Utils/localization';
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
         marginTop: 25,
     },
     modalContent: {
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         width: '100%',
         height: '30%',
         borderTopRightRadius: 35,
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
         marginTop: 20,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         width: '80%',

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
-import * as FileSystem from 'expo-file-system/legacy';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -9,13 +8,14 @@ import { registerForPushNotificationsAsync } from 'notification-config';
 // Components
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
-import { useAlert } from '@Components/alert/AlertContext';
+
+// Data
 import {
-    USER_FULLNAME_MAX_LENGTH,
-    USER_FULLNAME_MIN_LENGTH,
-    USER_NICKNAME_MAX_LENGTH,
-    USER_NICKNAME_MIN_LENGTH
-} from '@Components/constants';
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY,
+    USER_FULLNAME_MAX_LENGTH, USER_FULLNAME_MIN_LENGTH,
+    USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH
+} from '@Data/constants';
 
 // Modals
 import ConfigModal from '@Modal/ConfigModal';
@@ -35,6 +35,7 @@ import { setUser } from '@Redux/reducers/userReducer';
 // Rest
 import useCheckFieldAvailability from '@Rest/auth/useCheckFieldAvailability';
 import useAuthUserInToken from '@Rest/auth/authUserInToken';
+import useAuthSignUp from '@Rest/auth/authUserSignUp';
 
 
 const AuthAccountSetupDataScreen = ({ navigation }) => {
@@ -52,7 +53,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
     const { checkFieldAvailability } = useCheckFieldAvailability();
     const { authUserInToken } = useAuthUserInToken();
-    const { showAlert } = useAlert();
+    const { authSignUp } = useAuthSignUp();
 
     const formConfig = useMemo(() => ({
         fullName: {
@@ -93,48 +94,41 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
         const checkPhoneNumber = await checkFieldAvailability("phonenumber", textPhoneNumber);
         const checkNickname = await checkFieldAvailability("nickname", textNickname);
 
-        if (checkPhoneNumber && checkNickname) {
-            const pushToken = await registerForPushNotificationsAsync();
-            const response = await FileSystem.uploadAsync(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/register`, avatar.uri, {
-                fieldName: 'avatar',
-                httpMethod: 'POST',
-                headers: {
-                    "Content-Type": 'application/json',
-                    "Accept": 'application/json',
-                },
-                parameters: {
-                    email: authState.email,
-                    password: authState.password,
-                    interests: JSON.stringify(authState.interests),
-                    fullname: textFullName,
-                    nickname: textNickname,
-                    phonenumber: textPhoneNumber,
-                    pushToken: pushToken
-                },
-                uploadType: FileSystem.FileSystemUploadType.MULTIPART
-            })
+        if (!checkPhoneNumber || !checkNickname) {
+            setActiveButton(true);
+            return;
+        }
 
-            if (response.status == 200) {
-                setOpenModal(true);
-                setTimeout(async () => {
-                    const user = await authUserInToken(response.body);
-                    if (user) {
-                        saveTokenToStorage(response.body);
-                        dispatch(setUser(user));
-                        navigation.replace('HomeScreen');
-                    } else {
-                        setOpenModal(false);
-                    }
-                }, 5000);
+        const pushToken = await registerForPushNotificationsAsync();
+
+        const response = await authSignUp({
+            email: authState.email,
+            password: authState.password,
+            interests: JSON.stringify(authState.interests),
+            fullName: textFullName,
+            nickname: textNickname,
+            phoneNumber: textPhoneNumber,
+            avatarUri: avatar.uri,
+            pushToken,
+        });
+
+        if (!response) {
+            setOpenModal(false);
+            return;
+        }
+
+        setOpenModal(true);
+        setTimeout(async () => {
+            await saveTokenToStorage(response);
+
+            const user = await authUserInToken();
+            if (user) {
+                dispatch(setUser(user));
+                navigation.replace("HomeScreen");
             } else {
                 setOpenModal(false);
-                showAlert(response.body);
             }
-
-        } else {
-            showAlert('Please enter a valid phone number');
-            setActiveButton(true);
-        }
+        }, 5000);
     };
 
     return (
@@ -157,14 +151,14 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                     }
                 </TouchableOpacity>
                 <View style={styles.pencilContainer}>
-                    <PencilIcon Color={"#181A20"} Width={20} Height={20} />
+                    <PencilIcon Color={COLOR_BACKGROUND_PRIMARY} Width={20} Height={20} />
                 </View>
             </View>
             <View style={styles.inputsContainer}>
                 <View style={styles.fullNameSection}>
                     <TextInput
                         style={styles.fullNameInput}
-                        placeholderTextColor="#9E9E9E"
+                        placeholderTextColor={COLOR_TEXT_TERTIARY}
                         placeholder="Full Name"
                         onChangeText={(newText) => setTextFullName(newText)}
                         value={textFullName} />
@@ -174,7 +168,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                 <View style={styles.nicknameSection}>
                     <TextInput
                         style={styles.nicknameInput}
-                        placeholderTextColor="#9E9E9E"
+                        placeholderTextColor={COLOR_TEXT_TERTIARY}
                         placeholder="Nickname"
                         onChangeText={(newText) => setTextNickname(newText)}
                         value={textNickname} />
@@ -184,7 +178,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                 <View style={styles.phoneNumberSection}>
                     <TextInput
                         style={styles.phoneNumberInput}
-                        placeholderTextColor="#9E9E9E"
+                        placeholderTextColor={COLOR_TEXT_TERTIARY}
                         placeholder="Phone Number"
                         keyboardType="phone-pad"
                         onChangeText={(newText) => setTextPhoneNumber(newText)}
@@ -198,7 +192,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                         selectedValue={selectedGender}
                         prompt='Gender'
                         mode='dropdown'
-                        dropdownIconColor={'#fff'}
+                        dropdownIconColor={COLOR_TEXT_PRIMARY}
                         onValueChange={(value) => setSelectedGender(value)}>
 
                         <Picker.Item label="Male" value="male" />
@@ -224,7 +218,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     errorMessage: {
         marginTop: 5,
@@ -235,7 +229,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     pencilContainer: {
-        backgroundColor: "#06C149",
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 10,
         padding: 8,
         left: 50,
@@ -272,12 +266,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     fullNameInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         marginLeft: 20,
     },
@@ -289,12 +283,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     nicknameInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         marginLeft: 20,
     },
@@ -306,12 +300,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     phoneNumberInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         marginLeft: 20,
     },
@@ -323,12 +317,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
-        color: '#fff',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
+        color: COLOR_TEXT_PRIMARY,
     },
     genderPicker: {
         flex: 1,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         height: '100%',
     }

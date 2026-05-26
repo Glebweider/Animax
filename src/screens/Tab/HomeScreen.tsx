@@ -13,6 +13,12 @@ import SearchIcon from '@Components/icons/SearchIcon';
 import PlayIcon from '@Components/icons/PlayIcon';
 import AnimeCard from '@Components/cards/Anime';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY,
+    COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
 
@@ -21,16 +27,16 @@ import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
 import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
 
 // Interface
-import { Anime } from '@Interfaces/animeHomeScreen.interface';
+import { IAnime } from '@Interfaces/HomeScreen.interface';
 
 // Redux
 import { RootState } from '@Redux/store';
 
 
 const HomeScreen = ({ navigation }) => {
-    const [selectAnime, setSelectAnime] = useState<Anime>({ poster: { originalUrl: '' }, russian: '', score: 0, id: 0, name: '', rating: '', genres: [{ russian: '', name: '' }] });
-    const [topHitsAnime, setTopHitsAnime] = useState<Anime[]>([]);
-    const [recomendationAnime, setRecomendationAnime] = useState<Anime[]>([]);
+    const [selectAnime, setSelectAnime] = useState<IAnime>({ poster: { originalUrl: '' }, russian: '', score: 0, id: 0, name: '', rating: '', genres: [{ russian: '', name: '' }] });
+    const [topHitsAnime, setTopHitsAnime] = useState<IAnime[]>([]);
+    const [recomendationAnime, setRecomendationAnime] = useState<IAnime[]>([]);
     const [genreId, setGenreId] = useState<number>(null);
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
@@ -81,7 +87,7 @@ const HomeScreen = ({ navigation }) => {
                     <TouchableOpacity
                         onPress={() => navigation.navigate('AnimeSearchScreen')}
                         style={styles.headerIconSearch}>
-                        <SearchIcon Color={'#fff'} Style={styles.headerIconSearch} />
+                        <SearchIcon Color={COLOR_TEXT_PRIMARY} Style={styles.headerIconSearch} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.selectAnimeContainer}>
@@ -131,7 +137,7 @@ const HomeScreen = ({ navigation }) => {
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('AnimeScreen', { animeId: selectAnime.id })}
                                     style={styles.animeButtonPlay}>
-                                    <PlayIcon Color={'#fff'} Style={{ marginRight: 7, marginLeft: 13, }} Width={16} Height={16} />
+                                    <PlayIcon Color={COLOR_TEXT_PRIMARY} Style={{ marginRight: 7, marginLeft: 13, }} Width={16} Height={16} />
                                     <Text style={styles.animeButtonTextPlay}>{i18n.t('play')}</Text>
                                 </TouchableOpacity>
                                 <View style={{ marginLeft: 10 }}>
@@ -164,7 +170,7 @@ const HomeScreen = ({ navigation }) => {
                         )}
                         ListEmptyComponent={() => (
                             <View style={{ alignItems: 'center' }}>
-                                <Text style={{ marginTop: 20, color: '#FFF' }}>Not found</Text>
+                                <Text style={{ marginTop: 20, color: COLOR_TEXT_PRIMARY }}>Not found</Text>
                             </View>
                         )}
                         contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }} />
@@ -192,7 +198,7 @@ const HomeScreen = ({ navigation }) => {
                         )}
                         ListEmptyComponent={() => (
                             <View style={{ alignItems: 'center' }}>
-                                <Text style={{ marginTop: 20, color: '#FFF' }}>Not found</Text>
+                                <Text style={{ marginTop: 20, color: COLOR_TEXT_PRIMARY }}>Not found</Text>
                             </View>
                         )}
                         contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }} />
@@ -225,13 +231,13 @@ const styles = StyleSheet.create({
         margin: 18,
     },
     animeName: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 17,
         fontFamily: 'Outfit',
         overflow: 'hidden',
     },
     animeDescription: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
         overflow: 'hidden',
@@ -241,7 +247,7 @@ const styles = StyleSheet.create({
         marginTop: 12,
     },
     animeButtonPlay: {
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
@@ -250,7 +256,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     animeButtonTextPlay: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 13,
         fontFamily: 'Outfit',
         overflow: 'hidden',
@@ -275,7 +281,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         alignItems: 'center',
     },
     headerContainer: {
@@ -303,12 +309,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     hitsAnimeText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 15,
         fontFamily: 'Outfit',
     },
     hitsAnimeTextSeeAll: {
-        color: '#06C049',
+        color: COLOR_PRIMARY_DARK,
         fontSize: 12,
         fontFamily: 'Outfit',
     },
@@ -318,12 +324,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     newEpisodeAnimeText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 15,
         fontFamily: 'Outfit',
     },
     newEpisodeAnimeTextSeeAll: {
-        color: '#06C049',
+        color: COLOR_PRIMARY_DARK,
         fontSize: 12,
         fontFamily: 'Outfit',
     },

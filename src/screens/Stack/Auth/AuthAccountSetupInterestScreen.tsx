@@ -3,16 +3,19 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 import { useQuery } from '@apollo/client';
 import { useDispatch, useSelector } from 'react-redux';
 
-//Components
+// Components
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
-//Redux
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
+// Redux
 import { RootState } from '@Redux/store';
 import { addInterest } from '@Redux/reducers/authReducer';
 
-//Utils
-import { GET_GENRES } from '@Utils/api/graphql/getGenres';
+// GraphQl
+import { GET_GENRES } from '@GraphQl/getGenres';
 
 
 const AuthAccountSetupInterestScreen = ({ navigation }) => {
@@ -50,8 +53,8 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                <BackButton 
-                    onPress={() => navigation.navigate('AuthSignUp')} 
+                <BackButton
+                    onPress={() => navigation.navigate('AuthSignUp')}
                     text="Choose Your Interest" />
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>Choose your interests and get the best anime recommendations. Don't worry, you can always change it later.</Text>
@@ -61,7 +64,7 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
                         {renderItems()}
                     </View>
                     :
-                    <Text style={{ color: '#fff' }}>Загрузка</Text>
+                    <Text style={{ color: COLOR_TEXT_PRIMARY }}>Загрузка</Text>
                 }
             </ScrollView>
             <View style={styles.buttonsContainer}>
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         width: '48%',
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         paddingLeft: 25,
         height: 45,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -118,14 +121,14 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         paddingLeft: 25,
         height: 45,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 1,
         borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
     interestText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
         width: '90%',
     },
     titleText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },

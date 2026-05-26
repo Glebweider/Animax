@@ -1,4 +1,4 @@
-export interface IComment{
+export interface IComment {
     id: string;
     userId: string;
     username: string;
@@ -11,4 +11,10 @@ export interface IComment{
     parentCommentId: string;
     repliesCount: number;
     replies: IComment[];
+}
+
+export interface IReplyingUser {
+    messageId: string;
+    userId: string;
+    username: string;
 }

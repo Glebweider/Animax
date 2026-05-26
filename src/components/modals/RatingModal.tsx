@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 
@@ -7,6 +7,9 @@ import StarIcon from '@Icons/StarIcon';
 
 //Utils
 import { i18n } from '@Utils/localization';
+
+// Data
+import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 
 interface ModalProps {
@@ -17,12 +20,6 @@ interface ModalProps {
 
 const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
     const totalVotes = anime.scoresStats.reduce((sum, rating) => sum + rating.count, 0);
-
-    const ProgressBar = ({ progress }) => (
-        <View style={styles.progressBarContainer}>
-            <View style={[styles.progressBar, { width: `${progress}%` }]} />
-        </View>
-    );
 
     return (
         <Modal
@@ -44,11 +41,14 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
                             <Text style={styles.scoreMax}>/10</Text>
                         </View>
                         <View style={styles.scoreStars}>
-                            <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
-                            <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
-                            <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
-                            <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
-                            <StarIcon Style={{}} Color={'#06C149'} Width={14} Height={12} />
+                            {[...Array(5)].map((_, index) => (
+                                <StarIcon
+                                    key={index}
+                                    Style={{}}
+                                    Color={COLOR_PRIMARY}
+                                    Width={14}
+                                    Height={12} />
+                            ))}
                         </View>
                         <Text style={styles.userVoting}>({totalVotes} {i18n.t('anime.modal.users')})</Text>
                     </View>
@@ -60,7 +60,12 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
                         renderItem={({ item }) =>
                             <View key={item.score} style={styles.scoreLineContainer}>
                                 <Text style={styles.scoreLineText}>{item.score}</Text>
-                                <ProgressBar progress={(item.count / totalVotes) * 100} />
+                                <View style={styles.progressBarContainer}>
+                                    <View style={[
+                                        styles.progressBar,
+                                        { width: `${(item.count / totalVotes) * 100}%` }
+                                    ]} />
+                                </View>
                             </View>
                         }
                         showsVerticalScrollIndicator={false}
@@ -112,7 +117,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     scoreLineText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 10,
         fontFamily: 'Outfit',
         width: 13
@@ -128,12 +133,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     score: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 24,
         fontFamily: 'Outfit',
     },
     scoreMax: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 10,
         fontFamily: 'Outfit',
         marginTop: 17,
@@ -146,7 +151,7 @@ const styles = StyleSheet.create({
     },
     userVoting: {
         marginTop: 10,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 8,
         fontFamily: 'Outfit',
     },
@@ -163,7 +168,7 @@ const styles = StyleSheet.create({
         width: '90%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
         height: 58,
         shadowColor: 'rgba(6, 193, 73, 0.4)',
@@ -173,12 +178,12 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     modalButtonCloseText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14
     },
     modalContent: {
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         width: '100%',
         height: '45%',
         borderTopRightRadius: 35,
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         marginTop: 12,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18
     },
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
     },
     modalText: {
         marginTop: 20,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         width: '80%',

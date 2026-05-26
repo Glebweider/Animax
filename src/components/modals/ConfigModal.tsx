@@ -4,6 +4,12 @@ import { View, Text, Modal, StyleSheet, Image } from 'react-native';
 // Components
 import { BallIndicator } from '@Components/BallIndicator';
 
+// Data
+import {
+    COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
 
@@ -32,7 +38,7 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                         style={styles.modalImage} />
                     <Text style={styles.modalTitle}>{i18n.t('configModal.congratulations')}</Text>
                     <Text style={styles.modalText}>{i18n.t('configModal.text')}</Text>
-                    <BallIndicator color='#13D458' size={60} count={8} />
+                    <BallIndicator color={COLOR_PRIMARY_LIGHT} size={60} count={8} />
                 </View>
             </View>
         </Modal>
@@ -47,7 +53,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.3)',
     },
     modalContent: {
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         width: '90%',
         height: '75%',
         borderRadius: 20,
@@ -60,13 +66,13 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         marginTop: 20,
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 24
     },
     modalText: {
         marginTop: 15,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         width: '80%',

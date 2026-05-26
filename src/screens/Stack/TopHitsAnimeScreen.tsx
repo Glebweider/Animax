@@ -7,6 +7,9 @@ import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import RecomendationAnimeCard from '@Components/cards/RecomendationAnime';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
+
 // Utils
 import { GET_TOPHITSANIME } from '@Utils/api/graphql/getTopHitsAnimes';
 import { i18n } from '@Utils/localization';
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     wrapper: {
         width: '90%',

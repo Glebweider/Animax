@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useGetAnimeListUser = () => {
 	const { showAlert } = useAlert();
 
-	const getAnimeListUser = async (token: string) => {
+	const getAnimeListUser = async () => {
 		try {
 			return await apiRequest<string[]>(
 				`/user/animelist`,
 				{
 					method: 'GET',
-					token
+					token: true
 				},
 			);
 		} catch (error) {

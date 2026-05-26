@@ -11,9 +11,12 @@ import * as Notifications from 'expo-notifications';
 import { BallIndicator } from '@Components/BallIndicator';
 import { useAlert } from '@Components/alert/AlertContext';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY_LIGHT } from '@Data/constants';
+
 // Utils
-import { getTokenFromStorage } from '@Utils/functions/token';
-import useAuthUserInToken from '@Utils/api/rest/auth/authUserInToken';
+import { existsTokenInStorage } from '@Utils/functions/token';
+import useAuthUserInToken from '@Rest/auth/authUserInToken';
 
 // Redux
 import { setUser } from '@Redux/reducers/userReducer';
@@ -54,9 +57,8 @@ const PreloaderScreen = ({ navigation }: any) => {
                 }
             }
 
-            let userToken = await getTokenFromStorage();
-            if (userToken) {
-                const user = await authUserInToken(userToken);
+            if (await existsTokenInStorage()) {
+                const user = await authUserInToken();
 
                 if (user) {
                     dispatch(setUser(user));
@@ -86,7 +88,7 @@ const PreloaderScreen = ({ navigation }: any) => {
             <View style={{ height: '95%' }}>
                 <Image source={require('../../../assets/logo.png')} style={styles.logo} />
                 <View style={styles.loaderIndicatorContainer}>
-                    <BallIndicator color="#13D458" size={90} count={8} />
+                    <BallIndicator color={COLOR_PRIMARY_LIGHT} size={90} count={8} />
                 </View>
             </View>
             <Text style={styles.updateText}>
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     logo: {
         width: 160,

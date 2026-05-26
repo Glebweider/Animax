@@ -8,6 +8,9 @@ import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import RecomendationAnimeCard from '@Components/cards/RecomendationAnime';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
 
@@ -20,11 +23,11 @@ import { RootState } from '@Redux/store';
 
 const RecomendationsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();
+    const { showAlert } = useAlert();
     const [animes, setAnimes] = useState<any[]>([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState<number>(1);
     const [genreId, setGenreId] = useState<number | null>(null);
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
-    const { showAlert } = useAlert();
 
     useEffect(() => {
         if (!genreId && userInterests.length > 0) {
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     wrapper: {
         width: '90%',

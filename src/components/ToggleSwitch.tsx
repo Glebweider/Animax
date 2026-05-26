@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
+
+// Data
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 
 const ToggleSwitch = ({ isOn, onToggle }) => {
 	const [isActive, setIsActive] = useState(isOn);
@@ -24,7 +28,7 @@ const ToggleSwitch = ({ isOn, onToggle }) => {
 
 	const backgroundColor = toggleAnim.interpolate({
 		inputRange: [0, 1],
-		outputRange: ['#35383F', '#06C149'],
+		outputRange: ['#35383F', COLOR_PRIMARY],
 	});
 
 	return (
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
 		width: 26,
 		height: 25,
 		borderRadius: 15,
-		backgroundColor: '#fff',
+		backgroundColor: COLOR_TEXT_PRIMARY,
 	},
 });
 

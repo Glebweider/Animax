@@ -1,69 +1,42 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Linking } from 'react-native';
 
-// Icons
-import DiscordIcon from '@Icons/DiscordIcon';
-import WebSiteIcon from '@Icons/WebSiteIcon';
-import TwitterIcon from '@Icons/TwitterIcon';
-import WhatsAppIcon from '@Icons/WhatsAppIcon';
+// Data
+import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { CONTACT_ITEMS } from '@Data/contacts';
+
 
 const ContactUs = () => {
-  
+    const handlePress = async (url?: string) => {
+        try {
+            await Linking.openURL(url);
+        } catch (error) {
+            console.error(`Не удалось открыть ссылку: ${url}`, error);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <TouchableOpacity 
-                onPress={() => Linking.openURL('https://discord.gg/animelandia-926550837172514876')}
-                style={styles.contactContainer}>
-                    <DiscordIcon 
-                        Color='#06C149'
-                        Style={{
-                            marginLeft: 26, 
-                            marginRight: 18,
-                        }}
-                        Width={25} 
-                        Height={25} />
-                    <Text style={styles.contactText}>Discord</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                onPress={() => Linking.openURL('https://google.com')}
-                style={styles.contactContainer}>
-                    <WebSiteIcon 
-                        Color='#06C149'
-                        Style={{
-                            marginLeft: 26, 
-                            marginRight: 18,
-                        }}
-                        Width={25} 
-                        Height={25} />
-                    <Text style={styles.contactText}>Website</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                onPress={() => Linking.openURL('https://x.com')}
-                style={styles.contactContainer}>
-                    <TwitterIcon
-                        Color='#06C149'
-                        Style={{
-                            marginLeft: 26, 
-                            marginRight: 18,
-                        }}
-                        Width={25} 
-                        Height={25} />
-                    <Text style={styles.contactText}>Twitter</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-                onPress={() => Linking.openURL('https://www.whatsapp.com/')}
-                style={styles.contactContainer}>
-                    <WhatsAppIcon
-                        Color='#06C149'
-                        Style={{
-                            marginLeft: 26, 
-                            marginRight: 16,
-                        }}
-                        Width={27} 
-                        Height={27} />
-                    <Text style={styles.contactText}>WhatsApp</Text>
-            </TouchableOpacity>
-        </View>           
+            {CONTACT_ITEMS.map(({ name, url, Icon, size, marginRight }) => {
+                return (
+                    <TouchableOpacity
+                        key={name}
+                        onPress={() => handlePress(url)}
+                        style={styles.contactContainer}
+                        activeOpacity={0.7}>
+                        <Icon
+                            Color={COLOR_PRIMARY}
+                            Width={size}
+                            Height={size}
+                            Style={{
+                                marginLeft: 26,
+                                marginRight: marginRight,
+                            }} />
+                        <Text style={styles.contactText}>{name}</Text>
+                    </TouchableOpacity>
+                );
+            })}
+        </View>
     );
 };
 
@@ -78,16 +51,16 @@ const styles = StyleSheet.create({
     contactContainer: {
         width: '92%',
         height: 72,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 20,
         alignItems: 'center',
         flexDirection: 'row',
     },
     contactText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 15,
         fontFamily: 'Outfit',
     }
 });
-  
+
 export default ContactUs;

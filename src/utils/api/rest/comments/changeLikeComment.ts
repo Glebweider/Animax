@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useChangeLikeComment = () => {
     const { showAlert } = useAlert();
 
-    const changeLikeComment = async (token: string, animeId: string, commentId: string, action: 'like' | 'dislike') => {
+    const changeLikeComment = async (animeId: string, commentId: string, action: 'like' | 'dislike') => {
         try {
             await apiRequest(
                 `/anime/${animeId}/${commentId}/${action}`,
                 {
                     method: 'POST',
-                    token
+                    token: true
                 },
             );
 

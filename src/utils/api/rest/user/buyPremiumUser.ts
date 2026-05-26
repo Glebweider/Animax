@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useBuyPremiumUser = () => {
 	const { showAlert } = useAlert();
 
-	const buyPremiumUser = async (token: string, duration: string) => {
+	const buyPremiumUser = async (duration: string) => {
 		try {
 			return await apiRequest<{ premium: boolean; duration: number; }>(
 				`/premium/buy`,
 				{
 					method: 'POST',
-					token,
+					token: true,
 					body: {
 						duration,
 					}

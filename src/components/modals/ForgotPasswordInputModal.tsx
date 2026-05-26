@@ -1,6 +1,12 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
+} from '@Data/constants';
+
 
 interface ModalProps {
     visible: boolean;
@@ -18,11 +24,11 @@ const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, s
                     <View style={styles.modalInputSection}>
                         <TextInput
                             style={styles.modalInput}
-                            placeholderTextColor="#9E9E9E"
+                            placeholderTextColor={COLOR_TEXT_TERTIARY}
                             placeholder={data}
-                            onChangeText={(newText) => setData(newText)}/>
+                            onChangeText={(newText) => setData(newText)} />
                     </View>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => {
                             setVisible(false);
                         }}
@@ -48,18 +54,18 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         shadowRadius: 4,
         marginTop: 20,
         marginBottom: 20
     },
     modalButtonText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 16
     },
     modalContent: {
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         width: '80%',
         borderRadius: 40,
         alignItems: 'center',
@@ -67,7 +73,7 @@ const styles = StyleSheet.create({
     modalInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         marginLeft: 20
     },
@@ -79,7 +85,7 @@ const styles = StyleSheet.create({
         width: '86%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     }
 });
 

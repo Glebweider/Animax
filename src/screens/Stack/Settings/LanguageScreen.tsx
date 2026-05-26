@@ -5,6 +5,9 @@ import * as Updates from 'expo-updates';
 import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Utils
 import { i18n, languageNames, translations } from '@Utils/localization';
 import { saveLocalizationToStorage } from '@Utils/localization';
@@ -49,10 +52,10 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     cautionLangText: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontSize: 18,
         fontFamily: 'Outfit',
         marginHorizontal: 20,
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     laguageText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 18,
         fontFamily: 'Outfit',
         marginLeft: 20,
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
         width: 21,
         height: 21,
         borderRadius: 50,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 3,
         justifyContent: 'center',
         alignItems: 'center',
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
         width: 11,
         height: 11,
         borderRadius: 40,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
     },
 });
 

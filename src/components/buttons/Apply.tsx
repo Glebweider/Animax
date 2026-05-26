@@ -1,6 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+// Data
+import { COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 
 const ApplyButton = ({ onPress, isActiveButton, text, style }) => {
     return (
@@ -20,7 +23,7 @@ const ApplyButton = ({ onPress, isActiveButton, text, style }) => {
 const styles = StyleSheet.create({
     containerButton: {
         marginTop: 20,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         width: '90%',
         height: 60,
         borderRadius: 50,
@@ -34,7 +37,7 @@ const styles = StyleSheet.create({
     },
     containerButtonDisabled: {
         marginTop: 20,
-        backgroundColor: '#0E9E42',
+        backgroundColor: COLOR_PRIMARY_DARK,
         width: '90%',
         height: 60,
         borderRadius: 50,
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     textButton: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 15,
         fontFamily: 'Outfit',
     }

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const AddIcon = ({ Color, Style }) => (
+const AddIcon = ({ Color, Style, Width, Height }) => (
     <Svg
-        width="14"
-        height="14"
+        width={Width}
+        height={Height}
         viewBox="0 0 512 512"
         style={Style}>
         <Path

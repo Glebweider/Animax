@@ -5,13 +5,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useUpdateNotificationSettings = () => {
 	const { showAlert } = useAlert();
 
-	const updateNotificationSettings = async (token: string, alert: IUserNotificationSettings) => {
+	const updateNotificationSettings = async (alert: IUserNotificationSettings) => {
 		try {
 			await apiRequest(
 				`/user/notification-settings`,
 				{
 					method: 'POST',
-					token,
+					token: true,
 					body: {
 						newEpisodes: alert.newEpisodes,
 						newReleases: alert.newReleases,

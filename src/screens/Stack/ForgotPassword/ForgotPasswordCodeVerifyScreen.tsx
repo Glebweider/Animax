@@ -1,9 +1,16 @@
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 
-import BackButton from '@Components/buttons/Back';
-import useRecoverPassword from '@Utils/api/rest/user/recoverPasswordUser';
+// Components
 import ApplyButton from '@Components/buttons/Apply';
+import BackButton from '@Components/buttons/Back';
+
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
+// Rest
+import useRecoverPassword from '@Rest/user/recoverPasswordUser';
+
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
     const { data } = route.params;
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         marginTop: 0
@@ -127,17 +134,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     resendCodeText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
     resendCodeTimer: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
     resendCodeTime: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
@@ -155,7 +162,7 @@ const styles = StyleSheet.create({
         borderColor: '#35383F',
         borderRadius: 10,
         textAlign: 'center',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
     },
@@ -163,16 +170,16 @@ const styles = StyleSheet.create({
         width: 80,
         height: 60,
         borderWidth: 1,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderRadius: 10,
         textAlign: 'center',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
     },
     contentText: {
         marginTop: 0,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         width: '86%',

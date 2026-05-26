@@ -3,8 +3,9 @@ interface IInterest {
     text: string;
 }
 
+// TODO: Похож на Anime Interface
 interface IFavoriteAnime {
-    animeId: string;
+    id: string;
     poster: {
         originalUrl: string;
     };
@@ -20,11 +21,18 @@ export interface IUserProfile {
     description: string;
     profile: {
         avatar: string;
-        nickname: string;    
+        nickname: string;
     };
     animestats: {
         counterWatchedAnime: number;
         timeSpentWatchingAnime: number;
         achievementsCountWatchedAnime: number;
     }
+}
+
+export interface IMyFavoriteGenre {
+    id: string;
+    label: string;
+    value: number;
+    onPress?: () => void;
 }

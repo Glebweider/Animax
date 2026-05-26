@@ -1,19 +1,27 @@
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache, Observable } from '@apollo/client';
+import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
-import { NavigationBar } from 'expo-navigation-bar';
-import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache, Observable } from '@apollo/client';
 
+// Components
 import { AlertProvider } from '@Components/alert/AlertContext';
-import store from './src/redux/store';
-import StackNavigator from './src/screens/Stack/StackNavigator';
+
+// Data
+import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
+
+// Stack
+import StackNavigator from '@Stack/StackNavigator';
+
+// Redux
+import store from '@Redux/store';
 
 
 const AppTheme = {
 	...DefaultTheme,
 	colors: {
 		...DefaultTheme.colors,
-		background: '#181A20',
+		background: COLOR_BACKGROUND_PRIMARY,
 	},
 };
 
@@ -75,8 +83,7 @@ const throttlingLink = new ApolloLink((operation, forward) => {
 	});
 });
 
-const httpLink = new HttpLink({ uri: process.env.EXPO_PUBLIC_ANIME_API_GRAPHQL });
-
+const httpLink = new HttpLink({ uri: `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}/api/graphql` });
 const client = new ApolloClient({
 	link: ApolloLink.from([throttlingLink, httpLink]),
 	cache: new InMemoryCache({
@@ -94,14 +101,20 @@ const client = new ApolloClient({
 	}),
 });
 
-NavigationBar.setHidden(true);
+NavigationBar.setVisibilityAsync('hidden');
 
 const App = () => {
+	NavigationBar.addVisibilityListener(() => {
+		setTimeout(() => {
+			NavigationBar.setVisibilityAsync('hidden')
+		}, 2000);
+	});
+
 	return (
 		<ApolloProvider client={client}>
 			<Provider store={store}>
 				<AlertProvider>
-					<StatusBar backgroundColor="#181A20" />
+					<StatusBar backgroundColor={COLOR_BACKGROUND_PRIMARY} />
 					<NavigationContainer theme={AppTheme}>
 						<StackNavigator />
 					</NavigationContainer>

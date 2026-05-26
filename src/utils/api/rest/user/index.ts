@@ -3,3 +3,4 @@ export * from './forgotPasswordUser';
 export * from './getUserProfile';
 export * from './recoverPasswordUser';
 export * from './resetPasswordUser';
+export * from './userUpdateData';

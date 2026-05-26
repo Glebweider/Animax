@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useAddAnimeList = () => {
 	const { showAlert } = useAlert();
 
-	const addAnimeListUser = async (token: string, animeId: string) => {
+	const addAnimeListUser = async (animeId: string) => {
 		try {
 			await apiRequest(
 				`/user/animelist`,
 				{
 					method: 'POST',
-					token,
+					token: true,
 					body: {
 						"animeId": `${animeId}`
 					}

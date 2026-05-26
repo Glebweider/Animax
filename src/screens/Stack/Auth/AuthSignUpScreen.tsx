@@ -7,7 +7,13 @@ import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
 import ApplyButton from '@Components/buttons/Apply';
 import { useAlert } from '@Components/alert/AlertContext';
-import { USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH } from '@Components/constants';
+
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY_DARK,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY,
+    USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH
+} from '@Data/constants';
 
 // Icons
 import EmailIcon from '@Icons/EmailIcon';
@@ -76,11 +82,11 @@ const AuthSignUpScreen = ({ navigation }: any) => {
             <View style={styles.authContainer}>
                 <View style={styles.emailSection}>
                     <EmailIcon
-                        Color={textEmail ? '#fff' : '#9E9E9E'}
+                        Color={textEmail ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
                         Style={styles.icon} />
                     <TextInput
                         style={styles.emailInput}
-                        placeholderTextColor="#9E9E9E"
+                        placeholderTextColor={COLOR_TEXT_TERTIARY}
                         placeholder="Email"
                         keyboardType="email-address"
                         onChangeText={(newText) => setTextEmail(newText)}
@@ -159,12 +165,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     emailInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
     },
     icon: {
@@ -175,7 +181,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     titleContainer: {
         marginTop: 5,
@@ -189,7 +195,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         marginTop: 25,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 26,
         fontWeight: "600"
@@ -226,7 +232,7 @@ const styles = StyleSheet.create({
     facebookContainer: {
         width: 89,
         height: 61,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 15,
         borderColor: '#2E3138',
         borderWidth: 1,
@@ -240,7 +246,7 @@ const styles = StyleSheet.create({
     googleContainer: {
         width: 89,
         height: 61,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 15,
         borderColor: '#2E3138',
         borderWidth: 1,
@@ -254,7 +260,7 @@ const styles = StyleSheet.create({
     appleContainer: {
         width: 89,
         height: 61,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 15,
         borderColor: '#2E3138',
         borderWidth: 1,
@@ -273,12 +279,12 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     signInText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 12,
         fontFamily: 'Outfit',
     },
     clicableSignInText: {
-        color: '#06C049',
+        color: COLOR_PRIMARY_DARK,
         fontSize: 12,
         fontFamily: 'Outfit',
         marginLeft: 10

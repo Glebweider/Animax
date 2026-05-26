@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+
+// Utils
 import { socket } from '@Utils/socket';
+
+// Data
+import {
+    COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_PRIMARY_DARK,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
+} from '@Data/constants';
+import { SUPPORT_TAGS } from '@Data/supportTags';
 
 
 interface ModalProps {
@@ -12,27 +22,20 @@ const CreateTicketModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
     const [textReason, setTextReason] = useState<string>('');
     const [selectedTags, setSelectedTags] = useState<{ id: string; text: string; }[]>([]);
     const [isEnabledButton, setEnabledButton] = useState<boolean>(true);
-    const tags = [
-        { id: '0', text: 'Error at the entrance to the account' },
-        { id: '1', text: 'Problem with payment' },
-        { id: '2', text: 'Error in the application' },
-        { id: '3', text: 'Question about the functionality' },
-        { id: '4', text: 'Other' }
-    ];
 
     useEffect(() => {
         if (textReason.length > 4 && selectedTags.length >= 1) {
             setEnabledButton(false);
         }
     }, [textReason, selectedTags]);
-  
+
     const createTicket = () => {
-        socket.emit('createTicket', { 
+        socket.emit('createTicket', {
             reason: textReason,
             tags: selectedTags
         });
         setVisible(false);
-    };    
+    };
 
     return (
         <Modal transparent visible={visible} animationType="slide">
@@ -42,21 +45,21 @@ const CreateTicketModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                     <View style={styles.emailSection}>
                         <TextInput
                             style={styles.emailInput}
-                            placeholderTextColor="#9E9E9E"
+                            placeholderTextColor={COLOR_TEXT_TERTIARY}
                             placeholder="Reason"
                             keyboardType="default"
                             onChangeText={(newText) => setTextReason(newText)}
-                            value={textReason}/>
+                            value={textReason} />
                     </View>
                     <View style={styles.tagsContainer}>
-                        <ScrollView 
-                            horizontal 
-                            showsHorizontalScrollIndicator={false} 
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
                             style={styles.tagsScrollView}>
-                            {tags.map((tag) => (
+                            {SUPPORT_TAGS.map((tag) => (
                                 <TouchableOpacity
                                     style={[
-                                        styles.tagContainer, 
+                                        styles.tagContainer,
                                         selectedTags.some(selectedTag => selectedTag.id === tag.id) && styles.selectedTagContainer
                                     ]}
                                     key={tag.id}
@@ -69,29 +72,29 @@ const CreateTicketModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
                                             }
                                         });
                                     }}>
-                                    <Text 
+                                    <Text
                                         style={[
-                                            styles.tagText, 
+                                            styles.tagText,
                                             selectedTags.some(selectedTag => selectedTag.id === tag.id) && styles.selectedTagText
                                         ]}>
                                         {tag.text}
-                                    </Text>                                  
+                                    </Text>
                                 </TouchableOpacity>
-                            ))}                    
+                            ))}
                         </ScrollView>
                     </View>
                     <View style={styles.containerButtons}>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={styles.containerButtonCancel}
                             onPress={() => setVisible(false)}>
                             <Text style={styles.textButton}>Cancel</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             style={styles.containerButtonCreate}
                             disabled={isEnabledButton}
                             onPress={createTicket}>
                             <Text style={styles.textButton}>Create Ticket</Text>
-                        </TouchableOpacity>                        
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -113,20 +116,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     selectedTagText: {
-        color: '#fff'
+        color: COLOR_TEXT_PRIMARY
     },
     selectedTagContainer: {
-        backgroundColor: '#06C149'
+        backgroundColor: COLOR_PRIMARY
     },
     tagsScrollView: {
         width: '100%',
         height: 36,
         flexGrow: 1,
-        paddingRight: 10,  
+        paddingRight: 10,
     },
     tagContainer: {
         height: 36,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderRadius: 8,
         borderWidth: 1,
         alignItems: 'center',
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
         paddingLeft: 7,
     },
     tagText: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 10
     },
@@ -147,11 +150,11 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 15,
         flexDirection: 'row',
-        backgroundColor: '#1F222A'
+        backgroundColor: COLOR_BACKGROUND_SECONDARY
     },
     titleText: {
         marginTop: 16,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         width: '80%',
@@ -176,7 +179,7 @@ const styles = StyleSheet.create({
         width: '44%',
         padding: 14,
         borderRadius: 15,
-        backgroundColor: '#0E9E42',
+        backgroundColor: COLOR_PRIMARY_DARK,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 15
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
     },
     modalContent: {
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         width: '90%',
         minHeight: '37%',
         borderRadius: 20,
@@ -201,13 +204,13 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         marginTop: 20,
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 24
     },
     modalText: {
         marginTop: 15,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         width: '80%',
@@ -220,16 +223,16 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderColor: '#35383F',
         borderWidth: 1
-    },    
+    },
     emailInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
-        marginLeft: 22, 
+        marginLeft: 22,
     },
 });
 

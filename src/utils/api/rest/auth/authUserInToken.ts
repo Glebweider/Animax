@@ -5,13 +5,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useAuthUserInToken = () => {
 	const { showAlert } = useAlert();
 
-	const authUserInToken = async (token: string) => {
+	const authUserInToken = async () => {
 		try {
 			return await apiRequest<IUserState>(
 				`/auth/verify`,
 				{
 					method: 'GET',
-					token,
+					token: true,
 				},
 			);
 		} catch (error) {

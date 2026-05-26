@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 
+// Data
+import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 
 interface AlertProps {
     message: string;
@@ -8,7 +11,7 @@ interface AlertProps {
 }
 
 const Alert: React.FC<AlertProps> = ({ message, onClose }) => {
-  const scaleAnim = useRef(new Animated.Value(0)).current;
+    const scaleAnim = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         Animated.timing(scaleAnim, {
@@ -53,16 +56,16 @@ const styles = StyleSheet.create({
     alertBox: {
         width: '90%',
         minHeight: 60,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#fff',
+        borderColor: COLOR_TEXT_PRIMARY,
         borderWidth: 1,
     },
     message: {
         fontSize: 16,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         textAlign: 'center',
         fontFamily: 'Outfit',
     },

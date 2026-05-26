@@ -32,9 +32,9 @@ import CommentsScreen from '@Stack/CommentsScreen';
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
-
     return (
         <Stack.Navigator
+            id="RootStack"
             initialRouteName='Preloader'
             screenOptions={{
                 headerShown: false,

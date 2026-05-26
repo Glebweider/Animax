@@ -5,6 +5,9 @@ import { StatusBar } from 'expo-status-bar';
 // Components
 import BackButton from '@Components/buttons/Back';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
 
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
 });
 

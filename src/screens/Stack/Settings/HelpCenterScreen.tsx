@@ -7,64 +7,45 @@ import BackButton from '@Components/buttons/Back';
 import ContactUs from '@Components/ContactUs';
 import CreateTicketModal from '@Components/modals/CreateTicketModal';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY
+} from '@Data/constants';
+
 // Utils
-import { getTokenFromStorage } from '@Utils/functions/token';
 import formatDate from '@Utils/formatters/date';
 import { i18n } from '@Utils/localization';
 import { socket } from '@Utils/socket';
 
+// Interface
+import { ITicket } from '@Interfaces/HelpCenterScreen.interface';
 
-export interface ITicket {
-    adminId: string;
-    adminNickname: string;
-    createdAt: string;
-    id: string;
-    messages: IMessage[];
-    priority: number;
-    reason: string;
-    tags: string[];
-    userId: string;
-    userNickname: string;
-}
-
-export interface IMessage {
-    id: string;
-    text: string;
-    senderId: string;
-    createdAt: string;
-}
+// Rest
+import useGetUserTickets from '@Rest/user/getUserTickets';
 
 
 const HelpCenterScreen = ({ navigation }) => {
     const [selectMethodHelp, setSelectMethodHelp] = useState<string>('SUPPORT');
+
     const [moveLeft, setMoveLeft] = useState<boolean>(true);
     const [openModal, setOpenModal] = useState<boolean>(false);
-    const [tickets, setTickets] = useState<ITicket[]>([]);
-    const moveValue = useRef(new Animated.Value(0)).current;
 
+    const [tickets, setTickets] = useState<ITicket[]>([]);
+
+    const moveValue = useRef(new Animated.Value(0)).current;
+    const { getUserTickets } = useGetUserTickets();
 
     useEffect(() => {
         const fetchData = async () => {
-            const token = await getTokenFromStorage();
+            const response = await getUserTickets();
 
-            // const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/tickets/user`, {
-            //     "method": 'GET',
-            //     "headers": {
-            //         Authorization: token || '',
-            //         "Content-Type": 'application/json',
-			// 		"Accept": 'application/json',
-            //     }
-            // });
+            if (!response) return;
 
-            // if (!response.ok) {
-            //     alert('Error');
-            //     return;
-            // }
-
-            // const data = await response.json();
-            // setTickets(data)
+            const data = await response.json();
+            setTickets(data)
         }
-        fetchData();
+        //fetchData();
 
         socket?.on('ticketCreated', (ticket) => {
             setTickets((prevTickets) => [...prevTickets, ticket]);
@@ -102,7 +83,7 @@ const HelpCenterScreen = ({ navigation }) => {
                         source={{ uri: `${process.env.EXPO_PUBLIC_API_URL}/api/cdn/avatar/${item.adminId}` }}
                         style={styles.avatarTicket} />
                     <View style={styles.dataTicket}>
-                        <Text style={{ color: '#ffffff' }}>{item.adminNickname}</Text>
+                        <Text style={{ color: COLOR_TEXT_PRIMARY }}>{item.adminNickname}</Text>
                         <Text
                             numberOfLines={1}
                             ellipsizeMode="tail"
@@ -175,13 +156,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     containerButton: {
         width: '74%',
         padding: 16,
         borderRadius: 15,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 15
@@ -194,7 +175,7 @@ const styles = StyleSheet.create({
     containerTicket: {
         width: '100%',
         height: 90,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         marginTop: 24,
         borderRadius: 20,
         flexDirection: 'row',
@@ -230,12 +211,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     methodText: {
-        color: '#616161',
+        color: COLOR_TEXT_SECONDARY,
         fontSize: 15,
         fontFamily: 'Outfit',
     },
     methodTextActive: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontSize: 15,
         fontFamily: 'Outfit',
     },
@@ -248,7 +229,7 @@ const styles = StyleSheet.create({
     },
     lineActive: {
         width: '50%',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         height: 4,
         borderRadius: 50,
     },

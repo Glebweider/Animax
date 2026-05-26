@@ -4,10 +4,18 @@ import { useState } from 'react';
 // Components
 import BackButton from '@Components/buttons/Back';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+import { PAYMENT_METHODS } from '@Data/paymentMethods';
+
 // Utils
 import { i18n } from '@Utils/localization';
 
 
+// TODO: Переписать и передавать просто id метода оплаты, так же все методы получать при загрузке приложенния и кешировать их а после использовать
 interface IPaymentMethod {
     textPaymentMethod: string;
     iconPaymentMethod: string;
@@ -32,72 +40,26 @@ const PaymentScreen = ({ navigation, route }) => {
                     <Text style={styles.headerText}>{i18n.t('payment.details')}</Text>
                 </View>
                 <View style={styles.paymentMethods}>
-                    <TouchableOpacity
-                        onPress={() => setSelectPaymentMethod({
-                            textPaymentMethod: 'PayPal',
-                            iconPaymentMethod: 'https://static-00.iconduck.com/assets.00/paypal-icon-856x1024-a3b7wbse.png',
-                            iconPaymentMethodWidth: 24,
-                            iconPaymentMethodHeight: 24,
-                        })}
-                        style={styles.paymentMethod}>
-                        <View style={styles.paymentCardData}>
-                            <Image
-                                source={{ uri: 'https://static-00.iconduck.com/assets.00/paypal-icon-856x1024-a3b7wbse.png' }}
-                                width={24}
-                                height={24}
-                                style={styles.paymentMethodIcon} />
-                            <Text style={styles.paymentMethodText}>PayPal</Text>
-                        </View>
-                        <View style={styles.paymentMethodSelect}>
-                            {selectPaymentMethod.textPaymentMethod == 'PayPal' && (
-                                <View style={styles.paymentMethodSelected} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setSelectPaymentMethod({
-                            textPaymentMethod: 'GooglePay',
-                            iconPaymentMethod: 'https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png',
-                            iconPaymentMethodWidth: 24,
-                            iconPaymentMethodHeight: 24,
-                        })}
-                        style={styles.paymentMethod}>
-                        <View style={styles.paymentCardData}>
-                            <Image
-                                source={{ uri: 'https://static-00.iconduck.com/assets.00/google-icon-2048x2048-czn3g8x8.png' }}
-                                width={24}
-                                height={24}
-                                style={styles.paymentMethodIcon} />
-                            <Text style={styles.paymentMethodText}>Google Pay</Text>
-                        </View>
-                        <View style={styles.paymentMethodSelect}>
-                            {selectPaymentMethod.textPaymentMethod == 'GooglePay' && (
-                                <View style={styles.paymentMethodSelected} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => setSelectPaymentMethod({
-                            textPaymentMethod: 'ApplePay',
-                            iconPaymentMethod: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1200px-Apple_logo_white.svg.png',
-                            iconPaymentMethodWidth: 24,
-                            iconPaymentMethodHeight: 30,
-                        })}
-                        style={styles.paymentMethod}>
-                        <View style={styles.paymentCardData}>
-                            <Image
-                                source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_logo_white.svg/1200px-Apple_logo_white.svg.png' }}
-                                width={24}
-                                height={30}
-                                style={styles.paymentMethodIcon} />
-                            <Text style={styles.paymentMethodText}>Apple Pay</Text>
-                        </View>
-                        <View style={styles.paymentMethodSelect}>
-                            {selectPaymentMethod.textPaymentMethod == 'ApplePay' && (
-                                <View style={styles.paymentMethodSelected} />
-                            )}
-                        </View>
-                    </TouchableOpacity>
+                    {PAYMENT_METHODS.map((method) => (
+                        <TouchableOpacity
+                            key={method.textPaymentMethod}
+                            onPress={() => setSelectPaymentMethod(method)}
+                            style={styles.paymentMethod}>
+                            <View style={styles.paymentCardData}>
+                                <Image
+                                    source={{ uri: method.iconPaymentMethod }}
+                                    style={styles.paymentMethodIcon} />
+                                <Text style={styles.paymentMethodText}>
+                                    {method.textPaymentMethod}
+                                </Text>
+                            </View>
+                            <View style={styles.paymentMethodSelect}>
+                                {selectPaymentMethod.textPaymentMethod === method.textPaymentMethod && (
+                                    <View style={styles.paymentMethodSelected} />
+                                )}
+                            </View>
+                        </TouchableOpacity>
+                    ))}
                 </View>
             </View>
             <TouchableOpacity
@@ -123,14 +85,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     headerContainer: {
         width: '90%',
     },
     headerText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         textAlign: 'left'
@@ -141,7 +103,7 @@ const styles = StyleSheet.create({
     paymentMethod: {
         width: '100%',
         height: 80,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 20,
         marginTop: 30,
         justifyContent: 'space-between',
@@ -159,7 +121,7 @@ const styles = StyleSheet.create({
         height: 30,
     },
     paymentMethodText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 16,
     },
@@ -167,7 +129,7 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         borderRadius: 50,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 3,
         justifyContent: 'center',
         alignItems: 'center',
@@ -177,7 +139,7 @@ const styles = StyleSheet.create({
         width: 10,
         height: 10,
         borderRadius: 40,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
     },
     buttonContinue: {
         width: '90%',
@@ -185,7 +147,7 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         shadowColor: 'rgba(6, 193, 73, 0.4)',
         shadowOffset: { width: 4, height: 8 },
         shadowOpacity: 0.24,
@@ -194,7 +156,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     buttonContinueText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 15,
     },

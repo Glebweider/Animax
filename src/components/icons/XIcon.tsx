@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const TwitterIcon = ({ Color, Style, Width, Height }) => (
+const XIcon = ({ Color, Style, Width, Height }) => (
     <Svg
         fill={Color}
         height={Width}
@@ -12,4 +12,4 @@ const TwitterIcon = ({ Color, Style, Width, Height }) => (
     </Svg>
 );
 
-export default TwitterIcon;
+export default XIcon;

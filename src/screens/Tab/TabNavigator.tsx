@@ -22,9 +22,11 @@ import MyListIcon from "@Icons/MyListIcon";
 // Redux
 import { RootState } from "@Redux/store";
 
+// Data
+import { COLOR_PRIMARY, COLOR_TEXT_TERTIARY } from "@Data/constants";
+
 
 const Tab = createMaterialTopTabNavigator();
-
 const TabNavigator = () => {
     const currentUserStateId = useSelector((state: RootState) => state.userReducer.uuid);
     ScreenOrientation.unlockAsync();
@@ -67,8 +69,8 @@ const TabNavigator = () => {
                     alignItems: 'center',
                     marginTop: 7,
                 },
-                tabBarActiveTintColor: '#06C149',
-                tabBarInactiveTintColor: '#9E9E9E',
+                tabBarActiveTintColor: COLOR_PRIMARY,
+                tabBarInactiveTintColor: COLOR_TEXT_TERTIARY,
                 tabBarShowIcon: true,
             }}>
             <Tab.Screen
@@ -76,7 +78,7 @@ const TabNavigator = () => {
                 component={HomeScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <HomeIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
+                        <HomeIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.home'),
                 }} />
@@ -85,7 +87,7 @@ const TabNavigator = () => {
                 component={ReleaseScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CalendarIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
+                        <CalendarIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.release'),
                 }} />
@@ -94,7 +96,7 @@ const TabNavigator = () => {
                 component={MyListScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <MyListIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
+                        <MyListIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.mylist'),
                 }} />
@@ -104,7 +106,7 @@ const TabNavigator = () => {
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <ProfileIcon Color={focused ? '#06C149' : '#9E9E9E'} Style={styles.icon} />
+                        <ProfileIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
                     title: i18n.t('navigation.profile'),
                 }} />

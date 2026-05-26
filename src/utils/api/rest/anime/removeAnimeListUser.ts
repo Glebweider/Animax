@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useRemoveAnimeListUser = () => {
 	const { showAlert } = useAlert();
 
-	const removeAnimeListUser = async (token: string, animeId: string) => {
+	const removeAnimeListUser = async (animeId: string) => {
 		try {
 			await apiRequest(
 				`/user/animelist`,
 				{
 					method: 'DELETE',
-					token,
+					token: true,
 					body: {
 						"animeId": `${animeId}`
 					}

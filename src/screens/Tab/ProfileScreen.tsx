@@ -12,34 +12,38 @@ import CrownIcon from '@Components/icons/CrownIcon';
 import SettingsIcon from '@Components/icons/SettingsIcon';
 import AnimeCard from '@Components/cards/Anime';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY,
+    COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY,
+    PROFILE_CHUNK_SIZE
+} from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
-import useGetUserProfile from '@Utils/api/rest/user/getUserProfile';
-import { getTokenFromStorage } from '@Utils/functions/token';
 import { GET_ANIMESANALYTICS } from '@Utils/api/graphql';
 import { CacheMyFavoriteGenresService, ICachedMyFavoriteGenres } from '@Utils/services/MyFavoriteGenresCache';
 
 // GraphQl
 import { GET_ANIMES } from '@GraphQl/getAnimes';
 
+// Rest
+import useGetUserProfile from '@Rest/user/getUserProfile';
+
 // Redux
 import { RootState } from '@Redux/store';
 import { addFilter } from '@Redux/reducers/sortReducer';
 
+// Interface
+import { IMyFavoriteGenre, IUserProfile } from '@Interfaces/ProfileScreen.interface';
 
-interface IMyFavoriteGenre {
-    id: string;
-    label: string;
-    value: number;
-    onPress?: () => void;
-}
 
 const ProfileScreen = ({ navigation, route }) => {
     const client = useApolloClient();
     const dispatch = useDispatch();
     const uuid = useSelector((state: RootState) => state.userReducer.uuid);
     const [isLoading, setLoading] = useState<boolean>(true);
-    const [user, setUser] = useState<any>({
+    const [user, setUser] = useState<IUserProfile>({
         uuid: "",
         interests: [],
         animelist: [],
@@ -55,7 +59,6 @@ const ProfileScreen = ({ navigation, route }) => {
             achievementsCountWatchedAnime: 0,
         }
     });
-    const [userAnimeList, setUserAnimeList] = useState<any[]>([]);
     const [topGenres, setTopGenres] = useState<IMyFavoriteGenre[]>();
 
     const { getUserProfile } = useGetUserProfile();
@@ -63,118 +66,115 @@ const ProfileScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            let token = await getTokenFromStorage();
-            if (token && userId) {
-                const userData = await getUserProfile(token, userId);
-                if (userData) {
-                    setUser(userData);
-                    let animeList = userData.animelist ?? [];
-                    const CHUNK_SIZE = 50;
+            if (!userId) return;
 
-                    // ===== Get Favorite Animes =====
-                    const { data } = await client.query({
-                        query: GET_ANIMES,
-                        variables: {
-                            ids: animeList.join(","),
-                            limit: 10,
-                            page: 1
+            const userData = await getUserProfile(userId);
+            if (userData) {
+                setUser(userData);
+                let animeList = userData.animelist ?? [];
+
+                // ===== Get Favorite Animes =====
+                const { data } = await client.query({
+                    query: GET_ANIMES,
+                    variables: {
+                        ids: animeList.join(","),
+                        limit: 10,
+                        page: 1
+                    }
+                });
+
+                if (data?.animes)
+                    setUser((prev) => ({ ...prev, animelist: data?.animes }));
+
+                // ===== Get Favorite Genres =====
+                let allAnimes = [];
+                let localCache = [];
+
+                if (uuid == userId) {
+                    localCache = await CacheMyFavoriteGenresService.getList();
+                    if (localCache) {
+                        const liveIdsSet = new Set(animeList);
+                        const updatedCache = localCache.filter(cachedAnime => liveIdsSet.has(cachedAnime.id));
+                        allAnimes = updatedCache;
+
+                        const idsSet = new Set(localCache.map(obj => obj.id));
+                        animeList = animeList.filter(animeId => !idsSet.has(animeId));
+                    }
+                }
+
+                const chunks = Array.from(
+                    { length: Math.ceil(animeList.length / PROFILE_CHUNK_SIZE) },
+                    (_, index) => animeList.slice(index * PROFILE_CHUNK_SIZE, index * PROFILE_CHUNK_SIZE + PROFILE_CHUNK_SIZE)
+                );
+
+                for (const [index, ids] of chunks.entries()) {
+                    try {
+                        const dataAnalytics = await client.query({
+                            query: GET_ANIMESANALYTICS,
+                            variables: {
+                                ids: ids.join(","),
+                                page: 1,
+                            },
+                            fetchPolicy: "no-cache",
+                        });
+
+                        const animes = dataAnalytics.data?.animes ?? [];
+                        allAnimes.push(...animes);
+
+                        console.log(`Loaded chunk ${index + 1}/${chunks.length}`);
+                    } catch (error: any) {
+                        console.log(`Error: Чанк ${index + 1} окончательно зафейлился`, error);
+                        break;
+                    }
+                }
+
+                const map = new Map<string, { id: string; count: number }>();
+                const cache: ICachedMyFavoriteGenres[] = [];
+
+                for (const anime of allAnimes) {
+                    for (const genre of anime.genres || []) {
+                        const key = genre.russian;
+                        const genreId = genre.id;
+
+                        const current = map.get(key);
+                        if (current) {
+                            current.count += 1;
+                        } else {
+                            map.set(key, { id: genreId, count: 1 });
                         }
+                    }
+                }
+
+                for (const anime of allAnimes) {
+                    if (!anime.id || !anime.genres) continue;
+                    const animeGenres = anime.genres.map((genre: any) => ({ id: genre.id, russian: genre.russian }));
+
+                    cache.push({
+                        id: String(anime.id),
+                        genres: animeGenres,
+                    });
+                }
+
+                const result = [...map.entries()]
+                    .sort((a, b) => b[1].count - a[1].count)
+                    .slice(0, 5)
+                    .map(([label, dataObj]) => {
+                        const item: IMyFavoriteGenre = {
+                            id: dataObj.id,
+                            label: label,
+                            value: dataObj.count
+                        };
+                        item.onPress = () => handleClickFavoriteGenre(item);
+
+                        return item;
                     });
 
-                    if (data?.animes) {
-                        setUserAnimeList(data?.animes);
-                    }
+                setTopGenres(result);
 
-                    // ===== Get Favorite Genres =====
-                    let allAnimes = [];
-                    let localCache = [];
+                if (uuid == userId && (animeList.length != 0 || localCache.length > allAnimes.length))
+                    await CacheMyFavoriteGenresService.saveList(cache);
 
-                    if (uuid == userId) {
-                        localCache = await CacheMyFavoriteGenresService.getList();
-                        if (localCache) {
-                            const liveIdsSet = new Set(animeList);
-                            const updatedCache = localCache.filter(cachedAnime => liveIdsSet.has(cachedAnime.id));
-                            allAnimes = updatedCache;
-
-                            const idsSet = new Set(localCache.map(obj => obj.id));
-                            animeList = animeList.filter(animeId => !idsSet.has(animeId));
-                        }
-                    }
-
-                    const chunks = Array.from(
-                        { length: Math.ceil(animeList.length / CHUNK_SIZE) },
-                        (_, index) => animeList.slice(index * CHUNK_SIZE, index * CHUNK_SIZE + CHUNK_SIZE)
-                    );
-
-                    for (const [index, ids] of chunks.entries()) {
-                        try {
-                            const dataAnalytics = await client.query({
-                                query: GET_ANIMESANALYTICS,
-                                variables: {
-                                    ids: ids.join(","),
-                                    page: 1,
-                                },
-                                fetchPolicy: "no-cache",
-                            });
-
-                            const animes = dataAnalytics.data?.animes ?? [];
-                            allAnimes.push(...animes);
-
-                            console.log(`Loaded chunk ${index + 1}/${chunks.length}`);
-                        } catch (error: any) {
-                            console.log(`Error: Чанк ${index + 1} окончательно зафейлился`, error);
-                            break;
-                        }
-                    }
-
-                    const map = new Map<string, { id: string; count: number }>();
-                    const cache: ICachedMyFavoriteGenres[] = [];
-
-                    for (const anime of allAnimes) {
-                        for (const genre of anime.genres || []) {
-                            const key = genre.russian;
-                            const genreId = genre.id;
-
-                            const current = map.get(key);
-                            if (current) {
-                                current.count += 1;
-                            } else {
-                                map.set(key, { id: genreId, count: 1 });
-                            }
-                        }
-                    }
-
-                    for (const anime of allAnimes) {
-                        if (!anime.id || !anime.genres) continue;
-                        const animeGenres = anime.genres.map((genre: any) => ({ id: genre.id, russian: genre.russian }));
-
-                        cache.push({
-                            id: String(anime.id),
-                            genres: animeGenres,
-                        });
-                    }
-
-                    const result = [...map.entries()]
-                        .sort((a, b) => b[1].count - a[1].count)
-                        .slice(0, 5)
-                        .map(([label, dataObj]) => {
-                            const item: IMyFavoriteGenre = {
-                                id: dataObj.id,
-                                label: label,
-                                value: dataObj.count
-                            };
-                            item.onPress = () => handleClickFavoriteGenre(item);
-
-                            return item;
-                        });
-
-                    setTopGenres(result);
-
-                    if (uuid == userId && (animeList.length != 0 || localCache.length > allAnimes.length))
-                        await CacheMyFavoriteGenresService.saveList(cache);
-
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
 
@@ -191,7 +191,7 @@ const ProfileScreen = ({ navigation, route }) => {
     }
 
     if (!user)
-        return <BallIndicator color="#13D458" size={70} count={8} />;
+        return <BallIndicator color={COLOR_PRIMARY_LIGHT} size={70} count={8} />;
 
     return (
         <ScrollView
@@ -208,7 +208,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     <Text style={styles.headerText}>{i18n.t('navigation.profile')}</Text>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
-                    <SettingsIcon Color={'#fff'} Style={{}} />
+                    <SettingsIcon Color={COLOR_TEXT_PRIMARY} Style={{}} />
                 </TouchableOpacity>
             </View>
             <View style={styles.profileContainer}>
@@ -219,7 +219,7 @@ const ProfileScreen = ({ navigation, route }) => {
                 </View>
                 <View style={styles.profileUserData}>
                     <View style={{ flexDirection: 'row' }}>
-                        {user.premium && <CrownIcon Width={34} Height={34} Color={'#06C149'} />}
+                        {user.premium && <CrownIcon Width={34} Height={34} Color={COLOR_PRIMARY} />}
                         <Text style={styles.profileUsername}>{!isLoading && user.profile.nickname}</Text>
                     </View>
                     <Text style={styles.profileDescription}>{!isLoading && user.description}</Text>
@@ -255,7 +255,7 @@ const ProfileScreen = ({ navigation, route }) => {
             </View> */}
             <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text>
             <FlatList
-                data={userAnimeList}
+                data={user.animelist}
                 nestedScrollEnabled={true}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
@@ -284,12 +284,12 @@ const ProfileScreen = ({ navigation, route }) => {
                         initialSpacing={0}
                         endSpacing={0}
                         xAxisLabelTextStyle={{
-                            color: "#06C149",
+                            color: COLOR_PRIMARY,
                             fontSize: 8,
                             fontFamily: 'Outfit'
                         }}
                         topLabelTextStyle={{
-                            color: "#FFF",
+                            color: COLOR_TEXT_PRIMARY,
                             fontSize: 14,
                             fontFamily: 'Outfit'
                         }}
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     chartContainer: {
         width: '94%',
@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     chartTitle: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 18,
         fontFamily: 'Outfit',
         alignSelf: 'flex-start',
@@ -339,27 +339,27 @@ const styles = StyleSheet.create({
     statContainer: {
         width: '30%',
         height: 120,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderRadius: 8,
         borderWidth: 1,
         alignItems: 'center',
         justifyContent: 'space-between'
     },
     statTitleText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 10,
         marginTop: 10,
     },
     statDataText: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 24,
         marginBottom: 10,
     },
     favoriteAnimelistText: {
         width: '90%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         marginTop: 15,
         fontSize: 18
     },
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     },
     genreContainer: {
         height: 26,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderRadius: 8,
         borderWidth: 1,
         alignItems: 'center',
@@ -386,12 +386,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 7,
     },
     genreText: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 8
     },
     profileDescription: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 11,
         marginLeft: 6,
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
         marginLeft: 12,
     },
     profileUsername: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 6,
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
         height: 30,
     },
     headerText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,

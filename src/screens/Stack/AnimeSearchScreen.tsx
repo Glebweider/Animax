@@ -12,12 +12,20 @@ import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
 import { useAlert } from '@Components/alert/AlertContext';
 import AnimeCard from '@Components/cards/Anime';
 
-//Utils
-import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
-import { GET_ANIMEBYSEARCH } from '@Utils/api/graphql/getAnimeBySearch';
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
+} from '@Data/constants';
+
+// GraphQl
+import { GET_ANIMEBYGENRES } from '@GraphQl/getAnimeByGenres';
+import { GET_ANIMEBYSEARCH } from '@GraphQl/getAnimeBySearch';
+
+// Utils
 import { i18n } from '@Utils/localization';
 
-//Redux
+// Redux
 import { RootState } from '@Redux/store';
 import { reset } from '@Redux/reducers/sortReducer';
 
@@ -84,14 +92,14 @@ const AnimeSearchScreen = ({ navigation }) => {
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity
                     onPress={handleBackScreen}
-                    style={[styles.sortButton, { backgroundColor: '#1F222A' }]}>
-                    <ArrowLeftIcon Color={'#fff'} Style={{ width: 200, height: 200 }} />
+                    style={[styles.sortButton, { backgroundColor: COLOR_BACKGROUND_SECONDARY }]}>
+                    <ArrowLeftIcon Color={COLOR_TEXT_PRIMARY} Style={{ width: 200, height: 200 }} />
                 </TouchableOpacity>
                 <View style={styles.searchSection}>
-                    <SearchIcon Color={textSearch ? '#fff' : '#9E9E9E'} Style={styles.icon} />
+                    <SearchIcon Color={textSearch ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     <TextInput
                         style={styles.searchInput}
-                        placeholderTextColor="#9E9E9E"
+                        placeholderTextColor={COLOR_TEXT_TERTIARY}
                         placeholder={i18n.t('searchanime.search')}
                         keyboardType="default"
                         returnKeyType="search"
@@ -102,7 +110,7 @@ const AnimeSearchScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('AnimeSortScreen')}
                     style={styles.sortButton}>
-                    <SortIcon Color={'#06C149'} Style={{ width: 200, height: 200 }} />
+                    <SortIcon Color={COLOR_PRIMARY} Style={{ width: 200, height: 200 }} />
                 </TouchableOpacity>
             </View>
             {FilterState.filter.length >= 1 && (
@@ -152,7 +160,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     content: {
         flexGrow: 1,
@@ -177,12 +185,12 @@ const styles = StyleSheet.create({
         height: 250,
     },
     errorTitle: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 17,
     },
     errorText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         marginTop: 20,
@@ -200,7 +208,7 @@ const styles = StyleSheet.create({
     },
     tag: {
         height: 45,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
@@ -209,7 +217,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
     tagText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13
     },
@@ -236,12 +244,12 @@ const styles = StyleSheet.create({
         width: '62%',
         height: 62,
         borderRadius: 15,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     searchInput: {
         flex: 1,
         height: '100%',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14
     },

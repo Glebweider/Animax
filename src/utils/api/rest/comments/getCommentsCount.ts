@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useGetCommentsCount = () => {
     const { showAlert } = useAlert();
 
-    const getCommentsCount = async (token: string, animeId: string) => {
+    const getCommentsCount = async (animeId: string) => {
         try {
             return await apiRequest<number>(
                 `/anime/${animeId}/comments-count`,
                 {
                     method: 'GET',
-                    token,
+                    token: true,
                 },
             );
         } catch (error) {

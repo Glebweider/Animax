@@ -1,11 +1,25 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
 
+// Components
 import BackButton from '@Components/buttons/Back';
-import EmailIcon from '@Icons/EmailIcon';
-import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
-import useForgotPassword from '@Utils/api/rest/user/forgotPasswordUser';
 import ApplyButton from '@Components/buttons/Apply';
+
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+
+// Icons
+import EmailIcon from '@Icons/EmailIcon';
+
+// Modals
+import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
+
+// Rest
+import useForgotPassword from '@Rest/user/forgotPasswordUser';
+
 
 const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const [methodResetPassword, setMethodResetPassword] = useState<string>('SMS');
@@ -14,7 +28,6 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
     const { forgotPasswordUser } = useForgotPassword();
 
     const fetchData = async () => {
-        console.log(viaData)
         const response = await forgotPasswordUser(viaData);
 
         if (response) {
@@ -28,11 +41,10 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
         }
     }
 
-
     return (
         <View style={styles.container}>
-            <BackButton 
-                onPress={() => navigation.navigate('AuthSignIn')} 
+            <BackButton
+                onPress={() => navigation.navigate('AuthSignIn')}
                 text="Forgot Password" />
             <ForgotPasswordInputModal
                 visible={isOpenModalForgotPasswordInput}
@@ -55,7 +67,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                     }}>
                     <View style={styles.contentMethodImageContainer}>
                         <EmailIcon 
-                            Color={'#06C149'} 
+                            Color={COLOR_PRIMARY} 
                             Style={{}} />
                     </View>
                     <Text style={styles.contentMethodViaText}>SMS</Text>
@@ -73,7 +85,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                     }}>
                     <View style={styles.contentMethodImageContainer}>
                         <EmailIcon
-                            Color={'#06C149'}
+                            Color={COLOR_PRIMARY}
                             Style={{}} />
                     </View>
                     <Text style={styles.contentMethodViaText}>Email</Text>
@@ -92,7 +104,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         marginTop: 0
@@ -104,16 +116,16 @@ const styles = StyleSheet.create({
     },
     contentText: {
         marginTop: 20,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
     },
     contentMethodContainerEnabled: {
         height: 129,
         width: '100%',
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 2,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 30,
         marginTop: 20,
         alignItems: 'center',
@@ -124,7 +136,7 @@ const styles = StyleSheet.create({
         width: '100%',
         borderColor: '#2E3138',
         borderWidth: 2,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 30,
         marginTop: 20,
         alignItems: 'center',
@@ -141,7 +153,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     contentMethodViaText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     }

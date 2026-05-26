@@ -4,13 +4,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useGetUserProfile = () => {
 	const { showAlert } = useAlert();
 
-	const getUserProfile = async (token: string, id: string) => {
+	const getUserProfile = async (id: string) => {
 		try {
-			return await apiRequest<{ animelist: string[] }>(
+			return await apiRequest<any>(
 				`/user/${id}`,
 				{
 					method: 'GET',
-					token,
+					token: true,
 				},
 			);
 		} catch (error) {

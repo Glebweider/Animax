@@ -5,6 +5,9 @@ import { NavigationProp } from '@react-navigation/native';
 //Icons
 import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
 
+// Data
+import { COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 
 interface BallIndicatorProps {
     navigation?: NavigationProp<any>;
@@ -25,7 +28,7 @@ const BackButton: React.FC<BallIndicatorProps> = ({ navigation, text, onPress })
         <View style={styles.container}>
             <View style={styles.content}>
                 <TouchableOpacity onPress={handlePress}>
-                    <ArrowLeftIcon Style={styles.button} Color={'#fff'} />
+                    <ArrowLeftIcon Style={styles.button} Color={COLOR_TEXT_PRIMARY} />
                 </TouchableOpacity>
                 <Text style={styles.text}>{text}</Text>
             </View>
@@ -47,7 +50,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,

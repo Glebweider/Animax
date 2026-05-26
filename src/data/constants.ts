@@ -1,0 +1,22 @@
+export const USER_FULLNAME_MIN_LENGTH = 4;
+export const USER_NICKNAME_MIN_LENGTH = 3;
+export const USER_PASSWORD_MIN_LENGTH = 6;
+export const USER_FULLNAME_MAX_LENGTH = 26;
+export const USER_NICKNAME_MAX_LENGTH = 24;
+export const USER_PASSWORD_MAX_LENGTH = 24;
+export const USER_DESCRIPTION_MAX_LENGTH = 48;
+
+// ONLY APP
+export const COLOR_BACKGROUND_PRIMARY = '#181A20';
+export const COLOR_BACKGROUND_SECONDARY = '#1F222A';
+
+export const COLOR_TEXT_PRIMARY = '#FFFFFF';
+export const COLOR_TEXT_SECONDARY = '#616161';
+export const COLOR_TEXT_TERTIARY = '#9E9E9E';
+export const COLOR_TEXT_DISABLED = '#CCCCCC';
+
+export const COLOR_PRIMARY = '#06C149';
+export const COLOR_PRIMARY_DARK = '#06C049';
+export const COLOR_PRIMARY_LIGHT = '#13D458';
+
+export const PROFILE_CHUNK_SIZE = 50;

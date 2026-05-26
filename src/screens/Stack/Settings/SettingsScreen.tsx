@@ -14,6 +14,9 @@ import ArrowRightIcon from '@Components/icons/ArrowRightIcon';
 import NotificationIcon from '@Components/icons/NotificationIcon';
 import BackButton from '@Components/buttons/Back';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Modal
 import LogoutModal from '@Modal/LogoutModal';
 
@@ -51,7 +54,7 @@ const SettingsScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => navigation.navigate('SubcribeScreen')}
                     style={styles.premiumContainer}>
-                    <CrownIcon Width={60} Height={55} Color={'#06C149'} />
+                    <CrownIcon Width={60} Height={55} Color={COLOR_PRIMARY} />
                     <View style={styles.premiumTextContainer}>
                         <Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
                         <Text
@@ -59,7 +62,7 @@ const SettingsScreen = ({ navigation }) => {
                             ellipsizeMode="tail"
                             style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#06C149'} Width={30} Height={30} />
+                    <ArrowRightIcon Color={COLOR_PRIMARY} Width={30} Height={30} />
                 </TouchableOpacity>
             }
             <View style={styles.labelsContainer}>
@@ -67,19 +70,19 @@ const SettingsScreen = ({ navigation }) => {
                     onPress={() => navigation.navigate('EditDataScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
-                        <ProfileIcon Style={{}} Color={'#fff'} />
+                        <ProfileIcon Style={{}} Color={COLOR_TEXT_PRIMARY} />
                         <Text style={styles.labelLeftText}>{i18n.t('profile.edit')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('NotificationScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
-                        <NotificationIcon Style={{}} Color={'#fff'} Width={25} Height={25} />
+                        <NotificationIcon Style={{}} Color={COLOR_TEXT_PRIMARY} Width={25} Height={25} />
                         <Text style={styles.labelLeftText}>{i18n.t('profile.notification')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity>
                 {/* <TouchableOpacity 
                     onPress={() => navigation.navigate('SecurityScreen')}
@@ -94,16 +97,16 @@ const SettingsScreen = ({ navigation }) => {
                                 <G data-name="icons Q2">
                                     <Path 
                                         d="M24 6.2c5.3 1.5 11.1 3.3 14 4.3v15.7c0 3.4-3.7 9.4-14 15.4-10.3-6.1-14-12-14-15.4V10.5c2.9-1.1 8.7-2.8 14-4.3M24 2S6 7.1 6 8v18.2c0 9.2 13.3 17.3 17 19.5a1.8 1.8 0 002 0c3.8-2.1 17-10.3 17-19.5V8c0-.9-18-6-18-6z"
-                                        fill='#fff' />
+                                        fill=COLOR_TEXT_PRIMARY />
                                     <Path 
                                         d="M19.6 29.4l-5-4.9a2.1 2.1 0 01-.2-2.7 1.9 1.9 0 013-.2l3.6 3.6 9.6-9.6a2 2 0 012.8 2.8l-11 11a1.9 1.9 0 01-2.8 0z"
-                                        fill='#fff' />
+                                        fill=COLOR_TEXT_PRIMARY />
                                 </G>
                             </G>
                         </Svg>
                         <Text style={styles.labelLeftText}>{i18n.t('profile.security')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity> */}
                 <TouchableOpacity
                     onPress={() => navigation.navigate('LanguageScreen')}
@@ -114,7 +117,7 @@ const SettingsScreen = ({ navigation }) => {
                             height="27"
                             viewBox="0 0 24 24"
                             fill="none">
-                            <G stroke="#fff" strokeLinecap="round" strokeLinejoin="round">
+                            <G stroke={COLOR_TEXT_PRIMARY} strokeLinecap="round" strokeLinejoin="round">
                                 <Path
                                     d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"
                                     strokeWidth={1.5} />
@@ -125,35 +128,35 @@ const SettingsScreen = ({ navigation }) => {
                         </Svg>
                         <Text style={styles.labelLeftText}>{i18n.t('profile.language')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('HelpCenterScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
-                            <G stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                            <G stroke={COLOR_TEXT_PRIMARY} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                                 <Path d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z" />
                                 <Path d="M12 15.895V12M12.005 8.5h-.01" />
                             </G>
                         </Svg>
                         <Text style={styles.labelLeftText}>{i18n.t('profile.helpcenter')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('PrivacyPolicyScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
                         <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
-                            <G stroke="#fff" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                            <G stroke={COLOR_TEXT_PRIMARY} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
                                 <Path d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z" />
                                 <Path d="M12 8.105V12M11.995 15.5h.01" />
                             </G>
                         </Svg>
                         <Text style={styles.labelLeftText}>{i18n.t('profile.privacypolicy')}</Text>
                     </View>
-                    <ArrowRightIcon Color={'#fff'} Width={20} Height={20} />
+                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => setOpenModalLogout(true)}
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     updateText: {
         marginTop: 15,
@@ -215,7 +218,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     labelLeftText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
         marginLeft: 15
@@ -232,7 +235,7 @@ const styles = StyleSheet.create({
         height: 110,
         borderRadius: 25,
         borderWidth: 2,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         alignItems: 'center',
         justifyContent: 'space-evenly',
         marginTop: 25,
@@ -241,12 +244,12 @@ const styles = StyleSheet.create({
         width: '60%',
     },
     premiumTitle: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 15,
     },
     premiumDescription: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 10,
         marginTop: 10,
@@ -264,12 +267,12 @@ const styles = StyleSheet.create({
         marginLeft: 24,
     },
     profileUsername: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 15,
     },
     profileUserEmail: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 12,
         marginTop: 10,

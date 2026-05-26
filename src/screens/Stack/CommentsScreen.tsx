@@ -8,13 +8,14 @@ import { RootState } from '@Redux/store';
 
 //Utils
 import { i18n } from '@Utils/localization';
-import useGetComments from '@Utils/api/rest/comments/getComments';
 import formatViews from '@Utils/formatters/views';
-import useGetRepliesByComment from '@Utils/api/rest/comments/getRepliesByComment';
 import formatDateComment from '@Utils/formatters/comment';
-import useChangeLikeComment from '@Utils/api/rest/comments/changeLikeComment';
-import useAddComment from '@Utils/api/rest/comments/addComment';
-import { getTokenFromStorage } from '@Utils/functions/token';
+
+// Rest
+import useGetComments from '@Rest/comments/getComments';
+import useGetRepliesByComment from '@Rest/comments/getRepliesByComment';
+import useChangeLikeComment from '@Rest/comments/changeLikeComment';
+import useAddComment from '@Rest/comments/addComment';
 
 //Components
 import BackButton from '@Components/buttons/Back';
@@ -24,15 +25,15 @@ import { BallIndicator } from '@Components/BallIndicator';
 import CrownIcon from '@Components/icons/CrownIcon';
 import LikeIcon from '@Components/icons/LikeIcon';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_PRIMARY_DARK, COLOR_TEXT_DISABLED, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+
 //Interfaces
-import { IComment } from '@Interfaces/comments.interface';
+import { IComment, IReplyingUser } from '@Interfaces/CommentsScreen.interface';
 
-
-interface IReplyingUser {
-    messageId: string;
-    userId: string;
-    username: string;
-}
 
 const CommentsScreen = ({ navigation, route }) => {
     const { animeId, commentsCount } = route.params;
@@ -171,59 +172,51 @@ const CommentsScreen = ({ navigation, route }) => {
     };
 
     const handleChangeLike = async (commentId: string, action: 'like' | 'dislike') => {
-        const token = await getTokenFromStorage();
-        if (token) {
-            const data = await changeLikeComment(token, animeId, commentId, action);
-            if (data) {
-                setComments(prevComments =>
-                    prevComments.map(comment => {
-                        const updateLikes = (item) => {
-                            let newLikedByUserIds = [...(item.likedByUserIds || [])];
-                            let newLikes = item.likes;
+        if (!await changeLikeComment(animeId, commentId, action)) return;
 
-                            if (action === 'like') {
-                                if (!newLikedByUserIds.includes(userId)) {
-                                    newLikedByUserIds.push(userId);
-                                    newLikes += 1;
-                                }
-                            } else {
-                                if (newLikedByUserIds.includes(userId)) {
-                                    newLikedByUserIds = newLikedByUserIds.filter(id => id !== userId);
-                                    newLikes = Math.max(0, newLikes - 1);
-                                }
-                            }
+        setComments(prevComments =>
+            prevComments.map(comment => {
+                const updateLikes = (item) => {
+                    let newLikedByUserIds = [...(item.likedByUserIds || [])];
+                    let newLikes = item.likes;
 
-                            return {
-                                ...item,
-                                likedByUserIds: newLikedByUserIds,
-                                likes: newLikes
-                            };
-                        };
-
-                        if (comment.id === commentId) {
-                            comment = updateLikes(comment);
+                    if (action === 'like') {
+                        if (!newLikedByUserIds.includes(userId)) {
+                            newLikedByUserIds.push(userId);
+                            newLikes += 1;
                         }
+                    } else {
+                        if (newLikedByUserIds.includes(userId)) {
+                            newLikedByUserIds = newLikedByUserIds.filter(id => id !== userId);
+                            newLikes = Math.max(0, newLikes - 1);
+                        }
+                    }
 
-                        comment.replies = comment.replies.map(reply => {
-                            if (reply.id === commentId) {
-                                return updateLikes(reply);
-                            }
-                            return reply;
-                        });
+                    return {
+                        ...item,
+                        likedByUserIds: newLikedByUserIds,
+                        likes: newLikes
+                    };
+                };
 
-                        return comment;
-                    })
-                );
-            } else {
-                showAlert('Error updating like');
-            }
-        }
+                if (comment.id === commentId) {
+                    comment = updateLikes(comment);
+                }
+
+                comment.replies = comment.replies.map(reply => {
+                    if (reply.id === commentId) {
+                        return updateLikes(reply);
+                    }
+                    return reply;
+                });
+
+                return comment;
+            })
+        );
     };
 
     const handleSendComment = async () => {
-        const token = await getTokenFromStorage();
-
-        const data = await addComment(token, animeId, textInput, replyingUser.messageId && replyingUser.messageId);
+        const data = await addComment(animeId, textInput, replyingUser.messageId && replyingUser.messageId);
         if (data) {
             setCommentsCountNew(prevCount => prevCount + 1);
 
@@ -272,7 +265,7 @@ const CommentsScreen = ({ navigation, route }) => {
                             </TouchableOpacity>
                             <View style={styles.commentContent}>
                                 <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                                    {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} />}
+                                    {item.premium && <CrownIcon Width={32} Height={28} Color={COLOR_PRIMARY} />}
                                     <Text style={styles.username}>
                                         {item.username}
                                     </Text>
@@ -292,7 +285,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                         </View>
                                         <View style={styles.likesContainer}>
                                             <TouchableOpacity onPress={() => handleChangeLike(item.id, isCommentLikedByUser(item.likedByUserIds) ? 'dislike' : 'like')}>
-                                                <LikeIcon Color={isCommentLikedByUser(item.likedByUserIds) ? '#06C049' : '#fff'} Style={{}} />
+                                                <LikeIcon Color={isCommentLikedByUser(item.likedByUserIds) ? COLOR_PRIMARY_DARK : COLOR_TEXT_PRIMARY} Style={{}} />
                                             </TouchableOpacity>
                                             <Text style={styles.likesCount}>{formatViews(item.likes)}</Text>
                                         </View>
@@ -315,7 +308,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                             </Text>
                                         )}
                                         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                                            {item.premium && <CrownIcon Width={32} Height={28} Color={'#06C149'} />}
+                                            {item.premium && <CrownIcon Width={32} Height={28} Color={COLOR_PRIMARY} />}
                                             <Text style={styles.username}>
                                                 {item.username}
                                             </Text>
@@ -335,7 +328,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                                 </View>
                                                 <View style={styles.likesContainer}>
                                                     <TouchableOpacity onPress={() => handleChangeLike(reply.id, isCommentLikedByUser(reply.likedByUserIds) ? 'dislike' : 'like')}>
-                                                        <LikeIcon Color={isCommentLikedByUser(reply.likedByUserIds) ? '#06C049' : '#fff'} Style={{}} />
+                                                        <LikeIcon Color={isCommentLikedByUser(reply.likedByUserIds) ? COLOR_PRIMARY_DARK : COLOR_TEXT_PRIMARY} Style={{}} />
                                                     </TouchableOpacity>
                                                     <Text style={styles.likesCount}>{formatViews(reply.likes)}</Text>
                                                 </View>
@@ -367,7 +360,7 @@ const CommentsScreen = ({ navigation, route }) => {
                 onEndReachedThreshold={0.1}
                 ListEmptyComponent={isLoading &&
                     <View style={{ height: 80 }}>
-                        <BallIndicator color="#06C049" size={50} count={8} />
+                        <BallIndicator color={COLOR_PRIMARY_DARK} size={50} count={8} />
                     </View>
                 }
             />
@@ -384,8 +377,8 @@ const CommentsScreen = ({ navigation, route }) => {
                 <TouchableOpacity
                     onPress={() => handleSendComment()}
                     disabled={!isCommentVerify}
-                    style={[styles.buttonApplyContainer, isCommentVerify ? { backgroundColor: '#15D75A' } : { backgroundColor: '#06C149' }]}>
-                    <SendIcon Color={'#fff'} Style={{}} />
+                    style={[styles.buttonApplyContainer, isCommentVerify ? { backgroundColor: '#15D75A' } : { backgroundColor: COLOR_PRIMARY }]}>
+                    <SendIcon Color={COLOR_TEXT_PRIMARY} Style={{}} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -397,7 +390,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     input: {
         height: 60,
@@ -406,13 +399,13 @@ const styles = StyleSheet.create({
         borderColor: '#21212C',
         borderWidth: 1,
         borderRadius: 15,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 12,
         fontFamily: 'Outfit',
-        backgroundColor: '#1F222B'
+        backgroundColor: COLOR_BACKGROUND_SECONDARY
     },
     footer: {
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         borderColor: '#35383F',
         borderTopWidth: 1,
         borderRightWidth: 1,
@@ -437,7 +430,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         fontSize: 10,
         marginLeft: 10,
-        color: '#ccc',
+        color: COLOR_TEXT_DISABLED,
     },
     line: {
         width: '16%',
@@ -459,7 +452,7 @@ const styles = StyleSheet.create({
     replyText: {
         fontFamily: 'Outfit',
         fontSize: 11,
-        color: '#ccc',
+        color: COLOR_TEXT_DISABLED,
         marginLeft: 10
     },
     replyContainer: {
@@ -485,11 +478,11 @@ const styles = StyleSheet.create({
     },
     username: {
         fontFamily: 'Outfit',
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 14,
     },
     commentText: {
-        color: '#ccc',
+        color: COLOR_TEXT_DISABLED,
         fontSize: 12,
         marginTop: 2,
         fontFamily: 'Outfit',
@@ -504,12 +497,12 @@ const styles = StyleSheet.create({
     },
     likeIcon: {
         fontSize: 14,
-        color: '#ccc',
+        color: COLOR_TEXT_DISABLED,
         marginRight: 5,
         fontFamily: 'Outfit',
     },
     likesCount: {
-        color: '#ccc',
+        color: COLOR_TEXT_DISABLED,
         fontSize: 12,
         fontFamily: 'Outfit',
         marginLeft: 5

@@ -5,13 +5,13 @@ import { apiRequest } from "@Utils/api/rest/api";
 const useUpdateTimeSpent = () => {
 	const { showAlert } = useAlert();
 
-	const updateTimeSpent = async (token: string, timeSpent: number) => {
+	const updateTimeSpent = async (timeSpent: number) => {
 		try {
 			await apiRequest<IUserState>(
 				`/user/time-spent`,
 				{
 					method: 'POST',
-					token,
+					token: true,
 					body: {
 						timeSpent: timeSpent
 					}

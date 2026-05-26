@@ -6,6 +6,12 @@ import { StatusBar } from 'expo-status-bar';
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
+
 //Utils
 import { facebookAuth, googleAuth, appleAuth } from '@Utils/functions';
 
@@ -71,7 +77,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         width: '90%'
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         marginTop: 25,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 35,
         fontWeight: "500"
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
     socialContainer: {
         width: '90%',
         height: 59,
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 15,
         borderColor: '#2E3138',
         borderWidth: 1,
@@ -112,7 +118,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     socialText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 12
     },
@@ -157,13 +163,13 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     signUpText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 12,
         fontFamily: 'Outfit',
         fontWeight: '100',
     },
     clicableSignUpText: {
-        color: '#06C049',
+        color: COLOR_PRIMARY_DARK,
         fontSize: 12,
         fontFamily: 'Outfit',
         marginLeft: 10

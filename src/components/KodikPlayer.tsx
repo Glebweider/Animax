@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { WebView } from 'react-native-webview';
 import { Text } from 'react-native';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
+
+
 const KodikPlayer = ({ shikimoriId }: any) => {
     const [animeLink, setAnimeLink] = useState<string>('');
     const webViewRef = useRef(null);
@@ -10,7 +14,7 @@ const KodikPlayer = ({ shikimoriId }: any) => {
         if (!shikimoriId) return;
 
         try {
-            const response = await fetch(`https://kodik-api.com/search?shikimori_id=${shikimoriId}&limit=1&token=${process.env.EXPO_PUBLIC_KODIK_API_KEY}`, {
+            const response = await fetch(`${process.env.EXPO_PUBLIC_KODIK_API_URL}/search?shikimori_id=${shikimoriId}&limit=1&token=${process.env.EXPO_PUBLIC_KODIK_API_KEY}`, {
                 headers: {
                     "Content-Type": 'application/json',
                     "Accept": 'application/json',
@@ -34,7 +38,7 @@ const KodikPlayer = ({ shikimoriId }: any) => {
 
     return (
         <WebView
-            style={{ backgroundColor: '#181A20', flex: 1, marginTop: 20 }}
+            style={{ backgroundColor: COLOR_BACKGROUND_PRIMARY, flex: 1, marginTop: 20 }}
             containerStyle={{ width: '94%', height: 280 }}
             ref={webViewRef}
             allowsFullscreenVideo={true}

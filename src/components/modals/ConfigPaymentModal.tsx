@@ -4,6 +4,9 @@ import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-na
 //Utils
 import { i18n } from '@Utils/localization';
 
+// Data
+import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 
 interface ModalProps {
     visible: boolean;
@@ -13,7 +16,6 @@ interface ModalProps {
 }
 
 const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, navigation }) => {
-
     useEffect(() => {
         if (visible) {
             setTimeout(() => {
@@ -63,17 +65,17 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         shadowRadius: 4,
         marginTop: 20,
     },
     modalButtonText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 16
     },
     modalContent: {
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         width: '80%',
         height: '60%',
         borderRadius: 40,
@@ -86,13 +88,13 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         marginTop: 20,
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 24
     },
     modalText: {
         marginTop: 15,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         width: '80%',

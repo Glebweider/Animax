@@ -1,5 +1,3 @@
-/* eslint-disable import/namespace */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList, Animated, Easing } from 'react-native';
@@ -26,47 +24,35 @@ import PlayIcon from '@Icons/PlayIcon';
 import ArrowRightIcon from '@Icons/ArrowRightIcon';
 
 // Utils
-import { getTokenFromStorage } from '@Utils/functions/token';
 import { i18n } from '@Utils/localization';
-import { GET_ANIME } from '@Utils/api/graphql/getAnime';
-import useAddAnimeList from '@Utils/api/rest/anime/addAnimeListUser';
-import useGetAnimeEpisodes from '@Utils/api/rest/anime/getAnimeEpisodes';
-import useRemoveAnimeListUser from '@Utils/api/rest/anime/removeAnimeListUser';
-import useUpdateTimeSpent from '@Utils/api/rest/analytics/updateTimeSpent';
-import useGetCommentsCount from '@Utils/api/rest/comments/getCommentsCount';
 import formatViews from '@Utils/formatters/views';
-import { GET_ANIMEBYGENRES } from '@Utils/api/graphql/getAnimeByGenres';
+
+// GraphQl
+import { GET_ANIME } from '@GraphQl/getAnime';
+import { GET_ANIMEBYGENRES } from '@GraphQl/getAnimeByGenres';
+
+// Rest
+import useAddAnimeList from '@Rest/anime/addAnimeListUser';
+import useGetAnimeEpisodes from '@Rest/anime/getAnimeEpisodes';
+import useRemoveAnimeListUser from '@Rest/anime/removeAnimeListUser';
+import useUpdateTimeSpent from '@Rest/analytics/updateTimeSpent';
+import useGetCommentsCount from '@Rest/comments/getCommentsCount';
 
 //Interface
-import { IAnime } from '@Interfaces/animeAnimeScreen.interface';
+import { IAnime, IEpisode } from '@Interfaces/AnimeScreen.interface';
 
 // Redux
 import { RootState } from '@Redux/store';
 
+// Data
+import { ANIME_RATINGS } from '@Data/animeRatings';
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_PRIMARY_DARK,
+    COLOR_PRIMARY_LIGHT,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY
+} from '@Data/constants';
 
-const arrayRatings = {
-    g: 0,
-    pg: 10,
-    pg_13: 13,
-    r: 17,
-    r_plus: 18,
-    rx: 18,
-    nc_17: 18,
-};
-
-export interface IEpisode {
-    id: string;
-    ordinal: number;
-    name: string;
-    preview: {
-        optimized: {
-            src: string;
-        };
-    };
-    hls_480: string;
-    hls_720: string;
-    hls_1080: string;
-}
 
 const AnimeScreen = ({ navigation, route }) => {
     const client = useApolloClient();
@@ -142,13 +128,11 @@ const AnimeScreen = ({ navigation, route }) => {
     // useEffect(() => {
     //     const fetchData = async () => {
     //         try {
-    //             let token = await getTokenFromStorage();
-
     //             endTime.current = Date.now();
     //             const timeSpent = ((endTime.current - (startTime.current || 0)));
     //             startTime.current = Date.now();
 
-    //             await updateTimeSpent(token, Number(timeSpent));
+    //             await updateTimeSpent(Number(timeSpent));
     //         } catch (error) {
     //             showAlert(error.message);
     //         }
@@ -213,16 +197,9 @@ const AnimeScreen = ({ navigation, route }) => {
     }, [animeId]);
 
     const fetchCommentsCount = async () => {
-        try {
-            let token = await getTokenFromStorage();
-            if (token) {
-                const data = await getCommentsCount(token, animeId);
-                if (data) {
-                    setCommentsCount(data);
-                }
-            }
-        } catch (error) {
-            showAlert('Error fetching comments');
+        const data = await getCommentsCount(animeId);
+        if (data) {
+            setCommentsCount(data);
         }
     };
 
@@ -269,12 +246,12 @@ const AnimeScreen = ({ navigation, route }) => {
     }
 
     const handlePressMyList = async () => {
-        let token = await getTokenFromStorage();
         if (isInMyList) {
-            await removeAnimeListUser(token, String(anime.id));
+            await removeAnimeListUser(String(anime.id));
         } else {
-            await addAnimeListUser(token, anime.id);
+            await addAnimeListUser(anime.id);
         }
+
         setIsInMyList((prev) => !prev);
     };
 
@@ -302,7 +279,7 @@ const AnimeScreen = ({ navigation, route }) => {
                 anime={anime} />
             <View style={styles.headerContainer}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <ArrowLeftIcon Style={styles.headerIconArrow} Color={'#fff'} />
+                    <ArrowLeftIcon Style={styles.headerIconArrow} Color={COLOR_TEXT_PRIMARY} />
                 </TouchableOpacity>
             </View>
             <View style={styles.previewAnimeContainer}>
@@ -326,7 +303,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             resizeMode="contain" />
                     </View>
                 ) : (
-                    <BallIndicator color='#13D458' size={70} count={8} />
+                    <BallIndicator color={COLOR_PRIMARY_LIGHT} size={70} count={8} />
                 )}
             </View>
             <View style={styles.titleContainer}>
@@ -341,12 +318,12 @@ const AnimeScreen = ({ navigation, route }) => {
                     <TouchableOpacity
                         onPress={() => handlePressMyList()}
                         style={styles.titleButtonMyList}>
-                        <MyListIcon Style={{}} Color={isInMyList ? '#06C149' : '#fff'} />
+                        <MyListIcon Style={{}} Color={isInMyList ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => handleShare()}
                         style={styles.titleButtonSend}>
-                        <SendIcon Style={{}} Color={'#fff'} />
+                        <SendIcon Style={{}} Color={COLOR_TEXT_PRIMARY} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -354,12 +331,12 @@ const AnimeScreen = ({ navigation, route }) => {
                 <TouchableOpacity
                     onPress={() => setOpenRatingWindow(true)}
                     style={styles.animeScoreContainer}>
-                    <StarIcon Style={{}} Color={'#06C149'} Width={24} Height={24} />
+                    <StarIcon Style={{}} Color={COLOR_PRIMARY} Width={24} Height={24} />
                     <Text style={styles.animeScore}>
                         {Number(anime.score).toFixed(1)}
                     </Text>
                 </TouchableOpacity>
-                <ArrowRightIcon Color={'#06C149'} Width={22} Height={22} />
+                <ArrowRightIcon Color={COLOR_PRIMARY} Width={22} Height={22} />
                 <Text style={styles.animeDate}>
                     {new Date(anime.createdAt).getFullYear()}
                 </Text>
@@ -370,7 +347,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             showsHorizontalScrollIndicator={false}
                             style={styles.genresScrollView}>
                             <View style={styles.genreContainer}>
-                                <Text style={styles.genreText}>{arrayRatings[anime.rating]}+</Text>
+                                <Text style={styles.genreText}>{ANIME_RATINGS[anime.rating]}+</Text>
                             </View>
                             {anime.genres.map((genre) => (
                                 <View
@@ -399,7 +376,11 @@ const AnimeScreen = ({ navigation, route }) => {
                 </View>
             }
             {isLoading ? (
-                <BallIndicator style={{ marginTop: 55, marginBottom: 40 }} color="#13D458" size={70} count={8} />
+                <BallIndicator
+                    style={{ marginTop: 55, marginBottom: 40 }}
+                    color={COLOR_PRIMARY_LIGHT}
+                    size={70}
+                    count={8} />
             ) : episodes.length > 0 ? (
                 <>
                     <View style={styles.animeEpisodesContainer}>
@@ -423,7 +404,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                             require('../../../assets/default-to-poster.jpg')
                                         }
                                         style={styles.cardEpisodeImage} />
-                                    <PlayIcon Color={'#fff'} Style={{}} Width={23} Height={23} />
+                                    <PlayIcon Color={COLOR_TEXT_PRIMARY} Style={{}} Width={23} Height={23} />
                                     <Text style={styles.cardEpisodeText}>{i18n.t('anime.episode')} {item.ordinal}</Text>
                                 </TouchableOpacity>
                             }
@@ -442,7 +423,6 @@ const AnimeScreen = ({ navigation, route }) => {
             ) : (
                 <KodikPlayer shikimoriId={anime.id} />
             )}
-
             <View style={styles.infoContainer}>
                 <View style={styles.infoTextContainer}>
                     <TouchableOpacity
@@ -488,7 +468,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                 contentContainerStyle={styles.containerAnimeTop}
                                 numColumns={2} />
                             :
-                            <BallIndicator color='#13D458' size={70} count={8} />
+                            <BallIndicator color={COLOR_PRIMARY_LIGHT} size={70} count={8} />
                         }
                     </View>
                     :
@@ -508,7 +488,7 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20'
+        backgroundColor: COLOR_BACKGROUND_PRIMARY
     },
     commentsContainer: {
         width: '92%',
@@ -518,12 +498,12 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     seeAllComments: {
-        color: '#06C049',
+        color: COLOR_PRIMARY_DARK,
         fontSize: 13,
         fontFamily: 'Outfit'
     },
     commentsText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 16,
         fontFamily: 'Outfit'
     },
@@ -551,12 +531,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     infoText: {
-        color: '#616161',
+        color: COLOR_TEXT_SECONDARY,
         fontSize: 13,
         fontFamily: 'Outfit',
     },
     infoTextActive: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontSize: 13,
         fontFamily: 'Outfit',
     },
@@ -569,7 +549,7 @@ const styles = StyleSheet.create({
     },
     lineActive: {
         width: '50%',
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         height: 4,
         borderRadius: 50,
     },
@@ -580,11 +560,11 @@ const styles = StyleSheet.create({
         marginLeft: 7,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 10
     },
     selectedEpisode: {
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 1,
     },
     cardEpisodeImage: {
@@ -595,7 +575,7 @@ const styles = StyleSheet.create({
         opacity: 0.7
     },
     cardEpisodeText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
         position: 'absolute',
@@ -615,7 +595,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     animeEpisodesText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 16,
         fontFamily: 'Outfit',
     },
@@ -626,7 +606,7 @@ const styles = StyleSheet.create({
         marginTop: 18,
     },
     animeDescriptionText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 12,
         fontFamily: 'Outfit',
         width: '100%'
@@ -645,7 +625,7 @@ const styles = StyleSheet.create({
     },
     genreContainer: {
         height: 26,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderRadius: 8,
         borderWidth: 1,
         alignItems: 'center',
@@ -655,7 +635,7 @@ const styles = StyleSheet.create({
         paddingLeft: 9
     },
     genreText: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 8
     },
@@ -665,7 +645,7 @@ const styles = StyleSheet.create({
     },
     animeScore: {
         marginLeft: 7,
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontSize: 12,
         fontFamily: 'Outfit',
     },
@@ -677,7 +657,7 @@ const styles = StyleSheet.create({
     },
     animeDate: {
         marginLeft: 5,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 12,
         fontFamily: 'Outfit',
     },
@@ -690,7 +670,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     titleText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 17,
         fontFamily: 'Outfit',
         width: '70%'
@@ -727,7 +707,7 @@ const styles = StyleSheet.create({
     previewAnimeImage: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     }
 });
 

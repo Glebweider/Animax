@@ -5,16 +5,14 @@ import AnimeCard from './Anime';
 // Components
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 
+// Data
+import { COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Utils
 import { i18n } from '@Utils/localization';
 
 
-interface Props {
-    navigation: any;
-    item: any;
-}
-
-const RecomendationAnimeCard: React.FC<Props> = ({ navigation, item }) => {
+const RecomendationAnimeCard: React.FC<{ navigation: any; item: any; }> = ({ navigation, item }) => {
     return (
         <View key={item.id} style={styles.container}>
             <AnimeCard
@@ -39,7 +37,6 @@ const RecomendationAnimeCard: React.FC<Props> = ({ navigation, item }) => {
                         {i18n.t('genre')}: {item.genres.map(genre => genre.russian).join(', ')}
                     </Text>
                 </View>
-
                 <View style={{ marginTop: 10 }}>
                     <MyAnimeListButton anime={item} />
                 </View>
@@ -62,19 +59,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     genres: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
         marginTop: 10,
     },
     year: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
         marginTop: 10,
     },
     title: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 14,
         fontFamily: 'Outfit',
         overflow: 'hidden',

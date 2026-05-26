@@ -1,43 +1,57 @@
+import { getTokenFromStorage } from '@Utils/functions';
 import { Platform } from 'react-native';
 
+
 interface IRequestOptions extends RequestInit {
-	token?: string;
+	token?: boolean;
 	body?: any;
+	isMultipart?: boolean;
+	rawBody?: BodyInit;
 }
 
 export const apiRequest = async <T>(
 	endpoint: string,
 	options: IRequestOptions = {},
-): Promise<T | null> => {
+): Promise<T> => {
 	try {
+		const isMultipart = options.isMultipart;
+
 		const headers: HeadersInit = {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json',
+			Accept: 'application/json',
 			'X-Device-Platform': Platform.OS,
 			'X-Request-Source': 'app',
 			...options.headers,
 		};
 
-		if (options.token) {
-			headers['Authorization'] = options.token;
-		}
+		if (!isMultipart)
+			headers['Content-Type'] = 'application/json';
+
+		if (options.token)
+			headers['Authorization'] = await getTokenFromStorage();
+
+		const body =
+			options.rawBody ??
+			(options.body
+				? isMultipart
+					? options.body // FormData
+					: JSON.stringify(options.body)
+				: undefined);
 
 		const response = await fetch(
 			`${process.env.EXPO_PUBLIC_API_URL}/api${endpoint}`,
 			{
 				...options,
 				headers,
-				body: options.body
-					? JSON.stringify(options.body)
-					: undefined,
+				body,
 			},
 		);
 
 		const text = await response.text();
-		let data: any = null;
 
+		let data: any;
 		const contentType = response.headers.get('content-type');
-		if (contentType && contentType.includes('application/json')) {
+
+		if (contentType?.includes('application/json')) {
 			try {
 				data = text ? JSON.parse(text) : null;
 			} catch {
@@ -48,14 +62,20 @@ export const apiRequest = async <T>(
 		}
 
 		if (!response.ok) {
-			throw new Error(data?.message?.message || 'Request failed');
+			const message =
+				data?.message ||
+				data?.error ||
+				(typeof data === 'string' ? data : null) ||
+				'Request failed';
+
+			throw new Error(message);
 		}
 
-		return data;
+		return data as T;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
-			console.log(error)
-			throw new Error(error.message);
+			console.log('[API ERROR]', error.message);
+			throw error;
 		}
 
 		throw new Error('Unknown network error');

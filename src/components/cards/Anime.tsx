@@ -1,15 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
+// Data
+import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
-export interface AnimeItem {
-    id: string;
-    score: number;
-    rating: string;
-    poster: {
-        originalUrl: string;
-    };
-}
+// Interface
+import { AnimeItem } from '@Interfaces/AnimeCard.interface';
+
 
 interface AnimeCardProps {
     navigation?: any;
@@ -20,41 +17,41 @@ interface AnimeCardProps {
     isLoading?: boolean;
 }
 
-const AnimeCard: React.FC<AnimeCardProps> = ({ navigation, onPress, item, width = 174, height = 242, isLoading = false }) => {
-    if (isLoading) {
-        return (
-            <View style={[styles.container, { width, height }]}>
-                <View style={styles.posterSkeleton} />
-                <View style={styles.scoreSkeleton} />
-            </View>
-        );
-    }
+const AnimeCard: React.FC<AnimeCardProps> = ({
+    navigation,
+    onPress,
+    item,
+    width = 174,
+    height = 242,
+    isLoading = false
+}) => {
+    if (isLoading) return (
+        <View style={[styles.container, { width, height }]}>
+            <View style={styles.posterSkeleton} />
+            <View style={styles.scoreSkeleton} />
+        </View>
+    );
 
     if (!item) return null;
-
     return (
         <TouchableOpacity
-            onPress={() =>
-                onPress
-                    ? onPress()
-                    : navigation.navigate('AnimeScreen', { animeId: item.id })
+            onPress={() => onPress
+                ? onPress()
+                : navigation.navigate('AnimeScreen', { animeId: item.id })
             }
             style={[styles.container, { width, height }]} >
             <View style={styles.scoreBadge}>
                 <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
             </View>
-
             {(item.rating === 'r_plus' || item.rating === 'rx') && (
                 <View style={styles.ratingBadge}>
                     <Text style={styles.ratingText}>18+</Text>
                 </View>
             )}
-
             <Image
-                source={
-                    item.poster?.originalUrl ?
-                        { uri: item.poster.originalUrl } :
-                        require('../../../assets/default-to-poster.jpg')
+                source={item.poster?.originalUrl ?
+                    { uri: item.poster.originalUrl }
+                    : require('../../../assets/default-to-poster.jpg')
                 }
                 style={styles.posterImage} />
         </TouchableOpacity>
@@ -67,20 +64,20 @@ const styles = StyleSheet.create({
         marginHorizontal: 6,
         borderRadius: 15,
         flexDirection: 'row',
-        backgroundColor: '#1F222A',
+        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     scoreBadge: {
         zIndex: 2,
         borderRadius: 6,
         width: 33,
         height: 24,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         justifyContent: 'center',
         alignItems: 'center',
         margin: 12
     },
     scoreText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
     },

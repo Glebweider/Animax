@@ -5,14 +5,21 @@ import { useApolloClient } from '@apollo/client';
 
 // Components
 import { BallIndicator } from '@Components/BallIndicator';
-import AnimeCard, { AnimeItem } from '@Components/cards/Anime';
+import AnimeCard from '@Components/cards/Anime';
+
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Utils
-import { getTokenFromStorage } from '@Utils/functions/token';
 import { i18n } from '@Utils/localization';
 
-// Requests
+// Interface
+import { AnimeItem } from '@Interfaces/AnimeCard.interface';
+
+// Rest
 import useGetAnimeListUser from '@Rest/anime/getAnimeListUser';
+
+// GraphQl
 import { GET_ANIMES } from '@GraphQl/getAnimes';
 
 
@@ -20,12 +27,15 @@ const MyListScreen = ({ navigation }) => {
     const client = useApolloClient();
     const [userAnimeListId, setUserAnimeListId] = useState<string[]>([]);
     const [userAnimeList, setUserAnimeList] = useState<AnimeItem[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [page, setPage] = useState<number>(1);
-    const limit = 40;
-    const { getAnimeListUser } = useGetAnimeListUser();
-    const [isFetchingMore, setIsFetchingMore] = useState(false);
 
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
+
+    const [page, setPage] = useState<number>(1);
+
+    const { getAnimeListUser } = useGetAnimeListUser();
+
+    const limit = 40;
     const fetchAnimes = useCallback(
         async (ids: string[], pageToFetch: number) => {
             const paginatedIds = ids.slice((pageToFetch - 1) * limit, pageToFetch * limit);
@@ -51,15 +61,14 @@ const MyListScreen = ({ navigation }) => {
 
     const fetchData = useCallback(async () => {
         setIsLoading(true);
-        const token = await getTokenFromStorage();
-        if (token) {
-            const ids = await getAnimeListUser(token);
-            setUserAnimeListId(ids);
-            setPage(1);
-            setUserAnimeList([]);
 
-            await fetchAnimes(ids, 1);
-        }
+        const ids = await getAnimeListUser();
+
+        setUserAnimeListId(ids);
+        setPage(1);
+        setUserAnimeList([]);
+
+        await fetchAnimes(ids, 1);
         setIsLoading(false);
     }, [fetchAnimes]);
 
@@ -89,7 +98,7 @@ const MyListScreen = ({ navigation }) => {
             </View>
             <View style={{ width: '100%', flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
                 {isLoading ? (
-                    <BallIndicator color='#06C149' size={80} count={8} />
+                    <BallIndicator color={COLOR_PRIMARY} size={80} count={8} />
                 ) : (
                     userAnimeListId?.length >= 1 ?
                         <FlatList
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     errorTextContainer: {
         width: '90%',
@@ -135,13 +144,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     errorTitle: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 20,
         marginTop: 20
     },
     errorText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         width: '90%',
         fontSize: 14,
@@ -170,7 +179,7 @@ const styles = StyleSheet.create({
         height: 30,
     },
     headerText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,

@@ -5,6 +5,9 @@ import Modal from 'react-native-modal';
 // Components
 import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
 
+// Data
+import { COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 
 interface ModalProps {
     visible: boolean;
@@ -30,7 +33,7 @@ const QualityEpisodeModal: React.FC<ModalProps> = ({ visible, setVisible, setQua
             <View style={styles.modalContent}>
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => setVisible(false)} style={styles.backButton}>
-                        <ArrowLeftIcon Color={'#FFFFFF'} Style={{}} />
+                        <ArrowLeftIcon Color={COLOR_TEXT_PRIMARY} Style={{}} />
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>Quality</Text>
                 </View>
@@ -73,11 +76,11 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     backButtonText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 16,
     },
     headerTitle: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 18,
         fontWeight: '500',
     },
@@ -91,7 +94,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     qualityButtonText: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 16,
     },
 });

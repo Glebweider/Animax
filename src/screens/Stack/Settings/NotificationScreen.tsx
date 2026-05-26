@@ -8,12 +8,14 @@ import ToggleSwitch from '@Components/ToggleSwitch';
 import { useAlert } from '@Components/alert/AlertContext';
 import ApplyButton from '@Components/buttons/Apply';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
 // Redux
 import { RootState } from '@Redux/store';
 import { IUserNotificationSettings, setAlertSettings } from '@Redux/reducers/userReducer';
 
 //Utils
-import { getTokenFromStorage } from '@Utils/functions';
 import { i18n } from '@Utils/localization';
 
 // Rest
@@ -46,16 +48,10 @@ const NotificationScreen = ({ navigation }) => {
     }, []);
 
     const update = useCallback(async () => {
-        try {
-            const token = await getTokenFromStorage();
-            const data = await updateNotificationSettings(token, notificationSettings);
-            if (data) {
-                setActiveButton(false);
-                dispatch(setAlertSettings(notificationSettings));
-                navigation.navigate('SettingsScreen');
-            }
-        } catch (error: any) {
-            showAlert(`Ошибка: ${error.message}`);
+        const data = await updateNotificationSettings(notificationSettings);
+        if (data) {
+            setActiveButton(false);
+            dispatch(setAlertSettings(notificationSettings));
         }
     }, [notificationSettings, dispatch, navigation]);
 
@@ -89,7 +85,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     applyButton: {
@@ -105,7 +101,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     textSetting: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 15,
     },

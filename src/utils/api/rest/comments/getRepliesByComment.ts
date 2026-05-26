@@ -1,5 +1,5 @@
 import { useAlert } from "@Components/alert/AlertContext";
-import { IComment } from "@Interfaces/comments.interface";
+import { IComment } from "@Interfaces/CommentsScreen.interface";
 import { apiRequest } from "@Utils/api/rest/api";
 
 const useGetRepliesByComment = () => {

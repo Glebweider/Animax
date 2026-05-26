@@ -6,6 +6,10 @@ import { StatusBar } from 'expo-status-bar';
 // Components
 import ApplyButton from '@Components/buttons/Apply';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
+
 const AuthWelcomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         width: '100%',
@@ -73,14 +77,14 @@ const styles = StyleSheet.create({
         zIndex: 1
     },
     title: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontWeight: "500",
         fontSize: 36,
         fontFamily: 'Outfit',
         textAlign: 'center'
     },
     description: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontSize: 13,
         fontFamily: 'Outfit',
         textAlign: 'center'

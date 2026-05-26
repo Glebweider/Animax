@@ -6,7 +6,12 @@ import BackButton from '@Components/buttons/Back';
 import PasswordSection from '@Components/PasswordSection';
 import ConfigModal from '@Components/modals/ConfigModal';
 import ApplyButton from '@Components/buttons/Apply';
-import { USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH } from '@Components/constants';
+
+// Data
+import {
+    COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY,
+    USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH
+} from '@Data/constants';
 
 // Utils
 import { saveTokenToStorage } from '@Utils/functions/token';
@@ -43,7 +48,9 @@ const ForgotPasswordResetPasswordScreen = ({ navigation, route }) => {
             if (response) {
                 dispatch(setUser(response.user));
                 await saveTokenToStorage(response.token);
+                
                 setOpenModal(true);
+                
                 setTimeout(() => {
                     navigation.replace('HomeScreen');
                 }, 5000);
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         marginTop: 0
@@ -91,7 +98,7 @@ const styles = StyleSheet.create({
     },
     contentText: {
         marginTop: 35,
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
     },

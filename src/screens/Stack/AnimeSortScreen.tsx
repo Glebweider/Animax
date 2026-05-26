@@ -7,8 +7,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
+// Data
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+
+// GraphQl
+import { GET_GENRES } from '@GraphQl/getGenres';
+
 //Utils
-import { GET_GENRES } from '@Utils/api/graphql/getGenres';
 import { i18n } from '@Utils/localization';
 
 //Redux
@@ -97,10 +102,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     buttons: {
-        backgroundColor: '#181A20',
+        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         borderColor: '#35383F',
         borderTopWidth: 1,
         borderRightWidth: 1,
@@ -125,9 +130,9 @@ const styles = StyleSheet.create({
         paddingRight: 19,
         paddingLeft: 19,
         height: 45,
-        backgroundColor: '#06C149',
+        backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 2,
         alignItems: 'center',
         justifyContent: 'center',
@@ -138,19 +143,19 @@ const styles = StyleSheet.create({
         paddingRight: 19,
         paddingLeft: 19,
         height: 45,
-        borderColor: '#06C149',
+        borderColor: COLOR_PRIMARY,
         borderWidth: 2,
         borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',
     },
     filterTextEnabled: {
-        color: '#fff',
+        color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
     filterTextDisabled: {
-        color: '#06C149',
+        color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
