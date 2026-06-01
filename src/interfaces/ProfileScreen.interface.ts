@@ -1,14 +1,14 @@
+import { IPoster } from "./AnimeScreen.interface";
+
+
 interface IInterest {
     id: number;
     text: string;
 }
 
-// TODO: Похож на Anime Interface
-interface IFavoriteAnime {
+export interface IAnimeSmall {
     id: string;
-    poster: {
-        originalUrl: string;
-    };
+    poster: IPoster;
     score: number;
     rating: string;
 }
@@ -16,7 +16,7 @@ interface IFavoriteAnime {
 export interface IUserProfile {
     uuid: string;
     interests: IInterest[];
-    animelist: IFavoriteAnime[];
+    animelist: IAnimeSmall[];
     premium: boolean;
     description: string;
     profile: {

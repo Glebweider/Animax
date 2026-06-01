@@ -16,8 +16,8 @@ import {
 // Utils
 import { i18n } from '@Utils/localization';
 
-// Interface
-import { AnimeItem } from '@Interfaces/AnimeCard.interface';
+// Interface 
+import { IAnimeSmall } from '@Interfaces/ProfileScreen.interface';
 
 // Rest
 import useGetAnimeListUser from '@Rest/anime/getAnimeListUser';
@@ -29,7 +29,7 @@ import { GET_ANIMES } from '@GraphQl/getAnimes';
 const MyListScreen = ({ navigation }) => {
     const client = useApolloClient();
     const [userAnimeListId, setUserAnimeListId] = useState<string[]>([]);
-    const [userAnimeList, setUserAnimeList] = useState<AnimeItem[]>([]);
+    const [userAnimeList, setUserAnimeList] = useState<IAnimeSmall[]>([]);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);

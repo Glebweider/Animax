@@ -38,10 +38,15 @@ import { IMyFavoriteGenre, IUserProfile } from '@Interfaces/ProfileScreen.interf
 
 
 const ProfileScreen = ({ navigation, route }) => {
+    const { userId } = route.params;
     const client = useApolloClient();
     const dispatch = useDispatch();
+
     const uuid = useSelector((state: RootState) => state.userReducer.uuid);
+
     const [isLoading, setLoading] = useState<boolean>(true);
+
+    const [topGenres, setTopGenres] = useState<IMyFavoriteGenre[]>();
     const [user, setUser] = useState<IUserProfile>({
         uuid: "",
         interests: [],
@@ -58,10 +63,8 @@ const ProfileScreen = ({ navigation, route }) => {
             achievementsCountWatchedAnime: 0,
         }
     });
-    const [topGenres, setTopGenres] = useState<IMyFavoriteGenre[]>();
 
     const { getUserProfile } = useGetUserProfile();
-    const { userId } = route.params;
 
     useEffect(() => {
         const fetchData = async () => {

@@ -28,16 +28,16 @@ import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
 import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
 
 // Interface
-import { IAnime } from '@Interfaces/HomeScreen.interface';
+import { IAnimeMedium } from '@Interfaces/HomeScreen.interface';
 
 // Redux
 import { RootState } from '@Redux/store';
 
 
 const HomeScreen = ({ navigation }) => {
-    const [selectAnime, setSelectAnime] = useState<IAnime>({ poster: { originalUrl: '' }, russian: '', score: 0, id: 0, name: '', rating: '', genres: [{ russian: '', name: '' }] });
-    const [topHitsAnime, setTopHitsAnime] = useState<IAnime[]>([]);
-    const [recomendationAnime, setRecomendationAnime] = useState<IAnime[]>([]);
+    const [selectAnime, setSelectAnime] = useState<IAnimeMedium>({ poster: { originalUrl: '' }, russian: '', score: 0, id: '', name: '', rating: '', genres: [{ id: 0, russian: '', name: '' }] });
+    const [topHitsAnime, setTopHitsAnime] = useState<IAnimeMedium[]>([]);
+    const [recomendationAnime, setRecomendationAnime] = useState<IAnimeMedium[]>([]);
     const [genreId, setGenreId] = useState<number>(null);
 
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
@@ -68,7 +68,7 @@ const HomeScreen = ({ navigation }) => {
     useEffect(() => {
         if (topHitsData) {
             setTopHitsAnime(topHitsData.animes);
-            if (!selectAnime || selectAnime.id === 0) {
+            if (!selectAnime || !selectAnime.id) {
                 setSelectAnime(topHitsData.animes[0]);
             }
         }

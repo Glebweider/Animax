@@ -2,28 +2,29 @@ export interface IAnime {
     id: string;
     name: string;
     russian: string;
-    poster: {
-        id: string;
-        originalUrl: string;
-    };
-    score: string;
+    poster: IPoster;
+    score: number;
     status: string;
     rating: string;
     createdAt: string;
     description: string;
-    genres: [
-        {
-            id: number;
-            russian: string;
-            name: string;
-        } 
-    ];
+    genres: IGenre[];
     scoresStats: [
         {
             count: number;
             score: number;
         }
     ];
+}
+
+export interface IPoster {
+    originalUrl: string;
+}
+
+export interface IGenre {
+    id: number;
+    name: string;
+    russian: string;
 }
 
 export interface IEpisode {

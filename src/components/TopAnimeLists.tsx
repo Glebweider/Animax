@@ -12,14 +12,14 @@ import { COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY } from '@Data/constants';
 import { i18n } from '@Utils/localization';
 
 // Interface
-import { IAnime } from '@Interfaces/HomeScreen.interface';
+import { IAnimeMedium } from '@Interfaces/HomeScreen.interface';
 
 
 interface TopAnimeListsProps {
-    data: IAnime[];
+    data: IAnimeMedium[];
     text: string;
     limit?: number;
-    selectAnime: (value: React.SetStateAction<IAnime>) => void;
+    selectAnime: (value: React.SetStateAction<IAnimeMedium>) => void;
     navigate: () => void;
 }
 

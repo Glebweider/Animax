@@ -1,16 +1,11 @@
-export interface IAnime {
-    poster: {
-        originalUrl: string;
-    };
+import { IGenre, IPoster } from "./AnimeScreen.interface";
+
+export interface IAnimeMedium {
+    poster: IPoster;
     russian: string;
     score: number;
-    id: number;
+    id: string;
     name: string;
     rating: string;
-    genres: [
-        {
-            russian: string
-            name: string;
-        }
-    ];
+    genres: IGenre[];
 }

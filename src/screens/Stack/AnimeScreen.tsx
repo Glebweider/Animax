@@ -53,19 +53,7 @@ const AnimeScreen = ({ navigation, route }) => {
     const { showAlert } = useAlert();
     const { animeId } = route.params;
 
-    const [anime, setAnime] = useState<IAnime>({
-        id: '',
-        name: '',
-        russian: '',
-        poster: { id: '', originalUrl: '' },
-        score: '',
-        status: '',
-        rating: '',
-        createdAt: '',
-        description: '',
-        genres: [{ id: 0, russian: '', name: '' }],
-        scoresStats: [{ count: 0, score: 0 }],
-    });
+    const [anime, setAnime] = useState<IAnime>({ id: '', name: '', russian: '', poster: { originalUrl: '' }, score: 0, status: '', rating: '', createdAt: '', description: '', genres: [{ id: 0, russian: '', name: '' }], scoresStats: [{ count: 0, score: 0 }] });
     const [animeRecomendations, setAnimeRecomendations] = useState<any[]>([]);
     const [episodes, setEpisodes] = useState<IEpisode[]>([]);
     const [selectInfoAnime, setSelectInfoAnime] = useState<string>('MoreLikeThis');
