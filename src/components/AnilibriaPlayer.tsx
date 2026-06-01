@@ -25,8 +25,8 @@ import { IEpisode } from '@Interfaces/AnimeScreen.interface';
 // Utils
 import { i18n } from '@Utils/localization';
 import {
-	getAnimeProgressById, getAnimeVolumeToStorage, IAnimeProgress, saveAnimeProgressToStorage,
-	saveAnimeVolumeToStorage
+	Formatter, getAnimeProgressById, getAnimeVolumeToStorage, IAnimeProgress, 
+	saveAnimeProgressToStorage, saveAnimeVolumeToStorage
 } from '@Utils/functions';
 
 
@@ -46,7 +46,7 @@ interface AnilibriaPlayerProps {
 	onNextEpisode: () => void;
 	onPrevEpisode: () => void;
 	selectedEpisodeId: React.Dispatch<React.SetStateAction<number>>;
-}
+};
 
 const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 	animeId,
@@ -263,14 +263,6 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 		}, 50);
 	};
 
-	// TODO: Вынести все форматеры временни и создать общий
-	const formatTime = (millis: number) => {
-		const minutes = Math.floor(millis / 60000);
-		const seconds = Math.floor((millis % 60000) / 1000);
-
-		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-	};
-
 	const handlePlay = () => {
 		if (isPlaying) {
 			stopTimer();
@@ -328,7 +320,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 				<View style={isFullScreen ? styles.resumeBannerFullScreen : styles.resumeBanner}>
 					<View style={styles.resumeLeft}>
 						<Text style={styles.resumeTitle}>
-							{save.episode} {i18n.t('anime.episode')?.toLowerCase()} • {formatTime(save.time)}
+							{save.episode} {i18n.t('anime.episode')?.toLowerCase()} • {Formatter.playerTime(save.time)}
 						</Text>
 						<Text style={styles.resumeSubtitle}>Продолжить?</Text>
 					</View>
@@ -367,7 +359,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 				{controlsVisible && (isFullScreen ?
 					<View style={[styles.controlsView, { alignItems: 'center' }]}>
 						<View style={styles.progressBar}>
-							<Text style={styles.timeText}>{formatTime(position)}</Text>
+							<Text style={styles.timeText}>{Formatter.playerTime(position)}</Text>
 							<Slider
 								style={styles.slider}
 								minimumValue={0}
@@ -379,7 +371,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 								minimumTrackTintColor={COLOR_PRIMARY}
 								maximumTrackTintColor="#4F4F4F"
 								thumbTintColor={COLOR_PRIMARY} />
-							<Text style={styles.timeText}>{formatTime(duration)}</Text>
+							<Text style={styles.timeText}>{Formatter.playerTime(duration)}</Text>
 						</View>
 						<View style={styles.controls}>
 							<View style={styles.volumeView}>
@@ -464,7 +456,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 					:
 					<View style={styles.controlsView}>
 						<View style={styles.progressBar}>
-							<Text style={styles.timeText}>{formatTime(position)}</Text>
+							<Text style={styles.timeText}>{Formatter.playerTime(position)}</Text>
 							<Slider
 								style={[styles.slider, { width: '70%', }]}
 								minimumValue={0}
@@ -476,7 +468,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 								minimumTrackTintColor={COLOR_PRIMARY}
 								maximumTrackTintColor="#4F4F4F"
 								thumbTintColor={COLOR_PRIMARY} />
-							<Text style={styles.timeText}>{formatTime(duration)}</Text>
+							<Text style={styles.timeText}>{Formatter.playerTime(duration)}</Text>
 						</View>
 						<View style={styles.controls}>
 							<View style={styles.volumeViewMinimize}>

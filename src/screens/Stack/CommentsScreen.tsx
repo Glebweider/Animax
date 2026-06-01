@@ -8,8 +8,7 @@ import { RootState } from '@Redux/store';
 
 //Utils
 import { i18n } from '@Utils/localization';
-import formatViews from '@Utils/formatters/views';
-import formatDateComment from '@Utils/formatters/comment';
+import { Formatter } from '@Utils/functions';
 
 // Rest
 import useGetComments from '@Rest/comments/getComments';
@@ -41,25 +40,25 @@ const CommentsScreen = ({ navigation, route }) => {
     const userId = useSelector((state: RootState) => state.userReducer.uuid);
 
     const [comments, setComments] = useState<IComment[]>([]);
+    const [replyingUser, setReplyingUser] = useState<IReplyingUser>({ messageId: '', userId: '', username: '' });
+
     const [openedReplies, setOpenedReplies] = useState<{ [commentId: string]: boolean }>({});
-    const [isLoading, setLoading] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(1);
-    const [textInput, setTextInput] = useState<string>('');
-    const [replyingUser, setReplyingUser] = useState<IReplyingUser>({
-        messageId: '',
-        userId: '',
-        username: ''
-    });
-    const [isCommentVerify, setCommentVerify] = useState<boolean>(false);
-    const [hasMore, setHasMore] = useState(true);
     const [repliesPagination, setRepliesPagination] = useState<{ [commentId: string]: number }>({});
+
+    const [isCommentVerify, setCommentVerify] = useState<boolean>(false);
+    const [isLoading, setLoading] = useState<boolean>(false);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+
     const [commentsCountNew, setCommentsCountNew] = useState<number>(0);
+    const [page, setPage] = useState<number>(1);
+
+    const [textInput, setTextInput] = useState<string>('');
+
 
     const { getComments } = useGetComments();
     const { getRepliesByComment } = useGetRepliesByComment();
     const { changeLikeComment } = useChangeLikeComment();
     const { addComment } = useAddComment();
-
 
     const inputRef = useRef<TextInput>(null);
 
@@ -250,7 +249,7 @@ const CommentsScreen = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
-            <BackButton navigation={navigation} text={`${formatViews(commentsCountNew)} ${i18n.t('anime.comments')}`} />
+            <BackButton navigation={navigation} text={`${Formatter.views(commentsCountNew)} ${i18n.t('anime.comments')}`} />
             <FlatList
                 data={comments}
                 style={{ width: '98%', marginTop: 15 }}
@@ -276,7 +275,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                 <View style={styles.commentFooter}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <View style={styles.commentInfo}>
-                                            <Text style={styles.commentDate}>{formatDateComment(item.createdAt)}</Text>
+                                            <Text style={styles.commentDate}>{Formatter.date(item.createdAt)}</Text>
                                             {!item.parentCommentId && (
                                                 <TouchableOpacity onPress={() => handleReply(item.id, item.userId, item.username)}>
                                                     <Text style={styles.replyText}>Reply</Text>
@@ -287,7 +286,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                             <TouchableOpacity onPress={() => handleChangeLike(item.id, isCommentLikedByUser(item.likedByUserIds) ? 'dislike' : 'like')}>
                                                 <LikeIcon Color={isCommentLikedByUser(item.likedByUserIds) ? COLOR_PRIMARY_DARK : COLOR_TEXT_PRIMARY} Style={{}} />
                                             </TouchableOpacity>
-                                            <Text style={styles.likesCount}>{formatViews(item.likes)}</Text>
+                                            <Text style={styles.likesCount}>{Formatter.views(item.likes)}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -319,7 +318,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                         <View style={styles.commentFooter}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <View style={styles.commentInfo}>
-                                                    <Text style={styles.commentDate}>{formatDateComment(reply.createdAt)}</Text>
+                                                    <Text style={styles.commentDate}>{Formatter.date(reply.createdAt)}</Text>
                                                     {!reply.parentCommentId && (
                                                         <TouchableOpacity onPress={() => handleReply(reply.id, reply.userId, reply.username)}>
                                                             <Text style={styles.replyText}>Reply</Text>
@@ -330,7 +329,7 @@ const CommentsScreen = ({ navigation, route }) => {
                                                     <TouchableOpacity onPress={() => handleChangeLike(reply.id, isCommentLikedByUser(reply.likedByUserIds) ? 'dislike' : 'like')}>
                                                         <LikeIcon Color={isCommentLikedByUser(reply.likedByUserIds) ? COLOR_PRIMARY_DARK : COLOR_TEXT_PRIMARY} Style={{}} />
                                                     </TouchableOpacity>
-                                                    <Text style={styles.likesCount}>{formatViews(reply.likes)}</Text>
+                                                    <Text style={styles.likesCount}>{Formatter.views(reply.likes)}</Text>
                                                 </View>
                                             </View>
                                         </View>

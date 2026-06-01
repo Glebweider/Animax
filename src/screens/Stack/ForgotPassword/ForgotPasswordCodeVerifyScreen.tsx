@@ -16,6 +16,7 @@ import useForgotPasswordUser from '@Rest/user/forgotPasswordUser';
 // Redux
 import { RootState } from '@Redux/store';
 import { setExpiresAt } from '@Redux/reducers/forgotPasswordReducer';
+import { Formatter } from '@Utils/functions';
 
 
 const ForgotPasswordCodeVerifyScreen = ({ navigation }) => {
@@ -51,12 +52,6 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation }) => {
 
         return () => clearInterval(interval);
     }, [state.expiresAt]);
-
-    const formattedTime = useMemo(() => {
-        const minutes = Math.floor(timeLeft / 60000);
-        const seconds = Math.floor((timeLeft % 60000) / 1000);
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }, [timeLeft]);
 
     const isCodeComplete = pins.join('').length === 4;
     const handlePinInputChange = (index: number, text: string) => {
@@ -131,7 +126,7 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation }) => {
                     {timeLeft > 0 ? (
                         <>
                             <Text style={styles.resendCodeText}>Resend code in </Text>
-                            <Text style={styles.resendCodeTimer}>{formattedTime}</Text>
+                            <Text style={styles.resendCodeTimer}>{Formatter.mmss(timeLeft)}</Text>
                         </>
                     ) : (
                         <TouchableOpacity onPress={handleResendCode}>

@@ -1,8 +1,8 @@
-/* eslint-disable react/display-name */
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useIsFocused } from '@react-navigation/native';
+import { useApolloClient } from '@apollo/client';
 
 // Components
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
@@ -15,18 +15,23 @@ import {
     COLOR_TEXT_PRIMARY, ICON_APP
 } from '@Data/constants';
 
+// GraphQl
+import { GET_ANIMEPOSTER } from '@GraphQl/getAnimePoster';
+
 // Rest
 import useGetCalendarAnime from '@Rest/anime/getCalendarAnime';
 
 // Utils
 import { i18n } from '@Utils/localization';
-import { getDateArrayForMonth } from '@Utils/functions';
+import { Formatter, getDateArrayForMonth } from '@Utils/functions';
 
 // Interface
 import { IDate } from '@Interfaces/ReleaseScreen.interface';
 
 
 const ReleaseScreen = ({ navigation }) => {
+    const client = useApolloClient();
+
     const [selectedDate, setSelectedDate] = useState<IDate>({ dayOfMonth: '', dayOfWeek: '', dayOfDate: '' });
     const [Animes, setAnimes] = useState<any[]>([]);
     const [selectedAnimes, setSelectedAnimes] = useState<any[]>([]);
@@ -34,6 +39,7 @@ const ReleaseScreen = ({ navigation }) => {
 
     const dateArray = useMemo(() => getDateArrayForMonth(), []);
     const isFocused = useIsFocused();
+
     const { getCalendarAnime } = useGetCalendarAnime();
 
     useEffect(() => {
@@ -45,8 +51,9 @@ const ReleaseScreen = ({ navigation }) => {
             setSelectedDate({
                 dayOfMonth: today.getDate().toString(),
                 dayOfWeek: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(today),
-                dayOfDate: new Date(today.getTime()).toISOString().split('T')[0]
+                dayOfDate: `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
             });
+
             setIsLoading(false);
         };
 
@@ -57,29 +64,49 @@ const ReleaseScreen = ({ navigation }) => {
     }, [isFocused]);
 
     useEffect(() => {
-        if (selectedDate) {
-            if (Animes) {
-                const animeForDate = Animes.filter((anime) => {
-                    if (anime.anime.score >= 7)
-                        return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
-                });
+        const GetAnime = async () => {
+            if (selectedDate) {
+                if (Animes) {
+                    const animeForDate = Animes.filter((anime) => {
+                        if (anime.anime.score >= 7)
+                            return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
+                    });
 
-                setSelectedAnimes(animeForDate);
+                    const idsNotHavePoster: string[] = [];
+                    for (const item of animeForDate) {
+                        const image = item.anime.image?.original;
+
+                        if (!image || image.includes('missing'))
+                            idsNotHavePoster.push(item.anime.id);
+                    }
+
+                    if (idsNotHavePoster.length > 0) {
+                        const newPosters = await fetchPosters(idsNotHavePoster);
+
+                        for (const item of newPosters) {
+                            const anime = animeForDate.find(anime => anime.anime.id == item.id);
+                            anime.anime.image.original = item.poster.originalUrl;
+                        }
+                    }
+
+                    setSelectedAnimes(animeForDate);
+                }
             }
-        }
+        };
+
+        GetAnime();
     }, [selectedDate, Animes]);
 
-    const animeCardTime = (data: string) => {
-        const date = new Date(data);
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
+    const fetchPosters = async (Ids: string[]) => {
+        const { data } = await client.query({
+            query: GET_ANIMEPOSTER,
+            variables: {
+                id: String(Ids.join(',')),
+            },
+        });
 
-        const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-
-        const formattedTime = `${formattedHours}:${formattedMinutes}`;
-        return formattedTime
-    }
+        return data.animes;
+    };
 
     return (
         <View style={styles.container}>
@@ -112,14 +139,18 @@ const ReleaseScreen = ({ navigation }) => {
                                 <View style={{ marginTop: 15 }}>
                                     <View style={styles.animeCardTimeContainer}>
                                         <View style={styles.animeCardTimeLine} />
-                                        <Text style={styles.animeCardTimeText}>{animeCardTime(item.next_episode_at)}</Text>
+                                        <Text style={styles.animeCardTimeText}>{Formatter.time(item.next_episode_at)}</Text>
                                     </View>
                                     <View key={item.anime.id} style={styles.animeCardContainer}>
                                         <TouchableOpacity
                                             onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
                                             style={styles.animeCardImage}>
                                             <Image
-                                                source={{ uri: `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}${item.anime.image.original}` }}
+                                                source={{
+                                                    uri: item.anime.image.original.includes('https://') ?
+                                                        item.anime.image.original :
+                                                        `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}${item.anime.image.original}`
+                                                }}
                                                 style={styles.animeCardImage} />
                                         </TouchableOpacity>
                                         <View style={styles.animeCardData}>

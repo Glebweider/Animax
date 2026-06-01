@@ -2,7 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView, Share, FlatList, Animated, Easing } from 'react-native';
 import { useApolloClient } from '@apollo/client';
-import { useSelector } from 'react-redux';
 import { useFocusEffect } from '@react-navigation/native';
 
 // Modal
@@ -25,8 +24,8 @@ import ArrowRightIcon from '@Icons/ArrowRightIcon';
 
 // Utils
 import { i18n } from '@Utils/localization';
-import formatViews from '@Utils/formatters/views';
 import { useUserAnime } from '@Utils/hooks';
+import { Formatter } from '@Utils/functions';
 
 // GraphQl
 import { GET_ANIME } from '@GraphQl/getAnime';
@@ -385,7 +384,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             setMoveLeft(false);
                         }}
                         style={styles.methodContainer}>
-                        <Text style={selectInfoAnime == 'Comments' ? styles.infoTextActive : styles.infoText}>{i18n.t('anime.comments')} ({formatViews(commentsCount)})</Text>
+                        <Text style={selectInfoAnime == 'Comments' ? styles.infoTextActive : styles.infoText}>{i18n.t('anime.comments')} ({Formatter.views(commentsCount)})</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.line}>
@@ -424,7 +423,7 @@ const AnimeScreen = ({ navigation, route }) => {
                     </View>
                     :
                     <View style={styles.commentsContainer}>
-                        <Text style={styles.commentsText}>{formatViews(commentsCount)} {i18n.t('anime.comments')}</Text>
+                        <Text style={styles.commentsText}>{Formatter.views(commentsCount)} {i18n.t('anime.comments')}</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('CommentsScreen', { animeId: animeId, commentsCount: commentsCount })}>
                             <Text style={styles.seeAllComments}>{i18n.t('home.seeall')}</Text>
                         </TouchableOpacity>

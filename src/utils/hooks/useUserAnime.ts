@@ -20,7 +20,8 @@ export const useUserAnime = (animeId: string) => {
 
     const isInMyList = useMemo(() => {
         if (!userAnimeList || !animeId) return false;
-        return userAnimeList.some(id => id === animeId);
+
+        return userAnimeList.some(id => id === String(animeId));
     }, [userAnimeList, animeId]);
 
     const toggleAnimeList = async () => {

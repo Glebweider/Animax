@@ -14,7 +14,7 @@ import {
 } from '@Data/constants';
 
 // Utils
-import formatDate from '@Utils/formatters/date';
+import { Formatter } from '@Utils/functions';
 import { i18n } from '@Utils/localization';
 import { socket } from '@Utils/socket';
 
@@ -93,7 +93,7 @@ const HelpCenterScreen = ({ navigation }) => {
                     </View>
                 </View>
                 <Text style={{ color: '#9CA3AF', marginRight: 15, fontSize: 10, marginTop: 15 }}>
-                    {formatDate(item.createdAt)}
+                    {Formatter.date(item.createdAt)}
                 </Text>
             </TouchableOpacity>
         )
