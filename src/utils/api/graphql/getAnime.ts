@@ -1,12 +1,10 @@
 import { gql } from '@apollo/client';
 
 export const GET_ANIME = gql`
-    query GetAnime($id: String!) {
-        animes(ids: $id) {
+    query GetAnime($id: String!, $censored: Boolean!) {
+        animes(ids: $id, censored: $censored) {
             createdAt
             description
-            episodes
-            episodesAired
             id
             name
             rating

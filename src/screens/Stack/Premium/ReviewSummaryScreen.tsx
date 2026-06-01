@@ -6,10 +6,7 @@ import { useDispatch } from 'react-redux';
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-    COLOR_PRIMARY, COLOR_TEXT_PRIMARY
-} from '@Data/constants';
+import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Icons
 import CrownIcon from '@Icons/CrownIcon';
@@ -120,7 +117,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     content: {

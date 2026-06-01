@@ -5,10 +5,13 @@ import { useApolloClient } from '@apollo/client';
 
 // Components
 import { BallIndicator } from '@Components/BallIndicator';
-import AnimeCard from '@Components/cards/Anime';
+import { AnimeCard, AnimeCardSkeleton } from '@Components/cards/Anime';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import {
+    BACKGROUND_ERROR_404_MYLIST, COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY, ICON_APP, MYLIST_CHUNK_SIZE
+} from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
@@ -35,17 +38,17 @@ const MyListScreen = ({ navigation }) => {
 
     const { getAnimeListUser } = useGetAnimeListUser();
 
-    const limit = 40;
+
     const fetchAnimes = useCallback(
         async (ids: string[], pageToFetch: number) => {
-            const paginatedIds = ids.slice((pageToFetch - 1) * limit, pageToFetch * limit);
+            const paginatedIds = ids.slice((pageToFetch - 1) * MYLIST_CHUNK_SIZE, pageToFetch * MYLIST_CHUNK_SIZE);
             if (paginatedIds.length === 0) return;
 
             const { data } = await client.query({
                 query: GET_ANIMES,
                 variables: {
                     ids: paginatedIds.join(","),
-                    limit,
+                    limit: Number(MYLIST_CHUNK_SIZE),
                     page
                 },
             });
@@ -92,7 +95,7 @@ const MyListScreen = ({ navigation }) => {
             <StatusBar style='light' />
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
-                    <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
+                    <Image source={ICON_APP} style={styles.headerIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>
                 </View>
             </View>
@@ -108,9 +111,18 @@ const MyListScreen = ({ navigation }) => {
                                 <AnimeCard
                                     navigation={navigation}
                                     item={item}
-                                    isLoading={userAnimeList.length < 1}
                                     width={172}
                                     height={232} />
+                            }
+                            ListEmptyComponent={() =>
+                                <View style={styles.skeletonGrid}>
+                                    {Array.from({ length: MYLIST_CHUNK_SIZE }).map((_, i) => (
+                                        <AnimeCardSkeleton
+                                            key={i}
+                                            width={172}
+                                            height={232} />
+                                    ))}
+                                </View>
                             }
                             showsVerticalScrollIndicator={false}
                             contentContainerStyle={styles.containerAnimeTop}
@@ -119,7 +131,7 @@ const MyListScreen = ({ navigation }) => {
                             numColumns={2} />
                         :
                         <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                            <Image style={{ marginTop: 80 }} source={require('../../../assets/error404MyList.png')} />
+                            <Image style={{ marginTop: 80 }} source={BACKGROUND_ERROR_404_MYLIST} />
                             <View style={styles.errorTextContainer}>
                                 <Text style={styles.errorTitle}>{i18n.t('mylist.listempty')}</Text>
                                 <Text style={styles.errorText}>{i18n.t('mylist.emptytext')}</Text>
@@ -136,7 +148,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
+    },
+    skeletonGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: '100%',
+        rowGap: 14
     },
     errorTextContainer: {
         width: '90%',
@@ -158,10 +175,9 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     containerAnimeTop: {
-        width: '100%',
         flexGrow: 1,
         paddingBottom: 200,
-        gap: 12
+        gap: 14,
     },
     header: {
         width: '90%',

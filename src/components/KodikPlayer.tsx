@@ -48,17 +48,17 @@ const KodikPlayer = ({ shikimoriId }: any) => {
             scalesPageToFit={false}
             source={{
                 html: `
-            <iframe src=${animeLink} 
-                id="kodik-player"
-                frameborder="0" 
-                allowfullscreen 
-                allow="autoplay *; fullscreen *" 
-                style="border: 0; 
-                width: 100%; 
-                height: 250;
-                border-radius: 20px;">
-            </iframe>` }}
-        />
+                <iframe src=${animeLink} 
+                    id="kodik-player"
+                    frameborder="0" 
+                    allowfullscreen 
+                    allow="autoplay *; fullscreen *" 
+                    style="border: 0; 
+                    width: 100%; 
+                    height: 250;
+                    border-radius: 20px;">
+                </iframe>
+            `}}/>
     );
 };
 

@@ -24,6 +24,11 @@ import { IEpisode } from '@Interfaces/AnimeScreen.interface';
 
 // Utils
 import { i18n } from '@Utils/localization';
+import {
+	getAnimeProgressById, getAnimeVolumeToStorage, IAnimeProgress, saveAnimeProgressToStorage,
+	saveAnimeVolumeToStorage
+} from '@Utils/functions';
+
 
 // Modals
 import QualityEpisodeModal from './modals/QualityEpisodeModal';
@@ -33,57 +38,95 @@ import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 
 interface AnilibriaPlayerProps {
+	animeId: string;
 	episode: IEpisode;
-	setScroll: (bool: boolean) => void;
 	setPlaying: (bool: boolean) => void;
 	hasNextEpisode: boolean;
 	hasPrevEpisode: boolean;
 	onNextEpisode: () => void;
 	onPrevEpisode: () => void;
+	selectedEpisodeId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
+	animeId,
 	episode,
-	setScroll,
 	setPlaying,
 	hasNextEpisode,
 	hasPrevEpisode,
 	onNextEpisode,
-	onPrevEpisode
+	onPrevEpisode,
+	selectedEpisodeId
 }) => {
 	const [qualityEpisode, setQualityEpisode] = useState<'hls_480' | 'hls_720' | 'hls_1080'>('hls_480');
+	const [save, setSave] = useState<IAnimeProgress>(null);
 
 	const [isOpenModalQuality, setIsOpenModalQuality] = useState<boolean>(false);
 	const [controlsVisible, setControlsVisible] = useState<boolean>(true);
 	const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
 	const [screenWidth, setScreenWidth] = useState<number>(Dimensions.get('window').width);
 	const [screenHeight, setScreenHeight] = useState<number>(Dimensions.get('window').height);
 	const [position, setPosition] = useState<number>(0);
-	const [volume, setVolume] = useState<number>(100);
+	const [volume, setVolume] = useState<number>(getAnimeVolumeToStorage() || 100);
 
+	const positionRef = useRef<number>(0);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const volumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const intervalSaveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
 	const player = useVideoPlayer(episode?.[qualityEpisode] ?? '', player => {
 		player.volume = volume / 100;
 		player.loop = false;
-		player.timeUpdateEventInterval = 0.25;
+		player.timeUpdateEventInterval = 0.1;
 	});
-	const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+
 	const sourceLoad = useEvent(player, 'sourceLoad', { videoSource: '', duration: 0, availableVideoTracks: [], availableSubtitleTracks: [], availableAudioTracks: [] });
 	const duration = sourceLoad.duration * 1000;
 
 	useEventListener(player, 'timeUpdate', (event) => {
 		if (player.playing) {
 			const currentMs = event.currentTime * 1000;
+			positionRef.current = currentMs;
 			setPosition(currentMs);
 		}
 	});
 
+	useEventListener(player, 'playingChange', (event) => {
+		setIsPlaying(event.isPlaying);
+	});
+
 	useEffect(() => {
-		player.replaceAsync(episode?.[qualityEpisode] ?? '');
-	}, [qualityEpisode, episode]);
+		setSave(getAnimeProgressById(animeId));
+	}, [animeId]);
+
+	useEffect(() => {
+		const switchQuality = async () => {
+			const wasPlaying = player.playing;
+			const currentTime = player.currentTime;
+
+			await player.replaceAsync(episode?.[qualityEpisode] ?? '');
+
+			player.currentTime = currentTime;
+
+			if (wasPlaying) {
+				player.play();
+				setIsPlaying(true);
+			} else {
+				setIsPlaying(false);
+			}
+		};
+
+		switchQuality();
+	}, [qualityEpisode]);
+
+	useEffect(() => {
+		setSaveTime(save ? save.time : 0);
+
+		if (save)
+			setSave(null);
+	}, [episode]);
 
 	// Отлов нажатия выхода, для закрытия плеера
 	useEffect(() => {
@@ -112,10 +155,37 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 		const subscription = Dimensions.addEventListener('change', updateScreenDimensions);
 		return () => {
 			subscription?.remove();
+			stopTimer();
+
 			if (timeoutRef.current)
 				clearTimeout(timeoutRef.current);
 		};
 	}, []);
+
+	const setSaveTime = (value: number) => {
+		player.currentTime = value / 1000;
+		positionRef.current = value;
+		setPosition(value);
+	};
+
+	const startTimer = () => {
+		if (intervalSaveRef.current) return;
+
+		intervalSaveRef.current = setInterval(() => {
+			saveAnimeProgressToStorage({
+				animeId,
+				episode: episode.ordinal,
+				time: positionRef.current + 1,
+			});
+		}, 5000);
+	};
+
+	const stopTimer = () => {
+		if (intervalSaveRef.current) {
+			clearInterval(intervalSaveRef.current);
+			intervalSaveRef.current = null;
+		}
+	};
 
 	const exitFullScreen = async () => {
 		setIsFullScreen(false);
@@ -123,7 +193,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 		StatusBar.setHidden(false);
 		NavigationBar.setHidden(false);
 
-		setScroll(true);
+
 		setPlaying(false);
 
 		await ScreenOrientation.unlockAsync();
@@ -134,6 +204,8 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 	};
 
 	const handleSeekStart = () => {
+		stopTimer();
+
 		if (player.playing)
 			player.pause();
 	};
@@ -143,8 +215,9 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 
 		setPosition(value);
 
-		if (!player.playing)
-			player.play();
+		player.play();
+		setIsPlaying(true);
+		startTimer();
 	};
 
 	const handlePressInShowControls = () => {
@@ -165,7 +238,6 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 			StatusBar.setHidden(true);
 			NavigationBar.setHidden(true);
 
-			setScroll(false);
 			setPlaying(true);
 
 			await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
@@ -185,24 +257,42 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 		if (volumeTimeoutRef.current)
 			clearTimeout(volumeTimeoutRef.current);
 
-		volumeTimeoutRef.current = setTimeout(() => { player.volume = value / 100; }, 50);
+		volumeTimeoutRef.current = setTimeout(() => {
+			player.volume = value / 100;
+			saveAnimeVolumeToStorage(value);
+		}, 50);
 	};
 
-	const handlePrevEpisodePress = () => {
-		if (hasPrevEpisode) // Затемнить иконку если нету
-			onPrevEpisode();
-	};
-
-	const handleNextEpisodePress = () => {
-		if (hasNextEpisode) // Затемнить иконку если нету
-			onNextEpisode();
-	};
-
+	// TODO: Вынести все форматеры временни и создать общий
 	const formatTime = (millis: number) => {
 		const minutes = Math.floor(millis / 60000);
 		const seconds = Math.floor((millis % 60000) / 1000);
 
 		return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+	};
+
+	const handlePlay = () => {
+		if (isPlaying) {
+			stopTimer();
+
+			player.pause();
+			setIsPlaying(false);
+		} else {
+			startTimer();
+
+			player.play();
+			setIsPlaying(true);
+		}
+	};
+
+	const handleResume = () => {
+		if (!save) return;
+
+		selectedEpisodeId(save.episode);
+		setSaveTime(save.time);
+
+		if (save.episode == episode.ordinal)
+			setSave(null);
 	};
 
 	return (
@@ -233,6 +323,26 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 			{controlsVisible && (
 				<View style={styles.background} />
 			)}
+
+			{save && (
+				<View style={isFullScreen ? styles.resumeBannerFullScreen : styles.resumeBanner}>
+					<View style={styles.resumeLeft}>
+						<Text style={styles.resumeTitle}>
+							{save.episode} {i18n.t('anime.episode')?.toLowerCase()} • {formatTime(save.time)}
+						</Text>
+						<Text style={styles.resumeSubtitle}>Продолжить?</Text>
+					</View>
+					<View style={styles.resumeButtons}>
+						<TouchableOpacity style={styles.resumeBtnApply} onPress={handleResume}>
+							<Text style={styles.resumeBtnApplyText}>Да</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.resumeBtnClose} onPress={() => setSave(null)}>
+							<Text style={styles.resumeBtnCloseText}>✕</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+			)}
+
 			<View style={styles.controlsContainer}>
 				{controlsVisible && (isFullScreen ?
 					<View style={styles.infoContainer}>
@@ -303,13 +413,20 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 									<RewindBackVideoPlayerIcon Color={COLOR_TEXT_PRIMARY} Style={{}} Width={26} Height={26} />
 								</TouchableOpacity>
 
-								<TouchableOpacity style={styles.Btn} onPress={handlePrevEpisodePress}>
-									<BackwardStepVideoPlayerIcon Color={COLOR_TEXT_PRIMARY} Style={{}} Width={26} Height={26} />
+								<TouchableOpacity
+									style={styles.Btn}
+									disabled={!hasPrevEpisode}
+									onPress={onPrevEpisode}>
+									<BackwardStepVideoPlayerIcon
+										Color={COLOR_TEXT_PRIMARY}
+										Style={!hasPrevEpisode && { opacity: 0.6 }}
+										Width={26}
+										Height={26} />
 								</TouchableOpacity>
 
 								<TouchableOpacity
 									style={styles.button}
-									onPress={() => isPlaying ? player.pause() : player.play()}>
+									onPress={handlePlay}>
 									{isPlaying ?
 										<PauseVideoPlayerIcon Color={COLOR_TEXT_PRIMARY} Style={{}} Width={26} Height={26} />
 										:
@@ -317,8 +434,15 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 									}
 								</TouchableOpacity>
 
-								<TouchableOpacity style={styles.Btn} onPress={handleNextEpisodePress}>
-									<ForwardStepVideoPlayerIcon Color={COLOR_TEXT_PRIMARY} Style={{}} Width={26} Height={26} />
+								<TouchableOpacity
+									style={styles.Btn}
+									disabled={!hasNextEpisode}
+									onPress={onNextEpisode}>
+									<ForwardStepVideoPlayerIcon
+										Color={COLOR_TEXT_PRIMARY}
+										Style={!hasNextEpisode && { opacity: 0.6 }}
+										Width={26}
+										Height={26} />
 								</TouchableOpacity>
 
 								<TouchableOpacity style={styles.Btn} onPress={() => handleSkip(10)}>
@@ -377,7 +501,7 @@ const AnilibriaPlayer: React.FC<AnilibriaPlayerProps> = ({
 							</View>
 							<TouchableOpacity
 								style={[styles.button, { marginRight: 100 }]}
-								onPress={() => isPlaying ? player.pause() : player.play()}>
+								onPress={handlePlay}>
 								{isPlaying ?
 									<PauseVideoPlayerIcon Color={COLOR_TEXT_PRIMARY} Width={18} Height={18} Style={{}} />
 									:
@@ -499,6 +623,84 @@ const styles = StyleSheet.create({
 	Btn: {
 		padding: 7,
 		borderRadius: 5,
+	},
+	resumeBanner: {
+		position: 'absolute',
+		bottom: 25,
+		left: '5%',
+		width: '90%',
+		backgroundColor: 'rgba(28, 28, 30, 0.9)',
+		borderRadius: 12,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingVertical: 10,
+		paddingHorizontal: 15,
+		borderWidth: 1,
+		borderColor: 'rgba(255, 255, 255, 0.1)',
+		zIndex: 10,
+	},
+	resumeBannerFullScreen: {
+		position: 'absolute',
+		bottom: 90,
+		left: 40,
+		width: 320,
+		backgroundColor: 'rgba(28, 28, 30, 0.95)',
+		borderRadius: 12,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingVertical: 12,
+		paddingHorizontal: 16,
+		borderWidth: 1,
+		borderColor: 'rgba(255, 255, 255, 0.15)',
+		zIndex: 10,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.3,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	resumeLeft: {
+		flexDirection: 'column',
+		flex: 1,
+	},
+	resumeTitle: {
+		color: COLOR_TEXT_PRIMARY,
+		fontSize: 13,
+		fontFamily: 'Outfit',
+		fontWeight: '600',
+	},
+	resumeSubtitle: {
+		color: '#A0A0A0',
+		fontSize: 11,
+		fontFamily: 'Outfit',
+		marginTop: 2,
+	},
+	resumeButtons: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginLeft: 10,
+		gap: 8
+	},
+	resumeBtnClose: {
+		padding: 8,
+		marginRight: 8,
+	},
+	resumeBtnCloseText: {
+		color: '#707070',
+		fontSize: 14,
+	},
+	resumeBtnApply: {
+		backgroundColor: COLOR_PRIMARY,
+		paddingVertical: 6,
+		paddingHorizontal: 16,
+		borderRadius: 20,
+	},
+	resumeBtnApplyText: {
+		color: COLOR_TEXT_PRIMARY,
+		fontSize: 13,
+		fontFamily: 'Outfit',
 	},
 });
 

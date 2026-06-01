@@ -7,14 +7,14 @@ import { StatusBar } from 'expo-status-bar';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { BACKGROUND_WELCOME, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 
 const AuthWelcomeScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <StatusBar style='light' />
-            <Image source={require('../../../../assets/background.png')} style={styles.backgroundImage} />
+            <Image source={BACKGROUND_WELCOME} style={styles.backgroundImage} />
             <LinearGradient
                 colors={['rgba(24, 26, 32, 0)', 'rgba(24, 26, 32, 100)']}
                 start={{ x: 0, y: 0, }}
@@ -27,10 +27,9 @@ const AuthWelcomeScreen = ({ navigation }) => {
                     <Text style={styles.description}>The best streaming anime app of the century to entertain you every day</Text>
 
                     <ApplyButton
-                        onPress={() => navigation.navigate('AuthFGA')}
+                        onPress={() => navigation.navigate('AuthMethods')}
                         isActiveButton={false}
-                        text={'Get Started'}
-                        style={styles.applyButton} />
+                        text={'Get Started'} />
                 </View>
             </View>
         </View>
@@ -42,10 +41,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
-    },
-    applyButton: {
-        width: '100%',
     },
     containerData: {
         width: '90%',

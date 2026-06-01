@@ -10,7 +10,10 @@ import { BallIndicator } from '@Components/BallIndicator';
 import { ReleaseAnimeCard } from '@Components/cards/ReleaseAnime';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import {
+    BACKGROUND_ERROR_404_RELEASE, COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY, ICON_APP
+} from '@Data/constants';
 
 // Rest
 import useGetCalendarAnime from '@Rest/anime/getCalendarAnime';
@@ -82,7 +85,7 @@ const ReleaseScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
-                    <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
+                    <Image source={ICON_APP} style={styles.headerIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.release')}</Text>
                 </View>
                 <FlatList
@@ -127,7 +130,7 @@ const ReleaseScreen = ({ navigation }) => {
                                                 {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
                                             </Text>
                                             <View style={{ marginTop: 10 }}>
-                                                <MyAnimeListButton anime={item.anime} />
+                                                <MyAnimeListButton animeId={item.anime.id} />
                                             </View>
                                         </View>
                                     </View>
@@ -137,7 +140,7 @@ const ReleaseScreen = ({ navigation }) => {
                             contentContainerStyle={styles.animesContainer} />
                         :
                         <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                            <Image style={{ marginTop: 80 }} source={require('../../../assets/error404Anime.png')} />
+                            <Image style={{ marginTop: 80 }} source={BACKGROUND_ERROR_404_RELEASE} />
                             <View style={styles.errorTextContainer}>
                                 <Text style={styles.errorTitle}>{i18n.t('release.norelease')}</Text>
                                 <Text style={styles.errorText}>{i18n.t('release.noreleasetext')}</Text>
@@ -154,7 +157,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     animeCardTimeContainer: {
         flexDirection: 'row',

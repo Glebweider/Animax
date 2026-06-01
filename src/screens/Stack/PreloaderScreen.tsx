@@ -5,39 +5,27 @@ import * as Updates from 'expo-updates';
 import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
-import * as Notifications from 'expo-notifications';
 
 // Components
 import { BallIndicator } from '@Components/BallIndicator';
 import { useAlert } from '@Components/alert/AlertContext';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY_LIGHT } from '@Data/constants';
+import { COLOR_PRIMARY_LIGHT, DEFAULT_FONT, ICON_APP } from '@Data/constants';
 
 // Utils
-import { existsTokenInStorage } from '@Utils/functions/token';
+import { existsTokenInStorage } from '@Utils/functions/storage';
 import useAuthUserInToken from '@Rest/auth/authUserInToken';
 
 // Redux
 import { setUser } from '@Redux/reducers/userReducer';
 
 
-Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-        shouldShowBanner: true,
-        shouldShowList: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-    }),
-});
-
 const PreloaderScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
-    const { authUserInToken } = useAuthUserInToken();
     const { showAlert } = useAlert();
-    const [loaded, error] = useFonts({
-        'Outfit': require('../../../assets/fonts/Outfit.ttf'),
-    });
+    const { authUserInToken } = useAuthUserInToken();
+    const [loaded, error] = useFonts({ 'Outfit': DEFAULT_FONT });
 
     const bootStart = useCallback(async () => {
         try {
@@ -57,7 +45,7 @@ const PreloaderScreen = ({ navigation }: any) => {
                 }
             }
 
-            if (await existsTokenInStorage()) {
+            if (existsTokenInStorage()) {
                 const user = await authUserInToken();
 
                 if (user) {
@@ -86,7 +74,7 @@ const PreloaderScreen = ({ navigation }: any) => {
         <View style={styles.container}>
             <StatusBar style='light' />
             <View style={{ height: '95%' }}>
-                <Image source={require('../../../assets/logo.png')} style={styles.logo} />
+                <Image source={ICON_APP} style={styles.logo} />
                 <View style={styles.loaderIndicatorContainer}>
                     <BallIndicator color={COLOR_PRIMARY_LIGHT} size={90} count={8} />
                 </View>
@@ -103,7 +91,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     logo: {
         width: 160,

@@ -8,9 +8,6 @@ import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import RecomendationAnimeCard from '@Components/cards/RecomendationAnime';
 
-// Data
-import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
-
 // Utils
 import { i18n } from '@Utils/localization';
 
@@ -19,6 +16,9 @@ import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
 
 // Redux
 import { RootState } from '@Redux/store';
+
+// Data
+import { RECOMENDATION_CHUNK_SIZE } from '@Data/constants';
 
 
 const RecomendationsAnimeScreen = ({ navigation }: any) => {
@@ -38,7 +38,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
 
     const { data } = useQuery(GET_RECOMENDATIONANIME, {
         skip: !genreId,
-        variables: { page: 1, limit: 50, order: 'ranked', genre: genreId },
+        variables: { page: 1, limit: RECOMENDATION_CHUNK_SIZE, order: 'ranked', genre: genreId },
     });
 
     useEffect(() => {
@@ -53,7 +53,7 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
             try {
                 const { data } = await client.query({
                     query: GET_RECOMENDATIONANIME,
-                    variables: { page, limit: 50, order: 'ranked', genre: genreId },
+                    variables: { page, limit: RECOMENDATION_CHUNK_SIZE, order: 'ranked', genre: genreId },
                 });
                 if (data)
                     setAnimes(prev => [...prev, ...data.animes]);
@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     wrapper: {
         width: '90%',

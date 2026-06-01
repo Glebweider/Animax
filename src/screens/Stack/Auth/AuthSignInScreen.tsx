@@ -1,26 +1,27 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import { registerForPushNotificationsAsync } from 'notification-config';
 
 // Components
 import BackButton from '@Components/buttons/Back';
-import PasswordSection from '@Components/PasswordSection';
 import ApplyButton from '@Components/buttons/Apply';
+import AuthMethods from '@Components/AuthMethods';
+import AuthRedirect from '@Components/AuthRedirect';
+import AuthDivider from '@Components/AuthDivider';
+import AuthEmailSectionInput from '@Components/AuthEmailSectionInput';
+import AuthPasswordSectionInput from '@Components/AuthPasswordSectionInput';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-    COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY,
+    COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY, ICON_APP,
     USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH
 } from '@Data/constants';
 
-// Icons 
-import EmailIcon from '@Icons/EmailIcon';
 
 // Utils
-import { facebookAuth, googleAuth, appleAuth, saveTokenToStorage } from '@Utils/functions';
+import { saveTokenToStorage } from '@Utils/functions';
 import { isEmail } from '@Utils/validators';
 import { useFormValidation } from '@Utils/hooks';
 
@@ -44,13 +45,13 @@ const AuthSignInScreen = ({ navigation }) => {
         email: {
             value: textEmail,
             rules: [
-                (v) => !isEmail(v) ? "Please enter a valid email" : null
+                (v) => (v.length > 0 && !isEmail(v)) ? "Please enter a valid email" : null
             ]
         },
         password: {
             value: textPassword,
             rules: [
-                (v) => (v.length < USER_PASSWORD_MIN_LENGTH || v.length > USER_PASSWORD_MAX_LENGTH)
+                (v) => (v.length > 0 && (v.length < USER_PASSWORD_MIN_LENGTH || v.length > USER_PASSWORD_MAX_LENGTH))
                     ? `Password must be between ${USER_PASSWORD_MIN_LENGTH} and ${USER_PASSWORD_MAX_LENGTH} characters`
                     : null
             ]
@@ -58,7 +59,6 @@ const AuthSignInScreen = ({ navigation }) => {
     }), [textEmail, textPassword]);
 
     const { errors, activeButton } = useFormValidation(formConfig);
-
 
     const authorization = async () => {
         setActiveButton(true);
@@ -71,7 +71,7 @@ const AuthSignInScreen = ({ navigation }) => {
         });
 
         if (response) {
-            await saveTokenToStorage(response);
+            saveTokenToStorage(response);
 
             const user = await authUserInToken();
             if (user) {
@@ -79,40 +79,33 @@ const AuthSignInScreen = ({ navigation }) => {
                 navigation.replace('HomeScreen');
             }
         }
+
         setActiveButton(false);
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
-            <BackButton onPress={() => navigation.navigate('AuthFGA')} text='' />
+            <BackButton onPress={() => navigation.navigate('AuthMethods')} />
             <View style={styles.titleContainer}>
-                <Image source={require('../../../../assets/logo.png')} style={styles.titleImage} />
+                <Image source={ICON_APP} style={styles.titleImage} />
                 <Text style={styles.titleText}>Login Your Account</Text>
             </View>
             <View style={styles.authContainer}>
+                <AuthEmailSectionInput
+                    error={errors.email}
+                    value={textEmail}
+                    setValue={(v) => setTextEmail(v)} />
 
-                <View style={styles.emailSection}>
-                    <EmailIcon
-                        Color={textEmail ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                        Style={styles.icon} />
-                    <TextInput
-                        style={styles.emailInput}
-                        placeholderTextColor={COLOR_TEXT_TERTIARY}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        onChangeText={(newText) => setTextEmail(newText)}
-                        value={textEmail} />
-                </View>
-                {errors.email && <Text style={styles.errorMessage}>{errors.email}</Text>}
-
-                <PasswordSection placeholder='Password' textPassword={textPassword} setTextPassword={setTextPassword} />
-                {errors.password && <Text style={styles.errorMessage}>{errors.password}</Text>}
+                <AuthPasswordSectionInput
+                    error={errors.password}
+                    value={textPassword}
+                    setValue={(v) => setTextPassword(v)} />
 
                 <ApplyButton
                     onPress={authorization}
                     isActiveButton={isActiveButton && activeButton}
-                    style={styles.applyButton}
+                    style={{ marginTop: 30 }}
                     text={'Sign in'} />
 
                 <TouchableOpacity
@@ -121,86 +114,24 @@ const AuthSignInScreen = ({ navigation }) => {
                     <Text style={styles.clicableForgotPasswordText}>Forgot the password?</Text>
                 </TouchableOpacity>
 
-                <View style={styles.intermediateContainer}>
-                    <View style={styles.line} />
-                    <Text style={styles.text}>or continue with</Text>
-                    <View style={styles.line} />
-                </View>
+                <AuthDivider text='or continue with' />
 
-                <View style={styles.authFGAContainer}>
-                    <TouchableOpacity
-                        onPress={() => facebookAuth()}
-                        style={styles.facebookContainer}>
-                        <Image
-                            source={require('../../../../assets/icons/facebook-icon.png')}
-                            style={styles.facebookImage} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => googleAuth()}
-                        style={styles.googleContainer}>
-                        <Image
-                            source={require('../../../../assets/icons/google-icon.png')}
-                            style={styles.googleImage} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => appleAuth()}
-                        style={styles.appleContainer}>
-                        <Image
-                            source={require('../../../../assets/icons/apple-icon.png')}
-                            style={styles.appleImage} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.signUpContainer}>
-                    <Text style={styles.signUpText}>Don't have an account?</Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('AuthSignUp')}>
-                        <Text style={styles.clicableSignUpText}>Sign up</Text>
-                    </TouchableOpacity>
-                </View>
+                <AuthMethods />
+
+                <AuthRedirect
+                    text={"Don't have an account?"}
+                    clicableText={'Sign up'}
+                    style={{ marginTop: 40 }}
+                    onPress={() => navigation.navigate('AuthSignUp')} />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    errorMessage: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    applyButton: {
-        marginTop: 30,
-        width: '100%'
-    },
-    emailSection: {
-        marginTop: 30,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-    },
-    emailInput: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-    },
-    icon: {
-        width: 20,
-        height: 20,
-        marginLeft: 22,
-        marginRight: 20,
-    },
     container: {
-        flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
+        paddingBottom: 25
     },
     titleContainer: {
         width: '100%',
@@ -221,91 +152,6 @@ const styles = StyleSheet.create({
     authContainer: {
         width: '90%',
         height: '100%',
-    },
-    intermediateContainer: {
-        marginTop: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 10,
-        width: '100%',
-    },
-    line: {
-        flex: 1,
-        height: 1,
-        backgroundColor: '#2D3037',
-    },
-    text: {
-        marginHorizontal: 15,
-        color: 'white',
-        fontFamily: 'Outfit',
-        fontSize: 16,
-    },
-    authFGAContainer: {
-        width: '100%',
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginTop: 20,
-    },
-    facebookContainer: {
-        width: 89,
-        height: 61,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    facebookImage: {
-        width: 30,
-        height: 30,
-    },
-    googleContainer: {
-        width: 89,
-        height: 61,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    googleImage: {
-        width: 25,
-        height: 25,
-    },
-    appleContainer: {
-        width: 89,
-        height: 61,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    appleImage: {
-        width: 25,
-        height: 31,
-    },
-    signUpContainer: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginTop: 40,
-    },
-    signUpText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontSize: 12,
-        fontFamily: 'Outfit',
-    },
-    clicableSignUpText: {
-        color: COLOR_PRIMARY_DARK,
-        fontSize: 12,
-        fontFamily: 'Outfit',
-        marginLeft: 10
     },
     clicableForgotPassword: {
         width: '100%',

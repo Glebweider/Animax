@@ -5,7 +5,10 @@ import { View, Text, Modal, StyleSheet, Image, TouchableOpacity } from 'react-na
 import { i18n } from '@Utils/localization';
 
 // Data
-import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import {
+    BACKGROUND_CONFIGURATOR, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY
+} from '@Data/constants';
 
 
 interface ModalProps {
@@ -30,7 +33,7 @@ const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, n
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Image
-                        source={require('../../../assets/backgroundConfigurator.png')} //Заменить на другую иконку
+                        source={BACKGROUND_CONFIGURATOR}
                         style={styles.modalImage} />
                     <Text style={styles.modalTitle}>{i18n.t('reviewsummary.modal.congratulations')}</Text>
                     <Text style={styles.modalText}>{

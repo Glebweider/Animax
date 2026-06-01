@@ -6,8 +6,8 @@ import { BallIndicator } from '@Components/BallIndicator';
 
 // Data
 import {
-    COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
-    COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY
+    BACKGROUND_CONFIGURATOR, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY
 } from '@Data/constants';
 
 // Utils
@@ -34,7 +34,7 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Image
-                        source={require('../../../assets/backgroundConfigurator.png')}
+                        source={BACKGROUND_CONFIGURATOR}
                         style={styles.modalImage} />
                     <Text style={styles.modalTitle}>{i18n.t('configModal.congratulations')}</Text>
                     <Text style={styles.modalText}>{i18n.t('configModal.text')}</Text>

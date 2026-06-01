@@ -8,11 +8,7 @@ export interface IAnime {
     };
     score: string;
     status: string;
-    episodes: number;
-    episodes_aired: number;
     rating: string;
-    aired_on: string;
-    released_on: string;
     createdAt: string;
     description: string;
     genres: [

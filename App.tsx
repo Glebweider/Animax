@@ -4,6 +4,9 @@ import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'react-native';
 import { Provider } from 'react-redux';
 
+// Utils
+import { getSettingsNSFWFromStorage } from '@Utils/functions';
+
 // Components
 import { AlertProvider } from '@Components/alert/AlertContext';
 
@@ -83,9 +86,18 @@ const throttlingLink = new ApolloLink((operation, forward) => {
 	});
 });
 
+export const nsfwLink = new ApolloLink((operation, forward) => {
+	operation.variables = {
+		...operation.variables,
+		censored: getSettingsNSFWFromStorage(),
+	};
+
+	return forward(operation);
+});
+
 const httpLink = new HttpLink({ uri: `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}/api/graphql` });
 const client = new ApolloClient({
-	link: ApolloLink.from([throttlingLink, httpLink]),
+	link: ApolloLink.from([nsfwLink, throttlingLink, httpLink]),
 	cache: new InMemoryCache({
 		typePolicies: {
 			Anime: {

@@ -5,10 +5,7 @@ import { useState } from 'react';
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-    COLOR_PRIMARY, COLOR_TEXT_PRIMARY
-} from '@Data/constants';
+import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 import { PAYMENT_METHODS } from '@Data/paymentMethods';
 
 // Utils
@@ -85,7 +82,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     headerContainer: {

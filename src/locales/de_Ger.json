@@ -66,7 +66,8 @@
     "privacypolicy": "Datenschutz-Bestimmungen",
     "logout": "Abmelden",
     "favoriteanime": "Lieblingsanimes",
-    "favoritegenres": "Lieblingsgenres"
+    "favoritegenres": "Lieblingsgenres",
+    "censored": "zensiert"
   },
   "privacyPolicy": {
     "section1": "1. Arten von Daten, die wir sammeln",

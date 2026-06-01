@@ -1,5 +1,5 @@
 import { io, Socket } from 'socket.io-client';
-import { getTokenFromStorage } from '../functions/token';
+import { getTokenFromStorage } from '../functions/storage';
 
 let socket: Socket | null = null;
 let isConnection: boolean = false;
@@ -7,14 +7,14 @@ let connectionAttempts: number = 0;
 const MAX_ATTEMPTS = 10;
 
 const connectSocket = async () => {
-    let token = await getTokenFromStorage();
+    let token = getTokenFromStorage();
     isConnection = false;
     connectionAttempts = 0;
 
     while (!token) {
         console.log('Токен не найден, повторная попытка через 5 секунд...');
         await new Promise(resolve => setTimeout(resolve, 5000));
-        token = await getTokenFromStorage();
+        token = getTokenFromStorage();
     }
 
     console.log('Токен получен, подключаем сокет...');

@@ -66,7 +66,8 @@
     "privacypolicy": "プライバシーポリシー",
     "logout": "ログアウト",
     "favoriteanime": "好きなアニメたち",
-    "favoritegenres": "好きなジャンル"
+    "favoritegenres": "好きなジャンル",
+    "censored": "検閲済み"
   },
   "privacyPolicy": {
     "section1": "1. 収集するデータの種類",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,22 +8,28 @@ import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
 import { addInterest } from '@Redux/reducers/authReducer';
 
+// Interface
+import { IInterest } from '@Interfaces/AccountSetupInterest.interface';
+
 // GraphQl
 import { GET_GENRES } from '@GraphQl/getGenres';
+import { BallIndicator } from '@Components/BallIndicator';
 
 
 const AuthAccountSetupInterestScreen = ({ navigation }) => {
     const dispatch = useDispatch();
-    const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
     const InterestsState = useSelector((state: RootState) => state.authReducer);
+
     const { data } = useQuery(GET_GENRES);
-    const [genresAnime, setGenresAnime] = useState([]);
+
+    const [isActiveButton, setActiveButton] = useState<boolean>(false);
+    const [genresAnime, setGenresAnime] = useState<IInterest[]>([]);
 
     useEffect(() => {
         if (data) {
@@ -32,23 +38,8 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
     }, [data]);
 
     useEffect(() => {
-        setActiveButton(true);
-        if (InterestsState.interests.length > 0) {
-            setActiveButton(false);
-        }
+        setActiveButton(InterestsState.interests.length > 0);
     }, [InterestsState.interests]);
-
-    const renderItems = () =>
-        genresAnime.map((data) => (
-            <TouchableOpacity
-                key={data.id}
-                onPress={() => dispatch(addInterest({ id: data.id, text: data.russian }))}
-                style={InterestsState.interests.some((i) => i.id === data.id)
-                    ? styles.interestContainerEnabled
-                    : styles.interestContainerDisabled}>
-                <Text style={styles.interestText}>{data.russian}</Text>
-            </TouchableOpacity>
-        ));
 
     return (
         <View style={styles.container}>
@@ -61,14 +52,24 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
                 </View>
                 {genresAnime.length >= 1 ?
                     <View style={styles.interestsContainer}>
-                        {renderItems()}
+                        {genresAnime.map((data) => (
+                            <TouchableOpacity
+                                key={data.id}
+                                onPress={() => dispatch(addInterest({ id: data.id, text: data.russian }))}
+                                style={[
+                                    styles.interestContainer,
+                                    InterestsState.interests.some((i) => i.id === data.id)
+                                    && { backgroundColor: COLOR_PRIMARY }
+                                ]}>
+                                <Text style={styles.interestText}>{data.name}</Text>
+                            </TouchableOpacity>
+                        ))}
                     </View>
                     :
-                    <Text style={{ color: COLOR_TEXT_PRIMARY }}>Загрузка</Text>
+                    <BallIndicator color={COLOR_PRIMARY_LIGHT} size={90} count={8} />
                 }
             </ScrollView>
             <View style={styles.buttonsContainer}>
-
                 <ApplyButton
                     onPress={() => navigation.navigate('AuthAccountSetupData')}
                     isActiveButton={false}
@@ -77,7 +78,7 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
 
                 <ApplyButton
                     onPress={() => navigation.navigate('AuthAccountSetupData')}
-                    isActiveButton={isActiveButton}
+                    isActiveButton={!isActiveButton}
                     style={styles.applyButton}
                     text={'Continue'} />
             </View>
@@ -93,7 +94,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     applyButton: {
         width: '48%',
@@ -104,18 +104,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#35383F',
         marginTop: 0
     },
-    interestContainerEnabled: {
-        marginTop: 24,
-        marginLeft: 12,
-        paddingRight: 25,
-        paddingLeft: 25,
-        height: 45,
-        backgroundColor: COLOR_PRIMARY,
-        borderRadius: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    interestContainerDisabled: {
+    interestContainer: {
         marginTop: 24,
         marginLeft: 12,
         paddingRight: 25,

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_TOPHITSANIME = gql`
-    query GetAnimes($limit: Int!, $order: OrderEnum!, $season: SeasonString, $page: Int!) {
-        animes(limit: $limit, order: $order, season: $season, page: $page) {
+    query GetAnimes($limit: Int!, $order: OrderEnum!, $season: SeasonString, $page: Int!, $censored: Boolean!) {
+        animes(limit: $limit, order: $order, season: $season, page: $page, censored: $censored) {
             poster {
                 originalUrl
             }

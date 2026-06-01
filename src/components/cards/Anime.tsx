@@ -1,12 +1,21 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, StyleProp, ViewStyle } from 'react-native';
 
 // Data
-import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import {
+    COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY, DEFAULT_POSTER
+} from '@Data/constants';
 
 // Interface
 import { AnimeItem } from '@Interfaces/AnimeCard.interface';
 
+
+interface AnimeCardSkeletonProps {
+    width?: number;
+    height?: number;
+    style?: StyleProp<ViewStyle>;
+}
 
 interface AnimeCardProps {
     navigation?: any;
@@ -14,25 +23,24 @@ interface AnimeCardProps {
     item: AnimeItem;
     width?: number;
     height?: number;
-    isLoading?: boolean;
 }
 
-const AnimeCard: React.FC<AnimeCardProps> = ({
+export const AnimeCardSkeleton: React.FC<AnimeCardSkeletonProps> = ({ width = 174, height = 242, style }) => {
+    return (
+        <View style={[styles.container, { width, height }, style]}>
+            <View style={styles.posterSkeleton} />
+            <View style={styles.scoreSkeleton} />
+        </View>
+    );
+};
+
+export const AnimeCard: React.FC<AnimeCardProps> = ({
     navigation,
     onPress,
     item,
     width = 174,
     height = 242,
-    isLoading = false
 }) => {
-    if (isLoading) return (
-        <View style={[styles.container, { width, height }]}>
-            <View style={styles.posterSkeleton} />
-            <View style={styles.scoreSkeleton} />
-        </View>
-    );
-
-    if (!item) return null;
     return (
         <TouchableOpacity
             onPress={() => onPress
@@ -41,7 +49,7 @@ const AnimeCard: React.FC<AnimeCardProps> = ({
             }
             style={[styles.container, { width, height }]} >
             <View style={styles.scoreBadge}>
-                <Text style={styles.scoreText}>{item.score.toFixed(1)}</Text>
+                <Text style={styles.scoreText}>{Number(item.score).toFixed(1)}</Text>
             </View>
             {(item.rating === 'r_plus' || item.rating === 'rx') && (
                 <View style={styles.ratingBadge}>
@@ -49,10 +57,7 @@ const AnimeCard: React.FC<AnimeCardProps> = ({
                 </View>
             )}
             <Image
-                source={item.poster?.originalUrl ?
-                    { uri: item.poster.originalUrl }
-                    : require('../../../assets/default-to-poster.jpg')
-                }
+                source={item.poster?.originalUrl ? { uri: item.poster.originalUrl } : DEFAULT_POSTER}
                 style={styles.posterImage} />
         </TouchableOpacity>
     );
@@ -125,13 +130,4 @@ const styles = StyleSheet.create({
         left: 12,
         zIndex: 2,
     },
-    shimmer: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        zIndex: 3,
-    },
 });
-
-export default AnimeCard;

@@ -8,7 +8,7 @@ import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // GraphQl
 import { GET_GENRES } from '@GraphQl/getGenres';
@@ -102,10 +102,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     buttons: {
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         borderColor: '#35383F',
         borderTopWidth: 1,
         borderRightWidth: 1,

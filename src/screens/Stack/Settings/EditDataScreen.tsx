@@ -117,7 +117,7 @@ const EditDataScreen = ({ navigation }) => {
 
             if (!response) return;
 
-            await saveTokenToStorage(response);
+            saveTokenToStorage(response);
             
             const user = await authUserInToken();
             if (user) {
@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     content: {

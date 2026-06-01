@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 // Components
 import BackButton from '@Components/buttons/Back';
 import ToggleSwitch from '@Components/ToggleSwitch';
-import { useAlert } from '@Components/alert/AlertContext';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
@@ -34,10 +33,9 @@ const NotificationScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const userState = useSelector((state: RootState) => state.userReducer);
     const [notificationSettings, setNotificationSettings] = useState<IUserNotificationSettings>(userState.notificationSettings);
-    const [isActiveButton, setActiveButton] = useState(false);
+    const [isActiveButton, setActiveButton] = useState<boolean>(false);
 
     const { updateNotificationSettings } = useUpdateNotificationSettings();
-    const { showAlert } = useAlert();
 
     useEffect(() => {
         setActiveButton(JSON.stringify(userState.notificationSettings) !== JSON.stringify(notificationSettings));
@@ -59,7 +57,6 @@ const NotificationScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View>
                 <BackButton navigation={navigation} text={i18n.t('profile.notification')} />
-
                 {notificationFields.map(({ key, label }) => (
                     <View key={key} style={styles.containerSetting}>
                         <Text style={styles.textSetting}>{label}</Text>
@@ -85,7 +82,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         justifyContent: 'space-between'
     },
     applyButton: {

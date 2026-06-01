@@ -2,7 +2,7 @@ import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/
 
 import PreloaderScreen from '@Stack/PreloaderScreen';
 import AuthWelcomeScreen from '@Stack/Auth/AuthWelcomeScreen';
-import AuthFGAScreen from '@Stack/Auth/AuthFGAScreen';
+import AuthMethodsScreen from '@Stack/Auth/AuthMethodsScreen';
 import AuthSignUpScreen from '@Stack/Auth/AuthSignUpScreen';
 import AuthSignInScreen from '@Stack/Auth/AuthSignInScreen';
 import AuthAccountSetupInterestScreen from '@Stack/Auth/AuthAccountSetupInterestScreen';
@@ -44,7 +44,7 @@ const StackNavigator = () => {
             }}>
             <Stack.Screen name="Preloader" component={PreloaderScreen} />
             <Stack.Screen name="AuthWelcome" component={AuthWelcomeScreen} />
-            <Stack.Screen name="AuthFGA" component={AuthFGAScreen} />
+            <Stack.Screen name="AuthMethods" component={AuthMethodsScreen} />
             <Stack.Screen name="AuthSignUp" component={AuthSignUpScreen} />
             <Stack.Screen name="AuthSignIn" component={AuthSignInScreen} />
             <Stack.Screen name="AuthAccountSetupInterest" component={AuthAccountSetupInterestScreen} />

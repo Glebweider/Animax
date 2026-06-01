@@ -7,22 +7,26 @@ import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 import RecomendationAnimeCard from '@Components/cards/RecomendationAnime';
 
-// Data
-import { COLOR_BACKGROUND_PRIMARY } from '@Data/constants';
+// GraphQl
+import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
 
 // Utils
-import { GET_TOPHITSANIME } from '@Utils/api/graphql/getTopHitsAnimes';
 import { i18n } from '@Utils/localization';
+
+// Data
+import { TOPHITS_CHUNK_SIZE } from '@Data/constants';
 
 
 const TopHitsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();
-    const [animes, setAnimes] = useState<any[]>([]);
-    const [page, setPage] = useState(1);
     const { showAlert } = useAlert();
+    
+    const [animes, setAnimes] = useState<any[]>([]);
+    const [page, setPage] = useState<number>(1);
+    
 
     const { data } = useQuery(GET_TOPHITSANIME, {
-        variables: { page: 1, limit: 50, order: 'ranked' },
+        variables: { page: 1, limit: TOPHITS_CHUNK_SIZE, order: 'ranked' },
     });
 
     useEffect(() => {
@@ -36,8 +40,9 @@ const TopHitsAnimeScreen = ({ navigation }: any) => {
             try {
                 const { data } = await client.query({
                     query: GET_TOPHITSANIME,
-                    variables: { page, limit: 50, order: 'ranked' },
+                    variables: { page, limit: TOPHITS_CHUNK_SIZE, order: 'ranked' },
                 });
+
                 if (data)
                     setAnimes(prev => [...prev, ...data.animes]);
             } catch (e) {
@@ -71,7 +76,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     wrapper: {
         width: '90%',

@@ -10,13 +10,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BallIndicator } from '@Components/BallIndicator';
 import CrownIcon from '@Components/icons/CrownIcon';
 import SettingsIcon from '@Components/icons/SettingsIcon';
-import AnimeCard from '@Components/cards/Anime';
+import { AnimeCard, AnimeCardSkeleton } from '@Components/cards/Anime';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY,
-    COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY,
-    PROFILE_CHUNK_SIZE
+    COLOR_PRIMARY, COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY,
+    ICON_APP, PROFILE_CHUNK_SIZE, PROFILE_FAVORITE_LIMIT
 } from '@Data/constants';
 
 // Utils
@@ -70,7 +69,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
             const userData = await getUserProfile(userId);
             if (userData) {
-                setUser(userData);
+                setUser((prev) => ({ ...prev, ...userData, animelist: [] }));
                 let animeList = userData.animelist ?? [];
 
                 // ===== Get Favorite Animes =====
@@ -78,7 +77,7 @@ const ProfileScreen = ({ navigation, route }) => {
                     query: GET_ANIMES,
                     variables: {
                         ids: animeList.join(","),
-                        limit: 10,
+                        limit: Number(PROFILE_FAVORITE_LIMIT),
                         page: 1
                     }
                 });
@@ -181,9 +180,9 @@ const ProfileScreen = ({ navigation, route }) => {
         fetchData();
     }, [userId]);
 
-    // Добавить возможность ставить что например аниме просмотренно или ожидает просмотра и тд.
-    // Добавить отображенния статуса аниме для человека, рядом с оценкой показывать просмотренно или нет
-    // Начать вести статистику просмотра аниме и тд.
+    // TODO: Добавить возможность ставить что например аниме просмотренно или ожидает просмотра и тд.
+    // TODO: Добавить отображенния статуса аниме для человека, рядом с оценкой показывать просмотренно или нет
+    // TODO: Начать вести статистику просмотра аниме и тд.
 
     const handleClickFavoriteGenre = (data: IMyFavoriteGenre) => {
         dispatch(addFilter({ id: Number(data.id), text: data.label }));
@@ -204,7 +203,7 @@ const ProfileScreen = ({ navigation, route }) => {
             <StatusBar style='light' />
             <View style={styles.headerContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={require('../../../assets/icon.png')} style={styles.headerIcon} />
+                    <Image source={ICON_APP} style={styles.headerIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.profile')}</Text>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
@@ -256,6 +255,7 @@ const ProfileScreen = ({ navigation, route }) => {
             <Text style={styles.favoriteAnimelistText}>{i18n.t('profile.favoriteanime')}</Text>
             <FlatList
                 data={user.animelist}
+                horizontal
                 nestedScrollEnabled={true}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
@@ -263,12 +263,18 @@ const ProfileScreen = ({ navigation, route }) => {
                         navigation={navigation}
                         item={item}
                         width={130}
-                        height={175}
-                        isLoading={!item?.id} />
+                        height={175} />
                 )}
+                ListEmptyComponent={() =>
+                    Array.from({ length: 10 }).map((_, i) => (
+                        <AnimeCardSkeleton
+                            key={i}
+                            width={130}
+                            height={175} />
+                    ))
+                }
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 5, height: '100%', marginTop: 9 }}
-                horizontal />
+                contentContainerStyle={{ paddingHorizontal: 5, height: '100%', marginTop: 9 }} />
             <View style={styles.chartContainer}>
                 <Text style={styles.chartTitle}>{i18n.t('profile.favoritegenres')}</Text>
                 {!isLoading &&
@@ -312,7 +318,6 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     chartContainer: {
         width: '94%',

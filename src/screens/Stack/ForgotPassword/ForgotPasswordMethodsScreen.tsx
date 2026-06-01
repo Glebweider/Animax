@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import BackButton from '@Components/buttons/Back';
@@ -7,7 +8,7 @@ import ApplyButton from '@Components/buttons/Apply';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    BACKGROUND_FORGOT_PASSWORD, COLOR_BACKGROUND_SECONDARY,
     COLOR_PRIMARY, COLOR_TEXT_PRIMARY
 } from '@Data/constants';
 
@@ -20,24 +21,25 @@ import ForgotPasswordInputModal from '@Modal/ForgotPasswordInputModal';
 // Rest
 import useForgotPassword from '@Rest/user/forgotPasswordUser';
 
+// Redux
+import { RootState } from '@Redux/store';
+import { setExpiresAt, setType } from '@Redux/reducers/forgotPasswordReducer';
+
 
 const ForgotPasswordMethodsScreen = ({ navigation }) => {
-    const [methodResetPassword, setMethodResetPassword] = useState<string>('SMS');
-    const [viaData, setViaData] = useState<string>(null);
+    const dispatch = useDispatch();
+    const state = useSelector((state: RootState) => state.forgotPasswordReducer);
+
     const [isOpenModalForgotPasswordInput, setOpenModalForgotPasswordInput] = useState<boolean>(false);
+
     const { forgotPasswordUser } = useForgotPassword();
 
     const fetchData = async () => {
-        const response = await forgotPasswordUser(viaData);
+        const response = await forgotPasswordUser(state.data);
 
         if (response) {
-            navigation.navigate('ForgotPasswordCodeVerifyScreen', {
-                data: {
-                    method: methodResetPassword,
-                    text: viaData,
-                    expiresAt: response.expiresAt
-                }
-            })
+            dispatch(setExpiresAt(Number(response.expiresAt)));
+            navigation.navigate('ForgotPasswordCodeVerifyScreen');
         }
     }
 
@@ -48,12 +50,10 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                 text="Forgot Password" />
             <ForgotPasswordInputModal
                 visible={isOpenModalForgotPasswordInput}
-                setVisible={setOpenModalForgotPasswordInput}
-                setData={setViaData}
-                data={methodResetPassword} />
+                setVisible={setOpenModalForgotPasswordInput} />
             <View style={styles.content}>
                 <Image
-                    source={require('../../../../assets/backgroundForgotPassword.png')}
+                    source={BACKGROUND_FORGOT_PASSWORD}
                     style={{}} />
                 <Text style={styles.contentText}>Select which contact details should we use to reset your password</Text>
                 {/* <TouchableOpacity 
@@ -62,7 +62,7 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                     : 
                         styles.contentMethodContainerDisabled}
                     onPress={() => {
-                        setMethodResetPassword('SMS');
+                        dispatch(setType('SMS'));
                         setOpenModalForgotPasswordInput(true);
                     }}>
                     <View style={styles.contentMethodImageContainer}>
@@ -74,13 +74,13 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                 </TouchableOpacity>    */}
                 <TouchableOpacity
                     style={
-                        methodResetPassword == 'EMAIL' ?
+                        state.type == 'EMAIL' ?
                             styles.contentMethodContainerEnabled
                             :
                             styles.contentMethodContainerDisabled
                     }
                     onPress={() => {
-                        setMethodResetPassword('EMAIL');
+                        dispatch(setType('EMAIL'));
                         setOpenModalForgotPasswordInput(true);
                     }}>
                     <View style={styles.contentMethodImageContainer}>
@@ -92,9 +92,9 @@ const ForgotPasswordMethodsScreen = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             <ApplyButton
-                onPress={() => fetchData()}
-                isActiveButton={viaData == null}
-                style={styles.applyButton}
+                onPress={fetchData}
+                isActiveButton={!state.data}
+                style={{ marginTop: 0, width: '90%' }}
                 text={'Continue'} />
         </View>
     );
@@ -104,10 +104,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
-    },
-    applyButton: {
-        marginTop: 0
     },
     content: {
         width: '90%',

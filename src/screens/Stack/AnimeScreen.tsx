@@ -13,7 +13,7 @@ import AnilibriaPlayer from '@Components/AnilibriaPlayer';
 import KodikPlayer from '@Components/KodikPlayer';
 import { useAlert } from '@Components/alert/AlertContext';
 import { BallIndicator } from '@Components/BallIndicator';
-import AnimeCard from '@Components/cards/Anime';
+import { AnimeCard, AnimeCardSkeleton } from '@Components/cards/Anime';
 
 // Icons
 import ArrowLeftIcon from '@Icons/ArrowLeftIcon';
@@ -26,31 +26,26 @@ import ArrowRightIcon from '@Icons/ArrowRightIcon';
 // Utils
 import { i18n } from '@Utils/localization';
 import formatViews from '@Utils/formatters/views';
+import { useUserAnime } from '@Utils/hooks';
 
 // GraphQl
 import { GET_ANIME } from '@GraphQl/getAnime';
 import { GET_ANIMEBYGENRES } from '@GraphQl/getAnimeByGenres';
 
 // Rest
-import useAddAnimeList from '@Rest/anime/addAnimeListUser';
 import useGetAnimeEpisodes from '@Rest/anime/getAnimeEpisodes';
-import useRemoveAnimeListUser from '@Rest/anime/removeAnimeListUser';
 import useUpdateTimeSpent from '@Rest/analytics/updateTimeSpent';
 import useGetCommentsCount from '@Rest/comments/getCommentsCount';
 
 //Interface
 import { IAnime, IEpisode } from '@Interfaces/AnimeScreen.interface';
 
-// Redux
-import { RootState } from '@Redux/store';
-
 // Data
 import { ANIME_RATINGS } from '@Data/animeRatings';
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-    COLOR_PRIMARY, COLOR_PRIMARY_DARK,
-    COLOR_PRIMARY_LIGHT,
-    COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY
+    ANIME_RECOMENDATION_LIMIT, COLOR_BACKGROUND_SECONDARY,
+    COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_PRIMARY_LIGHT,
+    COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY, DEFAULT_POSTER
 } from '@Data/constants';
 
 
@@ -59,38 +54,18 @@ const AnimeScreen = ({ navigation, route }) => {
     const { showAlert } = useAlert();
     const { animeId } = route.params;
 
-    const userAnimeList = useSelector((state: RootState) => state.userReducer.animelist);
-
     const [anime, setAnime] = useState<IAnime>({
         id: '',
         name: '',
         russian: '',
-        poster: {
-            id: '',
-            originalUrl: '',
-        },
+        poster: { id: '', originalUrl: '' },
         score: '',
         status: '',
-        episodes: 0,
-        episodes_aired: 0,
         rating: '',
-        aired_on: '',
-        released_on: '',
         createdAt: '',
         description: '',
-        genres: [
-            {
-                id: 0,
-                russian: '',
-                name: ''
-            },
-        ],
-        scoresStats: [
-            {
-                count: 0,
-                score: 0,
-            }
-        ],
+        genres: [{ id: 0, russian: '', name: '' }],
+        scoresStats: [{ count: 0, score: 0 }],
     });
     const [animeRecomendations, setAnimeRecomendations] = useState<any[]>([]);
     const [episodes, setEpisodes] = useState<IEpisode[]>([]);
@@ -98,16 +73,11 @@ const AnimeScreen = ({ navigation, route }) => {
     const [commentsCount, setCommentsCount] = useState<number>(0);
     const [selectedEpisodeId, setSelectedEpisodeId] = useState<number>(1);
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
-    const [isInMyList, setIsInMyList] = useState<boolean>(false);
     const [isPlaying, setPlaying] = useState<boolean>(false);
-    const [isLoading, setLoading] = useState<boolean>(false);
     const [moveLeft, setMoveLeft] = useState<boolean>(true);
-    const [isScroll, setScroll] = useState<boolean>(true);
 
-
-    const { addAnimeListUser } = useAddAnimeList();
+    const { isInMyList, toggleAnimeList } = useUserAnime(animeId);
     const { getAnimeEpisodes } = useGetAnimeEpisodes();
-    const { removeAnimeListUser } = useRemoveAnimeListUser();
     const { updateTimeSpent } = useUpdateTimeSpent();
     const { getCommentsCount } = useGetCommentsCount();
 
@@ -155,8 +125,9 @@ const AnimeScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setEpisodes([]);
+
             if (animeId) {
-                setLoading(true);
                 const { data, error } = await client.query({
                     query: GET_ANIME,
                     variables: {
@@ -178,30 +149,17 @@ const AnimeScreen = ({ navigation, route }) => {
                     if (animeEpisodes) {
                         if (Object.keys(animeEpisodes.episodes).length === 0) {
                             showAlert('Error, not found this anime episodes');
-                            setEpisodes(null);
+                            setEpisodes([]);
                             return;
                         }
 
                         setEpisodes(animeEpisodes.episodes);
                     }
                 }
-
-                setLoading(false);
             }
         }
         fetchData()
     }, [animeId, client]);
-
-    useEffect(() => {
-        setIsInMyList(userAnimeList.some(id => id == animeId));
-    }, [animeId]);
-
-    const fetchCommentsCount = async () => {
-        const data = await getCommentsCount(animeId);
-        if (data) {
-            setCommentsCount(data);
-        }
-    };
 
     useFocusEffect(
         useCallback(() => {
@@ -224,6 +182,10 @@ const AnimeScreen = ({ navigation, route }) => {
         };
     }, [moveLeft, moveValue]);
 
+    const fetchCommentsCount = async () => {
+        setCommentsCount(await getCommentsCount(animeId));
+    };
+
     const searchRecomendationAnime = async (genres: any[]) => {
         const shuffled = [...genres].sort(() => 0.5 - Math.random());
 
@@ -234,9 +196,9 @@ const AnimeScreen = ({ navigation, route }) => {
             query: GET_ANIMEBYGENRES,
             variables: {
                 page: 1,
-                limit: 12,
+                limit: ANIME_RECOMENDATION_LIMIT,
                 genreIds: randomGenreIds,
-                excludeIds: animeId
+                excludeIds: String(animeId)
             },
         });
 
@@ -244,16 +206,6 @@ const AnimeScreen = ({ navigation, route }) => {
             setAnimeRecomendations(data.animes);
         }
     }
-
-    const handlePressMyList = async () => {
-        if (isInMyList) {
-            await removeAnimeListUser(String(anime.id));
-        } else {
-            await addAnimeListUser(anime.id);
-        }
-
-        setIsInMyList((prev) => !prev);
-    };
 
     const handleShare = async () => {
         const message = `${i18n.t('anime.share') + anime.russian}, ${anime.poster.originalUrl}`;
@@ -269,8 +221,8 @@ const AnimeScreen = ({ navigation, route }) => {
 
     return (
         <ScrollView
-            scrollEnabled={isScroll}
-            contentContainerStyle={[styles.scrollContainer, isPlaying && { maxHeight: '100%' }]}
+            scrollEnabled={!isPlaying}
+            contentContainerStyle={[styles.container, isPlaying && { maxHeight: '100%' }]}
             showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
             <RatingModal
@@ -286,19 +238,13 @@ const AnimeScreen = ({ navigation, route }) => {
                 {anime?.poster?.originalUrl !== '' ? (
                     <View style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
                         <Image
-                            source={anime?.poster?.originalUrl ? { uri: anime.poster.originalUrl } : require('../../../assets/default-to-poster.jpg')}
+                            source={anime?.poster?.originalUrl ? { uri: anime.poster.originalUrl } : DEFAULT_POSTER}
                             style={[styles.previewAnimeImage, { position: 'absolute' }]}
                             resizeMode="cover"
                             blurRadius={15} />
-                        <View style={{
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                            width: '100%',
-                            height: '100%',
-                            zIndex: 2,
-                            position: 'absolute'
-                        }} />
+                        <View style={styles.darkBackground} />
                         <Image
-                            source={anime?.poster?.originalUrl ? { uri: anime.poster.originalUrl } : require('../../../assets/default-to-poster.jpg')}
+                            source={anime?.poster?.originalUrl ? { uri: anime.poster.originalUrl } : DEFAULT_POSTER}
                             style={{ width: '60%', height: '90%', zIndex: 3 }}
                             resizeMode="contain" />
                     </View>
@@ -316,7 +262,7 @@ const AnimeScreen = ({ navigation, route }) => {
                             : anime.name}</Text>
                 <View style={styles.titleContainerButtons}>
                     <TouchableOpacity
-                        onPress={() => handlePressMyList()}
+                        onPress={toggleAnimeList}
                         style={styles.titleButtonMyList}>
                         <MyListIcon Style={{}} Color={isInMyList ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY} />
                     </TouchableOpacity>
@@ -375,7 +321,7 @@ const AnimeScreen = ({ navigation, route }) => {
                     </Text>
                 </View>
             }
-            {isLoading ? (
+            {!anime.id ? (
                 <BallIndicator
                     style={{ marginTop: 55, marginBottom: 40 }}
                     color={COLOR_PRIMARY_LIGHT}
@@ -400,8 +346,7 @@ const AnimeScreen = ({ navigation, route }) => {
                                     <Image
                                         source={item.preview ?
                                             { uri: `${process.env.EXPO_PUBLIC_ANILIBIRTY_API_URL}/${item.preview.optimized.src}` }
-                                            :
-                                            require('../../../assets/default-to-poster.jpg')
+                                            : DEFAULT_POSTER
                                         }
                                         style={styles.cardEpisodeImage} />
                                     <PlayIcon Color={COLOR_TEXT_PRIMARY} Style={{}} Width={23} Height={23} />
@@ -412,9 +357,10 @@ const AnimeScreen = ({ navigation, route }) => {
                             contentContainerStyle={{ paddingHorizontal: 10 }} />
                     </View>
                     <AnilibriaPlayer
+                        animeId={anime.id}
+                        selectedEpisodeId={setSelectedEpisodeId}
                         episode={episodes[selectedEpisodeId - 1]}
                         setPlaying={setPlaying}
-                        setScroll={setScroll}
                         hasNextEpisode={episodes.findIndex(ep => ep.ordinal === selectedEpisodeId) < episodes.length - 1}
                         hasPrevEpisode={episodes.findIndex(ep => ep.ordinal === selectedEpisodeId) > 0}
                         onNextEpisode={() => { setSelectedEpisodeId(selectedEpisodeId + 1) }}
@@ -451,25 +397,30 @@ const AnimeScreen = ({ navigation, route }) => {
             <View style={{ width: '94%', height: '100%', marginTop: 20, alignItems: 'center' }}>
                 {moveLeft ?
                     <View style={styles.animeRecomendationContainer}>
-                        {animeRecomendations.length != 0 ?
-                            <FlatList
-                                data={animeRecomendations}
-                                scrollEnabled={false}
-                                keyExtractor={(item) => item.id.toString()}
-                                renderItem={({ item }) => (
-                                    <AnimeCard
-                                        navigation={navigation}
-                                        item={item}
-                                        isLoading={false}
-                                        width={165}
-                                        height={225} />
-                                )}
-                                showsVerticalScrollIndicator={false}
-                                contentContainerStyle={styles.containerAnimeTop}
-                                numColumns={2} />
-                            :
-                            <BallIndicator color={COLOR_PRIMARY_LIGHT} size={70} count={8} />
-                        }
+                        <FlatList
+                            data={animeRecomendations}
+                            scrollEnabled={false}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                                <AnimeCard
+                                    navigation={navigation}
+                                    item={item}
+                                    width={165}
+                                    height={225} />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={() =>
+                                <View style={styles.skeletonGrid}>
+                                    {Array.from({ length: 6 }).map((_, i) => (
+                                        <AnimeCardSkeleton
+                                            key={i}
+                                            width={165}
+                                            height={225} />
+                                    ))}
+                                </View>
+                            }
+                            contentContainerStyle={styles.containerAnimeTop}
+                            numColumns={2} />
                     </View>
                     :
                     <View style={styles.commentsContainer}>
@@ -485,10 +436,22 @@ const AnimeScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-    scrollContainer: {
+    container: {
         flexGrow: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY
+    },
+    darkBackground: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        width: '100%',
+        height: '100%',
+        zIndex: 2,
+        position: 'absolute'
+    },
+    skeletonGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        width: '100%',
+        rowGap: 14
     },
     commentsContainer: {
         width: '92%',

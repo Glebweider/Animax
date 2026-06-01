@@ -11,7 +11,7 @@ import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 interface BallIndicatorProps {
     navigation?: NavigationProp<any>;
-    text: string;
+    text?: string;
     onPress?: () => void;
 }
 

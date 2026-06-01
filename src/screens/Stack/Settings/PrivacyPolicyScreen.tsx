@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
@@ -35,7 +35,6 @@ const PrivacyPolicyScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         paddingBottom: 25,
         width: '100%',
     },

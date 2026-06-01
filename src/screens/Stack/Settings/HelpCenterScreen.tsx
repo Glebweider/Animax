@@ -9,7 +9,7 @@ import CreateTicketModal from '@Components/modals/CreateTicketModal';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
     COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY
 } from '@Data/constants';
 
@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     containerButton: {
         width: '74%',

@@ -1,57 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { TouchableOpacity, StyleSheet, Text } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 
 // Data
 import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
-
-// Rest
-import useAddAnimeList from '@Rest/anime/addAnimeListUser';
-import useRemoveAnimeListUser from '@Rest/anime/removeAnimeListUser';
+import { useUserAnime } from '@Utils/hooks';
 
 // Icons
 import AddIcon from '@Icons/AddIcon';
 import CheckIcon from '@Icons/CheckIcon';
 
-// Redux
-import { RootState } from '@Redux/store';
-import { addAnime, removeAnime } from '@Redux/reducers/userReducer';
 
-
-const MyAnimeListButton = ({ anime }) => {
-    const dispatch = useDispatch();
-    const userAnimeList = useSelector((state: RootState) => state.userReducer.animelist);
-
-    const [isInMyList, setIsInMyList] = useState<boolean>(false);
-
-    const { addAnimeListUser } = useAddAnimeList();
-    const { removeAnimeListUser } = useRemoveAnimeListUser();
-
-    const fetchMyAnimeList = async () => {
-        if (userAnimeList)
-            setIsInMyList(Boolean(userAnimeList.find((userAnimeId) => userAnimeId == anime.id)));
-    };
-
-    useEffect(() => {
-        fetchMyAnimeList();
-    }, [anime.id]);
-
-    const handlePress = async () => {
-        const id = anime.id
-        dispatch(isInMyList ? removeAnime(id) : addAnime(id));
-        setIsInMyList(!isInMyList);
-
-        const response = isInMyList ? await removeAnimeListUser(id) : await addAnimeListUser(id);
-        if (!response)
-            setIsInMyList(isInMyList);
-    };
+const MyAnimeListButton = ({ animeId }) => {
+    const { isInMyList, toggleAnimeList } = useUserAnime(animeId);
 
     return (
         <TouchableOpacity
-            onPress={handlePress}
+            onPress={toggleAnimeList}
             style={isInMyList ? styles.animeButtonMyListEnabled : styles.animeButtonMyListDisabled}>
             {isInMyList ? (
                 <CheckIcon

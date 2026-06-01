@@ -1,77 +1,101 @@
-import { StyleSheet, View, Text, TextInput } from 'react-native';
-import { useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Text, TextInput, TextInputKeyPressEvent, TouchableOpacity } from 'react-native';
+import { useEffect, useRef, useState, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import ApplyButton from '@Components/buttons/Apply';
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Rest
 import useRecoverPassword from '@Rest/user/recoverPasswordUser';
+import useForgotPasswordUser from '@Rest/user/forgotPasswordUser';
+
+// Redux
+import { RootState } from '@Redux/store';
+import { setExpiresAt } from '@Redux/reducers/forgotPasswordReducer';
 
 
-const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
-    const { data } = route.params;
-    const [expiresAt] = useState(data.expiresAt);
-    const [timeLeft, setTimeLeft] = useState(data.expiresAt);
+const ForgotPasswordCodeVerifyScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const state = useSelector((state: RootState) => state.forgotPasswordReducer);
+
     const { recoverPasswordUser } = useRecoverPassword();
+    const { forgotPasswordUser } = useForgotPasswordUser();
+
+    const calculateTimeLeft = () => {
+        const remaining = state.expiresAt - Date.now();
+        return remaining > 0 ? remaining : 0;
+    };
+
+    const [timeLeft, setTimeLeft] = useState<number>(calculateTimeLeft);
+    const [pins, setPins] = useState<string[]>(['', '', '', '']);
+    const [focusedIndex, setFocusedIndex] = useState<number>(0);
+
+    const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            const now = Date.now();
-            const remainingTime = expiresAt - now;
+        setTimeLeft(calculateTimeLeft());
 
-            if (remainingTime <= 0) {
+        const interval = setInterval(() => {
+            const remaining = state.expiresAt - Date.now();
+            if (remaining <= 0) {
                 setTimeLeft(0);
                 clearInterval(interval);
             } else {
-                setTimeLeft(remainingTime);
+                setTimeLeft(remaining);
             }
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [expiresAt]);
+    }, [state.expiresAt]);
 
+    const formattedTime = useMemo(() => {
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }, [timeLeft]);
 
-    const minutes = Math.floor(timeLeft / 60000);
-    const seconds = Math.floor((timeLeft % 60000) / 1000);
-    const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const isCodeComplete = pins.join('').length === 4;
+    const handlePinInputChange = (index: number, text: string) => {
+        const cleanText = text.replace(/[^0-9]/g, '').slice(-1);
 
-    const [pins, setPins] = useState(['', '', '', '']);
-    const inputRefs = useRef<Array<TextInput | null>>([null, null, null, null]);
-    const [focusedIndex, setFocusedIndex] = useState<number>(0);
-
-    const handlePinInputChange = (index: number, pin: string) => {
         const newPins = [...pins];
-        newPins[index] = pin;
+        newPins[index] = cleanText;
+        setPins(newPins);
 
-        if (pin !== '' && index < pins.length - 1) {
-            const nextInput = inputRefs.current[index + 1];
-            if (nextInput) {
-                nextInput.focus();
-            }
-        } else if (newPins.join('').length < pins.join('').length) {
-            const prevInput = inputRefs.current[index - 1];
-            if (prevInput) {
-                prevInput.focus();
+        if (cleanText !== '' && index < pins.length - 1)
+            inputRefs.current[index + 1]?.focus();
+    };
+
+    const handleKeyPress = (index: number, e: TextInputKeyPressEvent) => {
+        if (e.nativeEvent.key === 'Backspace') {
+            if (pins[index] === '' && index > 0) {
+                const newPins = [...pins];
+                newPins[index - 1] = '';
+                setPins(newPins);
+                inputRefs.current[index - 1]?.focus();
             }
         }
-
-        setPins(newPins);
     };
 
     const handlePinSubmit = async () => {
+        if (!isCodeComplete) return;
+
         const enteredPin = pins.join('');
-        const response = await recoverPasswordUser(data.text, enteredPin);
-        if (response) {
-            navigation.navigate('ForgotPasswordResetPasswordScreen', {
-                data: {
-                    email: data.text,
-                }
-            })
-        }
+        if (await recoverPasswordUser(state.data, enteredPin))
+            navigation.navigate('ForgotPasswordResetPasswordScreen');
+    };
+
+    const handleResendCode = async () => {
+        setPins(['', '', '', '']);
+        inputRefs.current[0]?.focus();
+
+        const response = await forgotPasswordUser(state.data);
+        if (response)
+            dispatch(setExpiresAt(Number(response.expiresAt)));
     };
 
     return (
@@ -79,38 +103,51 @@ const ForgotPasswordCodeVerifyScreen = ({ navigation, route }) => {
             <BackButton
                 onPress={() => navigation.navigate('ForgotPasswordMethodsScreen')}
                 text="Forgot Password" />
+
             <View style={styles.content}>
                 <Text
                     numberOfLines={1}
                     ellipsizeMode="tail"
-                    style={styles.contentText}>Code had been send to {data.text}
+                    style={styles.contentText}>
+                    Code has been sent to {state.data}
                 </Text>
+
                 <View style={styles.pinContainer}>
                     {pins.map((pin, index) => (
                         <TextInput
                             key={index}
-                            ref={(ref) => {
-                                inputRefs.current[index] = ref;
-                            }}
-                            style={index === focusedIndex ? styles.pinInputDisabled : styles.pinInputEnabled}
+                            ref={(ref) => { inputRefs.current[index] = ref; }}
+                            style={index === focusedIndex ? styles.pinInputActive : styles.pinInputInactive}
                             onChangeText={(text) => handlePinInputChange(index, text)}
+                            onKeyPress={(e) => handleKeyPress(index, e)}
                             onFocus={() => setFocusedIndex(index)}
                             value={pin}
                             keyboardType="numeric"
                             maxLength={1} />
                     ))}
                 </View>
+
                 <View style={styles.resendCodeContainer}>
-                    <Text style={styles.resendCodeText}>Resend code in </Text>
-                    <Text style={styles.resendCodeTimer}>{formattedTime}</Text>
-                    <Text style={styles.resendCodeTime}> s</Text>
+                    {timeLeft > 0 ? (
+                        <>
+                            <Text style={styles.resendCodeText}>Resend code in </Text>
+                            <Text style={styles.resendCodeTimer}>{formattedTime}</Text>
+                        </>
+                    ) : (
+                        <TouchableOpacity onPress={handleResendCode}>
+                            <Text style={[styles.resendCodeTimer, { textDecorationLine: 'underline' }]}>
+                                Resend Code
+                            </Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
+
             <ApplyButton
-                onPress={() => handlePinSubmit()}
-                isActiveButton={pins.join('').length != 4}
+                onPress={handlePinSubmit}
+                isActiveButton={!isCodeComplete && timeLeft >= 0}
                 style={styles.applyButton}
-                text={'Verify'} />
+                text="Verify" />
         </View>
     );
 };
@@ -119,16 +156,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
-    },
-    applyButton: {
-        marginTop: 0
     },
     content: {
         width: '90%',
-        height: '77%',
+        height: '74%',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     resendCodeContainer: {
         flexDirection: 'row',
@@ -143,11 +176,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         fontSize: 14,
     },
-    resendCodeTime: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 14,
-    },
     pinContainer: {
         flexDirection: 'row',
         width: '100%',
@@ -155,7 +183,8 @@ const styles = StyleSheet.create({
         marginTop: 50,
         marginBottom: 50,
     },
-    pinInputEnabled: {
+    // Переименовал для понятности
+    pinInputInactive: {
         width: 80,
         height: 60,
         borderWidth: 1,
@@ -166,7 +195,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         fontSize: 18,
     },
-    pinInputDisabled: {
+    pinInputActive: {
         width: 80,
         height: 60,
         borderWidth: 1,
@@ -178,12 +207,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     contentText: {
-        marginTop: 0,
         color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 13,
         width: '86%',
+        textAlign: 'center',
     },
+    applyButton: {
+        width: '90%',
+    }
 });
 
 export default ForgotPasswordCodeVerifyScreen;

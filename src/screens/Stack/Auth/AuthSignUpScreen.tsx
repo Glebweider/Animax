@@ -1,25 +1,23 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { StyleSheet, View, Image, Text, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Components
 import BackButton from '@Components/buttons/Back';
-import PasswordSection from '@Components/PasswordSection';
+import AuthEmailSectionInput from '@Components/AuthEmailSectionInput';
+import AuthPasswordSectionInput from '@Components/AuthPasswordSectionInput';
 import ApplyButton from '@Components/buttons/Apply';
-import { useAlert } from '@Components/alert/AlertContext';
+import AuthMethods from '@Components/AuthMethods';
+import AuthRedirect from '@Components/AuthRedirect';
+import AuthDivider from '@Components/AuthDivider';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY_DARK,
-    COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY,
-    USER_PASSWORD_MAX_LENGTH, USER_PASSWORD_MIN_LENGTH
+    COLOR_TEXT_PRIMARY, ICON_APP, USER_PASSWORD_MAX_LENGTH, 
+    USER_PASSWORD_MIN_LENGTH
 } from '@Data/constants';
 
-// Icons
-import EmailIcon from '@Icons/EmailIcon';
-
 // Utils
-import { facebookAuth, googleAuth, appleAuth } from '@Utils/functions';
 import { useFormValidation } from '@Utils/hooks';
 import { isEmail } from '@Utils/validators';
 
@@ -28,13 +26,15 @@ import useCheckFieldAvailability from '@Rest/auth/useCheckFieldAvailability';
 
 // Redux
 import { setEmailAndPasswordUser } from '@Redux/reducers/authReducer';
+import { RootState } from '@Redux/store';
 
 
 const AuthSignUpScreen = ({ navigation }: any) => {
     const dispatch = useDispatch();
-    const { showAlert } = useAlert();
-    const [textEmail, setTextEmail] = React.useState<string>('');
-    const [textPassword, setTextPassword] = React.useState<string>('');
+    const authState = useSelector((state: RootState) => state.authReducer);
+
+    const [textEmail, setTextEmail] = React.useState<string>(authState.email);
+    const [textPassword, setTextPassword] = React.useState<string>(authState.password);
     const [isActiveButton, setActiveButton] = React.useState<boolean>(true);
     const { checkFieldAvailability } = useCheckFieldAvailability();
 
@@ -42,13 +42,13 @@ const AuthSignUpScreen = ({ navigation }: any) => {
         email: {
             value: textEmail,
             rules: [
-                (v) => !isEmail(v) ? "Please enter a valid email" : null
+                (v) => (!isEmail(v) && v.length > 0) ? "Please enter a valid email" : null
             ]
         },
         password: {
             value: textPassword,
             rules: [
-                (v) => (v.length < USER_PASSWORD_MIN_LENGTH || v.length > USER_PASSWORD_MAX_LENGTH)
+                (v) => (v.length > 0 && (v.length < USER_PASSWORD_MIN_LENGTH || v.length > USER_PASSWORD_MAX_LENGTH))
                     ? `Password must be between ${USER_PASSWORD_MIN_LENGTH} and ${USER_PASSWORD_MAX_LENGTH} characters`
                     : null
             ]
@@ -57,131 +57,59 @@ const AuthSignUpScreen = ({ navigation }: any) => {
 
     const { errors, activeButton } = useFormValidation(formConfig);
 
-
     const registration = async () => {
         const checkEmail = await checkFieldAvailability("email", textEmail);
         if (checkEmail) {
-            dispatch(setEmailAndPasswordUser({
-                email: textEmail,
-                password: textPassword
-            }));
+            dispatch(setEmailAndPasswordUser({ email: textEmail, password: textPassword }));
+
             navigation.navigate('AuthAccountSetupInterest');
         } else {
-            showAlert('Please enter a valid email address');
             setActiveButton(true);
         }
     }
 
     return (
-        <View style={styles.container}>
-            <BackButton onPress={() => navigation.navigate('AuthFGA')} text='' />
+        <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+            <BackButton onPress={() => navigation.navigate('AuthMethods')} />
             <View style={styles.titleContainer}>
-                <Image source={require('../../../../assets/logo.png')} style={styles.titleImage} />
+                <Image source={ICON_APP} style={styles.titleImage} />
                 <Text style={styles.titleText}>Create Your Account</Text>
             </View>
             <View style={styles.authContainer}>
-                <View style={styles.emailSection}>
-                    <EmailIcon
-                        Color={textEmail ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                        Style={styles.icon} />
-                    <TextInput
-                        style={styles.emailInput}
-                        placeholderTextColor={COLOR_TEXT_TERTIARY}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        onChangeText={(newText) => setTextEmail(newText)}
-                        value={textEmail} />
-                </View>
-                {errors.email && <Text style={styles.errorMessage}>{errors.email}</Text>}
+                <AuthEmailSectionInput
+                    error={errors.email}
+                    value={textEmail}
+                    setValue={(v) => setTextEmail(v)} />
 
-                <PasswordSection placeholder='Password' textPassword={textPassword} setTextPassword={setTextPassword} />
-                {errors.password && <Text style={styles.errorMessage}>{errors.password}</Text>}
+                <AuthPasswordSectionInput
+                    error={errors.password}
+                    value={textPassword}
+                    setValue={(v) => setTextPassword(v)} />
 
                 <ApplyButton
                     onPress={registration}
                     isActiveButton={isActiveButton && activeButton}
-                    style={styles.applyButton}
+                    style={{ marginTop: 30, marginBottom: 42 }}
                     text={'Sign up'} />
 
-                <View style={styles.intermediateContainer}>
-                    <View style={styles.line} />
-                    <Text style={styles.text}>or continue with</Text>
-                    <View style={styles.line} />
-                </View>
+                <AuthDivider text='or continue with' />
 
-                <View style={styles.authFGAContainer}>
-                    <TouchableOpacity
-                        onPress={() => facebookAuth()}
-                        style={styles.facebookContainer}>
-                        <Image
-                            source={require('../../../../assets/icons/facebook-icon.png')}
-                            style={styles.facebookImage} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => googleAuth()}
-                        style={styles.googleContainer}>
-                        <Image
-                            source={require('../../../../assets/icons/google-icon.png')}
-                            style={styles.googleImage} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => appleAuth()}
-                        style={styles.appleContainer}>
-                        <Image
-                            source={require('../../../../assets/icons/apple-icon.png')}
-                            style={styles.appleImage} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.signInContainer}>
-                    <Text style={styles.signInText}>Already have an account?</Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('AuthSignIn')}>
-                        <Text style={styles.clicableSignInText}>Sign in</Text>
-                    </TouchableOpacity>
-                </View>
+                <AuthMethods />
+
+                <AuthRedirect
+                    text={"Already have an account?"}
+                    clicableText={'Sign in'}
+                    style={{ marginTop: 40 }}
+                    onPress={() => navigation.navigate('AuthSignIn')} />
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    errorMessage: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
-    },
-    applyButton: {
-        marginTop: 30,
-        width: '100%'
-    },
-    emailSection: {
-        marginTop: 30,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-    },
-    emailInput: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-    },
-    icon: {
-        width: 20,
-        height: 20,
-        margin: 22,
-    },
     container: {
-        flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
+        paddingBottom: 25
     },
     titleContainer: {
         marginTop: 5,
@@ -203,91 +131,6 @@ const styles = StyleSheet.create({
     authContainer: {
         width: '90%',
         height: '100%',
-    },
-    intermediateContainer: {
-        marginTop: 44,
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 10,
-        width: '100%',
-    },
-    line: {
-        flex: 1,
-        height: 1,
-        backgroundColor: '#2D3037',
-    },
-    text: {
-        marginHorizontal: 15,
-        color: 'white',
-        fontFamily: 'Outfit',
-        fontSize: 16,
-    },
-    authFGAContainer: {
-        width: '100%',
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        marginTop: 20,
-    },
-    facebookContainer: {
-        width: 89,
-        height: 61,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    facebookImage: {
-        width: 30,
-        height: 30,
-    },
-    googleContainer: {
-        width: 89,
-        height: 61,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    googleImage: {
-        width: 25,
-        height: 25,
-    },
-    appleContainer: {
-        width: 89,
-        height: 61,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        borderRadius: 15,
-        borderColor: '#2E3138',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    appleImage: {
-        width: 25,
-        height: 31,
-    },
-    signInContainer: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginTop: 40,
-    },
-    signInText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontSize: 12,
-        fontFamily: 'Outfit',
-    },
-    clicableSignInText: {
-        color: COLOR_PRIMARY_DARK,
-        fontSize: 12,
-        fontFamily: 'Outfit',
-        marginLeft: 10
     },
 });
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Data
 import {
@@ -7,16 +8,20 @@ import {
     COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
 } from '@Data/constants';
 
+// Redux
+import { RootState } from '@Redux/store';
+import { setData } from '@Redux/reducers/forgotPasswordReducer';
+
 
 interface ModalProps {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setData: React.Dispatch<React.SetStateAction<string>>;
-    data: any;
 }
 
-const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, setData, data }) => {
-
+const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
+    const dispatch = useDispatch();
+    const state = useSelector((state: RootState) => state.forgotPasswordReducer);
+    
     return (
         <Modal transparent visible={visible} animationType="slide">
             <View style={styles.modalContainer}>
@@ -25,8 +30,9 @@ const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible, s
                         <TextInput
                             style={styles.modalInput}
                             placeholderTextColor={COLOR_TEXT_TERTIARY}
-                            placeholder={data}
-                            onChangeText={(newText) => setData(newText)} />
+                            placeholder={state.type}
+                            value={state.data}
+                            onChangeText={(newText) => dispatch(setData(newText))} />
                     </View>
                     <TouchableOpacity
                         onPress={() => {

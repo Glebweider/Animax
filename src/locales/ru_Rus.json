@@ -67,7 +67,8 @@
     "privacypolicy": "Политика Конфиденциальности",
     "logout": "Выйти",
     "favoriteanime": "Любимые аниме",
-    "favoritegenres": "Любимые жанры"
+    "favoritegenres": "Любимые жанры",
+    "censored": "Цензура"
   },
   "privacyPolicy": {
     "section1": "1. Типы данных, которые мы собираем",

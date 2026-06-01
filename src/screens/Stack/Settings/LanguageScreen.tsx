@@ -6,11 +6,13 @@ import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { languageNames, translations } from '@Data/localizations';
 
 // Utils
-import { i18n, languageNames, translations } from '@Utils/localization';
-import { saveLocalizationToStorage } from '@Utils/localization';
+import { i18n } from '@Utils/localization';
+import { saveLocalizationToStorage } from '@Utils/functions';
+
 
 
 const LanguageScreen = ({ navigation }) => {
@@ -19,7 +21,8 @@ const LanguageScreen = ({ navigation }) => {
 
     const handleChangeLanguage = async (lang: string) => {
         try {
-            await saveLocalizationToStorage(lang);
+            saveLocalizationToStorage(lang);
+            
             i18n.locale = lang;
             await Updates.reloadAsync();
         } catch (error) {
@@ -52,7 +55,6 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     cautionLangText: {
         color: COLOR_PRIMARY,

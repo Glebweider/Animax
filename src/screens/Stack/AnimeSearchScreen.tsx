@@ -10,11 +10,11 @@ import SortIcon from '@Icons/SortIcon';
 // Components
 import ArrowLeftIcon from '@Components/icons/ArrowLeftIcon';
 import { useAlert } from '@Components/alert/AlertContext';
-import AnimeCard from '@Components/cards/Anime';
+import { AnimeCard } from '@Components/cards/Anime';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
+    BACKGROUND_ERROR_404_SEARCH, COLOR_BACKGROUND_SECONDARY,
     COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
 } from '@Data/constants';
 
@@ -31,14 +31,16 @@ import { reset } from '@Redux/reducers/sortReducer';
 
 
 const AnimeSearchScreen = ({ navigation }) => {
-    const client = useApolloClient();
     const dispatch = useDispatch();
+    const client = useApolloClient();
+    const { showAlert } = useAlert();
+
+    const FilterState = useSelector((state: RootState) => state.sortReducer);
+    
     const [textSearch, setTextSearch] = useState<string>('');
     const [isErrorSearch, setIsErrorSearch] = useState<boolean>(false);
-    const FilterState = useSelector((state: RootState) => state.sortReducer);
     const [animes, setAnimes] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
-    const { showAlert } = useAlert();
 
     const fetchAnimes = useCallback(
         async (newPage: number = 1, search: string = '') => {
@@ -131,19 +133,17 @@ const AnimeSearchScreen = ({ navigation }) => {
                     <FlatList
                         data={animes.length < 1 ? Array(6).fill({}) : animes}
                         keyExtractor={(item, index) => (item.id ? item.id.toString() : `skeleton-${index}`)}
-                        renderItem={({ item }) => <AnimeCard
-                            navigation={navigation}
-                            item={item}
-                            isLoading={animes.length < 1} />}
+                        renderItem={({ item }) =>
+                            <AnimeCard navigation={navigation} item={item} />
+                        }
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={styles.containerAnimeTop}
                         onEndReached={animes.length >= 1 ? handleEndReached : undefined}
                         onEndReachedThreshold={0.1}
-                        numColumns={2}
-                    />
+                        numColumns={2} />
                 ) : (
                     <View style={styles.errorContainer}>
-                        <Image source={require('../../../assets/404.png')} style={styles.errorImage} />
+                        <Image source={BACKGROUND_ERROR_404_SEARCH} style={styles.errorImage} />
                         <View style={styles.errorTextContainer}>
                             <Text style={styles.errorTitle}>{i18n.t('searchanime.notfound')}</Text>
                             <Text style={styles.errorText}>{i18n.t('searchanime.sorrytext')}</Text>
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     content: {
         flexGrow: 1,

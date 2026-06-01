@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import AnimeCard from './Anime';
+import { AnimeCard } from './Anime';
 
 // Components
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
@@ -18,7 +18,6 @@ const RecomendationAnimeCard: React.FC<{ navigation: any; item: any; }> = ({ nav
             <AnimeCard
                 navigation={navigation}
                 item={item}
-                isLoading={false}
                 width={150}
                 height={200} />
 
@@ -38,7 +37,7 @@ const RecomendationAnimeCard: React.FC<{ navigation: any; item: any; }> = ({ nav
                     </Text>
                 </View>
                 <View style={{ marginTop: 10 }}>
-                    <MyAnimeListButton anime={item} />
+                    <MyAnimeListButton animeId={item.id} />
                 </View>
             </View>
         </View>

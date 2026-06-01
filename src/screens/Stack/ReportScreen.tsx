@@ -10,17 +10,12 @@ import { IMessage, ITicket } from '@Interfaces/HelpCenterScreen.interface';
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-    COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
-} from '@Data/constants';
+import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY } from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
 
 // Utils
-import encryptor from '@Utils/crypto/encryptor';
-import decryptor from '@Utils/crypto/decryptor';
 import sendNotification from '@Utils/notifications';
 import { socket } from '@Utils/socket';
 
@@ -45,7 +40,7 @@ const ReportScreen = ({ navigation }) => {
         socket.on('newMessage', (data: IMessage) => {
             setMessages((prevMessages) => [...prevMessages, data]);
             if (data.senderId != userState.uuid) {
-                sendNotification(ticket.adminNickname, decryptor(data.text));
+                sendNotification(ticket.adminNickname, data.text);
             }
         });
 
@@ -57,7 +52,7 @@ const ReportScreen = ({ navigation }) => {
 
     const sendMessage = () => {
         if (newMessage.trim()) {
-            socket.emit('sendMessage', { message: encryptor(newMessage), ticketId: ticket.id });
+            socket.emit('sendMessage', { message: newMessage, ticketId: ticket.id });
             setNewMessage('');
         }
     };
@@ -69,7 +64,7 @@ const ReportScreen = ({ navigation }) => {
                 styles.messageContainer,
                 item.senderId === userState.uuid ? styles.userMessage : styles.adminMessage,
             ]}>
-            <Text style={styles.messageText}>{decryptor(item.text)}</Text>
+            <Text style={styles.messageText}>{item.text}</Text>
         </View>
     );
 
@@ -101,7 +96,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     messagesContainer: {
         flexGrow: 1,

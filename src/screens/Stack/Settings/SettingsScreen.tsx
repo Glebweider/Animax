@@ -13,9 +13,10 @@ import ProfileIcon from '@Icons/ProfileIcon';
 import ArrowRightIcon from '@Components/icons/ArrowRightIcon';
 import NotificationIcon from '@Components/icons/NotificationIcon';
 import BackButton from '@Components/buttons/Back';
+import ToggleSwitch from '@Components/ToggleSwitch';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Modal
 import LogoutModal from '@Modal/LogoutModal';
@@ -25,6 +26,8 @@ import { RootState } from '@Redux/store';
 
 // Utils
 import { i18n } from '@Utils/localization';
+import { getSettingsNSFWFromStorage, saveSettingsNSFWToStorage } from '@Utils/functions';
+import NSFWIcon from '@Components/icons/NSFWIcon';
 
 
 const SettingsScreen = ({ navigation }) => {
@@ -112,6 +115,21 @@ const SettingsScreen = ({ navigation }) => {
                     onPress={() => navigation.navigate('LanguageScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
+                        <NSFWIcon
+                            Color={COLOR_TEXT_PRIMARY}
+                            Style={{}}
+                            Width={24}
+                            Height={24} />
+                        <Text style={styles.labelLeftText}>{i18n.t('profile.censored')}</Text>
+                    </View>
+                    <ToggleSwitch
+                        isOn={getSettingsNSFWFromStorage()}
+                        onToggle={(v) => saveSettingsNSFWToStorage(v)} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('LanguageScreen')}
+                    style={styles.labelContainer}>
+                    <View style={styles.labelLeftContainer}>
                         <Svg
                             width="27"
                             height="27"
@@ -191,7 +209,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     updateText: {
         marginTop: 15,

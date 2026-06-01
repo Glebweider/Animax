@@ -9,7 +9,7 @@ import ApplyButton from '@Components/buttons/Apply';
 import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Utils
-import { removeTokenFromStorage } from '@Utils/functions/token';
+import { removeTokenFromStorage } from '@Utils/functions/storage';
 import { i18n } from '@Utils/localization';
 
 
@@ -22,7 +22,7 @@ interface ModalProps {
 const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) => {
     const logout = async () => {
         setVisible(false);
-        await removeTokenFromStorage();
+        removeTokenFromStorage();
         navigation.navigate('AuthWelcome');
     };
 

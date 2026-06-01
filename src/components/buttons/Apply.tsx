@@ -1,11 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 
 // Data
 import { COLOR_PRIMARY, COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 
-const ApplyButton = ({ onPress, isActiveButton, text, style }) => {
+interface ApplyButtonProps {
+    isActiveButton: boolean;
+    text: string;
+    style?: StyleProp<ViewStyle>;
+    onPress: () => void;
+}
+
+const ApplyButton = ({ isActiveButton, text, style, onPress }: ApplyButtonProps) => {
     return (
         <TouchableOpacity
             onPress={onPress}
@@ -24,7 +31,7 @@ const styles = StyleSheet.create({
     containerButton: {
         marginTop: 20,
         backgroundColor: COLOR_PRIMARY,
-        width: '90%',
+        width: '100%',
         height: 60,
         borderRadius: 50,
         justifyContent: 'center',
@@ -38,7 +45,7 @@ const styles = StyleSheet.create({
     containerButtonDisabled: {
         marginTop: 20,
         backgroundColor: COLOR_PRIMARY_DARK,
-        width: '90%',
+        width: '100%',
         height: 60,
         borderRadius: 50,
         justifyContent: 'center',

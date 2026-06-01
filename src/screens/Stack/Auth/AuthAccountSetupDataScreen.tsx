@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -8,11 +8,12 @@ import { registerForPushNotificationsAsync } from 'notification-config';
 // Components
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
+import SectionInput from '@Components/SectionInput';
 
 // Data
 import {
     COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-    COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY,
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY, DEFAULT_AVATAR,
     USER_FULLNAME_MAX_LENGTH, USER_FULLNAME_MIN_LENGTH,
     USER_NICKNAME_MAX_LENGTH, USER_NICKNAME_MIN_LENGTH
 } from '@Data/constants';
@@ -58,21 +59,21 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
     const formConfig = useMemo(() => ({
         fullName: {
             value: textFullName,
-            rules: [(v) => (v.length < USER_FULLNAME_MIN_LENGTH || v.length > USER_FULLNAME_MAX_LENGTH)
+            rules: [(v) => (v.length > 0 && (v.length < USER_FULLNAME_MIN_LENGTH || v.length > USER_FULLNAME_MAX_LENGTH))
                 ? `Full name must be between ${USER_FULLNAME_MIN_LENGTH} and ${USER_FULLNAME_MAX_LENGTH} characters`
                 : null
             ],
         },
         nickname: {
             value: textNickname,
-            rules: [(v) => (v.length < USER_NICKNAME_MIN_LENGTH || v.length > USER_NICKNAME_MAX_LENGTH)
+            rules: [(v) => (v.length > 0 && (v.length < USER_NICKNAME_MIN_LENGTH || v.length > USER_NICKNAME_MAX_LENGTH))
                 ? `Nickname must be between ${USER_NICKNAME_MIN_LENGTH} and ${USER_NICKNAME_MAX_LENGTH} characters`
                 : null
             ],
         },
         phone: {
             value: textPhoneNumber,
-            rules: [(v) => !isPhoneNumber(v) ? "Please enter a valid phone number" : null],
+            rules: [(v) => (v.length > 0 && !isPhoneNumber(v)) ? "Please enter a valid phone number" : null],
         },
     }), [textFullName, textNickname, textPhoneNumber]);
 
@@ -119,7 +120,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
         setOpenModal(true);
         setTimeout(async () => {
-            await saveTokenToStorage(response);
+            saveTokenToStorage(response);
 
             const user = await authUserInToken();
             if (user) {
@@ -140,51 +141,35 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
                 <TouchableOpacity
                     onPress={() => pickImage()}
                     style={styles.containerImageAvatar}>
-                    {avatar ?
-                        <Image
-                            source={{ uri: avatar.uri }}
-                            style={styles.imageAvatar} />
-                        :
-                        <Image
-                            source={require('../../../../assets/avatar.png')}
-                            style={styles.imageNullAvatar} />
-                    }
+                    <Image
+                        source={avatar ? { uri: avatar.uri } : DEFAULT_AVATAR}
+                        style={[{ width: '100%', height: '100%' }, !avatar && { marginTop: 8 }]} />
                 </TouchableOpacity>
                 <View style={styles.pencilContainer}>
                     <PencilIcon Color={COLOR_BACKGROUND_PRIMARY} Width={20} Height={20} />
                 </View>
             </View>
             <View style={styles.inputsContainer}>
-                <View style={styles.fullNameSection}>
-                    <TextInput
-                        style={styles.fullNameInput}
-                        placeholderTextColor={COLOR_TEXT_TERTIARY}
-                        placeholder="Full Name"
-                        onChangeText={(newText) => setTextFullName(newText)}
-                        value={textFullName} />
-                </View>
-                {errors.fullname && <Text style={styles.errorMessage}>{errors.fullname}</Text>}
+                <SectionInput
+                    value={textFullName}
+                    placeholder={'Full Name'}
+                    keyboardType={'default'}
+                    error={errors.fullName}
+                    setValue={(v) => setTextFullName(v)} />
 
-                <View style={styles.nicknameSection}>
-                    <TextInput
-                        style={styles.nicknameInput}
-                        placeholderTextColor={COLOR_TEXT_TERTIARY}
-                        placeholder="Nickname"
-                        onChangeText={(newText) => setTextNickname(newText)}
-                        value={textNickname} />
-                </View>
-                {errors.nickname && <Text style={styles.errorMessage}>{errors.nickname}</Text>}
+                <SectionInput
+                    value={textNickname}
+                    placeholder={'Nickname'}
+                    keyboardType={'default'}
+                    error={errors.nickname}
+                    setValue={(v) => setTextNickname(v)} />
 
-                <View style={styles.phoneNumberSection}>
-                    <TextInput
-                        style={styles.phoneNumberInput}
-                        placeholderTextColor={COLOR_TEXT_TERTIARY}
-                        placeholder="Phone Number"
-                        keyboardType="phone-pad"
-                        onChangeText={(newText) => setTextPhoneNumber(newText)}
-                        value={textPhoneNumber} />
-                </View>
-                {errors.phone && <Text style={styles.errorMessage}>{errors.phone}</Text>}
+                <SectionInput
+                    value={textPhoneNumber}
+                    placeholder={'Phone Number'}
+                    keyboardType={'phone-pad'}
+                    error={errors.phone}
+                    setValue={(v) => setTextPhoneNumber(v)} />
 
                 <View style={styles.genderSection}>
                     <Picker
@@ -204,7 +189,6 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
             <ApplyButton
                 onPress={registation}
                 isActiveButton={isActiveButton && activeButton}
-                style={{}}
                 text={'Continue'} />
 
             <ConfigModal
@@ -218,7 +202,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     errorMessage: {
         marginTop: 5,
@@ -245,15 +228,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#464648',
         borderRadius: 100,
         overflow: 'hidden'
-    },
-    imageNullAvatar: {
-        width: '100%',
-        height: '100%',
-        marginTop: 8
-    },
-    imageAvatar: {
-        width: '100%',
-        height: '100%',
     },
     inputsContainer: {
         width: '90%',
@@ -292,25 +266,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Outfit',
         marginLeft: 20,
     },
-    phoneNumberSection: {
-        marginTop: 25,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: 64,
-        borderRadius: 20,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-    },
-    phoneNumberInput: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        marginLeft: 20,
-    },
     genderSection: {
         marginTop: 25,
+        paddingLeft: 15,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

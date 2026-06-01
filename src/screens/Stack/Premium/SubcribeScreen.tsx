@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Icons
 import CrownIcon from '@Icons/CrownIcon';
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         paddingBottom: 30,
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     headerContainer: {
         width: '90%',

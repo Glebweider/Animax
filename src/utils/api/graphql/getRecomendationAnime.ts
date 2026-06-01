@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_RECOMENDATIONANIME = gql`
-    query GetRecomendationAnime($limit: Int!, $order: OrderEnum!, $genre: String!) {
-        animes(limit: $limit, order: $order, genre: $genre) {
+    query GetRecomendationAnime($limit: Int!, $order: OrderEnum!, $genre: String!, $censored: Boolean!) {
+        animes(limit: $limit, order: $order, genre: $genre, censored: $censored) {
             poster {
                 originalUrl
             }

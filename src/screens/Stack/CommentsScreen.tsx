@@ -27,7 +27,7 @@ import LikeIcon from '@Components/icons/LikeIcon';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
+    COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY,
     COLOR_PRIMARY_DARK, COLOR_TEXT_DISABLED, COLOR_TEXT_PRIMARY
 } from '@Data/constants';
 
@@ -362,8 +362,7 @@ const CommentsScreen = ({ navigation, route }) => {
                     <View style={{ height: 80 }}>
                         <BallIndicator color={COLOR_PRIMARY_DARK} size={50} count={8} />
                     </View>
-                }
-            />
+                } />
             <View style={styles.footer}>
                 <TextInput
                     ref={inputRef}
@@ -390,7 +389,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         alignItems: 'center',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
     },
     input: {
         height: 60,
@@ -405,7 +403,6 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR_BACKGROUND_SECONDARY
     },
     footer: {
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         borderColor: '#35383F',
         borderTopWidth: 1,
         borderRightWidth: 1,

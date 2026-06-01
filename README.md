@@ -37,9 +37,6 @@ $ EXPO_PUBLIC_ANILIBIRTY_API_URL
 # Secret key for Alt Video player(Aniliberty)
 $ EXPO_PUBLIC_KODIK_API_KEY
 
-# Secret key for encryption
-$ EXPO_PUBLIC_SECRET_KEY
-
 # === Urls from social meddia === #
 
 # Url to discord server

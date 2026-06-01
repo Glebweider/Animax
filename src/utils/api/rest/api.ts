@@ -27,7 +27,7 @@ export const apiRequest = async <T>(
 			headers['Content-Type'] = 'application/json';
 
 		if (options.token)
-			headers['Authorization'] = await getTokenFromStorage();
+			headers['Authorization'] = getTokenFromStorage();
 
 		const body =
 			options.rawBody ??

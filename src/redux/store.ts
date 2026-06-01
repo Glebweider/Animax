@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './reducers/authReducer';
 import userReducer from './reducers/userReducer';
 import sortReducer from './reducers/sortReducer';
+import forgotPasswordReducer from './reducers/forgotPasswordReducer';
 //import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
 		authReducer,
 		userReducer,
 		sortReducer,
+		forgotPasswordReducer
 	},
 	devTools: false,
 	// enhancers: (defaultEnhancers) => [

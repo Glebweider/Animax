@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
 import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
@@ -11,12 +11,13 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 import SearchIcon from '@Components/icons/SearchIcon';
 import PlayIcon from '@Components/icons/PlayIcon';
-import AnimeCard from '@Components/cards/Anime';
+import TopAnimeLists from '@Components/TopAnimeLists';
 
 // Data
 import {
-    COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY,
-    COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY,
+    DEFAULT_POSTER, HOME_RECOMENDATION_LIMIT,
+    HOME_TOPHITS_LIMIT, ICON_APP
 } from '@Data/constants';
 
 // Utils
@@ -38,14 +39,23 @@ const HomeScreen = ({ navigation }) => {
     const [topHitsAnime, setTopHitsAnime] = useState<IAnime[]>([]);
     const [recomendationAnime, setRecomendationAnime] = useState<IAnime[]>([]);
     const [genreId, setGenreId] = useState<number>(null);
+
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
     const { data: topHitsData } = useQuery(GET_TOPHITSANIME, {
         variables: {
             page: 1,
-            limit: 6,
+            limit: Number(HOME_TOPHITS_LIMIT),
             order: 'ranked',
             season: String(new Date().getFullYear())
+        },
+    });
+
+    const { data: recomendationData } = useQuery(GET_RECOMENDATIONANIME, {
+        variables: {
+            limit: Number(HOME_RECOMENDATION_LIMIT),
+            order: 'ranked',
+            genre: genreId
         },
     });
 
@@ -64,14 +74,6 @@ const HomeScreen = ({ navigation }) => {
         }
     }, [topHitsData]);
 
-    const { data: recomendationData } = useQuery(GET_RECOMENDATIONANIME, {
-        variables: {
-            limit: 6,
-            order: 'ranked',
-            genre: genreId
-        },
-    });
-
     useEffect(() => {
         if (recomendationData) {
             setRecomendationAnime(recomendationData.animes);
@@ -83,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
             <StatusBar style='light' />
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <Image source={require('../../../assets/icon.png')} style={styles.headerLogo} />
+                    <Image source={ICON_APP} style={styles.headerLogo} />
                     <TouchableOpacity
                         onPress={() => navigation.navigate('AnimeSearchScreen')}
                         style={styles.headerIconSearch}>
@@ -102,8 +104,7 @@ const HomeScreen = ({ navigation }) => {
                             <Animated.Image
                                 key={selectAnime.id}
                                 source={selectAnime?.poster?.originalUrl ?
-                                    { uri: selectAnime.poster.originalUrl } :
-                                    require('../../../assets/default-to-poster.jpg')
+                                    { uri: selectAnime.poster.originalUrl } : DEFAULT_POSTER
                                 }
                                 style={styles.selectAnimeShiftedImage}
                                 resizeMode="cover"
@@ -141,68 +142,28 @@ const HomeScreen = ({ navigation }) => {
                                     <Text style={styles.animeButtonTextPlay}>{i18n.t('play')}</Text>
                                 </TouchableOpacity>
                                 <View style={{ marginLeft: 10 }}>
-                                    <MyAnimeListButton anime={selectAnime} />
+                                    <MyAnimeListButton animeId={selectAnime.id} />
                                 </View>
                             </View>
                         </View>
                     </View>
                 </View>
-                <View style={styles.topAnimeContainer}>
-                    <View style={styles.hitsAnimeTextContainer}>
-                        <Text style={styles.hitsAnimeText}>{i18n.t('home.tophitsanime')}</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('TopHitsAnimeScreen')}>
-                            <Text style={styles.hitsAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <FlatList
-                        data={topHitsAnime}
-                        horizontal
-                        nestedScrollEnabled={true}
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }: any) => (
-                            <AnimeCard
-                                onPress={() => setSelectAnime(item)}
-                                item={item}
-                                isLoading={topHitsAnime?.length < 1}
-                                width={150}
-                                height={200} />
-                        )}
-                        ListEmptyComponent={() => (
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={{ marginTop: 20, color: COLOR_TEXT_PRIMARY }}>Not found</Text>
-                            </View>
-                        )}
-                        contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }} />
-                </View>
-                <View style={styles.topAnimeContainer}>
-                    <View style={styles.newEpisodeAnimeTextContainer}>
-                        <Text style={styles.newEpisodeAnimeText}>{i18n.t('home.yourecomendationanimes')}</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('RecomendationsAnimeScreen')}>
-                            <Text style={styles.newEpisodeAnimeTextSeeAll}>{i18n.t('home.seeall')}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <FlatList
-                        data={recomendationAnime}
-                        horizontal
-                        nestedScrollEnabled={true}
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }: any) => (
-                            <AnimeCard
-                                onPress={() => setSelectAnime(item)}
-                                item={item}
-                                isLoading={recomendationAnime?.length < 1}
-                                width={150}
-                                height={200} />
-                        )}
-                        ListEmptyComponent={() => (
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={{ marginTop: 20, color: COLOR_TEXT_PRIMARY }}>Not found</Text>
-                            </View>
-                        )}
-                        contentContainerStyle={{ paddingHorizontal: 10, marginTop: 10 }} />
-                </View>
+
+                {/* Top hits anime */}
+                <TopAnimeLists
+                    data={topHitsAnime}
+                    selectAnime={setSelectAnime}
+                    text={'home.tophitsanime'}
+                    limit={HOME_TOPHITS_LIMIT}
+                    navigate={() => navigation.navigate('TopHitsAnimeScreen')} />
+
+                {/* Recomondation for you */}
+                <TopAnimeLists
+                    data={recomendationAnime}
+                    selectAnime={setSelectAnime}
+                    text={'home.yourecomendationanimes'}
+                    limit={HOME_RECOMENDATION_LIMIT}
+                    navigate={() => navigation.navigate('RecomendationsAnimeScreen')} />
             </View>
         </ScrollView>
     );
@@ -211,7 +172,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
-        height: '114%'
+        height: '118%'
     },
     animeDataContainer: {
         position: 'absolute',
@@ -262,11 +223,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         marginRight: 13,
     },
-    topAnimeContainer: {
-        width: '100%',
-        height: 280,
-        alignItems: 'center'
-    },
     backgroundShadow: {
         position: 'absolute',
         width: '100%',
@@ -281,7 +237,6 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: COLOR_BACKGROUND_PRIMARY,
         alignItems: 'center',
     },
     headerContainer: {
@@ -301,37 +256,6 @@ const styles = StyleSheet.create({
     headerIconSearch: {
         width: 30,
         height: 30,
-    },
-    hitsAnimeTextContainer: {
-        flexDirection: 'row',
-        width: '90%',
-        justifyContent: 'space-between',
-        marginTop: 20,
-    },
-    hitsAnimeText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontSize: 15,
-        fontFamily: 'Outfit',
-    },
-    hitsAnimeTextSeeAll: {
-        color: COLOR_PRIMARY_DARK,
-        fontSize: 12,
-        fontFamily: 'Outfit',
-    },
-    newEpisodeAnimeTextContainer: {
-        flexDirection: 'row',
-        width: '90%',
-        justifyContent: 'space-between',
-    },
-    newEpisodeAnimeText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontSize: 15,
-        fontFamily: 'Outfit',
-    },
-    newEpisodeAnimeTextSeeAll: {
-        color: COLOR_PRIMARY_DARK,
-        fontSize: 12,
-        fontFamily: 'Outfit',
     },
     imageWrapper: {
         width: '100%',
