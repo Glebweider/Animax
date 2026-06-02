@@ -20,11 +20,15 @@ import { i18n } from '@Utils/localization';
 import { RootState } from '@Redux/store';
 import { addFilter, reset } from '@Redux/reducers/sortReducer';
 
+// Interface
+import { IGenre } from '@Interfaces/AnimeScreen.interface';
+
 
 const AnimeSortScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const { data } = useQuery(GET_GENRES);
-    const [genresAnime, setGenresAnime] = useState([]);
+    const [genresAnime, setGenresAnime] = useState<IGenre[]>([]);
+
     const FilterState = useSelector((state: RootState) => state.sortReducer);
 
     useEffect(() => {

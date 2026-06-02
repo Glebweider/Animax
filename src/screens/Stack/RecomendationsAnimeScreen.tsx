@@ -20,13 +20,19 @@ import { RootState } from '@Redux/store';
 // Data
 import { RECOMENDATION_CHUNK_SIZE } from '@Data/constants';
 
+// Interface
+import { ITopHitsAnime } from '@Interfaces/TopHitsScreen.interface';
+
 
 const RecomendationsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();
     const { showAlert } = useAlert();
-    const [animes, setAnimes] = useState<any[]>([]);
+
+    const [animes, setAnimes] = useState<ITopHitsAnime[]>([]);
+
     const [page, setPage] = useState<number>(1);
     const [genreId, setGenreId] = useState<number | null>(null);
+
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
     useEffect(() => {

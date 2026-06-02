@@ -29,6 +29,9 @@ import { i18n } from '@Utils/localization';
 import { RootState } from '@Redux/store';
 import { reset } from '@Redux/reducers/sortReducer';
 
+// Interface
+import { IRearchAnime } from '@Interfaces/ResearchScreen.interface';
+
 
 const AnimeSearchScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -37,9 +40,9 @@ const AnimeSearchScreen = ({ navigation }) => {
 
     const FilterState = useSelector((state: RootState) => state.sortReducer);
     
+    const [animes, setAnimes] = useState<IRearchAnime[]>([]);
     const [textSearch, setTextSearch] = useState<string>('');
     const [isErrorSearch, setIsErrorSearch] = useState<boolean>(false);
-    const [animes, setAnimes] = useState<any[]>([]);
     const [page, setPage] = useState<number>(1);
 
     const fetchAnimes = useCallback(

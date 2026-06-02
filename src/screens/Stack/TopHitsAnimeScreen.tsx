@@ -16,18 +16,18 @@ import { i18n } from '@Utils/localization';
 // Data
 import { TOPHITS_CHUNK_SIZE } from '@Data/constants';
 
+// Interface
+import { ITopHitsAnime } from '@Interfaces/TopHitsScreen.interface';
+
 
 const TopHitsAnimeScreen = ({ navigation }: any) => {
     const client = useApolloClient();
     const { showAlert } = useAlert();
-    
-    const [animes, setAnimes] = useState<any[]>([]);
-    const [page, setPage] = useState<number>(1);
-    
 
-    const { data } = useQuery(GET_TOPHITSANIME, {
-        variables: { page: 1, limit: TOPHITS_CHUNK_SIZE, order: 'ranked' },
-    });
+    const [animes, setAnimes] = useState<ITopHitsAnime[]>([]);
+    const [page, setPage] = useState<number>(1);
+
+    const { data } = useQuery(GET_TOPHITSANIME, { variables: { page: 1, limit: TOPHITS_CHUNK_SIZE, order: 'ranked' } });
 
     useEffect(() => {
         if (data)

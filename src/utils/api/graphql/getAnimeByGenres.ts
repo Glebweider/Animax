@@ -11,7 +11,6 @@ export const GET_ANIMEBYGENRES = gql`
             poster {
                 id
                 originalUrl
-                mainUrl
             }
         }
     }

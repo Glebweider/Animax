@@ -26,15 +26,15 @@ import { i18n } from '@Utils/localization';
 import { Formatter, getDateArrayForMonth } from '@Utils/functions';
 
 // Interface
-import { IDate } from '@Interfaces/ReleaseScreen.interface';
+import { IDate, IReleaseAnime } from '@Interfaces/ReleaseScreen.interface';
 
 
 const ReleaseScreen = ({ navigation }) => {
     const client = useApolloClient();
 
     const [selectedDate, setSelectedDate] = useState<IDate>({ dayOfMonth: '', dayOfWeek: '', dayOfDate: '' });
-    const [Animes, setAnimes] = useState<any[]>([]);
-    const [selectedAnimes, setSelectedAnimes] = useState<any[]>([]);
+    const [Animes, setAnimes] = useState<IReleaseAnime[]>([]); // Anime of month
+    const [selectedAnimes, setSelectedAnimes] = useState<IReleaseAnime[]>([]); // Anime of select day
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const dateArray = useMemo(() => getDateArrayForMonth(), []);
@@ -68,7 +68,7 @@ const ReleaseScreen = ({ navigation }) => {
             if (selectedDate) {
                 if (Animes) {
                     const animeForDate = Animes.filter((anime) => {
-                        if (anime.anime.score >= 7)
+                        if (Number(anime.anime.score) >= 7)
                             return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
                     });
 
@@ -77,7 +77,7 @@ const ReleaseScreen = ({ navigation }) => {
                         const image = item.anime.image?.original;
 
                         if (!image || image.includes('missing'))
-                            idsNotHavePoster.push(item.anime.id);
+                            idsNotHavePoster.push(item.anime.id.toString());
                     }
 
                     if (idsNotHavePoster.length > 0) {
@@ -130,54 +130,54 @@ const ReleaseScreen = ({ navigation }) => {
             <View style={{ width: '90%', height: '75%', justifyContent: 'center', alignItems: 'center' }}>
                 {isLoading ? (
                     <BallIndicator color={COLOR_PRIMARY} size={80} count={8} />
-                ) : (
-                    selectedAnimes.length >= 1 ?
-                        <FlatList
-                            data={selectedAnimes}
-                            keyExtractor={(item) => item.anime.id.toString()}
-                            renderItem={({ item }) => (
-                                <View style={{ marginTop: 15 }}>
-                                    <View style={styles.animeCardTimeContainer}>
-                                        <View style={styles.animeCardTimeLine} />
-                                        <Text style={styles.animeCardTimeText}>{Formatter.time(item.next_episode_at)}</Text>
-                                    </View>
-                                    <View key={item.anime.id} style={styles.animeCardContainer}>
-                                        <TouchableOpacity
-                                            onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
-                                            style={styles.animeCardImage}>
-                                            <Image
-                                                source={{
-                                                    uri: item.anime.image.original.includes('https://') ?
-                                                        item.anime.image.original :
-                                                        `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}${item.anime.image.original}`
-                                                }}
-                                                style={styles.animeCardImage} />
-                                        </TouchableOpacity>
-                                        <View style={styles.animeCardData}>
-                                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
-                                                {item.anime.russian ? item.anime.russian : item.anime.name}
-                                            </Text>
-                                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
-                                                {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
-                                            </Text>
-                                            <View style={{ marginTop: 10 }}>
-                                                <MyAnimeListButton animeId={item.anime.id} />
-                                            </View>
+                ) :
+                    <FlatList
+                        data={selectedAnimes}
+                        keyExtractor={(item) => item.anime.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={{ marginTop: 15 }}>
+                                <View style={styles.animeCardTimeContainer}>
+                                    <View style={styles.animeCardTimeLine} />
+                                    <Text style={styles.animeCardTimeText}>{Formatter.time(item.next_episode_at)}</Text>
+                                </View>
+                                <View style={styles.animeCardContainer}>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('AnimeScreen', { animeId: item.anime.id })}
+                                        style={styles.animeCardImage}>
+                                        <Image
+                                            source={{
+                                                uri: item.anime.image.original.includes('https://') ?
+                                                    item.anime.image.original :
+                                                    `${process.env.EXPO_PUBLIC_SHIKIMORI_API_URL}${item.anime.image.original}`
+                                            }}
+                                            style={styles.animeCardImage} />
+                                    </TouchableOpacity>
+                                    <View style={styles.animeCardData}>
+                                        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
+                                            {item.anime.russian ? item.anime.russian : item.anime.name}
+                                        </Text>
+                                        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
+                                            {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}
+                                        </Text>
+                                        <View style={{ marginTop: 10 }}>
+                                            <MyAnimeListButton animeId={item.anime.id} />
                                         </View>
                                     </View>
                                 </View>
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            contentContainerStyle={styles.animesContainer} />
-                        :
-                        <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
-                            <Image style={{ marginTop: 80 }} source={BACKGROUND_ERROR_404_RELEASE} />
-                            <View style={styles.errorTextContainer}>
-                                <Text style={styles.errorTitle}>{i18n.t('release.norelease')}</Text>
-                                <Text style={styles.errorText}>{i18n.t('release.noreleasetext')}</Text>
                             </View>
-                        </View>
-                )}
+                        )}
+                        ListEmptyComponent={
+                            <View style={{ width: '100%', height: '100%', alignItems: 'center' }}>
+                                <Image style={{ marginTop: 80 }} source={BACKGROUND_ERROR_404_RELEASE} />
+                                <View style={styles.errorTextContainer}>
+                                    <Text style={styles.errorTitle}>{i18n.t('release.norelease')}</Text>
+                                    <Text style={styles.errorText}>{i18n.t('release.noreleasetext')}</Text>
+                                </View>
+                            </View>
+                        }
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={styles.animesContainer} />
+                }
             </View>
         </View>
     );

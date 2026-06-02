@@ -28,6 +28,7 @@ const ReportScreen = ({ navigation }) => {
 
     const [messages, setMessages] = useState<IMessage[]>(ticket.messages);
     const [newMessage, setNewMessage] = useState<string>('');
+    
     const userState = useSelector((state: RootState) => state.userReducer);
 
     useEffect(() => {

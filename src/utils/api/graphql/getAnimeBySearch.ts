@@ -11,7 +11,6 @@ export const GET_ANIMEBYSEARCH = gql`
             poster {
                 id
                 originalUrl
-                mainUrl
             }
         }
     }

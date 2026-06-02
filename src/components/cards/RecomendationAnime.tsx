@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { AnimeCard } from './Anime';
 
 // Components
+import { AnimeCard } from './Anime';
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 
 // Data
@@ -11,8 +11,11 @@ import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 // Utils
 import { i18n } from '@Utils/localization';
 
+// Interface
+import { ITopHitsAnime } from '@Interfaces/TopHitsScreen.interface';
 
-const RecomendationAnimeCard: React.FC<{ navigation: any; item: any; }> = ({ navigation, item }) => {
+
+const RecomendationAnimeCard: React.FC<{ navigation: any; item: ITopHitsAnime; }> = ({ navigation, item }) => {
     return (
         <View key={item.id} style={styles.container}>
             <AnimeCard
@@ -33,7 +36,8 @@ const RecomendationAnimeCard: React.FC<{ navigation: any; item: any; }> = ({ nav
                         numberOfLines={3}
                         ellipsizeMode="tail"
                         style={styles.genres}>
-                        {i18n.t('genre')}: {item.genres.map(genre => genre.russian).join(', ')}
+                            {/* TODO: Genre */}
+                        {i18n.t('genre')}: {item.genres.map(genre => genre.russian).join(', ')} 
                     </Text>
                 </View>
                 <View style={{ marginTop: 10 }}>

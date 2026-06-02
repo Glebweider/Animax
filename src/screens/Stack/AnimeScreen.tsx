@@ -38,6 +38,7 @@ import useGetCommentsCount from '@Rest/comments/getCommentsCount';
 
 //Interface
 import { IAnime, IEpisode } from '@Interfaces/AnimeScreen.interface';
+import { IRearchAnime } from '@Interfaces/ResearchScreen.interface';
 
 // Data
 import { ANIME_RATINGS } from '@Data/animeRatings';
@@ -54,11 +55,14 @@ const AnimeScreen = ({ navigation, route }) => {
     const { animeId } = route.params;
 
     const [anime, setAnime] = useState<IAnime>({ id: '', name: '', russian: '', poster: { originalUrl: '' }, score: 0, status: '', rating: '', createdAt: '', description: '', genres: [{ id: 0, russian: '', name: '' }], scoresStats: [{ count: 0, score: 0 }] });
-    const [animeRecomendations, setAnimeRecomendations] = useState<any[]>([]);
+    const [animeRecomendations, setAnimeRecomendations] = useState<IRearchAnime[]>([]);
     const [episodes, setEpisodes] = useState<IEpisode[]>([]);
+
     const [selectInfoAnime, setSelectInfoAnime] = useState<string>('MoreLikeThis');
+
     const [commentsCount, setCommentsCount] = useState<number>(0);
     const [selectedEpisodeId, setSelectedEpisodeId] = useState<number>(1);
+
     const [isOpenRatingWindow, setOpenRatingWindow] = useState<boolean>(false);
     const [isPlaying, setPlaying] = useState<boolean>(false);
     const [moveLeft, setMoveLeft] = useState<boolean>(true);

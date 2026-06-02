@@ -15,9 +15,8 @@ import TopAnimeLists from '@Components/TopAnimeLists';
 
 // Data
 import {
-    COLOR_PRIMARY, COLOR_TEXT_PRIMARY,
-    DEFAULT_POSTER, HOME_RECOMENDATION_LIMIT,
-    HOME_TOPHITS_LIMIT, ICON_APP
+    COLOR_PRIMARY, COLOR_TEXT_PRIMARY, DEFAULT_POSTER,
+    HOME_RECOMENDATION_LIMIT, HOME_TOPHITS_LIMIT, ICON_APP
 } from '@Data/constants';
 
 // Utils
@@ -38,6 +37,7 @@ const HomeScreen = ({ navigation }) => {
     const [selectAnime, setSelectAnime] = useState<IAnimeMedium>({ poster: { originalUrl: '' }, russian: '', score: 0, id: '', name: '', rating: '', genres: [{ id: 0, russian: '', name: '' }] });
     const [topHitsAnime, setTopHitsAnime] = useState<IAnimeMedium[]>([]);
     const [recomendationAnime, setRecomendationAnime] = useState<IAnimeMedium[]>([]);
+    
     const [genreId, setGenreId] = useState<number>(null);
 
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
