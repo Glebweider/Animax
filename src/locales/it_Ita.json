@@ -4,7 +4,7 @@
   "genre": "Genere",
   "loading": "Caricamento",
   "play": "Riproduci",
-  "mylisttext": "mia lista",
+  "mylisttext": "Mia Lista",
   "helpCenter": {
     "support": "Supporto",
     "contactUs": "Contattaci",
@@ -131,5 +131,8 @@
     "newReleases": "Nuove uscite anime",
     "appUpdates": "Aggiornamenti dell'app",
     "subscription": "Abbonamento"
-  }
+  },
+  "anons": "Annunciato",
+  "ongoing": "In corso",
+  "released": "Concluso"
 }

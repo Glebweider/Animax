@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface Interest {
-	id: string;
-	text: string;
-}
-
 interface AuthState {
 	email: string;
 	password: string;
@@ -20,7 +15,7 @@ interface DataState {
 interface UserState {
 	email: string;
 	password: string;
-	interests: Interest[];
+	interests: string[];
 	avatar: string;
 	fullname: string;
 	nickname: string;
@@ -48,12 +43,12 @@ const authSlice = createSlice({
 		setSkip: (state, action: PayloadAction<boolean>) => {
 			state.interests = [];
 		},
-		addInterest: (state, action: PayloadAction<Interest>) => {
-			const interestExists = state.interests.find(interest => interest.id === action.payload.id);
+		addInterest: (state, action: PayloadAction<string>) => {
+			const interestExists = state.interests.find(interest => interest === action.payload);
 			if (!interestExists) {
 				state.interests.push(action.payload);
 			} else {
-				const index = state.interests.findIndex(interest => interest.id === action.payload.id);
+				const index = state.interests.findIndex(interest => interest === action.payload);
 				if (index !== -1) {
 					state.interests.splice(index, 1);
 				}

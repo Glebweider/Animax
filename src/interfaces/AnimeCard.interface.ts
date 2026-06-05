@@ -1,11 +1,7 @@
 import { IPoster } from "./AnimeScreen.interface";
 
-export interface IRearchAnime {
+export interface IAnimeCard {
     id: string;
-    name: string;
-    russian: string;
-    japanese: string;
-    english: string;
     score: number;
     rating: string;
     poster: IPoster;

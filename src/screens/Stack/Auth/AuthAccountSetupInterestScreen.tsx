@@ -55,10 +55,10 @@ const AuthAccountSetupInterestScreen = ({ navigation }) => {
                         {genresAnime.map((data) => (
                             <TouchableOpacity
                                 key={data.id}
-                                onPress={() => dispatch(addInterest({ id: data.id, text: data.russian }))}
+                                onPress={() => dispatch(addInterest(data.id))}
                                 style={[
                                     styles.interestContainer,
-                                    InterestsState.interests.some((i) => i.id === data.id)
+                                    InterestsState.interests.some((id) => id === data.id)
                                     && { backgroundColor: COLOR_PRIMARY }
                                 ]}>
                                 <Text style={styles.interestText}>{data.name}</Text>

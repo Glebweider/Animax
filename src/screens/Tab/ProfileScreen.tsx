@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { BarChart } from "react-native-gifted-charts";
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Components
@@ -19,8 +19,8 @@ import {
 } from '@Data/constants';
 
 // Utils
-import { i18n } from '@Utils/localization';
-import { GET_ANIMESANALYTICS } from '@Utils/api/graphql';
+import { i18n, isCisLocale } from '@Utils/localization';
+import { GET_ANIMESANALYTICS, GET_GENRES } from '@Utils/api/graphql';
 import { CacheMyFavoriteGenresService, ICachedMyFavoriteGenres } from '@Utils/services/MyFavoriteGenresCache';
 
 // GraphQl
@@ -34,7 +34,7 @@ import { RootState } from '@Redux/store';
 import { addFilter } from '@Redux/reducers/sortReducer';
 
 // Interface
-import { IMyFavoriteGenre, IUserProfile } from '@Interfaces/ProfileScreen.interface';
+import { IInterests, IMyFavoriteGenre, IUserProfile } from '@Interfaces/ProfileScreen.interface';
 
 
 const ProfileScreen = ({ navigation, route }) => {
@@ -49,6 +49,7 @@ const ProfileScreen = ({ navigation, route }) => {
     const [topGenres, setTopGenres] = useState<IMyFavoriteGenre[]>();
     const [user, setUser] = useState<IUserProfile>({
         uuid: "",
+        interestsIds: [],
         interests: [],
         animelist: [],
         premium: false,
@@ -65,14 +66,29 @@ const ProfileScreen = ({ navigation, route }) => {
     });
 
     const { getUserProfile } = useGetUserProfile();
+    const { data: genresData } = useQuery(GET_GENRES);
+
+    const genreMap = useMemo(() => {
+        if (!genresData?.genres) return null;
+
+        return new Map(genresData.genres.map((g) => [String(g.id), g]));
+    }, [genresData]);
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!userId) return;
+            if (!userId || !genreMap) return;
 
             const userData = await getUserProfile(userId);
             if (userData) {
-                setUser((prev) => ({ ...prev, ...userData, animelist: [] }));
+                const enrichedInterests = (userData.interests ?? []).map((id) => genreMap.get(String(id))).filter((g): g is IInterests => Boolean(g));
+
+                setUser({
+                    ...userData,
+                    interestsIds: userData.interests,
+                    interests: enrichedInterests,
+                    animelist: [],
+                });
+
                 let animeList = userData.animelist ?? [];
 
                 // ===== Get Favorite Animes =====
@@ -135,21 +151,24 @@ const ProfileScreen = ({ navigation, route }) => {
 
                 for (const anime of allAnimes) {
                     for (const genre of anime.genres || []) {
-                        const key = genre.russian;
-                        const genreId = genre.id;
+                        const key = isCisLocale ? genre.russian : genre.name;
 
                         const current = map.get(key);
                         if (current) {
                             current.count += 1;
                         } else {
-                            map.set(key, { id: genreId, count: 1 });
+                            map.set(key, { id: genre.id, count: 1 });
                         }
                     }
                 }
 
                 for (const anime of allAnimes) {
                     if (!anime.id || !anime.genres) continue;
-                    const animeGenres = anime.genres.map((genre: any) => ({ id: genre.id, russian: genre.russian }));
+                    const animeGenres = anime.genres.map((genre: any) => ({
+                        id: genre.id,
+                        russian: genre.russian,
+                        name: genre.name
+                    }));
 
                     cache.push({
                         id: String(anime.id),
@@ -183,6 +202,7 @@ const ProfileScreen = ({ navigation, route }) => {
         fetchData();
     }, [userId]);
 
+    // TODO: Добавить авторизацию гугл(возможно и дискорда, так же фейсбук можно)
     // TODO: Добавить возможность ставить что например аниме просмотренно или ожидает просмотра и тд.
     // TODO: Добавить отображенния статуса аниме для человека, рядом с оценкой показывать просмотренно или нет
     // TODO: Начать вести статистику просмотра аниме и тд.
@@ -230,11 +250,12 @@ const ProfileScreen = ({ navigation, route }) => {
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             style={styles.genresScrollView}>
+                            {/* Get Genres by Id */}
                             {!isLoading && user.interests.map((genre) => (
                                 <View
                                     style={styles.genreContainer}
                                     key={genre.id}>
-                                    <Text style={styles.genreText}>{genre.text}</Text>
+                                    <Text style={styles.genreText}>{isCisLocale ? genre.russian : genre.name}</Text>
                                 </View>
                             ))}
                         </ScrollView>

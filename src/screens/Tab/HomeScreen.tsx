@@ -20,7 +20,7 @@ import {
 } from '@Data/constants';
 
 // Utils
-import { i18n } from '@Utils/localization';
+import { formatAnimeTitle, i18n, isCisLocale } from '@Utils/localization';
 
 // GraphQl
 import { GET_RECOMENDATIONANIME } from '@GraphQl/getRecomendationAnime';
@@ -28,17 +28,18 @@ import { GET_TOPHITSANIME } from '@GraphQl/getTopHitsAnimes';
 
 // Interface
 import { IAnimeMedium } from '@Interfaces/HomeScreen.interface';
+import { EStatus } from '@Interfaces/AnimeScreen.interface';
 
 // Redux
 import { RootState } from '@Redux/store';
 
 
 const HomeScreen = ({ navigation }) => {
-    const [selectAnime, setSelectAnime] = useState<IAnimeMedium>({ poster: { originalUrl: '' }, russian: '', score: 0, id: '', name: '', rating: '', genres: [{ id: 0, russian: '', name: '' }] });
+    const [selectAnime, setSelectAnime] = useState<IAnimeMedium>({ poster: { originalUrl: '' }, russian: '', english: '', japanese: '', score: 0, id: '', name: '', rating: '', status: EStatus.ANONS, genres: [{ id: 0, russian: '', name: '' }] });
     const [topHitsAnime, setTopHitsAnime] = useState<IAnimeMedium[]>([]);
     const [recomendationAnime, setRecomendationAnime] = useState<IAnimeMedium[]>([]);
-    
-    const [genreId, setGenreId] = useState<number>(null);
+
+    const [genreId, setGenreId] = useState<string>(null);
 
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
@@ -61,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (!genreId && userInterests.length > 0) {
-            setGenreId(userInterests[Math.floor(Math.random() * userInterests.length)].id);
+            setGenreId(userInterests[Math.floor(Math.random() * userInterests.length)]);
         }
     }, [genreId, userInterests]);
 
@@ -113,10 +114,8 @@ const HomeScreen = ({ navigation }) => {
                     }
                     <View style={styles.animeDataContainer}>
                         <View style={styles.animeContent}>
-                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeName}>{
-                                (i18n.locale === 'ru' || i18n.locale === 'uk')
-                                    ? selectAnime.russian
-                                    : selectAnime.name}
+                            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeName}>
+                                {formatAnimeTitle(selectAnime)}
                             </Text>
                             <View style={styles.tagsContainer}>
                                 {selectAnime.genres ?
@@ -124,10 +123,8 @@ const HomeScreen = ({ navigation }) => {
                                         numberOfLines={1}
                                         ellipsizeMode="tail"
                                         style={styles.animeDescription}>
-                                        {selectAnime.genres.map(genre => (
-                                            i18n.locale === 'ru' || i18n.locale === 'uk')
-                                            ? genre.russian
-                                            : genre.name
+                                        {selectAnime.genres.map(genre =>
+                                            isCisLocale ? genre.russian : genre.name
                                         ).join(', ')}
                                     </Text>
                                     :

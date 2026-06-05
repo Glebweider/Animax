@@ -8,7 +8,7 @@ import {
 } from '@Data/constants';
 
 // Interface
-import { AnimeItem } from '@Interfaces/AnimeCard.interface';
+import { IAnimeCard } from '@Interfaces/AnimeCard.interface';
 
 
 interface AnimeCardSkeletonProps {
@@ -20,9 +20,10 @@ interface AnimeCardSkeletonProps {
 interface AnimeCardProps {
     navigation?: any;
     onPress?: () => void;
-    item: AnimeItem;
+    item: IAnimeCard;
     width?: number;
     height?: number;
+    style?: StyleProp<ViewStyle>;
 }
 
 export const AnimeCardSkeleton: React.FC<AnimeCardSkeletonProps> = ({ width = 174, height = 242, style }) => {
@@ -38,6 +39,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({
     navigation,
     onPress,
     item,
+    style,
     width = 174,
     height = 242,
 }) => {
@@ -47,7 +49,7 @@ export const AnimeCard: React.FC<AnimeCardProps> = ({
                 ? onPress()
                 : navigation.navigate('AnimeScreen', { animeId: item.id })
             }
-            style={[styles.container, { width, height }]} >
+            style={[styles.container, { width, height }, style]} >
             <View style={styles.scoreBadge}>
                 <Text style={styles.scoreText}>{Number(item.score).toFixed(1)}</Text>
             </View>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR_PRIMARY,
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 12
+        margin: 12,
     },
     scoreText: {
         color: COLOR_TEXT_PRIMARY,
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
         height: '100%',
         borderRadius: 10,
         position: 'absolute',
-        zIndex: 1
+        zIndex: 1,
     },
     ratingBadge: {
         zIndex: 2,

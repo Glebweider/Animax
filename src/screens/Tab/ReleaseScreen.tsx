@@ -22,7 +22,7 @@ import { GET_ANIMEPOSTER } from '@GraphQl/getAnimePoster';
 import useGetCalendarAnime from '@Rest/anime/getCalendarAnime';
 
 // Utils
-import { i18n } from '@Utils/localization';
+import { i18n, isCisLocale } from '@Utils/localization';
 import { Formatter, getDateArrayForMonth } from '@Utils/functions';
 
 // Interface
@@ -154,7 +154,7 @@ const ReleaseScreen = ({ navigation }) => {
                                     </TouchableOpacity>
                                     <View style={styles.animeCardData}>
                                         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardTitle}>
-                                            {item.anime.russian ? item.anime.russian : item.anime.name}
+                                            {isCisLocale ? item.anime.russian : item.anime.name}
                                         </Text>
                                         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.animeCardEpisode}>
                                             {i18n.t('release.episodes')} {item.next_episode}/{item.anime.episodes ? item.anime.episodes : '?'}

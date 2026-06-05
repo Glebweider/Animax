@@ -131,5 +131,8 @@
     "newReleases": "新作アニメ",
     "appUpdates": "アプリの更新",
     "subscription": "サブスクリプション"
-  }
+  },
+  "anons": "発表済み",
+  "ongoing": "放送中",
+  "released": "放送終了"
 }

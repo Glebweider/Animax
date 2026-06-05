@@ -19,7 +19,7 @@ const MyAnimeListButton = ({ animeId }) => {
     return (
         <TouchableOpacity
             onPress={toggleAnimeList}
-            style={isInMyList ? styles.animeButtonMyListEnabled : styles.animeButtonMyListDisabled}>
+            style={[styles.container, isInMyList && styles.containerEnabled]}>
             {isInMyList ? (
                 <CheckIcon
                     Color={COLOR_PRIMARY}
@@ -33,7 +33,7 @@ const MyAnimeListButton = ({ animeId }) => {
                     Width={20}
                     Height={20} />
             )}
-            <Text style={isInMyList ? styles.animeButtonTextMyListEnabled : styles.animeButtonTextMyListDisabled}>
+            <Text style={[styles.text, isInMyList && styles.textEnabled]}>
                 {i18n.t('mylisttext')}
             </Text>
         </TouchableOpacity>
@@ -41,24 +41,7 @@ const MyAnimeListButton = ({ animeId }) => {
 };
 
 const styles = StyleSheet.create({
-    animeButtonMyListEnabled: {
-        borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        maxWidth: 145,
-        height: 36,
-        borderColor: COLOR_PRIMARY,
-        borderWidth: 2,
-        flexDirection: 'row',
-    },
-    animeButtonTextMyListEnabled: {
-        color: COLOR_PRIMARY,
-        fontSize: 13,
-        fontFamily: 'Outfit',
-        overflow: 'hidden',
-        marginRight: 13,
-    },
-    animeButtonMyListDisabled: {
+    container: {
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
@@ -68,14 +51,19 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         flexDirection: 'row',
     },
-    animeButtonTextMyListDisabled: {
+    containerEnabled: {
+        borderColor: COLOR_PRIMARY,
+    },
+    text: {
         color: COLOR_TEXT_PRIMARY,
         fontSize: 13,
         fontFamily: 'Outfit',
         overflow: 'hidden',
         marginRight: 13,
     },
-
+    textEnabled: {
+        color: COLOR_PRIMARY,
+    },
 });
 
 export default MyAnimeListButton;

@@ -7,6 +7,7 @@ export const GET_ANIMESANALYTICS = gql`
             genres {
                 id
                 russian
+                name
             }
         }
     }

@@ -4,7 +4,7 @@
   "genre": "Genre",
   "loading": "Loading",
   "play": "Play",
-  "mylisttext": "mylist",
+  "mylisttext": "My List",
   "helpCenter": {
     "support": "Support",
     "contactUs": "Contact us",
@@ -131,5 +131,8 @@
     "newReleases": "New Anime Releases",
     "appUpdates": "App Updates",
     "subscription": "Subscription"
-  }
+  },
+  "anons": "Announced",
+  "ongoing": "ongoing",
+  "released": "released"
 }

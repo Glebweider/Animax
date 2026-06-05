@@ -13,6 +13,13 @@ interface LocaleData {
     currencySymbol: string | null;
 }
 
+interface AnimeNames {
+    name: string;
+    russian?: string;
+    japanese?: string;
+    english?: string;
+}
+
 export let i18n = new I18n(translations)
 
 const setAppLanguage = async () => {
@@ -33,3 +40,18 @@ export const getLocaleData = (): LocaleData => {
         languageCode, currencySymbol
     }
 }
+
+export const isCisLocale = i18n.locale === 'ru' || i18n.locale === 'uk';
+
+export const formatAnimeTitle = (names: AnimeNames): string => {
+    const mapper: Record<string, keyof AnimeNames> = {
+        ru: 'russian',
+        uk: 'russian',
+        en: 'english',
+        ja: 'japanese'
+    };
+
+    const targetKey = mapper[i18n.locale];
+
+    return names[targetKey] || names.name;
+};

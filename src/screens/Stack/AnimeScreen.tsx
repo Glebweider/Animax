@@ -23,7 +23,7 @@ import PlayIcon from '@Icons/PlayIcon';
 import ArrowRightIcon from '@Icons/ArrowRightIcon';
 
 // Utils
-import { i18n } from '@Utils/localization';
+import { formatAnimeTitle, i18n, isCisLocale } from '@Utils/localization';
 import { useUserAnime } from '@Utils/hooks';
 import { Formatter } from '@Utils/functions';
 
@@ -54,7 +54,7 @@ const AnimeScreen = ({ navigation, route }) => {
     const { showAlert } = useAlert();
     const { animeId } = route.params;
 
-    const [anime, setAnime] = useState<IAnime>({ id: '', name: '', russian: '', poster: { originalUrl: '' }, score: 0, status: '', rating: '', createdAt: '', description: '', genres: [{ id: 0, russian: '', name: '' }], scoresStats: [{ count: 0, score: 0 }] });
+    const [anime, setAnime] = useState<IAnime>({ id: '', name: '', russian: '', japanese: '', english: '', poster: { originalUrl: '' }, score: 0, status: '', rating: '', createdAt: '', description: '', genres: [{ id: 0, russian: '', name: '' }], scoresStats: [{ count: 0, score: 0 }] });
     const [animeRecomendations, setAnimeRecomendations] = useState<IRearchAnime[]>([]);
     const [episodes, setEpisodes] = useState<IEpisode[]>([]);
 
@@ -199,11 +199,12 @@ const AnimeScreen = ({ navigation, route }) => {
     }
 
     const handleShare = async () => {
-        const message = `${i18n.t('anime.share') + anime.russian}, ${anime.poster.originalUrl}`;
+        const name = formatAnimeTitle(anime);
+        const message = `${i18n.t('anime.share') + name}, ${anime.poster.originalUrl}`;
         try {
             await Share.share({
                 message,
-                title: anime.russian,
+                title: name,
             });
         } catch (error) {
             showAlert(error.message);
@@ -247,10 +248,9 @@ const AnimeScreen = ({ navigation, route }) => {
                 <Text
                     numberOfLines={1}
                     ellipsizeMode="tail"
-                    style={styles.titleText}>{
-                        (i18n.locale === 'ru' || i18n.locale === 'uk')
-                            ? anime.russian
-                            : anime.name}</Text>
+                    style={styles.titleText}>
+                    {formatAnimeTitle(anime)}
+                </Text>
                 <View style={styles.titleContainerButtons}>
                     <TouchableOpacity
                         onPress={toggleAnimeList}
@@ -290,9 +290,8 @@ const AnimeScreen = ({ navigation, route }) => {
                                 <View
                                     style={styles.genreContainer}
                                     key={genre.id}>
-                                    <Text style={styles.genreText}>{(i18n.locale === 'ru' || i18n.locale === 'uk')
-                                        ? genre.russian
-                                        : genre.name}
+                                    <Text style={styles.genreText}>
+                                        {isCisLocale ? genre.russian : genre.name}
                                     </Text>
                                 </View>
                             ))}

@@ -2,6 +2,8 @@ export interface IAnime {
     id: string;
     name: string;
     russian: string;
+    japanese: string;
+    english: string;
     poster: IPoster;
     score: number;
     status: string;
@@ -15,6 +17,11 @@ export interface IAnime {
             score: number;
         }
     ];
+}
+export enum EStatus {
+    ANONS = 'anons',
+    ONGOING = 'ongoing',
+    RELEASED = 'released',
 }
 
 export interface IPoster {

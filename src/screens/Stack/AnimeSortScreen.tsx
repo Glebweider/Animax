@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-//Components
+// Components
 import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
@@ -13,70 +13,82 @@ import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
 // GraphQl
 import { GET_GENRES } from '@GraphQl/getGenres';
 
-//Utils
-import { i18n } from '@Utils/localization';
+// Utils
+import { i18n, isCisLocale } from '@Utils/localization';
 
-//Redux
+// Redux
 import { RootState } from '@Redux/store';
 import { addFilter, reset } from '@Redux/reducers/sortReducer';
 
-// Interface
-import { IGenre } from '@Interfaces/AnimeScreen.interface';
+
+interface GenreItemProps {
+    item: { id: string; name: string; russian?: string };
+    isSelected: boolean;
+    onPress: () => void;
+}
+
+const GenreButton = React.memo(({ item, isSelected, onPress }: GenreItemProps) => {
+    const genreName = isCisLocale ? (item.russian || item.name) : item.name;
+
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={0.7}
+            style={[styles.filterContainer, isSelected && styles.filterContainerEnabled]}
+        >
+            <Text style={[styles.filterText, isSelected && styles.filterTextEnabled]}>
+                {genreName}
+            </Text>
+        </TouchableOpacity>
+    );
+}, (prevProps, nextProps) => {
+    return prevProps.isSelected === nextProps.isSelected && prevProps.item.id === nextProps.item.id;
+});
 
 
 const AnimeSortScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const { data } = useQuery(GET_GENRES);
-    const [genresAnime, setGenresAnime] = useState<IGenre[]>([]);
 
-    const FilterState = useSelector((state: RootState) => state.sortReducer);
+    const activeFilters = useSelector((state: RootState) => state.sortReducer.filter);
 
-    useEffect(() => {
-        if (data) {
-            setGenresAnime(data.genres);
-        }
-    }, [data]);
-
-    const renderItems = useMemo(() =>
-        genresAnime.map((data) => (
-            <TouchableOpacity
-                key={data.id}
-                onPress={() => dispatch(addFilter({
-                    id: data.id, text: (i18n.locale === 'ru' || i18n.locale === 'uk')
-                        ? data.russian
-                        : data.name
-                }))}
-                style={FilterState.filter.some((i) => i.id === data.id)
-                    ? styles.filterContainerEnabled
-                    : styles.filterContainerDisabled}>
-                <Text style={FilterState.filter.some((i) => i.id === data.id)
-                    ? styles.filterTextEnabled
-                    : styles.filterTextDisabled}>{(i18n.locale === 'ru' || i18n.locale === 'uk')
-                        ? data.russian
-                        : data.name}
-                </Text>
-            </TouchableOpacity>
-        )
-        ), [genresAnime, FilterState.filter]);
+    const genresAnime = data?.genres ?? [];
+    const selectedIds = useMemo(() => new Set(activeFilters.map(i => i.id)), [activeFilters]);
 
     return (
         <View style={styles.container}>
             <BackButton navigation={navigation} text={i18n.t('sortfilter.sortfilter')} />
+
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                {genresAnime.length >= 1 ?
+                {genresAnime.length ? (
                     <View style={styles.filtersContainer}>
-                        {renderItems}
+                        {genresAnime.map((item) => {
+                            const isSelected = selectedIds.has(item.id);
+
+                            return (
+                                <GenreButton
+                                    key={item.id}
+                                    item={item}
+                                    isSelected={isSelected}
+                                    onPress={() => dispatch(addFilter({
+                                        id: item.id,
+                                        text: isCisLocale ? (item.russian || item.name) : item.name
+                                    }))} />
+                            );
+                        })}
                     </View>
-                    :
-                    <Text>{i18n.t('loading')}</Text>
-                }
+                ) : (
+                    <Text style={styles.loadingText}>{i18n.t('loading')}</Text>
+                )}
             </ScrollView>
+
             <View style={styles.buttons}>
                 <ApplyButton
                     onPress={() => dispatch(reset())}
                     isActiveButton={false}
                     style={styles.cancelButton}
                     text={i18n.t('sortfilter.reset')} />
+
                 <ApplyButton
                     onPress={() => navigation.navigate('AnimeSearchScreen')}
                     isActiveButton={false}
@@ -119,27 +131,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 15
+        gap: 15,
+        backgroundColor: '#141414',
     },
     filtersContainer: {
         width: '94%',
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
     },
     filterContainerEnabled: {
-        marginTop: 21,
-        marginLeft: 10,
-        paddingRight: 19,
-        paddingLeft: 19,
-        height: 45,
         backgroundColor: COLOR_PRIMARY,
-        borderRadius: 50,
-        borderColor: COLOR_PRIMARY,
-        borderWidth: 2,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
-    filterContainerDisabled: {
+    filterContainer: {
         marginTop: 21,
         marginLeft: 10,
         paddingRight: 19,
@@ -153,14 +156,17 @@ const styles = StyleSheet.create({
     },
     filterTextEnabled: {
         color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 14,
     },
-    filterTextDisabled: {
+    filterText: {
         color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 14,
     },
+    loadingText: {
+        color: '#888',
+        marginTop: 40,
+        textAlign: 'center',
+    }
 });
 
 export default AnimeSortScreen;

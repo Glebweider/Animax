@@ -1,21 +1,23 @@
 import { IPoster } from "./AnimeScreen.interface";
 
 
-interface IInterest {
-    id: number;
-    text: string;
-}
+export interface IInterests {
+    id: string;
+    name: string;
+    russian: string;
+};
 
 export interface IAnimeSmall {
     id: string;
     poster: IPoster;
     score: number;
     rating: string;
-}
+};
 
 export interface IUserProfile {
     uuid: string;
-    interests: IInterest[];
+    interestsIds: string[];
+    interests: IInterests[];
     animelist: IAnimeSmall[];
     premium: boolean;
     description: string;
@@ -27,12 +29,12 @@ export interface IUserProfile {
         counterWatchedAnime: number;
         timeSpentWatchingAnime: number;
         achievementsCountWatchedAnime: number;
-    }
-}
+    };
+};
 
 export interface IMyFavoriteGenre {
     id: string;
     label: string;
     value: number;
     onPress?: () => void;
-}
+};

@@ -7,9 +7,10 @@ export const GET_ANIME = gql`
             description
             id
             name
-            rating
             russian
+            english
             japanese
+            rating
             score
             status
             poster {

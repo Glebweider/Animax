@@ -6,6 +6,8 @@ export const GET_ANIMEBYGENRES = gql`
             id
             name
             russian
+            english
+            japanese
             score
             rating
             poster {

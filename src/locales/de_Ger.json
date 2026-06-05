@@ -131,5 +131,8 @@
     "newReleases": "Neue Anime-Veröffentlichungen",
     "appUpdates": "App-Updates",
     "subscription": "Abonnement"
-  }
+  },
+  "anons": "Angekündigt",
+  "ongoing": "Laufend",
+  "released": "Abgeschlossen"
 }

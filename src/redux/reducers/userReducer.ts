@@ -1,9 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface IInterest {
-	id: number;
-	text: string;
-}
 
 interface IUserPremium {
 	premium: boolean;
@@ -27,7 +23,7 @@ export interface IUserNotificationSettings {
 export interface IUserState {
 	uuid: string;
 	email: string;
-	interests: IInterest[];
+	interests: string[];
 	description: string;
 	premium: {
 		premium: boolean;

@@ -31,13 +31,13 @@ const RecomendationsAnimeScreen = ({ navigation }: any) => {
     const [animes, setAnimes] = useState<ITopHitsAnime[]>([]);
 
     const [page, setPage] = useState<number>(1);
-    const [genreId, setGenreId] = useState<number | null>(null);
+    const [genreId, setGenreId] = useState<string>(null);
 
     const userInterests = useSelector((state: RootState) => state.userReducer.interests);
 
     useEffect(() => {
         if (!genreId && userInterests.length > 0) {
-            const randomGenreId = userInterests[Math.floor(Math.random() * userInterests.length)].id;
+            const randomGenreId = userInterests[Math.floor(Math.random() * userInterests.length)];
             setGenreId(randomGenreId);
         }
     }, [genreId, userInterests]);
