@@ -1,34 +1,65 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react-native",
-    "lib": ["dom", "esnext"],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "noEmit": true,
-    "target": "es2017",
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "strict": false,
-    "baseUrl": ".",
-    "paths": {
-      "@Data/*": ["src/data/*"],
-      "@Components/*": ["src/components/*"],
-      "@Modal/*": ["src/components/modals/*"],
-      "@Icons/*": ["src/components/icons/*"],
-      "@Utils/*": ["src/utils/*"],
-      "@Rest/*": ["src/utils/api/rest/*"],
-      "@GraphQl/*": ["src/utils/api/graphql/*"],
-      "@Stack/*": ["src/screens/Stack/*"],
-      "@Tab/*": ["src/screens/Tab/*"],
-      "@Redux/*": ["src/redux/*"],
-      "@Assets/*": ["assets/*"],
-      "@Interfaces/*": ["src/interfaces/*"],
-      "@locales/*": ["src/locales/*"]
-    }
-  },
-  "exclude": ["node_modules"],
-  "extends": "expo/tsconfig.base"
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"jsx": "react-native",
+		"lib": [
+			"dom",
+			"esnext"
+		],
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"moduleResolution": "node",
+		"module": "commonjs",
+		"noEmit": true,
+		"target": "es2017",
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"strict": false,
+		"baseUrl": ".",
+		"paths": {
+			"@Data/*": [
+				"src/data/*"
+			],
+			"@Components/*": [
+				"src/components/*"
+			],
+			"@Modal/*": [
+				"src/components/modals/*"
+			],
+			"@Icons/*": [
+				"src/components/icons/*"
+			],
+			"@Utils/*": [
+				"src/utils/*"
+			],
+			"@Rest/*": [
+				"src/utils/api/rest/*"
+			],
+			"@GraphQl/*": [
+				"src/utils/api/graphql/*"
+			],
+			"@Stack/*": [
+				"src/screens/Stack/*"
+			],
+			"@Tab/*": [
+				"src/screens/Tab/*"
+			],
+			"@Redux/*": [
+				"src/redux/*"
+			],
+			"@Assets/*": [
+				"assets/*"
+			],
+			"@Interfaces/*": [
+				"src/interfaces/*"
+			],
+			"@locales/*": [
+				"src/locales/*"
+			]
+		}
+	},
+	"exclude": [
+		"node_modules"
+	],
+	"extends": "expo/tsconfig.base"
 }

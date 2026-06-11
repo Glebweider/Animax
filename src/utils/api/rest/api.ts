@@ -1,5 +1,7 @@
-import { getTokenFromStorage } from '@Utils/functions';
 import { Platform } from 'react-native';
+
+import { getTokenFromStorage } from '@Utils/functions';
+import { i18n } from '@Utils/localization';
 
 
 interface IRequestOptions extends RequestInit {
@@ -20,6 +22,7 @@ export const apiRequest = async <T>(
 			Accept: 'application/json',
 			'X-Device-Platform': Platform.OS,
 			'X-Request-Source': 'app',
+			'locale': i18n.locale,
 			...options.headers,
 		};
 
@@ -74,7 +77,7 @@ export const apiRequest = async <T>(
 		return data as T;
 	} catch (error: unknown) {
 		if (error instanceof Error) {
-			console.log('[API ERROR]', error.message);
+			console.error('[API ERROR]', error.message);
 			throw error;
 		}
 
