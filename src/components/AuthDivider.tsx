@@ -1,4 +1,5 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Text } from 'react-native';
 
 
@@ -18,9 +19,8 @@ const AuthDivider = ({ text }: AuthDividerProps) => {
 
 const styles = StyleSheet.create({
     container: {
+        ...globalStyles.RowCenter,
         marginTop: 20,
-        flexDirection: 'row',
-        alignItems: 'center',
         marginVertical: 10,
         width: '100%',
     },

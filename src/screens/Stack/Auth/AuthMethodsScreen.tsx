@@ -1,4 +1,5 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -10,7 +11,7 @@ import AuthRedirect from '@Components/AuthRedirect';
 import AuthDivider from '@Components/AuthDivider';
 
 // Data
-import { BACKGROUND_METHODS, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { BACKGROUND_METHODS } from '@Data/constants';
 
 
 const AuthMethodsScreen = ({ navigation }) => {
@@ -46,22 +47,19 @@ const AuthMethodsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     titleContainer: {
-        width: '100%',
-        height: '30%',
-        alignItems: 'center',
-        justifyContent: 'center'
+        ...globalStyles.AuthTitleContainer,
+        height: '30%'
     },
     titleImage: {
         width: '60%',
-        height: '80%',
+        height: '80%'
     },
     titleText: {
+        ...globalStyles.TextPrimary,
         marginTop: 25,
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
         fontSize: 35,
         fontWeight: "500"
     }

@@ -110,7 +110,7 @@ const ReleaseScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.FullScreen}>
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
                     <Image source={ICON_APP} style={styles.HeaderScreenIcon} />
@@ -137,7 +137,7 @@ const ReleaseScreen = ({ navigation }) => {
                         keyExtractor={(item) => item.anime.id.toString()}
                         renderItem={({ item }) => (
                             <View style={{ marginTop: 15 }}>
-                                <View style={styles.animeCardTimeContainer}>
+                                <View style={globalStyles.RowCenter}>
                                     <View style={styles.animeCardTimeLine} />
                                     <Text style={styles.animeCardTimeText}>{Formatter.time(item.next_episode_at)}</Text>
                                 </View>
@@ -186,33 +186,22 @@ const ReleaseScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	...globalStyles,
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-    },
-    animeCardTimeContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     animeCardTimeLine: {
         backgroundColor: COLOR_PRIMARY,
         width: 16,
         height: 6,
         marginTop: 2,
-        borderRadius: 50,
+        borderRadius: 50
     },
     animeCardTimeText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 14,
         textAlign: 'center',
-        marginLeft: 6,
+        marginLeft: 6
     },
     errorTextContainer: {
-        width: '90%',
-        alignItems: 'center',
-        justifyContent: 'center',
+        ...globalStyles.Center,
+        width: '90%'
     },
     errorTitle: {
         color: COLOR_PRIMARY,
@@ -221,8 +210,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     errorText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 14,
         marginTop: 20,
         textAlign: 'center'
@@ -233,23 +221,21 @@ const styles = StyleSheet.create({
         width: '55%'
     },
     animeCardTitle: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 13,
-        fontFamily: 'Outfit',
         overflow: 'hidden',
-        marginTop: 5,
+        marginTop: 5
     },
     animeCardEpisode: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 11,
-        fontFamily: 'Outfit',
         overflow: 'hidden',
-        marginTop: 12,
+        marginTop: 12
     },
     animesContainer: {
         width: '100%',
         flexGrow: 1,
-        paddingBottom: 85,
+        paddingBottom: 85
     },
     animeCardContainer: {
         width: '100%',
@@ -263,22 +249,18 @@ const styles = StyleSheet.create({
         borderRadius: 15
     },
     headerContainer: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 50,
+        ...globalStyles.AuthTitleContainer,
+        marginTop: 50
     },
     header: {
+        ...globalStyles.RowCenter,
         width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 60,
+        height: 60
     },
     headerText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 18,
-        marginLeft: 15,
+        marginLeft: 15
     }
 });
 

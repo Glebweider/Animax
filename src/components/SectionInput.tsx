@@ -59,26 +59,19 @@ const SectionInput = ({ placeholder, secure, value, error, icon, keyboardType, s
 const styles = StyleSheet.create({
 	...globalStyles,
     container: {
+        ...globalStyles.Section,
         marginTop: 3,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
         height: 64,
-        borderRadius: 20,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
+        borderRadius: 20
     },
     input: {
         ...globalStyles.Input,
-        marginLeft: 20,
+        marginLeft: 20
     },
     error: {
-        marginTop: 5,
-        color: 'red',
-        fontSize: 11,
-        fontFamily: 'Outfit',
-        justifyContent: 'center',
-        textAlign: 'center'
+        ...globalStyles.ErrorText,
+        fontSize: 11
     },
 });
 

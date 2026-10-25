@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import * as Updates from 'expo-updates';
 import { useSelector } from 'react-redux';
@@ -31,63 +32,63 @@ import NSFWIcon from '@Components/icons/NSFWIcon';
 
 
 const SettingsScreen = ({ navigation }) => {
-    const userState = useSelector((state: RootState) => state.userReducer);
-    const [isOpenModalLogout, setOpenModalLogout] = useState<boolean>(false);
+	const userState = useSelector((state: RootState) => state.userReducer);
+	const [isOpenModalLogout, setOpenModalLogout] = useState<boolean>(false);
 
-    return (
-        <View style={styles.container}>
-            <StatusBar style='light' />
-            <LogoutModal
-                visible={isOpenModalLogout}
-                setVisible={setOpenModalLogout}
-                navigation={navigation} />
-            <BackButton navigation={navigation} text={i18n.t('profile.settings')} />
-            <View style={styles.profileContainer}>
-                <View style={styles.avatarContainer}>
-                    <Image
-                        source={{ uri: userState.profile.avatar }}
-                        style={styles.avatarImage} />
-                </View>
-                <View style={styles.profileUserData}>
-                    <Text style={styles.profileUsername}>{userState.profile.nickname}</Text>
-                    <Text style={styles.profileUserEmail}>{userState.email}</Text>
-                </View>
-            </View>
-            {!userState.premium.premium &&
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('SubcribeScreen')}
-                    style={styles.premiumContainer}>
-                    <CrownIcon Width={60} Height={55} Color={COLOR_PRIMARY} />
-                    <View style={styles.premiumTextContainer}>
-                        <Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
-                        <Text
-                            numberOfLines={2}
-                            ellipsizeMode="tail"
-                            style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
-                    </View>
-                    <ArrowRightIcon Color={COLOR_PRIMARY} Width={30} Height={30} />
-                </TouchableOpacity>
-            }
-            <View style={styles.labelsContainer}>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('EditDataScreen')}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <ProfileIcon Style={{}} Color={COLOR_TEXT_PRIMARY} />
-                        <Text style={styles.labelLeftText}>{i18n.t('profile.edit')}</Text>
-                    </View>
-                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('NotificationScreen')}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <NotificationIcon Style={{}} Color={COLOR_TEXT_PRIMARY} Width={25} Height={25} />
-                        <Text style={styles.labelLeftText}>{i18n.t('profile.notification')}</Text>
-                    </View>
-                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
-                </TouchableOpacity>
-                {/* <TouchableOpacity 
+	return (
+		<View style={globalStyles.FullScreen}>
+			<StatusBar style='light' />
+			<LogoutModal
+				visible={isOpenModalLogout}
+				setVisible={setOpenModalLogout}
+				navigation={navigation} />
+			<BackButton navigation={navigation} text={i18n.t('profile.settings')} />
+			<View style={styles.profileContainer}>
+				<View style={{ alignItems: 'center' }}>
+					<Image
+						source={{ uri: userState.profile.avatar }}
+						style={styles.avatarImage} />
+				</View>
+				<View style={styles.profileUserData}>
+					<Text style={styles.profileUsername}>{userState.profile.nickname}</Text>
+					<Text style={styles.profileUserEmail}>{userState.email}</Text>
+				</View>
+			</View>
+			{!userState.premium.premium &&
+				<TouchableOpacity
+					onPress={() => navigation.navigate('SubcribeScreen')}
+					style={styles.premiumContainer}>
+					<CrownIcon Width={60} Height={55} Color={COLOR_PRIMARY} />
+					<View style={{ width: '60%' }}>
+						<Text style={styles.premiumTitle}>{i18n.t('premium.join')}</Text>
+						<Text
+							numberOfLines={2}
+							ellipsizeMode="tail"
+							style={styles.premiumDescription}>{i18n.t('premium.details')}</Text>
+					</View>
+					<ArrowRightIcon Color={COLOR_PRIMARY} Width={30} Height={30} />
+				</TouchableOpacity>
+			}
+			<View style={styles.labelsContainer}>
+				<TouchableOpacity
+					onPress={() => navigation.navigate('EditDataScreen')}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<ProfileIcon Style={{}} Color={COLOR_TEXT_PRIMARY} />
+						<Text style={styles.labelLeftText}>{i18n.t('profile.edit')}</Text>
+					</View>
+					<ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => navigation.navigate('NotificationScreen')}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<NotificationIcon Style={{}} Color={COLOR_TEXT_PRIMARY} Width={25} Height={25} />
+						<Text style={styles.labelLeftText}>{i18n.t('profile.notification')}</Text>
+					</View>
+					<ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
+				</TouchableOpacity>
+				{/* <TouchableOpacity 
                     onPress={() => navigation.navigate('SecurityScreen')}
                     style={styles.labelContainer}>
                     <View style={styles.labelLeftContainer}>
@@ -111,199 +112,180 @@ const SettingsScreen = ({ navigation }) => {
                     </View>
                     <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
                 </TouchableOpacity> */}
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('LanguageScreen')}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <NSFWIcon
-                            Color={COLOR_TEXT_PRIMARY}
-                            Style={{}}
-                            Width={24}
-                            Height={24} />
-                        <Text style={styles.labelLeftText}>{i18n.t('profile.censored')}</Text>
-                    </View>
-                    <ToggleSwitch
-                        isOn={getSettingsNSFWFromStorage()}
-                        onToggle={(v) => saveSettingsNSFWToStorage(v)} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('LanguageScreen')}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <Svg
-                            width="27"
-                            height="27"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <G stroke={COLOR_TEXT_PRIMARY} strokeLinecap="round" strokeLinejoin="round">
-                                <Path
-                                    d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"
-                                    strokeWidth={1.5} />
-                                <Path
-                                    d="M15.204 13.9h.01M12.204 9.9h.01M9.196 13.9h.009"
-                                    strokeWidth={2} />
-                            </G>
-                        </Svg>
-                        <Text style={styles.labelLeftText}>{i18n.t('profile.language')}</Text>
-                    </View>
-                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('HelpCenterScreen')}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
-                            <G stroke={COLOR_TEXT_PRIMARY} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-                                <Path d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z" />
-                                <Path d="M12 15.895V12M12.005 8.5h-.01" />
-                            </G>
-                        </Svg>
-                        <Text style={styles.labelLeftText}>{i18n.t('profile.helpcenter')}</Text>
-                    </View>
-                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate('PrivacyPolicyScreen')}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
-                            <G stroke={COLOR_TEXT_PRIMARY} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-                                <Path d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z" />
-                                <Path d="M12 8.105V12M11.995 15.5h.01" />
-                            </G>
-                        </Svg>
-                        <Text style={styles.labelLeftText}>{i18n.t('profile.privacypolicy')}</Text>
-                    </View>
-                    <ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => setOpenModalLogout(true)}
-                    style={styles.labelContainer}>
-                    <View style={styles.labelLeftContainer}>
-                        <Svg
-                            width="27"
-                            height="27"
-                            viewBox="0 0 24 24"
-                            fill="none">
-                            <G
-                                stroke="#F75555"
-                                strokeWidth={1.5}
-                                strokeLinecap="round"
-                                strokeLinejoin="round">
-                                <Path d="M21.791 12.12H9.75M18.864 9.205l2.928 2.916-2.928 2.916M16.36 7.63c-.33-3.58-1.67-4.88-7-4.88-7.101 0-7.101 2.31-7.101 9.25 0 6.94 0 9.25 7.1 9.25 5.33 0 6.67-1.3 7-4.88" />
-                            </G>
-                        </Svg>
-                        <Text style={styles.labelLeftTextLogout}>{i18n.t('profile.logout')}</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <Text style={styles.updateText}>
-                {Updates.updateId}
-            </Text>
-        </View>
-    );
+				<TouchableOpacity
+					onPress={() => navigation.navigate('LanguageScreen')}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<NSFWIcon
+							Color={COLOR_TEXT_PRIMARY}
+							Style={{}}
+							Width={24}
+							Height={24} />
+						<Text style={styles.labelLeftText}>{i18n.t('profile.censored')}</Text>
+					</View>
+					<ToggleSwitch
+						isOn={getSettingsNSFWFromStorage()}
+						onToggle={(v) => saveSettingsNSFWToStorage(v)} />
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => navigation.navigate('LanguageScreen')}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<Svg
+							width="27"
+							height="27"
+							viewBox="0 0 24 24"
+							fill="none">
+							<G stroke={COLOR_TEXT_PRIMARY} strokeLinecap="round" strokeLinejoin="round">
+								<Path
+									d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z"
+									strokeWidth={1.5} />
+								<Path
+									d="M15.204 13.9h.01M12.204 9.9h.01M9.196 13.9h.009"
+									strokeWidth={2} />
+							</G>
+						</Svg>
+						<Text style={styles.labelLeftText}>{i18n.t('profile.language')}</Text>
+					</View>
+					<ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => navigation.navigate('HelpCenterScreen')}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
+							<G stroke={COLOR_TEXT_PRIMARY} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+								<Path d="M21.25 12c0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25 0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25z" />
+								<Path d="M12 15.895V12M12.005 8.5h-.01" />
+							</G>
+						</Svg>
+						<Text style={styles.labelLeftText}>{i18n.t('profile.helpcenter')}</Text>
+					</View>
+					<ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => navigation.navigate('PrivacyPolicyScreen')}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<Svg width="27" height="27" viewBox="0 0 24 24" fill="none">
+							<G stroke={COLOR_TEXT_PRIMARY} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+								<Path d="M2.75 12c0-6.937 2.313-9.25 9.25-9.25 6.937 0 9.25 2.313 9.25 9.25 0 6.937-2.313 9.25-9.25 9.25-6.937 0-9.25-2.313-9.25-9.25z" />
+								<Path d="M12 8.105V12M11.995 15.5h.01" />
+							</G>
+						</Svg>
+						<Text style={styles.labelLeftText}>{i18n.t('profile.privacypolicy')}</Text>
+					</View>
+					<ArrowRightIcon Color={COLOR_TEXT_PRIMARY} Width={20} Height={20} />
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => setOpenModalLogout(true)}
+					style={styles.labelContainer}>
+					<View style={styles.labelLeftContainer}>
+						<Svg
+							width="27"
+							height="27"
+							viewBox="0 0 24 24"
+							fill="none">
+							<G
+								stroke="#F75555"
+								strokeWidth={1.5}
+								strokeLinecap="round"
+								strokeLinejoin="round">
+								<Path d="M21.791 12.12H9.75M18.864 9.205l2.928 2.916-2.928 2.916M16.36 7.63c-.33-3.58-1.67-4.88-7-4.88-7.101 0-7.101 2.31-7.101 9.25 0 6.94 0 9.25 7.1 9.25 5.33 0 6.67-1.3 7-4.88" />
+							</G>
+						</Svg>
+						<Text style={styles.labelLeftTextLogout}>{i18n.t('profile.logout')}</Text>
+					</View>
+				</TouchableOpacity>
+			</View>
+			<Text style={styles.updateText}>
+				{Updates.updateId}
+			</Text>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-    },
-    updateText: {
-        marginTop: 15,
-        fontSize: 12,
-        color: '#666',
-    },
-    labelsContainer: {
-        width: '100%',
-        height: '64%',
-        alignItems: 'center',
-        marginTop: 10
-    },
-    labelContainer: {
-        width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: 30,
-        marginTop: 20,
-    },
-    labelLeftContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    labelLeftText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 14,
-        marginLeft: 15
-    },
-    labelLeftTextLogout: {
-        color: '#F75555',
-        fontFamily: 'Outfit',
-        fontSize: 14,
-        marginLeft: 15
-    },
-    premiumContainer: {
-        flexDirection: 'row',
-        width: '90%',
-        height: 110,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: COLOR_PRIMARY,
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        marginTop: 25,
-    },
-    premiumTextContainer: {
-        width: '60%',
-    },
-    premiumTitle: {
-        color: COLOR_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
-    premiumDescription: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 10,
-        marginTop: 10,
-    },
-    profileContainer: {
-        width: '90%',
-        height: 100,
-        flexDirection: 'row',
-        marginTop: 25,
-    },
-    profileUserData: {
-        justifyContent: 'center',
-        height: '100%',
-        width: '100%',
-        marginLeft: 24,
-    },
-    profileUsername: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 15,
-    },
-    profileUserEmail: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 12,
-        marginTop: 10,
-    },
-    avatarImage: {
-        width: 100,
-        height: 100,
-        backgroundColor: '#464648',
-        borderRadius: 100,
-        overflow: 'hidden'
-    },
-    avatarContainer: {
-        alignItems: 'center',
-    },
+	updateText: {
+		marginTop: 15,
+		fontSize: 12,
+		color: '#666'
+	},
+	labelsContainer: {
+		width: '100%',
+		height: '64%',
+		alignItems: 'center',
+		marginTop: 10
+	},
+	labelContainer: {
+		...globalStyles.RowCenter,
+		width: '90%',
+		justifyContent: 'space-between',
+		height: 30,
+		marginTop: 20
+	},
+	labelLeftContainer: {
+		...globalStyles.Center,
+		flexDirection: 'row'
+	},
+	labelLeftText: {
+		...globalStyles.TextPrimary,
+		fontSize: 14,
+		marginLeft: 15
+	},
+	labelLeftTextLogout: {
+		color: '#F75555',
+		fontFamily: 'Outfit',
+		fontSize: 14,
+		marginLeft: 15
+	},
+	premiumContainer: {
+		...globalStyles.RowCenter,
+		width: '90%',
+		height: 110,
+		borderRadius: 25,
+		borderWidth: 2,
+		borderColor: COLOR_PRIMARY,
+		justifyContent: 'space-evenly',
+		marginTop: 25
+	},
+	premiumTitle: {
+		color: COLOR_PRIMARY,
+		fontFamily: 'Outfit',
+		fontSize: 15
+	},
+	premiumDescription: {
+		...globalStyles.TextPrimary,
+		fontSize: 10,
+		marginTop: 10
+	},
+	profileContainer: {
+		width: '90%',
+		height: 100,
+		flexDirection: 'row',
+		marginTop: 25
+	},
+	profileUserData: {
+		...globalStyles.FullSize,
+		justifyContent: 'center',
+		marginLeft: 24
+	},
+	profileUsername: {
+		...globalStyles.TextPrimary,
+		fontSize: 15
+	},
+	profileUserEmail: {
+		...globalStyles.TextPrimary,
+		fontSize: 12,
+		marginTop: 10
+	},
+	avatarImage: {
+		width: 100,
+		height: 100,
+		backgroundColor: '#464648',
+		borderRadius: 100,
+		overflow: 'hidden'
+	}
 });
 
 export default SettingsScreen;

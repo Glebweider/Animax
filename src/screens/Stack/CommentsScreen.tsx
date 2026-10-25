@@ -250,7 +250,7 @@ const CommentsScreen = ({ navigation, route }) => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={globalStyles.FullScreen}>
 			<StatusBar style='light' />
 			<BackButton navigation={navigation} text={`${Formatter.views(commentsCountNew)} ${i18n.t('anime.comments')}`} />
 			<FlatList
@@ -388,11 +388,6 @@ const CommentsScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
 	...globalStyles,
-	container: {
-		width: '100%',
-		height: '100%',
-		alignItems: 'center'
-	},
 	input: {
 		...globalStyles.Input,
 		flex: 0,
@@ -406,6 +401,7 @@ const styles = StyleSheet.create({
 		backgroundColor: COLOR_BACKGROUND_SECONDARY
 	},
 	footer: {
+		...globalStyles.Center,
 		borderColor: '#35383F',
 		borderTopWidth: 1,
 		borderRightWidth: 1,
@@ -414,16 +410,13 @@ const styles = StyleSheet.create({
 		height: 110,
 		borderTopLeftRadius: 30,
 		borderTopRightRadius: 30,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center'
+		flexDirection: 'row'
 	},
 	buttonApplyContainer: {
+		...globalStyles.Center,
 		width: 60,
 		height: 60,
 		borderRadius: 50,
-		justifyContent: 'center',
-		alignItems: 'center',
 		marginLeft: 15
 	},
 	replyViewText: {
@@ -477,8 +470,7 @@ const styles = StyleSheet.create({
 		fontFamily: 'Outfit'
 	},
 	username: {
-		fontFamily: 'Outfit',
-		color: COLOR_TEXT_PRIMARY,
+		...globalStyles.TextPrimary,
 		fontSize: 14
 	},
 	commentText: {
@@ -491,8 +483,7 @@ const styles = StyleSheet.create({
 		marginTop: 4
 	},
 	likesContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		...globalStyles.RowCenter,
 		marginRight: 10
 	},
 	likeIcon: {

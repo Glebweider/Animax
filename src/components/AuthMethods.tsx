@@ -1,4 +1,5 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native';
 
 // Data
@@ -43,24 +44,19 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     methodContainer: {
+        ...globalStyles.Section,
         height: 60,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 15,
         borderColor: '#2E3138',
         borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
     },
     methodContent: {
-        flexDirection: 'row',
+        ...globalStyles.RowCenter,
         width: '62%',
-        alignItems: 'center',
         justifyContent: 'flex-start',
     },
     methodText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 12
     },
 });

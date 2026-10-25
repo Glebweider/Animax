@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -6,9 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import BackButton from '@Components/buttons/Back';
 import ToggleSwitch from '@Components/ToggleSwitch';
 import ApplyButton from '@Components/buttons/Apply';
-
-// Data
-import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
@@ -86,7 +84,7 @@ const styles = StyleSheet.create({
     },
     applyButton: {
         width: '90%',
-        marginBottom: 20,
+        marginBottom: 20
     },
     containerSetting: {
         width: '90%',
@@ -94,12 +92,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 15,
         marginBottom: 10,
-        alignContent: 'center',
+        alignContent: 'center'
     },
     textSetting: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 15,
+        ...globalStyles.TextPrimary,
+        fontSize: 15
     },
 });
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, TouchableOpacity, View, Dimensions, StatusBar, Text, BackHandler } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import Slider from '@react-native-community/slider';
@@ -525,14 +526,12 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	infoLeft: {
-		flexDirection: 'row',
-		alignItems: 'center'
+		...globalStyles.RowCenter,
 	},
 	infoTitle: {
+		...globalStyles.TextPrimary,
 		marginLeft: 20,
-		color: COLOR_TEXT_PRIMARY,
 		fontSize: 16,
-		fontFamily: 'Outfit',
 	},
 	infoContainer: {
 		width: '100%',
@@ -551,25 +550,22 @@ const styles = StyleSheet.create({
 		height: '100%'
 	},
 	background: {
+		...globalStyles.FullSize,
 		backgroundColor: 'black',
 		opacity: 0.2,
-		width: '100%',
-		height: '100%',
 		position: 'absolute'
 	},
 	progressBar: {
+		...globalStyles.Center,
 		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'center',
 	},
 	slider: {
 		width: '80%',
 		height: 8,
 	},
 	timeText: {
-		color: COLOR_TEXT_PRIMARY,
+		...globalStyles.TextPrimary,
 		fontSize: 12,
-		fontFamily: 'Outfit',
 	},
 	video: {
 		width: '100%',
@@ -608,8 +604,7 @@ const styles = StyleSheet.create({
 		zIndex: 1000,
 	},
 	fullScreenVideo: {
-		width: '100%',
-		height: '100%',
+		...globalStyles.FullSize,
 		position: 'absolute',
 	},
 	Btn: {
@@ -617,15 +612,14 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 	},
 	resumeBanner: {
+		...globalStyles.RowCenter,
 		position: 'absolute',
 		bottom: 25,
 		left: '5%',
 		width: '90%',
 		backgroundColor: 'rgba(28, 28, 30, 0.9)',
 		borderRadius: 12,
-		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center',
 		paddingVertical: 10,
 		paddingHorizontal: 15,
 		borderWidth: 1,
@@ -633,15 +627,14 @@ const styles = StyleSheet.create({
 		zIndex: 10,
 	},
 	resumeBannerFullScreen: {
+		...globalStyles.RowCenter,
 		position: 'absolute',
 		bottom: 90,
 		left: 40,
 		width: 320,
 		backgroundColor: 'rgba(28, 28, 30, 0.95)',
 		borderRadius: 12,
-		flexDirection: 'row',
 		justifyContent: 'space-between',
-		alignItems: 'center',
 		paddingVertical: 12,
 		paddingHorizontal: 16,
 		borderWidth: 1,
@@ -658,9 +651,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	resumeTitle: {
-		color: COLOR_TEXT_PRIMARY,
+		...globalStyles.TextPrimary,
 		fontSize: 13,
-		fontFamily: 'Outfit',
 		fontWeight: '600',
 	},
 	resumeSubtitle: {
@@ -670,8 +662,7 @@ const styles = StyleSheet.create({
 		marginTop: 2,
 	},
 	resumeButtons: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		...globalStyles.RowCenter,
 		marginLeft: 10,
 		gap: 8
 	},
@@ -690,9 +681,8 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 	},
 	resumeBtnApplyText: {
-		color: COLOR_TEXT_PRIMARY,
+		...globalStyles.TextPrimary,
 		fontSize: 13,
-		fontFamily: 'Outfit',
 	},
 });
 

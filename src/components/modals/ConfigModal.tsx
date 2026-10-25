@@ -8,10 +8,7 @@ import globalStyles from '@Styles/index';
 import { BallIndicator } from '@Components/BallIndicator';
 
 // Data
-import {
-	BACKGROUND_CONFIGURATOR, COLOR_BACKGROUND_SECONDARY,
-	COLOR_PRIMARY, COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY
-} from '@Data/constants';
+import { BACKGROUND_CONFIGURATOR, COLOR_PRIMARY_LIGHT } from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
@@ -38,9 +35,9 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 				<View style={styles.modalContent}>
 					<Image
 						source={BACKGROUND_CONFIGURATOR}
-						style={styles.modalImage} />
-					<Text style={styles.modalTitle}>{i18n.t('configModal.congratulations')}</Text>
-					<Text style={styles.modalText}>{i18n.t('configModal.text')}</Text>
+						style={globalStyles.ModalImage} />
+					<Text style={globalStyles.ModalTitle}>{i18n.t('configModal.congratulations')}</Text>
+					<Text style={globalStyles.ModalText}>{i18n.t('configModal.text')}</Text>
 					<BallIndicator color={COLOR_PRIMARY_LIGHT} size={60} count={8} />
 				</View>
 			</View>
@@ -50,30 +47,10 @@ const ConfigModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 
 const styles = StyleSheet.create({
 	modalContent: {
-		backgroundColor: COLOR_BACKGROUND_SECONDARY,
+		...globalStyles.ModalPanel,
 		width: '90%',
 		height: '75%',
-		borderRadius: 20,
-		alignItems: 'center',
-	},
-	modalImage: {
-		marginTop: 15,
-		width: 270,
-		height: 270
-	},
-	modalTitle: {
-		marginTop: 20,
-		color: COLOR_PRIMARY,
-		fontFamily: 'Outfit',
-		fontSize: 24
-	},
-	modalText: {
-		marginTop: 15,
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit',
-		fontSize: 14,
-		width: '80%',
-		textAlign: 'center'
+		borderRadius: 20
 	}
 });
 

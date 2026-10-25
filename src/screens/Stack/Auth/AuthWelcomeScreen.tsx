@@ -1,4 +1,5 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from 'expo-status-bar';
@@ -7,7 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Data
-import { BACKGROUND_WELCOME, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { BACKGROUND_WELCOME } from '@Data/constants';
 
 
 const AuthWelcomeScreen = ({ navigation }) => {
@@ -40,14 +41,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     containerData: {
         width: '90%',
         height: '30%',
         alignItems: 'center',
         zIndex: 2,
-        marginBottom: 10,
+        marginBottom: 10
     },
     backgroundShadow: {
         position: 'absolute',
@@ -58,30 +59,25 @@ const styles = StyleSheet.create({
         zIndex: 2
     },
     data: {
-        width: '100%',
-        height: '100%',
-        justifyContent: 'space-evenly',
-        alignItems: 'center'
+        ...globalStyles.FullScreen,
+        justifyContent: 'space-evenly'
     },
     backgroundImage: {
+        ...globalStyles.FullSize,
         flex: 1,
         resizeMode: 'cover',
         position: 'absolute',
-        width: '100%',
-        height: '100%',
         zIndex: 1
     },
     title: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontWeight: "500",
         fontSize: 36,
-        fontFamily: 'Outfit',
         textAlign: 'center'
     },
     description: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 13,
-        fontFamily: 'Outfit',
         textAlign: 'center'
     }
 });

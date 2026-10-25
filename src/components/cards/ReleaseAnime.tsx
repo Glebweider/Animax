@@ -1,8 +1,9 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 // Data
-import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
@@ -28,44 +29,40 @@ export const ReleaseAnimeCard = React.memo(
 
 const styles = StyleSheet.create({
     containerEnabled: {
+        ...globalStyles.Center,
         margin: 7.5,
         width: 50,
         height: 78,
-        justifyContent: 'center',
-        alignItems: 'center',
         borderWidth: 2,
         borderColor: COLOR_PRIMARY,
         backgroundColor: COLOR_PRIMARY,
-        borderRadius: 50,
+        borderRadius: 50
     },
     containerDisabled: {
+        ...globalStyles.Center,
         margin: 7.5,
         width: 50,
         height: 78,
-        justifyContent: 'center',
-        alignItems: 'center',
         borderWidth: 2,
         borderColor: COLOR_TEXT_SECONDARY,
-        borderRadius: 50,
+        borderRadius: 50
     },
     textWeekEnabled: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 12,
+        ...globalStyles.TextPrimary,
+        fontSize: 12
     },
     textMonthEnabled: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 15,
+        ...globalStyles.TextPrimary,
+        fontSize: 15
     },
     textWeekDisabled: {
         color: COLOR_TEXT_SECONDARY,
         fontFamily: 'Outfit',
-        fontSize: 12,
+        fontSize: 12
     },
     textMonthDisabled: {
         color: COLOR_TEXT_SECONDARY,
         fontFamily: 'Outfit',
-        fontSize: 15,
-    },
+        fontSize: 15
+    }
 });

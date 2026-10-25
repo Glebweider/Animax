@@ -1,4 +1,5 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 
@@ -26,7 +27,7 @@ const BackButton: React.FC<BallIndicatorProps> = ({ navigation, text, onPress })
 
     return (
         <View style={styles.container}>
-            <View style={styles.content}>
+            <View style={globalStyles.RowCenter}>
                 <TouchableOpacity onPress={handlePress}>
                     <ArrowLeftIcon Style={styles.button} Color={COLOR_TEXT_PRIMARY} />
                 </TouchableOpacity>
@@ -38,27 +39,21 @@ const BackButton: React.FC<BallIndicatorProps> = ({ navigation, text, onPress })
 
 const styles = StyleSheet.create({
     container: {
+        ...globalStyles.RowCenter,
         width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
         height: 60,
         marginTop: 50
     },
-    content: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
     text: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 18,
-        marginLeft: 15,
+        marginLeft: 15
     },
     button: {
         width: 28,
-        height: 28,
-    },
+        height: 28
+    }
 });
 
 export default BackButton;

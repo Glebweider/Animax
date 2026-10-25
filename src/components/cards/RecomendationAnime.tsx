@@ -1,12 +1,10 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { View, Text, StyleSheet } from 'react-native';
 
 // Components
 import { AnimeCard } from './Anime';
 import MyAnimeListButton from '@Components/buttons/MyAnimeList';
-
-// Data
-import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Utils
 import { formatAnimeTitle, i18n, isCisLocale } from '@Utils/localization';
@@ -55,7 +53,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 200,
         marginTop: 15,
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     content: {
         flexDirection: 'column',
@@ -64,26 +62,23 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     genres: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 11,
-        fontFamily: 'Outfit',
         marginTop: 10,
-        width: 170,
+        width: 170
     },
     year: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 11,
-        fontFamily: 'Outfit',
-        marginTop: 10,
+        marginTop: 10
     },
     title: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 14,
-        fontFamily: 'Outfit',
         overflow: 'hidden',
         marginTop: 10,
-        width: 170,
-    },
+        width: 170
+    }
 });
 
 export default RecomendationAnimeCard;

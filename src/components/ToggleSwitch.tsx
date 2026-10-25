@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import globalStyles from '@Styles/index';
 import { TouchableOpacity, StyleSheet, Animated } from 'react-native';
 
 // Data
@@ -32,7 +33,7 @@ const ToggleSwitch = ({ isOn, onToggle }) => {
 	});
 
 	return (
-		<TouchableOpacity style={styles.container} onPress={toggleSwitch}>
+		<TouchableOpacity style={globalStyles.Center} onPress={toggleSwitch}>
 			<Animated.View style={[styles.switchContainer, { backgroundColor }]}>
 				<Animated.View style={[styles.circle, { transform: [{ translateX }] }]} />
 			</Animated.View>
@@ -41,22 +42,18 @@ const ToggleSwitch = ({ isOn, onToggle }) => {
 };
 
 const styles = StyleSheet.create({
-	container: {
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
 	switchContainer: {
 		width: 58,
 		height: 30,
 		borderRadius: 17,
 		justifyContent: 'center',
-		paddingHorizontal: 2,
+		paddingHorizontal: 2
 	},
 	circle: {
 		width: 26,
 		height: 25,
 		borderRadius: 15,
-		backgroundColor: COLOR_TEXT_PRIMARY,
+		backgroundColor: COLOR_TEXT_PRIMARY
 	},
 });
 

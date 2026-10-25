@@ -1,4 +1,5 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
@@ -6,7 +7,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { AnimeCard, AnimeCardSkeleton } from '@Components/cards/Anime';
 
 // Data
-import { COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY_DARK } from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
@@ -65,23 +66,22 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: 255,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     dataContainer: {
         flexDirection: 'row',
         width: '90%',
         justifyContent: 'space-between',
-        marginTop: 20,
+        marginTop: 20
     },
     text: {
-        color: COLOR_TEXT_PRIMARY,
-        fontSize: 15,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
+        fontSize: 15
     },
     textSeeAll: {
         color: COLOR_PRIMARY_DARK,
         fontSize: 12,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
 });
 

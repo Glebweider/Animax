@@ -140,7 +140,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 			<BackButton
 				onPress={() => navigation.navigate('AuthAccountSetupInterest')}
 				text="Fill Your Profile" />
-			<View style={styles.avatarContainer}>
+			<View style={globalStyles.Center}>
 				<TouchableOpacity
 					onPress={() => pickImage()}
 					style={styles.containerImageAvatar}>
@@ -176,7 +176,7 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 
 				<View style={styles.genderSection}>
 					<Picker
-						style={styles.genderPicker}
+						style={globalStyles.Input}
 						selectedValue={selectedGender}
 						prompt='Gender'
 						mode='dropdown'
@@ -205,26 +205,18 @@ const styles = StyleSheet.create({
 	...globalStyles,
 	container: {
 		flex: 1,
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	errorMessage: {
-		marginTop: 5,
-		color: 'red',
-		fontSize: 11,
-		fontFamily: 'Outfit',
-		justifyContent: 'center',
-		textAlign: 'center'
+		...globalStyles.ErrorText,
+		fontSize: 11
 	},
 	pencilContainer: {
 		backgroundColor: COLOR_PRIMARY,
 		borderRadius: 10,
 		padding: 8,
 		left: 50,
-		bottom: 35,
-	},
-	avatarContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
+		bottom: 35
 	},
 	containerImageAvatar: {
 		width: 160,
@@ -244,13 +236,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: 64,
 		borderRadius: 20,
-		color: COLOR_TEXT_PRIMARY,
-	},
-	genderPicker: {
-		flex: 1,
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit',
-		height: '100%',
+		color: COLOR_TEXT_PRIMARY
 	}
 });
 

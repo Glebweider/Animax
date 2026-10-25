@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
@@ -84,7 +85,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
-            <View style={styles.container}>
+            <View style={globalStyles.FullScreen}>
                 <View style={styles.headerContainer}>
                     <Image source={ICON_APP} style={styles.headerLogo} />
                     <TouchableOpacity
@@ -172,10 +173,9 @@ const styles = StyleSheet.create({
         height: '118%'
     },
     animeDataContainer: {
+        ...globalStyles.FullSize,
         position: 'absolute',
         zIndex: 3,
-        width: '100%',
-        height: '100%',
         justifyContent: 'flex-end',
         alignItems: 'flex-start'
     },
@@ -189,15 +189,13 @@ const styles = StyleSheet.create({
         margin: 18
     },
     animeName: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 17,
-        fontFamily: 'Outfit',
         overflow: 'hidden'
     },
     animeDescription: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 11,
-        fontFamily: 'Outfit',
         overflow: 'hidden'
     },
     animeButtonsContainer: {
@@ -205,25 +203,22 @@ const styles = StyleSheet.create({
         marginTop: 12
     },
     animeButtonPlay: {
+        ...globalStyles.Center,
         backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
         minWidth: 86,
         height: 36,
         flexDirection: 'row'
     },
     animeButtonTextPlay: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 13,
-        fontFamily: 'Outfit',
         overflow: 'hidden',
         marginRight: 13
     },
     backgroundShadow: {
+        ...globalStyles.FullSize,
         position: 'absolute',
-        width: '100%',
-        height: '100%',
         zIndex: 2
     },
     selectAnimeContainer: {
@@ -231,19 +226,13 @@ const styles = StyleSheet.create({
         height: '39%',
         justifyContent: 'center'
     },
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center'
-    },
     headerContainer: {
+        ...globalStyles.RowCenter,
         position: 'absolute',
         width: '90%',
         height: 40,
         zIndex: 999,
         justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
         marginTop: 60
     },
     headerLogo: {
@@ -251,12 +240,10 @@ const styles = StyleSheet.create({
         height: 35
     },
     headerIconSearch: {
-        width: 30,
-        height: 30
+        ...globalStyles.HeaderScreenIcon
     },
     imageWrapper: {
-        width: '100%',
-        height: '100%',
+        ...globalStyles.FullSize,
         overflow: 'hidden'
     },
     selectAnimeShiftedImage: {

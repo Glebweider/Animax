@@ -1,8 +1,9 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { View, StyleSheet, TouchableOpacity, Text, Linking } from 'react-native';
 
 // Data
-import { COLOR_BACKGROUND_SECONDARY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY } from '@Data/constants';
 import { CONTACT_ITEMS } from '@Data/contacts';
 
 
@@ -42,24 +43,20 @@ const ContactUs = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
+        ...globalStyles.FullScreen,
         marginTop: 24,
         gap: 14
     },
     contactContainer: {
+        ...globalStyles.ModalPanel,
         width: '92%',
         height: 72,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 20,
-        alignItems: 'center',
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     contactText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontSize: 15,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
+        fontSize: 15
     }
 });
 

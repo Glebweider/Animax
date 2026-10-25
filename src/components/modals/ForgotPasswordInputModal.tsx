@@ -6,10 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import globalStyles from '@Styles/index';
 
 // Data
-import {
-	COLOR_BACKGROUND_PRIMARY, COLOR_BACKGROUND_SECONDARY,
-	COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY
-} from '@Data/constants';
+import { COLOR_BACKGROUND_PRIMARY, COLOR_PRIMARY, COLOR_TEXT_TERTIARY } from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
@@ -53,26 +50,23 @@ const ForgotPasswordInputModal: React.FC<ModalProps> = ({ visible, setVisible })
 const styles = StyleSheet.create({
 	...globalStyles,
 	modalButtonContainer: {
+		...globalStyles.Center,
 		width: '86%',
 		height: 58,
 		borderRadius: 50,
-		justifyContent: 'center',
-		alignItems: 'center',
 		backgroundColor: COLOR_PRIMARY,
 		shadowRadius: 4,
 		marginTop: 20,
 		marginBottom: 20
 	},
 	modalButtonText: {
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit',
+		...globalStyles.TextPrimary,
 		fontSize: 16
 	},
 	modalContent: {
-		backgroundColor: COLOR_BACKGROUND_SECONDARY,
+		...globalStyles.ModalPanel,
 		width: '80%',
-		borderRadius: 40,
-		alignItems: 'center',
+		borderRadius: 40
 	},
 	modalInput: {
 		...globalStyles.Input,
@@ -84,7 +78,7 @@ const styles = StyleSheet.create({
 		width: '86%',
 		height: 64,
 		borderRadius: 20,
-		backgroundColor: COLOR_BACKGROUND_PRIMARY,
+		backgroundColor: COLOR_BACKGROUND_PRIMARY
 	}
 });
 

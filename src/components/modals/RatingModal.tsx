@@ -88,8 +88,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
 const styles = StyleSheet.create({
 	...globalStyles,
     stars: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...globalStyles.RowCenter,
         marginTop: 14,
         width: '80%',
         justifyContent: 'space-evenly'
@@ -108,14 +107,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     scoreLineContainer: {
-        flexDirection: 'row',
+        ...globalStyles.RowCenter,
         width: '86%',
-        alignItems: 'center'
     },
     scoreLineText: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 10,
-        fontFamily: 'Outfit',
         width: 13
     },
     scoreDataContainer: {
@@ -129,41 +126,35 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     score: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 24,
-        fontFamily: 'Outfit',
     },
     scoreMax: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 10,
-        fontFamily: 'Outfit',
         marginTop: 17,
         marginLeft: 5,
     },
     scoreStars: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...globalStyles.RowCenter,
         marginTop: 19,
     },
     userVoting: {
+        ...globalStyles.TextPrimary,
         marginTop: 10,
-        color: COLOR_TEXT_PRIMARY,
         fontSize: 8,
-        fontFamily: 'Outfit',
     },
     modalRatingsContainer: {
+        ...globalStyles.RowCenter,
         marginTop: 23,
         marginBottom: 10,
         height: 133,
         width: '90%',
-        alignItems: 'center',
-        flexDirection: 'row',
     },
     modalButtonClose: {
+        ...globalStyles.Center,
         marginTop: 25,
         width: '90%',
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
         height: 58,
@@ -174,44 +165,29 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     modalButtonCloseText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 14
     },
     modalContent: {
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
+        ...globalStyles.ModalPanel,
         width: '100%',
         height: '45%',
         borderTopRightRadius: 35,
         borderTopLeftRadius: 35,
-        alignItems: 'center',
     },
     modalShelf: {
-        width: 40,
-        height: 4,
-        backgroundColor: '#424242',
-        borderRadius: 20,
-        alignSelf: 'center',
-        marginTop: 8
+        ...globalStyles.ModalShelf,
     },
     modalImage: {
-        marginTop: 15,
-        width: 270,
-        height: 270
+        ...globalStyles.ModalImage,
     },
     modalTitle: {
+        ...globalStyles.TextPrimary,
         marginTop: 12,
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
         fontSize: 18
     },
     modalHorizontalLine: {
-        width: '90%',
-        height: 1,
-        backgroundColor: '#424242',
-        borderRadius: 50,
-        alignSelf: 'center',
-        marginTop: 16
+        ...globalStyles.ModalLine,
     },
     modalVerticalLine: {
         width: 1,
@@ -221,9 +197,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     modalText: {
+        ...globalStyles.TextPrimary,
         marginTop: 20,
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
         fontSize: 14,
         width: '80%',
         textAlign: 'center'

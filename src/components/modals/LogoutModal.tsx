@@ -8,9 +8,6 @@ import globalStyles from '@Styles/index';
 // Components
 import ApplyButton from '@Components/buttons/Apply';
 
-// Data
-import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
-
 // Utils
 import { removeTokenFromStorage } from '@Utils/functions/storage';
 import { i18n } from '@Utils/localization';
@@ -39,9 +36,9 @@ const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) 
 			statusBarTranslucent
 			style={globalStyles.MiniModalContainer}>
 			<View style={styles.modalContent}>
-				<View style={styles.modalShelf} />
+				<View style={globalStyles.ModalShelf} />
 				<Text style={styles.modalTitle}>{i18n.t('profile.logout')}</Text>
-				<View style={styles.modalLine} />
+				<View style={globalStyles.ModalLine} />
 				<Text style={styles.modalText}>{i18n.t('logout.description')}</Text>
 				<View style={styles.modalButtons}>
 					<ApplyButton
@@ -70,34 +67,20 @@ const styles = StyleSheet.create({
 		width: '48%',
 		backgroundColor: '#35383F',
 		marginTop: 0,
-		elevation: 0,
+		elevation: 0
 	},
 	modalButtons: {
 		flexDirection: 'row',
 		width: '90%',
 		justifyContent: 'space-between',
-		marginTop: 25,
+		marginTop: 25
 	},
 	modalContent: {
-		backgroundColor: COLOR_BACKGROUND_SECONDARY,
+		...globalStyles.ModalPanel,
 		width: '100%',
 		height: '30%',
 		borderTopRightRadius: 35,
-		borderTopLeftRadius: 35,
-		alignItems: 'center',
-	},
-	modalShelf: {
-		width: 40,
-		height: 4,
-		backgroundColor: '#424242',
-		borderRadius: 20,
-		alignSelf: 'center',
-		marginTop: 8
-	},
-	modalImage: {
-		marginTop: 15,
-		width: 270,
-		height: 270
+		borderTopLeftRadius: 35
 	},
 	modalTitle: {
 		marginTop: 20,
@@ -105,18 +88,9 @@ const styles = StyleSheet.create({
 		fontFamily: 'Outfit',
 		fontSize: 20
 	},
-	modalLine: {
-		width: '90%',
-		height: 1,
-		backgroundColor: '#424242',
-		borderRadius: 50,
-		alignSelf: 'center',
-		marginTop: 16
-	},
 	modalText: {
+		...globalStyles.TextPrimary,
 		marginTop: 20,
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit',
 		fontSize: 14,
 		width: '80%',
 		textAlign: 'center'

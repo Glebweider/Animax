@@ -1,10 +1,8 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import globalStyles from '@Styles/index';
 
 // Components
 import BackButton from '@Components/buttons/Back';
-
-// Data
-import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 // Utils
 import { i18n } from '@Utils/localization';
@@ -34,24 +32,21 @@ const PrivacyPolicyScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
-        paddingBottom: 25,
-        width: '100%',
+        ...globalStyles.AuthScreen,
+        width: '100%'
     },
     contentContainer: {
         width: '90%',
-        marginTop: 10,
+        marginTop: 10
     },
     contentTitle: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 18,
+        ...globalStyles.TextPrimary,
+        fontSize: 18
     },
     contentText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 12,
-        marginLeft: 20,
+        marginLeft: 20
     }
 });
 

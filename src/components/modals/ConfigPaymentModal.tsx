@@ -8,10 +8,7 @@ import globalStyles from '@Styles/index';
 import { i18n } from '@Utils/localization';
 
 // Data
-import {
-	BACKGROUND_CONFIGURATOR, COLOR_BACKGROUND_SECONDARY,
-	COLOR_PRIMARY, COLOR_TEXT_PRIMARY
-} from '@Data/constants';
+import { BACKGROUND_CONFIGURATOR, COLOR_PRIMARY } from '@Data/constants';
 
 
 interface ModalProps {
@@ -38,7 +35,7 @@ const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, n
 					<Image
 						source={BACKGROUND_CONFIGURATOR}
 						style={styles.modalImage} />
-					<Text style={styles.modalTitle}>{i18n.t('reviewsummary.modal.congratulations')}</Text>
+					<Text style={globalStyles.ModalTitle}>{i18n.t('reviewsummary.modal.congratulations')}</Text>
 					<Text style={styles.modalText}>{
 						i18n.t('reviewsummary.modal.youhave') +
 						i18n.t(data.objecyBuy.date) +
@@ -60,42 +57,32 @@ const ConfigPaymentModal: React.FC<ModalProps> = ({ visible, setVisible, data, n
 
 const styles = StyleSheet.create({
 	modalButtonContainer: {
+		...globalStyles.Center,
 		width: '80%',
 		height: 58,
 		borderRadius: 50,
-		justifyContent: 'center',
-		alignItems: 'center',
 		backgroundColor: COLOR_PRIMARY,
 		shadowRadius: 4,
-		marginTop: 20,
+		marginTop: 20
 	},
 	modalButtonText: {
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit',
+		...globalStyles.TextPrimary,
 		fontSize: 16
 	},
 	modalContent: {
-		backgroundColor: COLOR_BACKGROUND_SECONDARY,
+		...globalStyles.ModalPanel,
 		width: '80%',
 		height: '60%',
-		borderRadius: 40,
-		alignItems: 'center',
+		borderRadius: 40
 	},
 	modalImage: {
 		marginTop: 15,
 		width: 240,
 		height: 240
 	},
-	modalTitle: {
-		marginTop: 20,
-		color: COLOR_PRIMARY,
-		fontFamily: 'Outfit',
-		fontSize: 24
-	},
 	modalText: {
+		...globalStyles.TextPrimary,
 		marginTop: 15,
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit',
 		fontSize: 13,
 		width: '80%',
 		textAlign: 'center'

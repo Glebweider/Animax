@@ -1,10 +1,11 @@
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import globalStyles from '@Styles/index';
 
 // Components
 import BackButton from '@Components/buttons/Back';
 
 // Data
-import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY } from '@Data/constants';
 
 // Icons
 import CrownIcon from '@Icons/CrownIcon';
@@ -95,17 +96,16 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         paddingBottom: 30,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     headerContainer: {
-        width: '90%',
-        justifyContent: 'center',
-        alignItems: 'center',
+        ...globalStyles.Center,
+        width: '90%'
     },
     headerTitle: {
         color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
-        fontSize: 22,
+        fontSize: 22
     },
     headerText: {
         color: '#E0E0E0',
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     },
     cardsContainer: {
         width: '90%',
-        height: '70%',
+        height: '70%'
     },
     cardPremium: {
         height: 294,
@@ -131,17 +131,14 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     cardHeaderTextContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...globalStyles.RowCenter
     },
     cardHeaderTextPrice: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 20,
+        ...globalStyles.TextPrimary,
+        fontSize: 20
     },
     cardHeaderTextMonth: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 13,
         marginLeft: 7
     },
@@ -154,20 +151,17 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     cardDataContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
+        ...globalStyles.Center
     },
     cardData: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...globalStyles.RowCenter,
         width: '80%',
         marginTop: 18
     },
     cardDataText: {
+        ...globalStyles.TextPrimary,
         marginLeft: 20,
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 13,
+        fontSize: 13
     }
 });
 

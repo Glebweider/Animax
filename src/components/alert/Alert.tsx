@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
+import globalStyles from '@Styles/index';
 import { Animated, Easing, StyleSheet, Text, View } from 'react-native';
 
 // Data
-import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_TEXT_PRIMARY } from '@Data/constants';
 
 
 interface AlertProps {
@@ -51,24 +52,22 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         alignItems: 'center',
-        zIndex: 2000,
+        zIndex: 2000
     },
     alertBox: {
+        ...globalStyles.ModalPanel,
         width: '90%',
         minHeight: 60,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderRadius: 50,
         justifyContent: 'center',
-        alignItems: 'center',
         borderColor: COLOR_TEXT_PRIMARY,
-        borderWidth: 1,
+        borderWidth: 1
     },
     message: {
+        ...globalStyles.TextPrimary,
         fontSize: 16,
-        color: COLOR_TEXT_PRIMARY,
-        textAlign: 'center',
-        fontFamily: 'Outfit',
-    },
+        textAlign: 'center'
+    }
 });
 
 export default Alert;

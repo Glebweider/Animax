@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import globalStyles from '@Styles/index';
 import * as Updates from 'expo-updates';
 
 // Components
@@ -6,7 +7,7 @@ import BackButton from '@Components/buttons/Back';
 import { useAlert } from '@Components/alert/AlertContext';
 
 // Data
-import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY } from '@Data/constants';
 import { languageNames, translations } from '@Data/localizations';
 
 // Utils
@@ -54,46 +55,43 @@ const LanguageScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     cautionLangText: {
         color: COLOR_PRIMARY,
         fontSize: 18,
         fontFamily: 'Outfit',
         marginHorizontal: 20,
-        marginBottom: 15,
+        marginBottom: 15
     },
     laguageContainer: {
+        ...globalStyles.RowCenter,
         width: "90%",
         height: 65,
         marginTop: 15,
-        alignItems: 'center',
         justifyContent: 'space-between',
-        flexDirection: 'row',
         backgroundColor: '#2D3036',
-        borderRadius: 10,
+        borderRadius: 10
     },
     laguageText: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 18,
-        fontFamily: 'Outfit',
-        marginLeft: 20,
+        marginLeft: 20
     },
     buttonSelect: {
+        ...globalStyles.Center,
         width: 21,
         height: 21,
         borderRadius: 50,
         borderColor: COLOR_PRIMARY,
         borderWidth: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 20,
+        marginRight: 20
     },
     buttonSelected: {
         width: 11,
         height: 11,
         borderRadius: 40,
-        backgroundColor: COLOR_PRIMARY,
+        backgroundColor: COLOR_PRIMARY
     },
 });
 

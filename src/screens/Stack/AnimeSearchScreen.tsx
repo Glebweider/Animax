@@ -96,7 +96,7 @@ const AnimeSearchScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.FullScreen}>
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity
                     onPress={handleBackScreen}
@@ -163,28 +163,18 @@ const AnimeSearchScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	...globalStyles,
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center'
-    },
     content: {
+        ...globalStyles.AuthTitleContainer,
         flexGrow: 1,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
         marginTop: 12
     },
     errorContainer: {
-        width: '100%',
+        ...globalStyles.AuthTitleContainer,
         height: '55%',
-        alignItems: 'center',
-        justifyContent: 'center'
     },
     errorTextContainer: {
+        ...globalStyles.Center,
         width: '90%',
-        alignItems: 'center',
-        justifyContent: 'center'
     },
     errorImage: {
         width: 350,
@@ -196,8 +186,7 @@ const styles = StyleSheet.create({
         fontSize: 17
     },
     errorText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 13,
         marginTop: 20,
         textAlign: 'center'
@@ -213,41 +202,37 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     tag: {
+        ...globalStyles.Center,
         height: 45,
         backgroundColor: COLOR_PRIMARY,
         borderRadius: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
         marginLeft: 13,
         paddingRight: 20,
         paddingLeft: 20
     },
     tagText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 13
     },
     buttonsContainer: {
+        ...globalStyles.RowCenter,
         width: '91%',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
         marginTop: 60,
         marginBottom: 15
     },
     sortButton: {
+        ...globalStyles.Center,
         width: 62,
         height: 62,
         backgroundColor: '#162723',
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center'
+        borderRadius: 15
     },
     searchSection: {
 		...globalStyles.Section,
         width: '62%',
         height: 62,
-        borderRadius: 15,
+        borderRadius: 15
     },
     searchInput: {
 		...globalStyles.Input,

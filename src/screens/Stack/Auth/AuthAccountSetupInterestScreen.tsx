@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +9,7 @@ import BackButton from '@Components/buttons/Back';
 import ApplyButton from '@Components/buttons/Apply';
 
 // Data
-import { COLOR_PRIMARY, COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY, COLOR_PRIMARY_LIGHT } from '@Data/constants';
 
 // Redux
 import { RootState } from '@Redux/store';
@@ -23,125 +24,119 @@ import { BallIndicator } from '@Components/BallIndicator';
 
 
 const AuthAccountSetupInterestScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const InterestsState = useSelector((state: RootState) => state.authReducer);
+	const dispatch = useDispatch();
+	const InterestsState = useSelector((state: RootState) => state.authReducer);
 
-    const { data } = useQuery(GET_GENRES);
+	const { data } = useQuery(GET_GENRES);
 
-    const [isActiveButton, setActiveButton] = useState<boolean>(false);
-    const [genresAnime, setGenresAnime] = useState<IInterest[]>([]);
+	const [isActiveButton, setActiveButton] = useState<boolean>(false);
+	const [genresAnime, setGenresAnime] = useState<IInterest[]>([]);
 
-    useEffect(() => {
-        if (data) {
-            setGenresAnime(data.genres);
-        }
-    }, [data]);
+	useEffect(() => {
+		if (data) {
+			setGenresAnime(data.genres);
+		}
+	}, [data]);
 
-    useEffect(() => {
-        setActiveButton(InterestsState.interests.length > 0);
-    }, [InterestsState.interests]);
+	useEffect(() => {
+		setActiveButton(InterestsState.interests.length > 0);
+	}, [InterestsState.interests]);
 
-    return (
-        <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                <BackButton
-                    onPress={() => navigation.navigate('AuthSignUp')}
-                    text="Choose Your Interest" />
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Choose your interests and get the best anime recommendations. Don't worry, you can always change it later.</Text>
-                </View>
-                {genresAnime.length >= 1 ?
-                    <View style={styles.interestsContainer}>
-                        {genresAnime.map((data) => (
-                            <TouchableOpacity
-                                key={data.id}
-                                onPress={() => dispatch(addInterest(data.id))}
-                                style={[
-                                    styles.interestContainer,
-                                    InterestsState.interests.some((id) => id === data.id)
-                                    && { backgroundColor: COLOR_PRIMARY }
-                                ]}>
-                                <Text style={styles.interestText}>{data.name}</Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                    :
-                    <BallIndicator color={COLOR_PRIMARY_LIGHT} size={90} count={8} />
-                }
-            </ScrollView>
-            <View style={styles.buttonsContainer}>
-                <ApplyButton
-                    onPress={() => navigation.navigate('AuthAccountSetupData')}
-                    isActiveButton={false}
-                    style={styles.buttonSkip}
-                    text={'Skip'} />
+	return (
+		<View style={styles.container}>
+			<ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+				<BackButton
+					onPress={() => navigation.navigate('AuthSignUp')}
+					text="Choose Your Interest" />
+				<View style={{ width: '90%' }}>
+					<Text style={styles.titleText}>Choose your interests and get the best anime recommendations. Don't worry, you can always change it later.</Text>
+				</View>
+				{genresAnime.length >= 1 ?
+					<View style={styles.interestsContainer}>
+						{genresAnime.map((data) => (
+							<TouchableOpacity
+								key={data.id}
+								onPress={() => dispatch(addInterest(data.id))}
+								style={[
+									styles.interestContainer,
+									InterestsState.interests.some((id) => id === data.id)
+									&& { backgroundColor: COLOR_PRIMARY }
+								]}>
+								<Text style={styles.interestText}>{data.name}</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+					:
+					<BallIndicator color={COLOR_PRIMARY_LIGHT} size={90} count={8} />
+				}
+			</ScrollView>
+			<View style={styles.buttonsContainer}>
+				<ApplyButton
+					onPress={() => navigation.navigate('AuthAccountSetupData')}
+					isActiveButton={false}
+					style={styles.buttonSkip}
+					text={'Skip'} />
 
-                <ApplyButton
-                    onPress={() => navigation.navigate('AuthAccountSetupData')}
-                    isActiveButton={!isActiveButton}
-                    style={styles.applyButton}
-                    text={'Continue'} />
-            </View>
-        </View>
-    );
+				<ApplyButton
+					onPress={() => navigation.navigate('AuthAccountSetupData')}
+					isActiveButton={!isActiveButton}
+					style={styles.applyButton}
+					text={'Continue'} />
+			</View>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-    scrollContainer: {
-        flexGrow: 1,
-        paddingBottom: 85,
-    },
-    container: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    applyButton: {
-        width: '48%',
-        marginTop: 0
-    },
-    buttonSkip: {
-        width: '48%',
-        backgroundColor: '#35383F',
-        marginTop: 0
-    },
-    interestContainer: {
-        marginTop: 24,
-        marginLeft: 12,
-        paddingRight: 25,
-        paddingLeft: 25,
-        height: 45,
-        borderColor: COLOR_PRIMARY,
-        borderWidth: 1,
-        borderRadius: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    interestText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 14,
-    },
-    titleContainer: {
-        width: '90%',
-    },
-    titleText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-        fontSize: 14,
-    },
-    interestsContainer: {
-        width: '94%',
-        height: '72%',
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-    },
-    buttonsContainer: {
-        width: '90%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 15,
-        marginTop: 15
-    },
+	scrollContainer: {
+		flexGrow: 1,
+		paddingBottom: 85
+	},
+	container: {
+		flex: 1,
+		alignItems: 'center'
+	},
+	applyButton: {
+		width: '48%',
+		marginTop: 0
+	},
+	buttonSkip: {
+		width: '48%',
+		backgroundColor: '#35383F',
+		marginTop: 0
+	},
+	interestContainer: {
+		...globalStyles.Center,
+		marginTop: 24,
+		marginLeft: 12,
+		paddingRight: 25,
+		paddingLeft: 25,
+		height: 45,
+		borderColor: COLOR_PRIMARY,
+		borderWidth: 1,
+		borderRadius: 50,
+	},
+	interestText: {
+		...globalStyles.TextPrimary,
+		fontSize: 14
+	},
+	titleText: {
+		...globalStyles.TextPrimary,
+		fontSize: 14
+	},
+	interestsContainer: {
+		width: '94%',
+		height: '72%',
+		flexDirection: 'row',
+		flexWrap: 'wrap'
+	},
+	buttonsContainer: {
+		width: '90%',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: 15,
+		marginTop: 15
+	}
 });
 
 export default AuthAccountSetupInterestScreen;

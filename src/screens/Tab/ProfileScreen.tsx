@@ -220,7 +220,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
     return (
         <ScrollView
-            style={styles.container}
+            style={globalStyles.FullSize}
             contentContainerStyle={{ alignItems: 'center', paddingBottom: 70 }}
             showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
@@ -328,22 +328,17 @@ const ProfileScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
 	...globalStyles,
-    container: {
-        width: '100%',
-        height: '100%',
-    },
     chartContainer: {
         width: '94%',
         alignSelf: 'center',
         borderRadius: 16,
         paddingVertical: 16,
         paddingHorizontal: 12,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     chartTitle: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 18,
-        fontFamily: 'Outfit',
         alignSelf: 'flex-start',
         marginBottom: 8
     },
@@ -364,16 +359,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     statTitleText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 10,
-        marginTop: 10,
+        marginTop: 10
     },
     statDataText: {
         color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 24,
-        marginBottom: 10,
+        marginBottom: 10
     },
     favoriteAnimelistText: {
         width: '90%',
@@ -386,22 +380,21 @@ const styles = StyleSheet.create({
         height: 30,
         marginTop: 8,
         marginLeft: -3,
-        alignItems: 'flex-start',
+        alignItems: 'flex-start'
     },
     genresScrollView: {
         width: '70%',
         height: 26,
-        paddingRight: 10,
+        paddingRight: 10
     },
     genreContainer: {
+        ...globalStyles.Center,
         height: 26,
         borderColor: COLOR_PRIMARY,
         borderRadius: 8,
         borderWidth: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         marginLeft: 7,
-        paddingHorizontal: 7,
+        paddingHorizontal: 7
     },
     genreText: {
         color: COLOR_PRIMARY,
@@ -409,8 +402,7 @@ const styles = StyleSheet.create({
         fontSize: 8
     },
     profileDescription: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 11,
         marginLeft: 6,
         width: '62%'
@@ -419,16 +411,14 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 100,
         flexDirection: 'row',
-        marginTop: 25,
+        marginTop: 25
     },
     profileUserData: {
-        height: '100%',
-        width: '100%',
-        marginLeft: 12,
+        ...globalStyles.FullSize,
+        marginLeft: 12
     },
     profileUsername: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 18,
         marginLeft: 6,
         marginTop: 4
@@ -441,21 +431,19 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     avatarContainer: {
-        alignItems: 'center',
+        alignItems: 'center'
     },
     headerContainer: {
+        ...globalStyles.RowCenter,
         width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
         height: 60,
         marginTop: 50
     },
     headerText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 18,
-        marginLeft: 15,
+        marginLeft: 15
     }
 });
 

@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 		justifyContent: 'center',
 		alignItems: 'center',
-		zIndex: 9999,
+		zIndex: 9999
 	},
 	loadingBox: {
 		backgroundColor: COLOR_BACKGROUND_PRIMARY,
@@ -198,13 +198,13 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 2 },
 		shadowOpacity: 0.25,
 		shadowRadius: 4,
-		elevation: 5,
+		elevation: 5
 	},
 	loadingText: {
 		color: COLOR_TEXT_PRIMARY,
 		marginTop: 12,
 		fontSize: 16,
-		fontWeight: '500',
+		fontWeight: '500'
 	},
 	container: {
 		flex: 1,
@@ -214,11 +214,11 @@ const styles = StyleSheet.create({
 	content: {
 		flex: 1,
 		width: '100%',
-		alignItems: 'center',
+		alignItems: 'center'
 	},
 	applyButton: {
 		width: '90%',
-		marginBottom: 20,
+		marginBottom: 20
 	},
 	pencilContainer: {
 		backgroundColor: COLOR_PRIMARY,
@@ -226,27 +226,24 @@ const styles = StyleSheet.create({
 		padding: 8,
 		position: 'absolute',
 		bottom: 10,
-		right: 10,
+		right: 10
 	},
 	avatarContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
+		...globalStyles.Center,
 		marginTop: 30,
-		position: 'relative',
+		position: 'relative'
 	},
 	containerImageAvatar: {
+		...globalStyles.Center,
 		width: 160,
 		height: 160,
 		backgroundColor: '#464648',
 		borderRadius: 80,
-		overflow: 'hidden',
-		justifyContent: 'center',
-		alignItems: 'center',
+		overflow: 'hidden'
 	},
 	imageAvatar: {
-		width: '100%',
-		height: '100%',
-		resizeMode: 'cover',
+		...globalStyles.FullSize,
+		resizeMode: 'cover'
 	},
 	inputsContainer: {
 		width: '90%',
@@ -259,20 +256,16 @@ const styles = StyleSheet.create({
 		height: 64,
 		borderRadius: 20,
 		alignItems: 'stretch',
-		flexDirection: 'column',
+		flexDirection: 'column'
 	},
 	input: {
 		...globalStyles.Input,
 		marginLeft: 20,
-		paddingVertical: 10,
+		paddingVertical: 10
 	},
 	errorText: {
-		marginTop: 5,
-		color: 'red',
-		fontSize: 10,
-		fontFamily: 'Outfit',
-		justifyContent: 'center',
-		textAlign: 'center',
+		...globalStyles.ErrorText,
+		fontSize: 10
 	},
 });
 

@@ -89,7 +89,7 @@ const ReportScreen = ({ navigation }) => {
 					placeholder="Type a message..."
 					style={styles.input} />
 				<TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-					<Text style={styles.sendText}>Send</Text>
+					<Text style={globalStyles.TextPrimary}>Send</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -121,32 +121,25 @@ const styles = StyleSheet.create({
 		backgroundColor: '#2B2A2A'
 	},
 	messageText: {
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit'
+		...globalStyles.TextPrimary,
 	},
 	inputContainer: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		...globalStyles.RowCenter,
 		padding: 10,
 		marginBottom: 10
 	},
 	input: {
 		...globalStyles.Input,
-
 		height: 'auto',
         padding: 14,
 		borderRadius: 15,
-		backgroundColor: COLOR_BACKGROUND_SECONDARY,
+		backgroundColor: COLOR_BACKGROUND_SECONDARY
 	},
 	sendButton: {
 		marginLeft: 10,
 		backgroundColor: '#4CAF50',
 		padding: 14,
 		borderRadius: 15
-	},
-	sendText: {
-		color: COLOR_TEXT_PRIMARY,
-		fontFamily: 'Outfit'
 	},
 });
 

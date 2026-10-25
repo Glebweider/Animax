@@ -1,8 +1,9 @@
 import React from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, TouchableOpacity, Text, ViewStyle, StyleProp } from 'react-native';
 
 // Data
-import { COLOR_PRIMARY_DARK, COLOR_TEXT_PRIMARY } from '@Data/constants';
+import { COLOR_PRIMARY_DARK } from '@Data/constants';
 
 
 interface AuthRedirectProps {
@@ -26,16 +27,13 @@ const AuthRedirect = ({ text, clicableText, style, onPress }: AuthRedirectProps)
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
+        ...globalStyles.AuthTitleContainer,
+        flexDirection: 'row'
     },
     text: {
-        color: COLOR_TEXT_PRIMARY,
+        ...globalStyles.TextPrimary,
         fontSize: 12,
-        fontFamily: 'Outfit',
-        fontWeight: '100',
+        fontWeight: '100'
     },
     clicableText: {
         color: COLOR_PRIMARY_DARK,

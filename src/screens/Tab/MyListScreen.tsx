@@ -91,7 +91,7 @@ const MyListScreen = ({ navigation }) => {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.FullScreen}>
             <StatusBar style='light' />
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
@@ -143,11 +143,6 @@ const MyListScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
 	...globalStyles,
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center'
-    },
     skeletonGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -155,9 +150,8 @@ const styles = StyleSheet.create({
         rowGap: 14
     },
     errorTextContainer: {
-        width: '90%',
-        alignItems: 'center',
-        justifyContent: 'center'
+        ...globalStyles.Center,
+        width: '90%'
     },
     errorTitle: {
         color: COLOR_PRIMARY,
@@ -166,8 +160,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     errorText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         width: '90%',
         fontSize: 14,
         marginTop: 20,
@@ -179,9 +172,8 @@ const styles = StyleSheet.create({
         gap: 14
     },
     header: {
+        ...globalStyles.RowCenter,
         width: '90%',
-        flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'space-between',
         height: 60,
         marginTop: 50
@@ -190,8 +182,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     headerText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.TextPrimary,
         fontSize: 18,
         marginLeft: 15
     }

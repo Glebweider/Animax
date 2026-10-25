@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import globalStyles from '@Styles/index';
 import React, { useMemo } from 'react';
 import { StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,7 +57,7 @@ const AnimeSortScreen = ({ navigation }) => {
     const selectedIds = useMemo(() => new Set(activeFilters.map(i => i.id)), [activeFilters]);
 
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.FullScreen}>
             <BackButton navigation={navigation} text={i18n.t('sortfilter.sortfilter')} />
 
             <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
@@ -114,12 +115,8 @@ const styles = StyleSheet.create({
         width: '40%',
         marginTop: 0
     },
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center'
-    },
     buttons: {
+        ...globalStyles.Center,
         borderColor: '#35383F',
         borderTopWidth: 1,
         borderRightWidth: 1,
@@ -129,8 +126,6 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         gap: 15,
         backgroundColor: '#141414'
     },
@@ -143,6 +138,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR_PRIMARY
     },
     filterContainer: {
+        ...globalStyles.Center,
         marginTop: 21,
         marginLeft: 10,
         paddingRight: 19,
@@ -150,9 +146,7 @@ const styles = StyleSheet.create({
         height: 45,
         borderColor: COLOR_PRIMARY,
         borderWidth: 2,
-        borderRadius: 50,
-        alignItems: 'center',
-        justifyContent: 'center'
+        borderRadius: 50
     },
     filterTextEnabled: {
         color: COLOR_TEXT_PRIMARY

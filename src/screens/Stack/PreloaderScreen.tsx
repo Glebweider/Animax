@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+import globalStyles from '@Styles/index';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as Updates from 'expo-updates';
@@ -71,7 +72,7 @@ const PreloaderScreen = ({ navigation }: any) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={globalStyles.FullScreen}>
             <StatusBar style='light' />
             <View style={{ height: '95%' }}>
                 <Image source={ICON_APP} style={styles.logo} />
@@ -87,21 +88,15 @@ const PreloaderScreen = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '100%',
-        alignItems: 'center'
-    },
     logo: {
         width: 160,
         height: 160,
         marginTop: '42%'
     },
     loaderIndicatorContainer: {
+        ...globalStyles.Center,
         height: 70,
-        marginTop: '60%',
-        justifyContent: 'center',
-        alignItems: 'center'
+        marginTop: '60%'
     },
     updateText: {
         marginTop: 5,
