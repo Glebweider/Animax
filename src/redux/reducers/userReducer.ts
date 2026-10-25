@@ -107,9 +107,10 @@ const userSlice = createSlice({
 			state.notificationSettings.appUpdates = action.payload.appUpdates;
 			state.notificationSettings.subscription = action.payload.subscription;
 		},
+		resetUser: () => initialState,
 	},
 });
 
-export const { setUser, removeAnime, addAnime, setPremium, setAlertSettings } = userSlice.actions;
+export const { setUser, removeAnime, addAnime, setPremium, setAlertSettings, resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

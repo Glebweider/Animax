@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 import { registerForPushNotificationsAsync } from 'notification-config';
+import { CommonActions } from '@react-navigation/native';
 
 // Styles
 import globalStyles from '@Styles/index';
@@ -35,6 +36,7 @@ import { useFormValidation } from '@Utils/hooks';
 // Redux
 import { RootState } from '@Redux/store';
 import { setUser } from '@Redux/reducers/userReducer';
+import { clearAuth } from '@Redux/reducers/authReducer';
 
 // Rest
 import useCheckFieldAvailability from '@Rest/auth/useCheckFieldAvailability';
@@ -128,7 +130,9 @@ const AuthAccountSetupDataScreen = ({ navigation }) => {
 			const user = await authUserInToken();
 			if (user) {
 				dispatch(setUser(user));
-				navigation.replace("HomeScreen");
+				dispatch(clearAuth());
+
+				navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'HomeScreen' }] }));
 			} else {
 				setOpenModal(false);
 			}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
+import { useDispatch } from 'react-redux';
+import { CommonActions } from '@react-navigation/native';
 
 // Styles
 import globalStyles from '@Styles/index';
@@ -12,6 +14,11 @@ import ApplyButton from '@Components/buttons/Apply';
 import { removeTokenFromStorage } from '@Utils/functions/storage';
 import { i18n } from '@Utils/localization';
 
+// Redux
+import { resetUser } from '@Redux/reducers/userReducer';
+import { clearAuth } from '@Redux/reducers/authReducer';
+
+
 
 interface ModalProps {
 	visible: boolean;
@@ -20,10 +27,17 @@ interface ModalProps {
 }
 
 const LogoutModal: React.FC<ModalProps> = ({ visible, setVisible, navigation }) => {
+	const dispatch = useDispatch();
+
 	const logout = async () => {
-		setVisible(false);
 		removeTokenFromStorage();
-		navigation.navigate('AuthWelcome');
+
+		dispatch(resetUser());
+		dispatch(clearAuth());
+
+		setVisible(false);
+
+		navigation.dispatch(CommonActions.reset({ index: 0, routes: [{ name: 'AuthWelcome' }] }));
 	};
 
 	return (

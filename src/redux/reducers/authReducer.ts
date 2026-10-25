@@ -59,10 +59,11 @@ const authSlice = createSlice({
 			state.fullname = action.payload.fullname;
 			state.nickname = action.payload.nickname;
 			state.phonenumber = action.payload.phonenumber;
-		}
+		},
+		clearAuth: () => initialState,
 	},
 });
 
-export const { setEmailAndPasswordUser, setSkip, addInterest, setDataUser } = authSlice.actions;
+export const { setEmailAndPasswordUser, setSkip, addInterest, setDataUser, clearAuth } = authSlice.actions;
 
 export default authSlice.reducer;
