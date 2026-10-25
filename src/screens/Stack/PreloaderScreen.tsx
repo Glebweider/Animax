@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     logo: {
         width: 160,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     updateText: {
         marginTop: 5,
         fontSize: 12,
-        color: '#666',
+        color: '#666'
     },
 });
 

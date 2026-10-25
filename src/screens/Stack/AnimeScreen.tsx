@@ -428,7 +428,7 @@ const AnimeScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     darkBackground: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -472,26 +472,26 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         width: '90%',
-        marginTop: 25,
+        marginTop: 25
     },
     infoTextContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     methodContainer: {
         width: '50%',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     infoText: {
         color: COLOR_TEXT_SECONDARY,
         fontSize: 13,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
     infoTextActive: {
         color: COLOR_PRIMARY,
         fontSize: 13,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
     line: {
         width: '100%',
@@ -504,7 +504,7 @@ const styles = StyleSheet.create({
         width: '50%',
         backgroundColor: COLOR_PRIMARY,
         height: 4,
-        borderRadius: 50,
+        borderRadius: 50
     },
     cardEpisodeContainer: {
         width: 150,
@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     },
     selectedEpisode: {
         borderColor: COLOR_PRIMARY,
-        borderWidth: 1,
+        borderWidth: 1
     },
     cardEpisodeImage: {
         width: '100%',
@@ -550,13 +550,13 @@ const styles = StyleSheet.create({
     animeEpisodesText: {
         color: COLOR_TEXT_PRIMARY,
         fontSize: 16,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
     animeDescriptionContainer: {
         width: '90%',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 18,
+        marginTop: 18
     },
     animeDescriptionText: {
         color: COLOR_TEXT_PRIMARY,
@@ -568,13 +568,13 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 26,
         marginLeft: 10,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     genresScrollView: {
         width: '100%',
         height: 26,
         flexGrow: 1,
-        paddingRight: 10,
+        paddingRight: 10
     },
     genreContainer: {
         height: 26,
@@ -594,25 +594,25 @@ const styles = StyleSheet.create({
     },
     animeScoreContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     animeScore: {
         marginLeft: 7,
         color: COLOR_PRIMARY,
         fontSize: 12,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
     animeData: {
         width: '90%',
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 20
     },
     animeDate: {
         marginLeft: 5,
         color: COLOR_TEXT_PRIMARY,
         fontSize: 12,
-        fontFamily: 'Outfit',
+        fontFamily: 'Outfit'
     },
     titleContainer: {
         justifyContent: 'space-between',
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '90%',
         height: 34,
-        marginTop: 20,
+        marginTop: 20
     },
     titleText: {
         color: COLOR_TEXT_PRIMARY,
@@ -647,20 +647,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 60,
+        marginTop: 60
     },
     headerIconArrow: {
         width: 30,
-        height: 30,
+        height: 30
     },
     previewAnimeContainer: {
         width: '100%',
-        height: 300,
+        height: 300
     },
     previewAnimeImage: {
         width: '100%',
         height: '100%',
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
+        backgroundColor: COLOR_BACKGROUND_SECONDARY
     }
 });
 

@@ -75,17 +75,17 @@ const TopHitsAnimeScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'center'
     },
     wrapper: {
         width: '90%',
         height: '87%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     containerAnimes: {
         flexGrow: 1,
         width: '100%',
-        paddingBottom: 10,
+        paddingBottom: 10
     },
 });
 

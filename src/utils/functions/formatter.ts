@@ -8,9 +8,7 @@ export const Formatter = {
             return 'Invalid date';
 
         const now = Date.now();
-        const diffDays = Math.floor(
-            (now - parsedDate.getTime()) / 86400000
-        );
+        const diffDays = Math.floor((now - parsedDate.getTime()) / 86400000);
 
         const hours = String(parsedDate.getHours()).padStart(2, '0');
         const minutes = String(parsedDate.getMinutes()).padStart(2, '0');

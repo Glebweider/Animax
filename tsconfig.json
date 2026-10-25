@@ -53,8 +53,11 @@
 			"@Interfaces/*": [
 				"src/interfaces/*"
 			],
-			"@locales/*": [
+			"@Locales/*": [
 				"src/locales/*"
+			],
+			"@Styles/*": [
+				"src/styles/*"
 			]
 		}
 	},

@@ -102,22 +102,22 @@ const AnimeSortScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
-        paddingBottom: 85,
+        paddingBottom: 85
     },
     cancelButton: {
         width: '40%',
         marginTop: 0,
         backgroundColor: '#35383F',
-        elevation: 0,
+        elevation: 0
     },
     applyButton: {
         width: '40%',
-        marginTop: 0,
+        marginTop: 0
     },
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     buttons: {
         borderColor: '#35383F',
@@ -132,15 +132,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 15,
-        backgroundColor: '#141414',
+        backgroundColor: '#141414'
     },
     filtersContainer: {
         width: '94%',
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     filterContainerEnabled: {
-        backgroundColor: COLOR_PRIMARY,
+        backgroundColor: COLOR_PRIMARY
     },
     filterContainer: {
         marginTop: 21,
@@ -152,20 +152,20 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 50,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     filterTextEnabled: {
-        color: COLOR_TEXT_PRIMARY,
+        color: COLOR_TEXT_PRIMARY
     },
     filterText: {
         color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
-        fontSize: 14,
+        fontSize: 14
     },
     loadingText: {
         color: '#888',
         marginTop: 40,
-        textAlign: 'center',
+        textAlign: 'center'
     }
 });
 

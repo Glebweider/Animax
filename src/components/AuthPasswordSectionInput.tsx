@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+
+// Styles
+import globalStyles from '@Styles/index';
 
 // Component
 import SectionInput from './SectionInput';
@@ -12,33 +14,25 @@ import { COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY } from '@Data/constants';
 
 
 interface AuthPasswordSectionInputProps {
-    error: string;
-    value: string;
-    setValue: (v: string) => void;
+	error: string;
+	value: string;
+	setValue: (v: string) => void;
 }
 
 const AuthPasswordSectionInput = ({ error, value, setValue }: AuthPasswordSectionInputProps) => {
-    return (
-        <SectionInput
-            secure
-            icon={<PasswordIcon
-                Color={value ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                Style={styles.icon} />
-            }
-            value={value}
-            error={error}
-            placeholder={'Password'}
-            keyboardType={'default'}
-            setValue={(v) => setValue(v)} />
-    );
+	return (
+		<SectionInput
+			secure
+			icon={<PasswordIcon
+				Color={value ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
+				Style={globalStyles.SectionInputIcon} />
+			}
+			value={value}
+			error={error}
+			placeholder={'Password'}
+			keyboardType={'default'}
+			setValue={(v) => setValue(v)} />
+	);
 };
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 20,
-        height: 20,
-        marginLeft: 22,
-    }
-});
 
 export default AuthPasswordSectionInput;

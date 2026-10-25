@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Modal, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 // Utils
 import { socket } from '@Utils/socket';
 
@@ -39,7 +42,7 @@ const CreateTicketModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 
     return (
         <Modal transparent visible={visible} animationType="slide">
-            <View style={styles.modalContainer}>
+            <View style={globalStyles.ModalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.titleText}>Create Ticket</Text>
                     <View style={styles.emailSection}>
@@ -103,12 +106,7 @@ const CreateTicketModal: React.FC<ModalProps> = ({ visible, setVisible }) => {
 };
 
 const styles = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    },
+	...globalStyles,
     tagsContainer: {
         width: '94%',
         height: 36,
@@ -217,21 +215,15 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     emailSection: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+		...globalStyles.Section,
         width: '90%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
         borderColor: '#35383F',
         borderWidth: 1
     },
     emailInput: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.Input,
         marginLeft: 22,
     },
 });

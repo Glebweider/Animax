@@ -3,6 +3,9 @@ import { StyleSheet, View, TouchableOpacity, Text, Image, TextInput, ScrollView,
 import { useDispatch, useSelector } from 'react-redux';
 import { useApolloClient } from '@apollo/client';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 //Icons
 import SearchIcon from '@Icons/SearchIcon';
 import SortIcon from '@Icons/SortIcon';
@@ -159,10 +162,11 @@ const AnimeSearchScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+	...globalStyles,
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     content: {
         flexGrow: 1,
@@ -175,21 +179,21 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '55%',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     errorTextContainer: {
         width: '90%',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     errorImage: {
         width: 350,
-        height: 250,
+        height: 250
     },
     errorTitle: {
         color: COLOR_PRIMARY,
         fontFamily: 'Outfit',
-        fontSize: 17,
+        fontSize: 17
     },
     errorText: {
         color: COLOR_TEXT_PRIMARY,
@@ -200,13 +204,13 @@ const styles = StyleSheet.create({
     },
     filters: {
         width: '100%',
-        borderRadius: 15,
+        borderRadius: 15
     },
     filtersScrollView: {
         width: '100%',
         height: 45,
         flexGrow: 1,
-        borderRadius: 10,
+        borderRadius: 10
     },
     tag: {
         height: 45,
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 13,
         paddingRight: 20,
-        paddingLeft: 20,
+        paddingLeft: 20
     },
     tagText: {
         color: COLOR_TEXT_PRIMARY,
@@ -229,7 +233,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         marginTop: 60,
-        marginBottom: 15,
+        marginBottom: 15
     },
     sortButton: {
         width: 62,
@@ -237,35 +241,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#162723',
         borderRadius: 15,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     searchSection: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+		...globalStyles.Section,
         width: '62%',
         height: 62,
         borderRadius: 15,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     searchInput: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+		...globalStyles.Input,
         fontSize: 14
     },
     icon: {
         width: 28,
         height: 28,
-        margin: 22,
+        margin: 22
     },
     containerAnimeTop: {
         width: '100%',
         flexGrow: 1,
         paddingBottom: 210,
         marginTop: 15,
-        gap: 14,
+        gap: 14
     },
 });
 

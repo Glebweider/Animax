@@ -3,6 +3,9 @@ import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 // Interface
 import { IMessage, ITicket } from '@Interfaces/HelpCenterScreen.interface';
 
@@ -23,127 +26,128 @@ import { socket } from '@Utils/socket';
 type TicketDetailsRouteProp = RouteProp<{ TicketDetails: { ticket: ITicket } }, 'TicketDetails'>;
 
 const ReportScreen = ({ navigation }) => {
-    const route = useRoute<TicketDetailsRouteProp>();
-    const { ticket } = route.params;
+	const route = useRoute<TicketDetailsRouteProp>();
+	const { ticket } = route.params;
 
-    const [messages, setMessages] = useState<IMessage[]>(ticket.messages);
-    const [newMessage, setNewMessage] = useState<string>('');
-    
-    const userState = useSelector((state: RootState) => state.userReducer);
+	const [messages, setMessages] = useState<IMessage[]>(ticket.messages);
+	const [newMessage, setNewMessage] = useState<string>('');
 
-    useEffect(() => {
-        socket.emit('connectToTicket', ticket.id);
+	const userState = useSelector((state: RootState) => state.userReducer);
 
-        socket.on('exception', (error) => {
-            alert(error.message);
-        });
+	useEffect(() => {
+		socket.emit('connectToTicket', ticket.id);
 
-        socket.on('newMessage', (data: IMessage) => {
-            setMessages((prevMessages) => [...prevMessages, data]);
-            if (data.senderId != userState.uuid) {
-                sendNotification(ticket.adminNickname, data.text);
-            }
-        });
+		socket.on('exception', (error) => {
+			alert(error.message);
+		});
 
-        return () => {
-            socket.off('exception');
-            socket.off('newMessage');
-        };
-    }, []);
+		socket.on('newMessage', (data: IMessage) => {
+			setMessages((prevMessages) => [...prevMessages, data]);
+			if (data.senderId != userState.uuid) {
+				sendNotification(ticket.adminNickname, data.text);
+			}
+		});
 
-    const sendMessage = () => {
-        if (newMessage.trim()) {
-            socket.emit('sendMessage', { message: newMessage, ticketId: ticket.id });
-            setNewMessage('');
-        }
-    };
+		return () => {
+			socket.off('exception');
+			socket.off('newMessage');
+		};
+	}, []);
+
+	const sendMessage = () => {
+		if (newMessage.trim()) {
+			socket.emit('sendMessage', { message: newMessage, ticketId: ticket.id });
+			setNewMessage('');
+		}
+	};
 
 
-    const renderMessage = ({ item }: { item: IMessage }) => (
-        <View
-            style={[
-                styles.messageContainer,
-                item.senderId === userState.uuid ? styles.userMessage : styles.adminMessage,
-            ]}>
-            <Text style={styles.messageText}>{item.text}</Text>
-        </View>
-    );
+	const renderMessage = ({ item }: { item: IMessage }) => (
+		<View
+			style={[
+				styles.messageContainer,
+				item.senderId === userState.uuid ? styles.userMessage : styles.adminMessage,
+			]}>
+			<Text style={styles.messageText}>{item.text}</Text>
+		</View>
+	);
 
-    return (
-        <View style={styles.container}>
-            <BackButton navigation={navigation} text={`Chat ${ticket.reason}`} />
-            <FlatList
-                data={messages}
-                renderItem={renderMessage}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={styles.messagesContainer}
-                style={{ width: '94%' }} />
-            <View style={styles.inputContainer}>
-                <TextInput
-                    value={newMessage}
-                    onChangeText={setNewMessage}
-                    placeholderTextColor={COLOR_TEXT_TERTIARY}
-                    placeholder="Type a message..."
-                    style={styles.input} />
-                <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-                    <Text style={styles.sendText}>Send</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
+	return (
+		<View style={styles.container}>
+			<BackButton navigation={navigation} text={`Chat ${ticket.reason}`} />
+			<FlatList
+				data={messages}
+				renderItem={renderMessage}
+				keyExtractor={(item, index) => index.toString()}
+				contentContainerStyle={styles.messagesContainer}
+				style={{ width: '94%' }} />
+			<View style={styles.inputContainer}>
+				<TextInput
+					value={newMessage}
+					onChangeText={setNewMessage}
+					placeholderTextColor={COLOR_TEXT_TERTIARY}
+					placeholder="Type a message..."
+					style={styles.input} />
+				<TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+					<Text style={styles.sendText}>Send</Text>
+				</TouchableOpacity>
+			</View>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    messagesContainer: {
-        flexGrow: 1,
-    },
-    messageContainer: {
-        maxWidth: '80%',
-        marginVertical: 8,
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: '#333',
-    },
-    userMessage: {
-        alignSelf: 'flex-end',
-        backgroundColor: '#333333',
-    },
-    adminMessage: {
-        alignSelf: 'flex-start',
-        backgroundColor: '#2B2A2A',
-    },
-    messageText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-    },
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        marginBottom: 10
-    },
-    input: {
-        flex: 1,
+	...globalStyles,
+	container: {
+		flex: 1,
+		alignItems: 'center'
+	},
+	messagesContainer: {
+		flexGrow: 1
+	},
+	messageContainer: {
+		maxWidth: '80%',
+		marginVertical: 8,
+		padding: 10,
+		borderRadius: 10,
+		backgroundColor: '#333'
+	},
+	userMessage: {
+		alignSelf: 'flex-end',
+		backgroundColor: '#333333'
+	},
+	adminMessage: {
+		alignSelf: 'flex-start',
+		backgroundColor: '#2B2A2A'
+	},
+	messageText: {
+		color: COLOR_TEXT_PRIMARY,
+		fontFamily: 'Outfit'
+	},
+	inputContainer: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		padding: 10,
+		marginBottom: 10
+	},
+	input: {
+		...globalStyles.Input,
+
+		height: 'auto',
         padding: 14,
-        borderRadius: 15,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-    },
-    sendButton: {
-        marginLeft: 10,
-        backgroundColor: '#4CAF50',
-        padding: 14,
-        borderRadius: 15,
-    },
-    sendText: {
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-    },
+		borderRadius: 15,
+		backgroundColor: COLOR_BACKGROUND_SECONDARY,
+	},
+	sendButton: {
+		marginLeft: 10,
+		backgroundColor: '#4CAF50',
+		padding: 14,
+		borderRadius: 15
+	},
+	sendText: {
+		color: COLOR_TEXT_PRIMARY,
+		fontFamily: 'Outfit'
+	},
 });
 
 export default ReportScreen;

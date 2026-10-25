@@ -1,5 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View, TouchableOpacity, TextInput } from 'react-native';
+
+// Styles
+import globalStyles from '@Styles/index';
 
 // Icons
 import PasswordIcon from '@Icons/PasswordIcon';
@@ -7,7 +10,7 @@ import EyeOnIcon from '@Icons/EyeOnIcon';
 import EyeOffIcon from '@Icons/EyeOffIcon';
 
 // Data
-import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY } from '@Data/constants';
+import { COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY } from '@Data/constants';
 
 
 interface PasswordSectionProps {
@@ -22,9 +25,9 @@ const PasswordSection = ({ placeholder, textPassword, setTextPassword }: Passwor
         <View style={styles.passwordSection}>
             <PasswordIcon
                 Color={textPassword ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                Style={styles.icon} />
+                Style={styles.SectionInputIcon} />
             <TextInput
-                style={styles.passwordInput}
+                style={globalStyles.Input}
                 placeholderTextColor={COLOR_TEXT_TERTIARY}
                 placeholder={placeholder}
                 secureTextEntry={isVisibledPassword}
@@ -34,11 +37,11 @@ const PasswordSection = ({ placeholder, textPassword, setTextPassword }: Passwor
                 {isVisibledPassword ?
                     <EyeOffIcon
                         Color={textPassword ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                        Style={styles.icon} />
+                        Style={styles.SectionInputIcon} />
                     :
                     <EyeOnIcon
                         Color={textPassword ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                        Style={styles.icon} />
+                        Style={styles.SectionInputIcon} />
                 }
             </TouchableOpacity>
         </View>
@@ -46,27 +49,14 @@ const PasswordSection = ({ placeholder, textPassword, setTextPassword }: Passwor
 };
 
 const styles = StyleSheet.create({
+	...globalStyles,
     passwordSection: {
+		...globalStyles.Section,
         marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
         height: 64,
         borderRadius: 20,
-        backgroundColor: COLOR_BACKGROUND_SECONDARY,
-    },
-    passwordInput: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
-    },
-    icon: {
-        width: 20,
-        height: 20,
-        margin: 22,
-    },
+    }
 });
 
 export default PasswordSection;

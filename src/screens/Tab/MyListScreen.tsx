@@ -7,6 +7,9 @@ import { useApolloClient } from '@apollo/client';
 import { BallIndicator } from '@Components/BallIndicator';
 import { AnimeCard, AnimeCardSkeleton } from '@Components/cards/Anime';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 // Data
 import {
     BACKGROUND_ERROR_404_MYLIST, COLOR_PRIMARY,
@@ -53,11 +56,8 @@ const MyListScreen = ({ navigation }) => {
                 },
             });
 
-            if (data?.animes?.length) {
-                setUserAnimeList(prev =>
-                    pageToFetch === 1 ? data.animes : [...prev, ...data.animes]
-                );
-            }
+            if (data?.animes?.length)
+                setUserAnimeList(prev => pageToFetch === 1 ? data.animes : [...prev, ...data.animes]);
         },
         [client]
     );
@@ -95,7 +95,7 @@ const MyListScreen = ({ navigation }) => {
             <StatusBar style='light' />
             <View style={styles.header}>
                 <View style={styles.headerLeft}>
-                    <Image source={ICON_APP} style={styles.headerIcon} />
+                    <Image source={ICON_APP} style={styles.HeaderScreenIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.mylist')}</Text>
                 </View>
             </View>
@@ -108,8 +108,7 @@ const MyListScreen = ({ navigation }) => {
                             data={userAnimeList}
                             keyExtractor={(item) => item.id}
                             renderItem={({ item }) =>
-                                <AnimeCard
-                                    navigation={navigation}
+                                <AnimeCard navigation={navigation}
                                     item={item}
                                     width={172}
                                     height={232} />
@@ -117,8 +116,7 @@ const MyListScreen = ({ navigation }) => {
                             ListEmptyComponent={() =>
                                 <View style={styles.skeletonGrid}>
                                     {Array.from({ length: MYLIST_CHUNK_SIZE }).map((_, i) => (
-                                        <AnimeCardSkeleton
-                                            key={i}
+                                        <AnimeCardSkeleton key={i}
                                             width={172}
                                             height={232} />
                                     ))}
@@ -144,10 +142,11 @@ const MyListScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+	...globalStyles,
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     skeletonGrid: {
         flexDirection: 'row',
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
     errorTextContainer: {
         width: '90%',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     errorTitle: {
         color: COLOR_PRIMARY,
@@ -177,7 +176,7 @@ const styles = StyleSheet.create({
     containerAnimeTop: {
         flexGrow: 1,
         paddingBottom: 200,
-        gap: 14,
+        gap: 14
     },
     header: {
         width: '90%',
@@ -188,18 +187,14 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     headerLeft: {
-        flexDirection: 'row',
-    },
-    headerIcon: {
-        width: 30,
-        height: 30,
+        flexDirection: 'row'
     },
     headerText: {
         color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
-        marginLeft: 15,
-    },
+        marginLeft: 15
+    }
 });
 
 export default MyListScreen;

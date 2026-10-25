@@ -24,9 +24,8 @@ const useUpdateNotificationSettings = () => {
 
 			return true;
 		} catch (error) {
-			if (error instanceof Error) {
+			if (error instanceof Error)
 				showAlert(error.message);
-			}
 
 			return false;
 		}

@@ -51,27 +51,27 @@ const TabNavigator = () => {
                     elevation: 0,
                     shadowOpacity: 0,
                     borderTopWidth: 0,
-                    height: '100%',
+                    height: '100%'
                 },
                 tabBarIndicatorStyle: {
-                    backgroundColor: 'transparent',
+                    backgroundColor: 'transparent'
                 },
                 tabBarLabelStyle: {
                     fontSize: 10,
                     textTransform: 'none',
                     margin: 0,
                     padding: 0,
-                    width: '100%',
+                    width: '100%'
                 },
                 tabBarItemStyle: {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: 7,
+                    marginTop: 7
                 },
                 tabBarActiveTintColor: COLOR_PRIMARY,
                 tabBarInactiveTintColor: COLOR_TEXT_TERTIARY,
-                tabBarShowIcon: true,
+                tabBarShowIcon: true
             }}>
             <Tab.Screen
                 name='Home'
@@ -80,7 +80,7 @@ const TabNavigator = () => {
                     tabBarIcon: ({ focused }) => (
                         <HomeIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
-                    title: i18n.t('navigation.home'),
+                    title: i18n.t('navigation.home')
                 }} />
             <Tab.Screen
                 name='Release'
@@ -89,7 +89,7 @@ const TabNavigator = () => {
                     tabBarIcon: ({ focused }) => (
                         <CalendarIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
-                    title: i18n.t('navigation.release'),
+                    title: i18n.t('navigation.release')
                 }} />
             <Tab.Screen
                 name='MyList'
@@ -98,7 +98,7 @@ const TabNavigator = () => {
                     tabBarIcon: ({ focused }) => (
                         <MyListIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
-                    title: i18n.t('navigation.mylist'),
+                    title: i18n.t('navigation.mylist')
                 }} />
             <Tab.Screen
                 name='Profile'
@@ -108,7 +108,7 @@ const TabNavigator = () => {
                     tabBarIcon: ({ focused }) => (
                         <ProfileIcon Color={focused ? COLOR_PRIMARY : COLOR_TEXT_TERTIARY} Style={styles.icon} />
                     ),
-                    title: i18n.t('navigation.profile'),
+                    title: i18n.t('navigation.profile')
                 }} />
         </Tab.Navigator>
     )

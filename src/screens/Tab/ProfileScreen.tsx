@@ -12,6 +12,9 @@ import CrownIcon from '@Components/icons/CrownIcon';
 import SettingsIcon from '@Components/icons/SettingsIcon';
 import { AnimeCard, AnimeCardSkeleton } from '@Components/cards/Anime';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 // Data
 import {
     COLOR_PRIMARY, COLOR_PRIMARY_LIGHT, COLOR_TEXT_PRIMARY,
@@ -218,15 +221,12 @@ const ProfileScreen = ({ navigation, route }) => {
     return (
         <ScrollView
             style={styles.container}
-            contentContainerStyle={{
-                alignItems: 'center',
-                paddingBottom: 70,
-            }}
+            contentContainerStyle={{ alignItems: 'center', paddingBottom: 70 }}
             showsVerticalScrollIndicator={false}>
             <StatusBar style='light' />
             <View style={styles.headerContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={ICON_APP} style={styles.headerIcon} />
+                    <Image source={ICON_APP} style={styles.HeaderScreenIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.profile')}</Text>
                 </View>
                 <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
@@ -283,16 +283,14 @@ const ProfileScreen = ({ navigation, route }) => {
                 nestedScrollEnabled={true}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <AnimeCard
-                        navigation={navigation}
+                    <AnimeCard navigation={navigation}
                         item={item}
                         width={130}
                         height={175} />
                 )}
                 ListEmptyComponent={() =>
                     Array.from({ length: 10 }).map((_, i) => (
-                        <AnimeCardSkeleton
-                            key={i}
+                        <AnimeCardSkeleton key={i}
                             width={130}
                             height={175} />
                     ))
@@ -302,8 +300,7 @@ const ProfileScreen = ({ navigation, route }) => {
             <View style={styles.chartContainer}>
                 <Text style={styles.chartTitle}>{i18n.t('profile.favoritegenres')}</Text>
                 {!isLoading &&
-                    <BarChart
-                        data={topGenres}
+                    <BarChart data={topGenres}
                         barWidth={48}
                         spacing={20}
                         maxValue={Math.max(...topGenres.map(item => item.value)) + 5}
@@ -313,17 +310,8 @@ const ProfileScreen = ({ navigation, route }) => {
                         xAxisThickness={0}
                         initialSpacing={0}
                         endSpacing={0}
-                        xAxisLabelTextStyle={{
-                            color: COLOR_PRIMARY,
-                            fontSize: 8,
-                            fontFamily: 'Outfit'
-                        }}
-                        topLabelTextStyle={{
-                            color: COLOR_TEXT_PRIMARY,
-                            fontSize: 14,
-                            fontFamily: 'Outfit'
-                        }}
-
+                        xAxisLabelTextStyle={{color: COLOR_PRIMARY,fontSize: 8,fontFamily: 'Outfit'}}
+                        topLabelTextStyle={{color: COLOR_TEXT_PRIMARY,fontSize: 14,fontFamily: 'Outfit'}}
                         hideYAxisText
                         hideRules
                         isAnimated
@@ -339,6 +327,7 @@ const ProfileScreen = ({ navigation, route }) => {
 
 
 const styles = StyleSheet.create({
+	...globalStyles,
     container: {
         width: '100%',
         height: '100%',
@@ -462,16 +451,12 @@ const styles = StyleSheet.create({
         height: 60,
         marginTop: 50
     },
-    headerIcon: {
-        width: 30,
-        height: 30,
-    },
     headerText: {
         color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,
-    },
+    }
 });
 
 export default ProfileScreen;

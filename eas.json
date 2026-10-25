@@ -1,40 +1,42 @@
 {
-  "cli": {
-    "version": ">= 3.8.0"
-  },
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal",
-      "ios": {
-        "simulator": true
-      },
-      "channel": "development"
-    },
-    "preview": {
-      "distribution": "internal",
-      "ios": {
-        "resourceClass": "m-medium"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://animax-back-end.vercel.app/api",
-        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
-      },
-      "channel": "preview"
-    },
-    "production": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://animax-back-end.vercel.app/api",
-        "EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.one/api/graphql"
-      },
-      "channel": "production"
-    }
-  },
-  "submit": {
-    "production": {}
-  }
+	"cli": {
+		"version": ">= 3.8.0"
+	},
+	"build": {
+		"development": {
+			"developmentClient": true,
+			"distribution": "internal",
+			"ios": {
+				"simulator": true
+			},
+			"channel": "development"
+		},
+		"preview": {
+			"distribution": "internal",
+			"ios": {
+				"resourceClass": "m-medium"
+			},
+			"channel": "preview"
+		},
+		"production": {
+			"distribution": "internal",
+			"android": {
+				"buildType": "apk"
+			},
+			"env": {
+				"EXPO_PUBLIC_API_URL": "https://animax-back-end.vercel.app",
+				"EXPO_PUBLIC_ANILIBIRTY_API_URL": "https://anilibria.top",
+				"EXPO_PUBLIC_ANIME_API_GRAPHQL": "https://shikimori.io/api/graphql",
+				"EXPO_PUBLIC_KODIK_API_URL": "https://kodik-api.com",
+				"EXPO_PUBLIC_CONTACTS_DISCORD": "https://discord.gg/animelandia-926550837172514876",
+				"EXPO_PUBLIC_CONTACTS_WEBSITE": "https://google.com",
+				"EXPO_PUBLIC_CONTACTS_X": "https://x.com",
+				"EXPO_PUBLIC_CONTACTS_WHATSAPP": "https://www.whatsapp.com"
+			},
+			"channel": "production"
+		}
+	},
+	"submit": {
+		"production": {}
+	}
 }

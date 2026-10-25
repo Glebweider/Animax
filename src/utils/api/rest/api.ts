@@ -23,7 +23,7 @@ export const apiRequest = async <T>(
 			'X-Device-Platform': Platform.OS,
 			'X-Request-Source': 'app',
 			'locale': i18n.locale,
-			...options.headers,
+			...options.headers
 		};
 
 		if (!isMultipart)
@@ -41,13 +41,11 @@ export const apiRequest = async <T>(
 				: undefined);
 
 		const response = await fetch(
-			`${process.env.EXPO_PUBLIC_API_URL}/api${endpoint}`,
-			{
-				...options,
-				headers,
-				body,
-			},
-		);
+			`${process.env.EXPO_PUBLIC_API_URL}/api${endpoint}`, {
+			...options,
+			headers,
+			body
+		});
 
 		const text = await response.text();
 

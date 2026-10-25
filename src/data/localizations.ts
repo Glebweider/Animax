@@ -1,11 +1,11 @@
 // Locales
-import en_Eng from '@locales/en_Eng.json';
-import fr_Fra from '@locales/fr_Fra.json';
-import de_Ger from '@locales/de_Ger.json';
-import it_Ita from '@locales/it_Ita.json';
-import ja_Jap from '@locales/ja_Jap.json';
-import ru_Rus from '@locales/ru_Rus.json';
-import uk_Ukr from '@locales/uk_Ukr.json';
+import en_Eng from '@Locales/en_Eng.json';
+import fr_Fra from '@Locales/fr_Fra.json';
+import de_Ger from '@Locales/de_Ger.json';
+import it_Ita from '@Locales/it_Ita.json';
+import ja_Jap from '@Locales/ja_Jap.json';
+import ru_Rus from '@Locales/ru_Rus.json';
+import uk_Ukr from '@Locales/uk_Ukr.json';
 
 export const translations = {
     en: en_Eng,

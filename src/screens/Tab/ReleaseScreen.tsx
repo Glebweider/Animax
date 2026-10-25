@@ -9,6 +9,9 @@ import MyAnimeListButton from '@Components/buttons/MyAnimeList';
 import { BallIndicator } from '@Components/BallIndicator';
 import { ReleaseAnimeCard } from '@Components/cards/ReleaseAnime';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 // Data
 import {
     BACKGROUND_ERROR_404_RELEASE, COLOR_PRIMARY,
@@ -65,32 +68,30 @@ const ReleaseScreen = ({ navigation }) => {
 
     useEffect(() => {
         const GetAnime = async () => {
-            if (selectedDate) {
-                if (Animes) {
-                    const animeForDate = Animes.filter((anime) => {
-                        if (Number(anime.anime.score) >= 7)
-                            return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
-                    });
+            if (selectedDate && Animes) {
+                const animeForDate = Animes.filter((anime) => {
+                    if (Number(anime.anime.score) >= 7)
+                        return anime.next_episode_at.split('T')[0] == selectedDate.dayOfDate;
+                });
 
-                    const idsNotHavePoster: string[] = [];
-                    for (const item of animeForDate) {
-                        const image = item.anime.image?.original;
+                const idsNotHavePoster: string[] = [];
+                for (const item of animeForDate) {
+                    const image = item.anime.image?.original;
 
-                        if (!image || image.includes('missing'))
-                            idsNotHavePoster.push(item.anime.id.toString());
-                    }
-
-                    if (idsNotHavePoster.length > 0) {
-                        const newPosters = await fetchPosters(idsNotHavePoster);
-
-                        for (const item of newPosters) {
-                            const anime = animeForDate.find(anime => anime.anime.id == item.id);
-                            anime.anime.image.original = item.poster.originalUrl;
-                        }
-                    }
-
-                    setSelectedAnimes(animeForDate);
+                    if (!image || image.includes('missing'))
+                        idsNotHavePoster.push(item.anime.id.toString());
                 }
+
+                if (idsNotHavePoster.length > 0) {
+                    const newPosters = await fetchPosters(idsNotHavePoster);
+
+                    for (const item of newPosters) {
+                        const anime = animeForDate.find(anime => anime.anime.id == item.id);
+                        anime.anime.image.original = item.poster.originalUrl;
+                    }
+                }
+
+                setSelectedAnimes(animeForDate);
             }
         };
 
@@ -112,7 +113,7 @@ const ReleaseScreen = ({ navigation }) => {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={styles.header}>
-                    <Image source={ICON_APP} style={styles.headerIcon} />
+                    <Image source={ICON_APP} style={styles.HeaderScreenIcon} />
                     <Text style={styles.headerText}>{i18n.t('navigation.release')}</Text>
                 </View>
                 <FlatList
@@ -184,6 +185,7 @@ const ReleaseScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+	...globalStyles,
     container: {
         width: '100%',
         height: '100%',
@@ -272,16 +274,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 60,
     },
-    headerIcon: {
-        width: 30,
-        height: 30,
-    },
     headerText: {
         color: COLOR_TEXT_PRIMARY,
         fontFamily: 'Outfit',
         fontSize: 18,
         marginLeft: 15,
-    },
+    }
 });
 
 export default ReleaseScreen;

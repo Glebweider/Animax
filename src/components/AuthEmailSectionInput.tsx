@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+
+// Styles
+import globalStyles from '@Styles/index';
 
 // Component
 import SectionInput from './SectionInput';
@@ -22,7 +24,7 @@ const AuthEmailSectionInput = ({ error, value, setValue }: AuthEmailSectionInput
         <SectionInput
             icon={<EmailIcon
                 Color={value ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                Style={styles.icon} />
+                Style={globalStyles.SectionInputIcon} />
             }
             value={value}
             error={error}
@@ -31,13 +33,5 @@ const AuthEmailSectionInput = ({ error, value, setValue }: AuthEmailSectionInput
             setValue={(v) => setValue(v)} />
     );
 };
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 20,
-        height: 20,
-        marginLeft: 22,
-    }
-});
 
 export default AuthEmailSectionInput;

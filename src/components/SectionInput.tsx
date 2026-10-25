@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, KeyboardTypeOptions, Text } from 'react-native';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 // Data
 import { COLOR_BACKGROUND_SECONDARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_TERTIARY } from '@Data/constants';
 
@@ -40,11 +43,11 @@ const SectionInput = ({ placeholder, secure, value, error, icon, keyboardType, s
                         {isVisibledPassword ?
                             <EyeOffIcon
                                 Color={value ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                                Style={styles.icon} />
+                                Style={styles.SectionInputIcon} />
                             :
                             <EyeOnIcon
                                 Color={value ? COLOR_TEXT_PRIMARY : COLOR_TEXT_TERTIARY}
-                                Style={styles.icon} />
+                                Style={styles.SectionInputIcon} />
                         }
                     </TouchableOpacity>
                 }
@@ -54,6 +57,7 @@ const SectionInput = ({ placeholder, secure, value, error, icon, keyboardType, s
 };
 
 const styles = StyleSheet.create({
+	...globalStyles,
     container: {
         marginTop: 3,
         flexDirection: 'row',
@@ -65,16 +69,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLOR_BACKGROUND_SECONDARY,
     },
     input: {
-        flex: 1,
-        height: '100%',
-        color: COLOR_TEXT_PRIMARY,
-        fontFamily: 'Outfit',
+        ...globalStyles.Input,
         marginLeft: 20,
-    },
-    icon: {
-        width: 20,
-        height: 20,
-        margin: 22,
     },
     error: {
         marginTop: 5,

@@ -177,32 +177,32 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         justifyContent: 'flex-end',
-        alignItems: 'flex-start',
+        alignItems: 'flex-start'
     },
     tagsContainer: {
         flexDirection: 'row',
-        marginTop: 8,
+        marginTop: 8
     },
     animeContent: {
         width: '80%',
         height: '25%',
-        margin: 18,
+        margin: 18
     },
     animeName: {
         color: COLOR_TEXT_PRIMARY,
         fontSize: 17,
         fontFamily: 'Outfit',
-        overflow: 'hidden',
+        overflow: 'hidden'
     },
     animeDescription: {
         color: COLOR_TEXT_PRIMARY,
         fontSize: 11,
         fontFamily: 'Outfit',
-        overflow: 'hidden',
+        overflow: 'hidden'
     },
     animeButtonsContainer: {
         flexDirection: 'row',
-        marginTop: 12,
+        marginTop: 12
     },
     animeButtonPlay: {
         backgroundColor: COLOR_PRIMARY,
@@ -211,14 +211,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         minWidth: 86,
         height: 36,
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     animeButtonTextPlay: {
         color: COLOR_TEXT_PRIMARY,
         fontSize: 13,
         fontFamily: 'Outfit',
         overflow: 'hidden',
-        marginRight: 13,
+        marginRight: 13
     },
     backgroundShadow: {
         position: 'absolute',
@@ -229,12 +229,12 @@ const styles = StyleSheet.create({
     selectAnimeContainer: {
         width: '100%',
         height: '39%',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     headerContainer: {
         position: 'absolute',
@@ -244,26 +244,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        marginTop: 60,
+        marginTop: 60
     },
     headerLogo: {
         width: 35,
-        height: 35,
+        height: 35
     },
     headerIconSearch: {
         width: 30,
-        height: 30,
+        height: 30
     },
     imageWrapper: {
         width: '100%',
         height: '100%',
-        overflow: 'hidden',
+        overflow: 'hidden'
     },
     selectAnimeShiftedImage: {
         width: '100%',
         height: '140%',
         position: 'absolute',
-        top: 0,
+        top: 0
     }
 });
 

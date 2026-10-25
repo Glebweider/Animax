@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import Modal from 'react-native-modal';
 
+// Styles
+import globalStyles from '@Styles/index';
+
 //Icons
 import StarIcon from '@Icons/StarIcon';
 
@@ -29,7 +32,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
             onBackdropPress={() => setVisible(false)}
             backdropOpacity={0.5}
             statusBarTranslucent
-            style={styles.modalContainer}>
+            style={globalStyles.MiniModalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modalShelf} />
                 <Text style={styles.modalTitle}>{i18n.t('anime.modal.rating')}</Text>
@@ -83,14 +86,7 @@ const RatingModal: React.FC<ModalProps> = ({ visible, setVisible, anime }) => {
 };
 
 const styles = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        backgroundColor: 'transparent',
-        margin: 0,
-        padding: 0
-    },
+	...globalStyles,
     stars: {
         flexDirection: 'row',
         alignItems: 'center',
